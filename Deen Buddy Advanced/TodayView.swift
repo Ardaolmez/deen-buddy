@@ -1,0 +1,83 @@
+//
+//  TodayView.swift
+//  Deen Buddy Advanced
+//
+//  Created by Arda Olmez on 2025-10-07.
+//
+
+import SwiftUI
+
+struct TodayView: View {
+    @State private var streakDays: [Bool] = [true, true, true, false, false, false, false]
+    @State private var showQuiz = false
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Daily Streak Section
+                    DailyStreakView(streakDays: $streakDays)
+                        .padding(.horizontal)
+
+                    // Daily Quran Verse
+                    DailyVerseCard()
+                        .padding(.horizontal)
+
+                    // Daily Quiz Button
+                    Button(action: {
+                        showQuiz = true
+                    }) {
+                        HStack {
+                            Image(systemName: "questionmark.circle.fill")
+                            Text("Daily Quiz")
+                                .fontWeight(.semibold)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                    }
+                    .padding(.horizontal)
+
+                    // Daily Reading Goal
+                    DailyReadingGoalCard()
+                        .padding(.horizontal)
+
+                    // Personalized Learning
+                    PersonalizedLearningCard()
+                        .padding(.horizontal)
+
+                    // Chat Box
+                    ChatBoxView()
+                        .padding(.horizontal)
+                        .padding(.bottom, 20)
+                }
+                .padding(.top, 10)
+            }
+            .navigationTitle("Today's Journey")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    PrayerTimeCompactWidget()
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        // Settings action
+                    }) {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.primary)
+                    }
+                }
+            }
+            .sheet(isPresented: $showQuiz) {
+                QuizView()
+            }
+        }
+    }
+}
+
+#Preview {
+    TodayView()
+}
