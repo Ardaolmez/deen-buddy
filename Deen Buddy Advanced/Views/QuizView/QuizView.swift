@@ -1,9 +1,9 @@
-// Views/QuizView.swift
+// QuizView.swift
 import SwiftUI
 
 struct QuizView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject var vm = QuizViewModel()
+    @StateObject var vm: QuizViewModel = .init()
 
     var body: some View {
         NavigationView {
@@ -20,10 +20,16 @@ struct QuizView: View {
                 }
                 .padding(.horizontal)
 
-                // Question + Answers
+                if !vm.quizOfDay.title.isEmpty {
+                    Text(vm.quizOfDay.title)
+                        .font(.system(.headline, design: .serif))
+                        .padding(.horizontal)
+                }
+
+                // Question & answers
                 VStack(alignment: .leading, spacing: 16) {
                     Text(vm.currentQuestion.question)
-                        .font(.title2.weight(.semibold))
+                        .font(.system(.title2, design: .serif).weight(.semibold))
                         .padding(.horizontal)
 
                     ForEach(vm.currentQuestion.answers.indices, id: \.self) { idx in
@@ -31,9 +37,7 @@ struct QuizView: View {
                             text: vm.currentQuestion.answers[idx],
                             state: vm.stateForAnswer(at: idx),
                             isLocked: vm.isLocked
-                        ) {
-                            vm.selectAnswer(idx)
-                        }
+                        ) { vm.selectAnswer(idx) }
                     }
                 }
 
@@ -41,13 +45,9 @@ struct QuizView: View {
 
                 // Next / Finish
                 Button {
-                    if vm.isLastQuestion {
-                        dismiss()
-                    } else {
-                        vm.next()
-                    }
+                    vm.next()     // will flip didFinish=true on last
                 } label: {
-                    Text(vm.isLastQuestion ? "Finish Quiz" : "Next Question")
+                    Text(vm.isLastQuestion ? "See Results" : "Next Question")
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -65,6 +65,16 @@ struct QuizView: View {
                     Button("Close") { dismiss() }
                 }
             }
+        }
+        .fullScreenCover(isPresented: $vm.didFinish) {
+            QuizResultView(
+                score: vm.score,
+                total: vm.totalQuestions,
+                gradeText: vm.gradeText,
+                onShare: { QuizShareSheet.present(text: "I scored \(vm.summaryLine) on Deen Buddy!") },
+                onDone: { dismiss() },
+                onRetry: { vm.restartSameQuiz() }
+            )
         }
     }
 }

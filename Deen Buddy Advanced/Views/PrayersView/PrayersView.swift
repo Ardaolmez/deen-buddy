@@ -1,0 +1,255 @@
+// Views/Prayers/PrayersView.swift
+import SwiftUI
+
+struct PrayersView: View {
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var vm = PrayersViewModel()
+
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 20) {
+
+                    // Header card: city, current/next, countdown
+                    if let h = vm.header {
+                        HeaderCard(
+                            cityLine: vm.cityLine,
+                            currentLine: vm.isBetweenSunriseAndDhuhr
+                                ? "Next: Dhuhr — \(time(h.dhuhr))"
+                                : nowLine(current: vm.currentPrayer),
+                            countdown: vm.countdownText,
+                            nextLine: nextLine(next: vm.nextPrayer, h: h),
+                            sunrise: h.sunrise,
+                            sunset: h.sunset,
+                            zawalStart: h.zawalStart,
+                            zawalEnd: h.zawalEnd
+                        )
+                        .padding(.horizontal)
+                    }
+
+                    // “Did you pray?” prompt for current prayer (if any)
+                    if let current = vm.currentPrayer {
+                        CompletedPrompt(
+                            prayer: current.name.title,
+                            completed: vm.isCompleted(current.name),
+                            onToggle: { vm.toggleCompleted(current.name) }
+                        )
+                        .padding(.horizontal)
+                    }
+
+                    // List
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Today’s Prayers")
+                            .font(.system(.title3, design: .serif).weight(.semibold))
+                            .padding(.horizontal)
+
+                        ForEach(vm.entries) { entry in
+                            PrayerRow(entry: entry,
+                                      isCurrent: entry.id == vm.currentPrayer?.id,
+                                      isCompleted: vm.isCompleted(entry.name),
+                                      onToggle: { vm.toggleCompleted(entry.name) })
+                        }
+                    }
+                }
+                .padding(.vertical)
+            }
+            .navigationBarTitle("Prayers", displayMode: .inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 18, weight: .semibold))
+                            .padding(8)
+                            .background(.thinMaterial)
+                            .clipShape(Circle())
+                    }
+                }
+            }
+        }
+    }
+
+    private func time(_ d: Date) -> String {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        return f.string(from: d)
+    }
+
+    private func nowLine(current: PrayerEntry?) -> String {
+        if let c = current {
+            return "Now: \(c.name.title) — \(time(c.time))"
+        }
+        return "Before Fajr"
+    }
+
+    private func nextLine(next: PrayerEntry?, h: DayTimes) -> String {
+        if let n = next {
+            // if next < now it's tomorrow's fajr, but ViewModel already handles countdown across days
+            let isTomorrowFajr = Calendar.current.isDate(n.time, inSameDayAs: Date()) == false && n.name == .fajr
+            return isTomorrowFajr ? "Next: Fajr tomorrow" : "Next: \(n.name.title) at \(time(n.time))"
+        }
+        return "Next: Fajr tomorrow"
+    }
+}
+
+
+
+private struct HeaderCard: View {
+    let cityLine: String
+    let currentLine: String
+    let countdown: String
+    let nextLine: String
+
+    let sunrise: Date
+    let sunset: Date
+    let zawalStart: Date
+    let zawalEnd: Date
+
+    var body: some View {
+        VStack(spacing: 14) {
+            Text(cityLine)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+            Text(currentLine)
+                .font(.system(.title3, design: .serif).weight(.semibold))
+
+            HStack(spacing: 8) {
+                Image(systemName: "clock")
+                Text(countdown)
+                    .font(.system(.headline, design: .monospaced))
+            }
+            .padding(.horizontal, 14).padding(.vertical, 8)
+            .background(Capsule().fill(Color.green.opacity(0.15)))
+            .foregroundStyle(Color.green)
+
+            Text(nextLine)
+                .font(.callout)
+                .foregroundStyle(.secondary)
+
+            // Sunrise / Sunset / Zawal line (Islam360-style)
+            HStack(spacing: 16) {
+                SunStat(icon: "sunrise.fill", title: "Sunrise", time: sunrise)
+                Divider().frame(height: 22)
+                SunStat(icon: "sun.max.fill", title: "Zawal", range: zawalStart...zawalEnd)
+                Divider().frame(height: 22)
+                SunStat(icon: "sunset.fill", title: "Sunset", time: sunset)
+            }
+            .padding(.top, 6)
+        }
+        .padding(18)
+        .background(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(Color(.systemGray6))
+                .shadow(color: .black.opacity(0.06), radius: 12, x: 0, y: 6)
+        )
+    }
+}
+
+private struct SunStat: View {
+    let icon: String
+    let title: String
+    var time: Date? = nil
+    var range: ClosedRange<Date>? = nil
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon).font(.system(size: 14, weight: .semibold))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title).font(.caption).foregroundStyle(.secondary)
+                if let t = time {
+                    Text(timeString(t)).font(.footnote.weight(.semibold))
+                } else if let r = range {
+                    Text("\(timeString(r.lowerBound)) – \(timeString(r.upperBound))")
+                        .font(.footnote.weight(.semibold))
+                }
+            }
+        }
+    }
+    private func timeString(_ d: Date) -> String {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        return f.string(from: d)
+    }
+}
+
+private struct PrayerRow: View {
+    let entry: PrayerEntry
+    let isCurrent: Bool
+    let isCompleted: Bool
+    let onToggle: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(entry.name.title)
+                    .font(.system(.headline, design: .serif))
+                if isCurrent {
+                    Text("current").font(.caption2).foregroundStyle(.green)
+                }
+            }
+            Spacer()
+            Text(timeString(entry.time))
+                .font(.system(.body, design: .monospaced))
+                .foregroundStyle(.secondary)
+
+            Button(action: onToggle) {
+                Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(isCompleted ? .green : .secondary)
+            }
+        }
+        .padding(.horizontal)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(isCurrent ? Color.green.opacity(0.12) : Color(.systemBackground))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(isCurrent ? Color.green : Color.black.opacity(0.08),
+                        lineWidth: isCurrent ? 1.2 : 0.5)
+        )
+        .padding(.horizontal)
+    }
+
+    private func timeString(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        return f.string(from: date)
+    }
+}
+
+private struct CompletedPrompt: View {
+    let prayer: String
+    let completed: Bool
+    let onToggle: () -> Void
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: completed ? "checkmark.circle.fill" : "questionmark.circle")
+                .foregroundStyle(completed ? Color.green : Color.blue)
+                .font(.system(size: 20, weight: .semibold))
+            VStack(alignment: .leading, spacing: 4) {
+                Text(completed ? "Great job!" : "Did you pray \(prayer)?")
+                    .font(.system(.headline, design: .serif))
+                Text(completed ? "Marked as completed for today." : "Mark it completed to track your consistency.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            Button(action: onToggle) {
+                Text(completed ? "Undo" : "Yes")
+                    .fontWeight(.semibold)
+                    .padding(.horizontal, 14).padding(.vertical, 8)
+                    .background(RoundedRectangle(cornerRadius: 10).fill(completed ? Color.gray.opacity(0.2) : Color.green.opacity(0.2)))
+            }
+        }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(.systemGray6))
+        )
+    }
+}

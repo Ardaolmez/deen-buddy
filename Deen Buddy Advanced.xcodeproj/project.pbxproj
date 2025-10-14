@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		65733D6F2E996BC00059D9E5 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 65733D6E2E996BC00059D9E5 /* GoogleGenerativeAI */; };
+		65733DA22E9EA7B90059D9E5 /* Adhan in Frameworks */ = {isa = PBXBuildFile; productRef = 65733DA12E9EA7B90059D9E5 /* Adhan */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				65733D6F2E996BC00059D9E5 /* GoogleGenerativeAI in Frameworks */,
+				65733DA22E9EA7B90059D9E5 /* Adhan in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,6 +85,7 @@
 				469C4F522E95C2A40006FC4D /* Deen Buddy Advanced */,
 				469C4F612E95C2A50006FC4D /* Deen Buddy AdvancedTests */,
 				469C4F6B2E95C2A50006FC4D /* Deen Buddy AdvancedUITests */,
+				65733DA02E9EA7B90059D9E5 /* Frameworks */,
 				469C4F512E95C2A40006FC4D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -95,6 +98,13 @@
 				469C4F682E95C2A50006FC4D /* Deen Buddy AdvancedUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		65733DA02E9EA7B90059D9E5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -118,6 +128,7 @@
 			name = "Deen Buddy Advanced";
 			packageProductDependencies = (
 				65733D6E2E996BC00059D9E5 /* GoogleGenerativeAI */,
+				65733DA12E9EA7B90059D9E5 /* Adhan */,
 			);
 			productName = "Deen Buddy Advanced";
 			productReference = 469C4F502E95C2A40006FC4D /* Deen Buddy Advanced.app */;
@@ -203,6 +214,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				65733D6D2E996AFE0059D9E5 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+				65733D8C2E9EA48C0059D9E5 /* XCRemoteSwiftPackageReference "adhan-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 469C4F512E95C2A40006FC4D /* Products */;
@@ -406,6 +418,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to calculate accurate prayer times.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -445,6 +458,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to calculate accurate prayer times.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -612,6 +626,14 @@
 				minimumVersion = 0.5.6;
 			};
 		};
+		65733D8C2E9EA48C0059D9E5 /* XCRemoteSwiftPackageReference "adhan-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/batoulapps/adhan-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -619,6 +641,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 65733D6D2E996AFE0059D9E5 /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
+		};
+		65733DA12E9EA7B90059D9E5 /* Adhan */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65733D8C2E9EA48C0059D9E5 /* XCRemoteSwiftPackageReference "adhan-swift" */;
+			productName = Adhan;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
