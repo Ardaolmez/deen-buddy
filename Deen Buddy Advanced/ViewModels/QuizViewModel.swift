@@ -33,8 +33,35 @@ final class QuizViewModel: ObservableObject {
     
 
     init(quizzes: [QuizModel]? = nil, preselected quiz: QuizModel? = nil) {
-        // build local first (no 'self' yet)
-        let sampleQuizzes: [QuizModel] = [
+        // Load quizzes from JSON file or use provided quizzes
+        let resolvedQuizzes = quizzes ?? QuizViewModel.loadQuizzesFromJSON()
+        let resolvedQuizOfDay = quiz ?? QuizViewModel.pickQuizOfDay(from: resolvedQuizzes)
+
+        // now assign to self
+        self.quizzes = resolvedQuizzes
+        self.quizOfDay = resolvedQuizOfDay
+    }
+
+    private static func loadQuizzesFromJSON() -> [QuizModel] {
+        guard let url = Bundle.main.url(forResource: "quizzes", withExtension: "json") else {
+            print("⚠️ quizzes.json not found in bundle, using fallback")
+            return fallbackQuizzes()
+        }
+
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            let quizzes = try decoder.decode([QuizModel].self, from: data)
+            print("✅ Loaded \(quizzes.count) quizzes from JSON")
+            return quizzes
+        } catch {
+            print("⚠️ Error loading quizzes.json: \(error), using fallback")
+            return fallbackQuizzes()
+        }
+    }
+
+    private static func fallbackQuizzes() -> [QuizModel] {
+        return [
             QuizModel(
                 title: "Basics 1",
                 questions: [
@@ -63,13 +90,6 @@ final class QuizViewModel: ObservableObject {
                 ]
             )
         ]
-
-        let resolvedQuizzes = quizzes ?? sampleQuizzes
-        let resolvedQuizOfDay = quiz ?? QuizViewModel.pickQuizOfDay(from: resolvedQuizzes)
-
-        // now assign to self
-        self.quizzes = resolvedQuizzes
-        self.quizOfDay = resolvedQuizOfDay
     }
 
     private static func pickQuizOfDay(from quizzes: [QuizModel]) -> QuizModel {

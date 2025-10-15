@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Basics 1",
+    "questions": [
+      {
+        "question": "How many Surahs are in the Quran?",
+        "answers": ["114", "100", "120", "99"],
+        "correctIndex": 0
+      },
+      {
+        "question": "Which Surah is known as the heart of the Quran?",
+        "answers": ["Al-Fatiha", "Yasin", "Al-Baqarah", "Al-Ikhlas"],
+        "correctIndex": 1
+      },
+      {
+        "question": "How many times is Salah obligatory per day?",
+        "answers": ["3", "4", "5", "6"],
+        "correctIndex": 2
+      }
+    ]
+  },
+  {
+    "title": "Basics 2",
+    "questions": [
+      {
+        "question": "What is the first pillar of Islam?",
+        "answers": ["Zakat", "Salah", "Shahada", "Sawm"],
+        "correctIndex": 2
+      },
+      {
+        "question": "Which month is fasting obligatory?",
+        "answers": ["Muharram", "Sha'ban", "Ramadan", "Dhul-Hijjah"],
+        "correctIndex": 2
+      }
+    ]
+  },
+  {
+    "title": "Basics 3",
+    "questions": [
+      {
+        "question": "What is Zakat?",
+        "answers": ["Charity", "Pilgrimage", "Prayer", "Fasting"],
+        "correctIndex": 0
+      }
+    ]
+  }
+]

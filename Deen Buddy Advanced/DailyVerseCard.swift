@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct DailyVerseCard: View {
-    let verse = "And He found you lost and guided you."
-    let reference = "Surah Ad-Duha 93:7"
+    @StateObject private var viewModel = DailyVerseViewModel()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -18,15 +17,39 @@ struct DailyVerseCard: View {
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
 
-            Text(verse)
-                .font(.title3)
-                .fontWeight(.medium)
-                .foregroundColor(.white)
-                .multilineTextAlignment(.leading)
+            if viewModel.isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding()
+            } else if let errorMessage = viewModel.errorMessage {
+                Text(errorMessage)
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+            } else {
+                // Show verse in selected language
+                if let translation = viewModel.translationText, !translation.isEmpty {
+                    Text(translation)
+                        .font(.title3)
+                        .fontWeight(.medium)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.leading)
+                } else if !viewModel.arabicText.isEmpty {
+                    // Fallback to Arabic if no translation available
+                    Text(viewModel.arabicText)
+                        .font(.title2)
+                        .fontWeight(.medium)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.trailing)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
 
-            Text(reference)
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
+                // Reference
+                Text(viewModel.reference)
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.8))
+                    .padding(.top, 8)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
