@@ -10,6 +10,7 @@ import SwiftUI
 struct TodayView: View {
     @State private var streakDays: [Bool] = [true, true, true, false, false, false, false]
     @State private var showQuiz = false
+    @StateObject private var prayersVM = PrayersViewModel()
 
     var body: some View {
         NavigationView {
@@ -59,7 +60,7 @@ struct TodayView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    PrayerTimeCompactWidget()
+                    PrayerTimeCompact(nextPrayer: prayersVM.nextPrayer)
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {
