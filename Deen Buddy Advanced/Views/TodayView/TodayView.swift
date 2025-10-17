@@ -29,7 +29,7 @@ struct TodayView: View {
                     }) {
                         HStack {
                             Image(systemName: "questionmark.circle.fill")
-                            Text("Daily Quiz")
+                            Text(AppStrings.today.dailyQuiz)
                                 .fontWeight(.semibold)
                         }
                         .frame(maxWidth: .infinity)
@@ -55,7 +55,7 @@ struct TodayView: View {
                 }
                 .padding(.top, 10)
             }
-            .navigationTitle("Today's Journey")
+            .navigationTitle(AppStrings.today.navigationTitle)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

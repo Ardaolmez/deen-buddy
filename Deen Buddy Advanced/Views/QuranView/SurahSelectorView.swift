@@ -36,12 +36,12 @@ struct SurahSelectorView: View {
                     }
                 }
             }
-            .searchable(text: $searchText, prompt: "Search Surah...")
-            .navigationTitle("Select Surah")
+            .searchable(text: $searchText, prompt: AppStrings.quran.searchSurahPlaceholder)
+            .navigationTitle(AppStrings.quran.selectSurah)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(AppStrings.quran.done) {
                         dismiss()
                     }
                 }
@@ -96,7 +96,7 @@ struct SurahRowView: View {
                         Image(systemName: surah.type == "meccan" ? "moon.fill" : "building.2.fill")
                             .font(.system(size: 10))
 
-                        Text("\(surah.typeCapitalized) • \(surah.total_verses) verses")
+                        Text(String(format: AppStrings.quran.surahType, surah.typeCapitalized, surah.total_verses))
                             .font(.system(size: 12))
                     }
                     .foregroundColor(.secondary)

@@ -25,7 +25,7 @@ final class ChatViewModel: ObservableObject {
                                                  modelName: "gemini-2.5-flash",
                                                  systemInstruction: "You are Deen Buddy, a kind Islamic guide. Keep answers concise, gentle, and grounded in mainstream scholarship.")) {
         self.service = service
-        messages = [.init(role: .bot, text: "Deen Buddy:\nWhat's on your mind?")]
+        messages = [.init(role: .bot, text: AppStrings.chat.welcomeMessage)]
     }
 
 

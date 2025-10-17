@@ -16,7 +16,7 @@ struct DailyStreakView: View {
             HStack {
                 Image(systemName: "flame.fill")
                     .foregroundColor(AppColors.Today.streakFlame)
-                Text("Daily Streak")
+                Text(AppStrings.common.dailyStreak)
                     .font(.headline)
                     .fontWeight(.semibold)
             }

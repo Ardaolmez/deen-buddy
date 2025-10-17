@@ -13,7 +13,7 @@ struct MessageRowView: View {
 
             VStack(alignment: .leading, spacing: 6) {
                 if !isUser {
-                    Text("Deen Buddy:")
+                    Text(AppStrings.chat.botName)
                         .font(.callout.weight(.semibold))
                         .foregroundStyle(brand)
                 }

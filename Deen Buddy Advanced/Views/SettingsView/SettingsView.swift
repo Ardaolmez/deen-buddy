@@ -14,29 +14,29 @@ struct SettingsView: View {
         NavigationView {
             Form {
                 // Language Section
-                Section(header: Text("Quran Translation")) {
-                    Picker("Language", selection: $languageManager.selectedLanguage) {
+                Section(header: Text(AppStrings.settings.quranTranslation)) {
+                    Picker(AppStrings.settings.language, selection: $languageManager.selectedLanguage) {
                         ForEach(QuranLanguage.allCases, id: \.self) { language in
                             Text(language.displayName).tag(language)
                         }
                     }
 
-                    Text("Selected: \(languageManager.selectedLanguage.displayName)")
+                    Text(String(format: AppStrings.settings.selected, languageManager.selectedLanguage.displayName))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }
 
                 // Future sections can be added here
-                Section(header: Text("About")) {
+                Section(header: Text(AppStrings.settings.about)) {
                     HStack {
-                        Text("App Version")
+                        Text(AppStrings.settings.appVersion)
                         Spacer()
-                        Text("1.0.0")
+                        Text(AppStrings.settings.version)
                             .foregroundColor(.secondary)
                     }
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle(AppStrings.settings.navigationTitle)
         }
     }
 }

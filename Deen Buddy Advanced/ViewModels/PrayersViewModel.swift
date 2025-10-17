@@ -13,7 +13,7 @@ import CoreLocation
 
 
 final class PrayersViewModel: ObservableObject {
-    @Published private(set) var cityLine: String = "Locating…"
+    @Published private(set) var cityLine: String = AppStrings.prayers.locating
     @Published private(set) var header: DayTimes?
     @Published private(set) var entries: [PrayerEntry] = []
 
@@ -79,7 +79,7 @@ final class PrayersViewModel: ObservableObject {
             let remain = max(0, Int(next.time.timeIntervalSince(now)))
             countdownText = Self.hhmmss(remain)
         } else {
-            countdownText = "—"
+            countdownText = AppStrings.prayers.countdownPlaceholder
         }
     }
 
@@ -94,7 +94,7 @@ final class PrayersViewModel: ObservableObject {
         let g = CLGeocoder()
         g.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, _ in
             let p = placemarks?.first
-            let city = p?.locality ?? p?.subAdministrativeArea ?? "Your Area"
+            let city = p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea
             let country = p?.isoCountryCode ?? p?.country ?? ""
             self?.cityLine = country.isEmpty ? city : "\(city), \(country)"
         }

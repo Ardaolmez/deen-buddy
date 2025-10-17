@@ -14,7 +14,7 @@ struct QuizView: View {
                         .font(.subheadline)
                         .foregroundColor(AppColors.Quiz.secondaryText)
                     Spacer()
-                    Text("Score: \(vm.score)")
+                    Text(String(format: AppStrings.quiz.score, vm.score))
                         .font(.subheadline.weight(.semibold))
                         .foregroundColor(AppColors.Quiz.scoreText)
                 }
@@ -47,7 +47,7 @@ struct QuizView: View {
                 Button {
                     vm.next()     // will flip didFinish=true on last
                 } label: {
-                    Text(vm.isLastQuestion ? "See Results" : "Next Question")
+                    Text(vm.isLastQuestion ? AppStrings.quiz.seeResults : AppStrings.quiz.nextQuestion)
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -59,10 +59,10 @@ struct QuizView: View {
                 .padding(.horizontal)
                 .padding(.bottom)
             }
-            .navigationBarTitle("Daily Quiz", displayMode: .inline)
+            .navigationBarTitle(AppStrings.quiz.navigationTitle, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Close") { dismiss() }
+                    Button(AppStrings.quiz.close) { dismiss() }
                 }
             }
         }

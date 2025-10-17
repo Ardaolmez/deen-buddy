@@ -15,7 +15,7 @@ struct DailyReadingGoalCard: View {
             HStack {
                 Image(systemName: "book.fill")
                     .foregroundColor(.blue)
-                Text("Daily Reading Goal")
+                Text(AppStrings.today.dailyReadingGoal)
                     .font(.headline)
                     .fontWeight(.semibold)
                 Spacer()
@@ -30,14 +30,14 @@ struct DailyReadingGoalCard: View {
                 .scaleEffect(x: 1, y: 2, anchor: .center)
 
             HStack {
-                Text("2 / 5 pages read today")
+                Text(String(format: AppStrings.today.pagesReadToday, 2, 5))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 Spacer()
                 Button(action: {
                     // Continue reading action
                 }) {
-                    Text("Continue")
+                    Text(AppStrings.today.continueReading)
                         .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundColor(.blue)

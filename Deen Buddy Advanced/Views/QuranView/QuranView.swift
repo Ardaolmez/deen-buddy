@@ -17,7 +17,7 @@ struct QuranView: View {
                     VStack(spacing: 20) {
                         ProgressView()
                             .scaleEffect(1.5)
-                        Text("Loading Quran...")
+                        Text(AppStrings.quran.loading)
                             .font(.system(size: 16, design: .serif))
                             .foregroundColor(AppColors.Quran.toolbarText.opacity(0.7))
                     }
@@ -32,7 +32,7 @@ struct QuranView: View {
                             .foregroundColor(AppColors.Quran.toolbarText.opacity(0.7))
                             .multilineTextAlignment(.center)
 
-                        Button("Retry") {
+                        Button(AppStrings.quran.retry) {
                             viewModel.loadQuran()
                         }
                         .buttonStyle(.bordered)

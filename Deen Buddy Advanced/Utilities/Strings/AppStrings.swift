@@ -1,0 +1,23 @@
+//
+//  AppStrings.swift
+//  Deen Buddy Advanced
+//
+//  Main entry point for all app strings
+//  Usage: AppStrings.today.navigationTitle, AppStrings.common.close
+//
+
+import Foundation
+
+struct AppStrings {
+    // Tabs
+    static let today = TodayStrings.self
+    static let prayers = PrayersStrings.self
+    static let quiz = QuizStrings.self
+    static let quran = QuranStrings.self
+    static let explore = ExploreStrings.self
+    static let chat = ChatStrings.self
+
+    // Shared
+    static let common = CommonStrings.self
+    static let settings = SettingsStrings.self
+}
