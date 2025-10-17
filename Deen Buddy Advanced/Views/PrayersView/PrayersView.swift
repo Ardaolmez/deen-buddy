@@ -121,8 +121,8 @@ private struct HeaderCard: View {
                     .font(.system(.headline, design: .monospaced))
             }
             .padding(.horizontal, 14).padding(.vertical, 8)
-            .background(Capsule().fill(Color.green.opacity(0.15)))
-            .foregroundStyle(Color.green)
+            .background(Capsule().fill(AppColors.Prayers.countdownBackground))
+            .foregroundStyle(AppColors.Prayers.countdownText)
 
             Text(nextLine)
                 .font(.callout)
@@ -141,8 +141,8 @@ private struct HeaderCard: View {
         .padding(18)
         .background(
             RoundedRectangle(cornerRadius: 24, style: .continuous)
-                .fill(Color(.systemGray6))
-                .shadow(color: .black.opacity(0.06), radius: 12, x: 0, y: 6)
+                .fill(AppColors.Prayers.headerBackground)
+                .shadow(color: AppColors.Prayers.headerShadow, radius: 12, x: 0, y: 6)
         )
     }
 }
@@ -186,7 +186,7 @@ private struct PrayerRow: View {
                 Text(entry.name.title)
                     .font(.system(.headline, design: .serif))
                 if isCurrent {
-                    Text("current").font(.caption2).foregroundStyle(.green)
+                    Text("current").font(.caption2).foregroundStyle(AppColors.Prayers.currentPrayerAccent)
                 }
             }
             Spacer()
@@ -197,18 +197,18 @@ private struct PrayerRow: View {
             Button(action: onToggle) {
                 Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(isCompleted ? .green : .secondary)
+                    .foregroundStyle(isCompleted ? AppColors.Prayers.completedCheckmark : AppColors.Prayers.uncompletedCheckmark)
             }
         }
         .padding(.horizontal)
         .padding(.vertical, 12)
         .background(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(isCurrent ? Color.green.opacity(0.12) : Color(.systemBackground))
+                .fill(isCurrent ? AppColors.Prayers.rowCurrentBackground : AppColors.Prayers.rowNormalBackground)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(isCurrent ? Color.green : Color.black.opacity(0.08),
+                .stroke(isCurrent ? AppColors.Prayers.rowCurrentBorder : AppColors.Prayers.rowNormalBorder,
                         lineWidth: isCurrent ? 1.2 : 0.5)
         )
         .padding(.horizontal)
@@ -229,7 +229,7 @@ private struct CompletedPrompt: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: completed ? "checkmark.circle.fill" : "questionmark.circle")
-                .foregroundStyle(completed ? Color.green : Color.blue)
+                .foregroundStyle(completed ? AppColors.Prayers.promptCompleted : AppColors.Prayers.promptIncomplete)
                 .font(.system(size: 20, weight: .semibold))
             VStack(alignment: .leading, spacing: 4) {
                 Text(completed ? "Great job!" : "Did you pray \(prayer)?")
@@ -243,13 +243,13 @@ private struct CompletedPrompt: View {
                 Text(completed ? "Undo" : "Yes")
                     .fontWeight(.semibold)
                     .padding(.horizontal, 14).padding(.vertical, 8)
-                    .background(RoundedRectangle(cornerRadius: 10).fill(completed ? Color.gray.opacity(0.2) : Color.green.opacity(0.2)))
+                    .background(RoundedRectangle(cornerRadius: 10).fill(completed ? AppColors.Prayers.promptCompletedBackground : AppColors.Prayers.promptIncompleteBackground))
             }
         }
         .padding(14)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(.systemGray6))
+                .fill(AppColors.Prayers.cardBackground)
         )
     }
 }

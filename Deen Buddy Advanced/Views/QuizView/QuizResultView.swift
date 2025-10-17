@@ -44,12 +44,12 @@ struct QuizResultView: View {
 
             // Progress bar
             Capsule()
-                .fill(Color.green.opacity(0.25))
+                .fill(AppColors.Quiz.progressBarBackground)
                 .frame(height: 6)
                 .overlay(
                     GeometryReader { geo in
                         Capsule()
-                            .fill(Color.green)
+                            .fill(AppColors.Quiz.progressBarFill)
                             .frame(width: geo.size.width * percent)
                     }
                 )
@@ -58,7 +58,7 @@ struct QuizResultView: View {
             // Card
             ZStack {
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .fill(Color(.systemGray6))
+                    .fill(AppColors.Quiz.resultCardBackground)
                 VStack(spacing: 18) {
                     // Circular ring
                     ProgressRing(progress: percent)
@@ -83,8 +83,8 @@ struct QuizResultView: View {
                             Label("Retry", systemImage: "arrow.clockwise")
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.blue.opacity(0.15))
-                                .foregroundColor(.blue)
+                                .background(AppColors.Quiz.retryButtonBackground)
+                                .foregroundColor(AppColors.Quiz.retryButtonText)
                                 .cornerRadius(12)
                         }
 
@@ -94,8 +94,8 @@ struct QuizResultView: View {
                             Label("Share", systemImage: "square.and.arrow.up")
                                 .frame(maxWidth: .infinity)
                                 .padding()
-                                .background(Color.black.opacity(0.1))
-                                .foregroundColor(.primary)
+                                .background(AppColors.Quiz.shareButtonBackground)
+                                .foregroundColor(AppColors.Quiz.shareButtonText)
                                 .cornerRadius(12)
                         }
                     }

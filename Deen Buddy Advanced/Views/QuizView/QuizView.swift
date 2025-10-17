@@ -12,11 +12,11 @@ struct QuizView: View {
                 HStack {
                     Text(vm.progressText)
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(AppColors.Quiz.secondaryText)
                     Spacer()
                     Text("Score: \(vm.score)")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundColor(.blue)
+                        .foregroundColor(AppColors.Quiz.scoreText)
                 }
                 .padding(.horizontal)
 
@@ -51,8 +51,8 @@ struct QuizView: View {
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(vm.selectedIndex != nil ? Color.blue : Color.gray)
-                        .foregroundColor(.white)
+                        .background(vm.selectedIndex != nil ? AppColors.Quiz.nextButtonActive : AppColors.Quiz.nextButtonInactive)
+                        .foregroundColor(AppColors.Quiz.buttonText)
                         .cornerRadius(12)
                 }
                 .disabled(vm.selectedIndex == nil)
