@@ -18,26 +18,26 @@ struct QuranPageView: View {
                 VStack(spacing: 8) {
                     Text(surah.name)
                         .font(.system(size: 36, weight: .bold, design: .serif))
-                        .foregroundColor(.black)
+                        .foregroundColor(AppColors.Quran.surahNameArabic)
 
                     Text(surah.transliteration)
                         .font(.system(size: 24, weight: .semibold, design: .serif))
-                        .foregroundColor(.black.opacity(0.8))
+                        .foregroundColor(AppColors.Quran.surahNameTransliteration)
 
                     Text(surah.translation)
                         .font(.system(size: 18, weight: .regular, design: .serif))
-                        .foregroundColor(.black.opacity(0.6))
+                        .foregroundColor(AppColors.Quran.surahNameTranslation)
 
                     HStack {
                         Text("\(surah.typeCapitalized)")
                             .font(.system(size: 16, design: .serif))
-                            .foregroundColor(.black.opacity(0.5))
+                            .foregroundColor(AppColors.Quran.surahMetadata)
 
                         Spacer()
 
                         Text("\(surah.total_verses) Verses")
                             .font(.system(size: 16, design: .serif))
-                            .foregroundColor(.black.opacity(0.5))
+                            .foregroundColor(AppColors.Quran.surahMetadata)
                     }
                     .padding(.top, 8)
                 }
@@ -48,7 +48,7 @@ struct QuranPageView: View {
                 if surah.id != 9 && surah.id != 1 {
                     Text("بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ")
                         .font(.system(size: 26, design: .serif))
-                        .foregroundColor(.black.opacity(0.7))
+                        .foregroundColor(AppColors.Quran.bismillah)
                         .multilineTextAlignment(.center)
                         .padding(.vertical, 12)
                 }
@@ -67,11 +67,11 @@ struct QuranPageView: View {
             // Radial gradient - lighter overall with subtle transition
             RadialGradient(
                 gradient: Gradient(colors: [
-                    Color.white,
-                    Color(red: 0.998, green: 0.99, blue: 0.98),
-                    Color(red: 0.995, green: 0.985, blue: 0.96),
-                    Color(red: 0.99, green: 0.98, blue: 0.94),
-                    Color(red: 0.985, green: 0.97, blue: 0.90)
+                    AppColors.Quran.pageCenter,
+                    AppColors.Quran.pageRing1,
+                    AppColors.Quran.pageRing2,
+                    AppColors.Quran.pageRing3,
+                    AppColors.Quran.pageRing4
                 ]),
                 center: .center,
                 startRadius: 50,
@@ -91,20 +91,20 @@ struct VerseView: View {
             // Verse number (no circle)
             Text("\(verse.id)")
                 .font(.system(size: 20, weight: .bold, design: .serif))
-                .foregroundColor(.black.opacity(0.6))
+                .foregroundColor(AppColors.Quran.verseNumber)
 
             // Verse text
             VStack(alignment: .leading, spacing: 8) {
                 if let translation = verse.translation, !translation.isEmpty {
                     Text(translation)
                         .font(.system(size: 20, weight: .regular, design: .serif))
-                        .foregroundColor(.black)
+                        .foregroundColor(AppColors.Quran.verseText)
                         .lineSpacing(6)
                 } else {
                     // Fallback to Arabic if no translation
                     Text(verse.text)
                         .font(.system(size: 24, design: .serif))
-                        .foregroundColor(.black)
+                        .foregroundColor(AppColors.Quran.verseText)
                         .multilineTextAlignment(.trailing)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .lineSpacing(10)

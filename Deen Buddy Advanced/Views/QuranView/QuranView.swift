@@ -19,7 +19,7 @@ struct QuranView: View {
                             .scaleEffect(1.5)
                         Text("Loading Quran...")
                             .font(.system(size: 16, design: .serif))
-                            .foregroundColor(.brown.opacity(0.7))
+                            .foregroundColor(AppColors.Quran.toolbarText.opacity(0.7))
                     }
                 } else if let errorMessage = viewModel.errorMessage {
                     VStack(spacing: 16) {
@@ -29,7 +29,7 @@ struct QuranView: View {
 
                         Text(errorMessage)
                             .font(.system(size: 16, design: .serif))
-                            .foregroundColor(.brown.opacity(0.7))
+                            .foregroundColor(AppColors.Quran.toolbarText.opacity(0.7))
                             .multilineTextAlignment(.center)
 
                         Button("Retry") {
@@ -50,8 +50,8 @@ struct QuranView: View {
                     .background(
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color(red: 0.98, green: 0.94, blue: 0.82),
-                                Color(red: 0.96, green: 0.92, blue: 0.78)
+                                AppColors.Quran.backgroundGradientStart,
+                                AppColors.Quran.backgroundGradientEnd
                             ]),
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
@@ -71,12 +71,12 @@ struct QuranView: View {
                             Text(viewModel.selectedLanguage.rawValue.uppercased())
                         }
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
-                        .foregroundColor(.brown)
+                        .foregroundColor(AppColors.Quran.toolbarText)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.white.opacity(0.7))
+                                .fill(AppColors.Quran.toolbarBackground)
                         )
                     }
                 }
@@ -86,7 +86,7 @@ struct QuranView: View {
                     if let surah = viewModel.currentSurah {
                         Text(surah.transliteration)
                             .font(.system(size: 16, weight: .semibold, design: .serif))
-                            .foregroundColor(.brown)
+                            .foregroundColor(AppColors.Quran.toolbarText)
                     }
                 }
 
@@ -102,12 +102,12 @@ struct QuranView: View {
                             }
                         }
                         .font(.system(size: 14, weight: .semibold, design: .rounded))
-                        .foregroundColor(.brown)
+                        .foregroundColor(AppColors.Quran.toolbarText)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.white.opacity(0.7))
+                                .fill(AppColors.Quran.toolbarBackground)
                         )
                     }
                 }

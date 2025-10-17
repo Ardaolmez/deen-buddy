@@ -12,7 +12,7 @@ struct PersonalizedLearningCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "brain.head.profile")
-                    .foregroundColor(.purple)
+                    .foregroundColor(AppColors.Today.learningIcon)
                 Text("Personalized Learning")
                     .font(.headline)
                     .fontWeight(.semibold)
@@ -44,16 +44,16 @@ struct PersonalizedLearningCard: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
-                    .background(Color.purple)
-                    .foregroundColor(.white)
+                    .background(AppColors.Today.learningButton)
+                    .foregroundColor(AppColors.Today.learningButtonText)
                     .cornerRadius(8)
                 }
             }
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(AppColors.Today.cardBackground)
         .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+        .shadow(color: AppColors.Today.cardShadow, radius: 8, x: 0, y: 2)
     }
 }
 

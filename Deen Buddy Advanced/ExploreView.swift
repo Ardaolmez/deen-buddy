@@ -13,7 +13,7 @@ struct ExploreView: View {
             VStack {
                 Image(systemName: "safari.fill")
                     .font(.system(size: 60))
-                    .foregroundColor(.orange)
+                    .foregroundColor(AppColors.Explore.icon)
                     .padding()
 
                 Text("Explore")
@@ -22,7 +22,7 @@ struct ExploreView: View {
 
                 Text("Coming Soon")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(AppColors.Explore.secondaryText)
                     .padding(.top, 4)
             }
             .navigationTitle("Explore")

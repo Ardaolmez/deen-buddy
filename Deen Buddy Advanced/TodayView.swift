@@ -34,8 +34,8 @@ struct TodayView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
-                        .foregroundColor(.white)
+                        .background(AppColors.Today.dailyQuizButton)
+                        .foregroundColor(AppColors.Today.dailyQuizText)
                         .cornerRadius(12)
                     }
                     .padding(.horizontal)
@@ -67,7 +67,7 @@ struct TodayView: View {
                         // Settings action
                     }) {
                         Image(systemName: "gearshape.fill")
-                            .foregroundColor(.primary)
+                            .foregroundColor(AppColors.Today.settingsIcon)
                     }
                 }
             }
