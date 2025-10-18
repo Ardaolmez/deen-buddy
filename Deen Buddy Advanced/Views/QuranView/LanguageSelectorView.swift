@@ -36,11 +36,11 @@ struct LanguageSelectorView: View {
                     }
                 }
             }
-            .navigationTitle("Select Language")
+            .navigationTitle(AppStrings.quran.selectLanguage)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button(AppStrings.quran.done) {
                         dismiss()
                     }
                 }

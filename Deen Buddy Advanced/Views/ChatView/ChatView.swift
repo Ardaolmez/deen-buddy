@@ -37,7 +37,7 @@ struct ChatView: View {
 
                 // Input
                 HStack(spacing: 12) {
-                    TextField("Type your question...", text: $vm.input)
+                    TextField(AppStrings.chat.inputPlaceholder, text: $vm.input)
                         .padding(.vertical, 12)
                         .padding(.horizontal, 16)
                         .background(Color(.systemGray6))
@@ -58,10 +58,10 @@ struct ChatView: View {
                 .padding()
                 .background(Color(.systemBackground))
             }
-            .navigationBarTitle("Islamic Chat", displayMode: .inline)
+            .navigationBarTitle(AppStrings.chat.navigationTitle, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Close") { dismiss() }
+                    Button(AppStrings.chat.close) { dismiss() }
                 }
             }
         }

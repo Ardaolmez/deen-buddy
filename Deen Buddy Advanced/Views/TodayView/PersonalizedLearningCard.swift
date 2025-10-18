@@ -13,18 +13,18 @@ struct PersonalizedLearningCard: View {
             HStack {
                 Image(systemName: "brain.head.profile")
                     .foregroundColor(AppColors.Today.learningIcon)
-                Text("Personalized Learning")
+                Text(AppStrings.common.personalizedLearning)
                     .font(.headline)
                     .fontWeight(.semibold)
             }
 
-            Text("Continue your journey with tailored lessons")
+            Text(AppStrings.today.continueJourney)
                 .font(.subheadline)
                 .foregroundColor(.secondary)
 
             HStack(spacing: 12) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Prophets Stories")
+                    Text(AppStrings.common.prophetsStories)
                         .font(.subheadline)
                         .fontWeight(.medium)
                     Text("Lesson 3 of 12")
@@ -38,7 +38,7 @@ struct PersonalizedLearningCard: View {
                     // Start lesson action
                 }) {
                     HStack {
-                        Text("Start")
+                        Text(AppStrings.common.start)
                             .fontWeight(.semibold)
                         Image(systemName: "arrow.right")
                     }

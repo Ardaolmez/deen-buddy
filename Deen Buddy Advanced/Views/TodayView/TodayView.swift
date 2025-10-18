@@ -10,6 +10,7 @@ import SwiftUI
 struct TodayView: View {
     @State private var streakDays: [Bool] = [true, true, true, false, false, false, false]
     @State private var showQuiz = false
+    @StateObject private var prayersVM = PrayersViewModel()
 
     var body: some View {
         NavigationView {
@@ -29,7 +30,7 @@ struct TodayView: View {
                     }) {
                         HStack {
                             Image(systemName: "questionmark.circle.fill")
-                            Text("Daily Quiz")
+                            Text(AppStrings.today.dailyQuiz)
                                 .fontWeight(.semibold)
                         }
                         .frame(maxWidth: .infinity)
@@ -55,11 +56,11 @@ struct TodayView: View {
                 }
                 .padding(.top, 10)
             }
-            .navigationTitle("Today's Journey")
+            .navigationTitle(AppStrings.today.navigationTitle)
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    PrayerTimeCompactWidget()
+                    PrayerTimeCompact(nextPrayer: prayersVM.nextPrayer)
                 }
 
                 ToolbarItem(placement: .navigationBarTrailing) {

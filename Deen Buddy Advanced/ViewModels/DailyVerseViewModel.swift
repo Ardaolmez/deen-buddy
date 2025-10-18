@@ -47,7 +47,7 @@ class DailyVerseViewModel: ObservableObject {
             guard !surahs.isEmpty else {
                 DispatchQueue.main.async {
                     self.isLoading = false
-                    self.errorMessage = "Could not load Quran data"
+                    self.errorMessage = AppStrings.today.couldNotLoadQuranData
                 }
                 return
             }
@@ -56,7 +56,7 @@ class DailyVerseViewModel: ObservableObject {
             guard let (verse, surah) = self.quranService.getDailyVerse(surahs: surahs) else {
                 DispatchQueue.main.async {
                     self.isLoading = false
-                    self.errorMessage = "Could not select daily verse"
+                    self.errorMessage = AppStrings.today.couldNotSelectDailyVerse
                 }
                 return
             }

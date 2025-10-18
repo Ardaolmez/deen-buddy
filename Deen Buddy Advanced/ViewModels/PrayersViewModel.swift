@@ -9,11 +9,12 @@
 import Foundation
 import Combine
 import CoreLocation
+import WidgetKit
 
 
 
 final class PrayersViewModel: ObservableObject {
-    @Published private(set) var cityLine: String = "Locating…"
+    @Published private(set) var cityLine: String = AppStrings.prayers.locating
     @Published private(set) var header: DayTimes?
     @Published private(set) var entries: [PrayerEntry] = []
 
@@ -79,8 +80,11 @@ final class PrayersViewModel: ObservableObject {
             let remain = max(0, Int(next.time.timeIntervalSince(now)))
             countdownText = Self.hhmmss(remain)
         } else {
-            countdownText = "—"
+            countdownText = AppStrings.prayers.countdownPlaceholder
         }
+
+        // Save data for widget
+        saveDataForWidget()
     }
 
     private static func hhmmss(_ secs: Int) -> String {
@@ -94,7 +98,7 @@ final class PrayersViewModel: ObservableObject {
         let g = CLGeocoder()
         g.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, _ in
             let p = placemarks?.first
-            let city = p?.locality ?? p?.subAdministrativeArea ?? "Your Area"
+            let city = p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea
             let country = p?.isoCountryCode ?? p?.country ?? ""
             self?.cityLine = country.isEmpty ? city : "\(city), \(country)"
         }
@@ -130,6 +134,59 @@ final class PrayersViewModel: ObservableObject {
         if let data = try? JSONEncoder().encode(completedToday) {
             UserDefaults.standard.set(data, forKey: key)
         }
+    }
+
+    // MARK: - Widget Data Saving
+
+    private func saveDataForWidget() {
+        guard let next = nextPrayer else { return }
+
+        // Create all prayers info
+        let allPrayersInfo = entries.map { entry in
+            PrayerInfo(
+                prayerKey: entry.name.rawValue,  // "fajr", "dhuhr", etc.
+                time: entry.time,
+                icon: iconForPrayer(entry.name),
+                isCompleted: isCompleted(entry.name)
+            )
+        }
+
+        // Create widget data
+        let widgetData = PrayerWidgetData(
+            nextPrayerKey: next.name.rawValue,
+            nextPrayerTime: next.time,
+            nextPrayerIcon: iconForPrayer(next.name),
+            city: extractCity(from: cityLine),
+            country: extractCountry(from: cityLine),
+            allPrayers: allPrayersInfo,
+            lastUpdated: Date()
+        )
+
+        // Save to shared storage
+        UserDefaults.shared.savePrayerData(widgetData)
+
+        // Tell widgets to reload
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    private func iconForPrayer(_ prayer: PrayerName) -> String {
+        switch prayer {
+        case .fajr: return "sunrise.fill"
+        case .dhuhr: return "sun.max.fill"
+        case .asr: return "sun.min.fill"
+        case .maghrib: return "sunset.fill"
+        case .isha: return "moon.stars.fill"
+        }
+    }
+
+    private func extractCity(from cityLine: String) -> String {
+        let components = cityLine.split(separator: ",")
+        return String(components.first ?? "")
+    }
+
+    private func extractCountry(from cityLine: String) -> String {
+        let components = cityLine.split(separator: ",")
+        return components.count > 1 ? String(components.last ?? "").trimmingCharacters(in: .whitespaces) : ""
     }
 }
 

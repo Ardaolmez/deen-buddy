@@ -12,7 +12,7 @@ struct DailyVerseCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Daily Quran Verse for You")
+            Text(AppStrings.today.dailyVerseTitle)
                 .font(.headline)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)

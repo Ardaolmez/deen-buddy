@@ -55,7 +55,7 @@ class QuranViewModel: ObservableObject {
 
             DispatchQueue.main.async {
                 if loadedSurahs.isEmpty {
-                    self.errorMessage = "Could not load Quran data"
+                    self.errorMessage = AppStrings.quran.couldNotLoadQuranData
                 } else {
                     self.surahs = loadedSurahs
                 }

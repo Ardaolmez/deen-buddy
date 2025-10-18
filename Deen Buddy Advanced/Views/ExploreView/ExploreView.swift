@@ -16,16 +16,16 @@ struct ExploreView: View {
                     .foregroundColor(AppColors.Explore.icon)
                     .padding()
 
-                Text("Explore")
+                Text(AppStrings.explore.navigationTitle)
                     .font(.title)
                     .fontWeight(.semibold)
 
-                Text("Coming Soon")
+                Text(AppStrings.explore.comingSoon)
                     .font(.subheadline)
                     .foregroundColor(AppColors.Explore.secondaryText)
                     .padding(.top, 4)
             }
-            .navigationTitle("Explore")
+            .navigationTitle(AppStrings.explore.navigationTitle)
         }
     }
 }

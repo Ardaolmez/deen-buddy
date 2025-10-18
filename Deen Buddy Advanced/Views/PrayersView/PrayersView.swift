@@ -39,7 +39,7 @@ struct PrayersView: View {
 
                     // List
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Today’s Prayers")
+                        Text(AppStrings.prayers.todaysPrayers)
                             .font(.system(.title3, design: .serif).weight(.semibold))
                             .padding(.horizontal)
 
@@ -53,7 +53,7 @@ struct PrayersView: View {
                 }
                 .padding(.vertical)
             }
-            .navigationBarTitle("Prayers", displayMode: .inline)
+            .navigationBarTitle(AppStrings.prayers.navigationTitle, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
@@ -186,7 +186,7 @@ private struct PrayerRow: View {
                 Text(entry.name.title)
                     .font(.system(.headline, design: .serif))
                 if isCurrent {
-                    Text("current").font(.caption2).foregroundStyle(AppColors.Prayers.currentPrayerAccent)
+                    Text(AppStrings.prayers.current).font(.caption2).foregroundStyle(AppColors.Prayers.currentPrayerAccent)
                 }
             }
             Spacer()
@@ -232,15 +232,15 @@ private struct CompletedPrompt: View {
                 .foregroundStyle(completed ? AppColors.Prayers.promptCompleted : AppColors.Prayers.promptIncomplete)
                 .font(.system(size: 20, weight: .semibold))
             VStack(alignment: .leading, spacing: 4) {
-                Text(completed ? "Great job!" : "Did you pray \(prayer)?")
+                Text(completed ? AppStrings.prayers.greatJob : String(format: AppStrings.prayers.didYouPray, prayer))
                     .font(.system(.headline, design: .serif))
-                Text(completed ? "Marked as completed for today." : "Mark it completed to track your consistency.")
+                Text(completed ? AppStrings.prayers.markedCompleted : AppStrings.prayers.markCompleted)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
             Spacer()
             Button(action: onToggle) {
-                Text(completed ? "Undo" : "Yes")
+                Text(completed ? AppStrings.prayers.undo : AppStrings.prayers.yes)
                     .fontWeight(.semibold)
                     .padding(.horizontal, 14).padding(.vertical, 8)
                     .background(RoundedRectangle(cornerRadius: 10).fill(completed ? AppColors.Prayers.promptCompletedBackground : AppColors.Prayers.promptIncompleteBackground))

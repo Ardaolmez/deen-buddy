@@ -35,7 +35,7 @@ struct QuranPageView: View {
 
                         Spacer()
 
-                        Text("\(surah.total_verses) Verses")
+                        Text(String(format: AppStrings.quran.versesCount, surah.total_verses))
                             .font(.system(size: 16, design: .serif))
                             .foregroundColor(AppColors.Quran.surahMetadata)
                     }

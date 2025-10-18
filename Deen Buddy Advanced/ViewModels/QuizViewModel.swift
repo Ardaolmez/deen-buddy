@@ -20,10 +20,10 @@ final class QuizViewModel: ObservableObject {
 
         var gradeText: String {
             switch percent {
-            case 0.9...: return "Excellent 🌟"
-            case 0.7..<0.9: return "Great 👍"
-            case 0.5..<0.7: return "Good 🙂"
-            default: return "Keep Going 💪"
+            case 0.9...: return AppStrings.quiz.gradeExcellent
+            case 0.7..<0.9: return AppStrings.quiz.gradeGreat
+            case 0.5..<0.7: return AppStrings.quiz.gradeGood
+            default: return AppStrings.quiz.gradeKeepGoing
             }
         }
 
@@ -101,7 +101,7 @@ final class QuizViewModel: ObservableObject {
 
     var currentQuestion: QuizQuestion { quizOfDay.questions[currentIndex] }
     var isLastQuestion: Bool { currentIndex == max(quizOfDay.questions.count - 1, 0) }
-    var progressText: String { "Question \(currentIndex + 1) of \(quizOfDay.questions.count)" }
+    var progressText: String { String(format: AppStrings.quiz.progressText, currentIndex + 1, quizOfDay.questions.count) }
 
     func selectAnswer(_ index: Int) {
         guard !isLocked, quizOfDay.questions.indices.contains(currentIndex) else { return }

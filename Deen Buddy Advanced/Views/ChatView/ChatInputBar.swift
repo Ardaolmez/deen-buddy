@@ -7,7 +7,7 @@ struct ChatInputBar: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            TextField("Ask me anything…", text: $text, axis: .vertical)
+            TextField(AppStrings.chat.inputPlaceholderShort, text: $text, axis: .vertical)
                 .textFieldStyle(.plain)
                 .padding(.vertical, 12)
                 .padding(.horizontal, 16)

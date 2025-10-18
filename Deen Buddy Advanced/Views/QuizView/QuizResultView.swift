@@ -34,7 +34,7 @@ struct QuizResultView: View {
                         .clipShape(Circle())
                 }
                 Spacer()
-                Text("Daily Quiz")
+                Text(AppStrings.quiz.navigationTitle)
                     .font(.system(.title3, design: .serif).weight(.semibold))
                 Spacer()
                 // spacer to balance
@@ -68,7 +68,7 @@ struct QuizResultView: View {
                     Text("\(score)/\(total)")
                         .font(.system(size: 24, weight: .bold, design: .serif))
 
-                    Text("Your Iman:")
+                    Text(AppStrings.quiz.yourIman)
                         .font(.system(.title3, design: .serif).weight(.semibold))
                         .padding(.top, 8)
 
@@ -80,7 +80,7 @@ struct QuizResultView: View {
                         Button {
                             onRetry()
                         } label: {
-                            Label("Retry", systemImage: "arrow.clockwise")
+                            Label(AppStrings.quiz.retry, systemImage: "arrow.clockwise")
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(AppColors.Quiz.retryButtonBackground)
@@ -91,7 +91,7 @@ struct QuizResultView: View {
                         Button {
                             onShare()
                         } label: {
-                            Label("Share", systemImage: "square.and.arrow.up")
+                            Label(AppStrings.quiz.share, systemImage: "square.and.arrow.up")
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .background(AppColors.Quiz.shareButtonBackground)
@@ -108,7 +108,7 @@ struct QuizResultView: View {
             .padding(.horizontal)
 
             // Footer note
-            Text("Deen Buddy will tailor custom quizzes for you each day based on your knowledge level. Keep going to steadily strengthen your Iman.")
+            Text(AppStrings.quiz.tailoredQuizzes)
                 .font(.callout)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)

@@ -19,7 +19,7 @@ struct ChatBoxView: View {
                     .font(.system(size: 18))
                     .foregroundColor(.secondary)
 
-                Text("Ask me anything you're curious about Islam")
+                Text(AppStrings.chat.chatBoxPrompt)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.leading)
