@@ -19,7 +19,7 @@ final class LocationService: NSObject, ObservableObject {
     }
 
     func request() {
-        if CLLocationManager.authorizationStatus() == .notDetermined {
+        if manager.authorizationStatus == .notDetermined {
             manager.requestWhenInUseAuthorization()
         }
         manager.requestLocation()

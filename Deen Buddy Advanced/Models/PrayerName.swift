@@ -28,7 +28,7 @@ enum PrayerName: String, CaseIterable, Identifiable, Codable {
 }
 
 struct PrayerEntry: Identifiable, Codable, Equatable {
-    let id = UUID()
+    var id = UUID()
     let name: PrayerName
     let time: Date
 }

@@ -70,7 +70,7 @@ class AppLanguageManager: ObservableObject {
             currentLanguage = lang
         } else {
             // Try to detect device language
-            let deviceLang = Locale.current.languageCode ?? "en"
+            let deviceLang = Locale.current.language.languageCode?.identifier ?? "en"
             currentLanguage = AppLanguage(rawValue: deviceLang) ?? .english
         }
     }
