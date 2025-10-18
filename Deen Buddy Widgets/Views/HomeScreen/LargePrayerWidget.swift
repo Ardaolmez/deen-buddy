@@ -14,7 +14,7 @@ struct LargePrayerWidget: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        colors: [Color.green, Color.green.opacity(0.7)],
+                        colors: [AppColors.Widget.prayerBackgroundStart, AppColors.Widget.prayerBackgroundEnd],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -33,37 +33,37 @@ struct LargePrayerWidget: View {
                     Image(systemName: "moon.stars.fill")
                         .font(.title2)
                 }
-                .foregroundColor(.white)
+                .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                 Divider()
-                    .background(.white.opacity(0.3))
+                    .background(AppColors.Widget.prayerDivider)
 
                 // Next prayer (large)
                 VStack(spacing: 8) {
                     Text(WidgetStrings.nextPrayer)
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(AppColors.Widget.prayerSecondaryText)
 
                     Image(systemName: entry.prayerIcon)
                         .font(.system(size: 48))
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                     Text(entry.prayerName)
                         .font(.title.bold())
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                     Text(entry.prayerTime, style: .time)
                         .font(.title2)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                     // Countdown
                     Text(entry.prayerTime, style: .relative)
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(AppColors.Widget.prayerSecondaryText)
                 }
 
                 Divider()
-                    .background(.white.opacity(0.3))
+                    .background(AppColors.Widget.prayerDivider)
 
                 // All prayers list
                 VStack(spacing: 8) {
@@ -77,11 +77,11 @@ struct LargePrayerWidget: View {
                                 .font(.callout.bold())
                             if prayer.isCompleted {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
+                                    .foregroundColor(AppColors.Widget.prayerCheckmark)
                             }
                         }
                         .font(.callout)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.prayerPrimaryText)
                     }
                 }
             }

@@ -17,7 +17,7 @@ struct LargeVerseWidget: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        colors: [Color(red: 0.2, green: 0.4, blue: 0.3), Color(red: 0.15, green: 0.35, blue: 0.25)],
+                        colors: [AppColors.Widget.verseBackgroundStart, AppColors.Widget.verseBackgroundEnd],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -32,10 +32,10 @@ struct LargeVerseWidget: View {
                         .font(.headline)
                     Spacer()
                 }
-                .foregroundColor(.white)
+                .foregroundColor(AppColors.Widget.versePrimaryText)
 
                 Divider()
-                    .background(.white.opacity(0.3))
+                    .background(AppColors.Widget.verseDivider)
 
                 Spacer()
 
@@ -46,13 +46,13 @@ struct LargeVerseWidget: View {
                         .fontWeight(.medium)
                         .lineLimit(8)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.versePrimaryText)
                         .minimumScaleFactor(0.7)
                         .padding(.horizontal)
 
                     Text(entry.verseReference)
                         .font(.callout)
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(AppColors.Widget.verseSecondaryText)
                 }
 
                 Spacer()
@@ -62,7 +62,7 @@ struct LargeVerseWidget: View {
                     Spacer()
                     Image(systemName: "quote.opening")
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.4))
+                        .foregroundColor(AppColors.Widget.verseTertiaryText)
                     Spacer()
                 }
             }

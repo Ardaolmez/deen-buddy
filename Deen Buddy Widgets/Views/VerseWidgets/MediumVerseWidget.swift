@@ -17,7 +17,7 @@ struct MediumVerseWidget: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        colors: [Color(red: 0.2, green: 0.4, blue: 0.3), Color(red: 0.15, green: 0.35, blue: 0.25)],
+                        colors: [AppColors.Widget.verseBackgroundStart, AppColors.Widget.verseBackgroundEnd],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -28,29 +28,29 @@ struct MediumVerseWidget: View {
                 VStack {
                     Image(systemName: "book.fill")
                         .font(.system(size: 40))
-                        .foregroundColor(.white.opacity(0.9))
+                        .foregroundColor(AppColors.Widget.verseSecondaryText)
                 }
 
                 Divider()
-                    .background(.white.opacity(0.3))
+                    .background(AppColors.Widget.verseDivider)
 
                 // Verse content
                 VStack(alignment: .leading, spacing: 8) {
                     Text(WidgetStrings.quranVerse)
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(AppColors.Widget.verseTertiaryText)
 
                     Text(entry.verseText)
                         .font(.callout)
                         .lineLimit(5)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.versePrimaryText)
                         .minimumScaleFactor(0.8)
 
                     Spacer()
 
                     Text(entry.verseReference)
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(AppColors.Widget.verseSecondaryText)
                 }
 
                 Spacer()
