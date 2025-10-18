@@ -21,19 +21,13 @@ extension UserDefaults {
         if let encoded = try? JSONEncoder().encode(data) {
             set(encoded, forKey: Self.prayerDataKey)
             synchronize() // Force write to disk
-            print("💾 [Shared] Saved prayer data for widget")
         }
     }
 
     func loadPrayerData() -> PrayerWidgetData? {
         guard let data = data(forKey: Self.prayerDataKey) else {
-            print("⚠️ [Shared] No prayer data found")
             return nil
         }
-        let decoded = try? JSONDecoder().decode(PrayerWidgetData.self, from: data)
-        if decoded != nil {
-            print("✅ [Shared] Loaded prayer data successfully")
-        }
-        return decoded
+        return try? JSONDecoder().decode(PrayerWidgetData.self, from: data)
     }
 }

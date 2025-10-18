@@ -62,6 +62,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		46B68FAD2EA32A7E002B2DF1 /* Exceptions for "Deen Buddy Advanced" folder in "Deen Buddy WidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/Quran/quran_en.json,
+			);
+			target = 46C2089B2EA308790038604E /* Deen Buddy WidgetsExtension */;
+		};
 		46C208B52EA3087A0038604E /* Exceptions for "Deen Buddy Widgets" folder in "Deen Buddy WidgetsExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -74,6 +81,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		469C4F522E95C2A40006FC4D /* Deen Buddy Advanced */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				46B68FAD2EA32A7E002B2DF1 /* Exceptions for "Deen Buddy Advanced" folder in "Deen Buddy WidgetsExtension" target */,
+			);
 			path = "Deen Buddy Advanced";
 			sourceTree = "<group>";
 		};

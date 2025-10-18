@@ -12,10 +12,7 @@ import SwiftUI
 struct Deen_Buddy_WidgetsBundle: WidgetBundle {
     var body: some Widget {
         PrayerTimeWidget()  // Prayer time widget with home & lock screen support
-
-        // Template widgets (can be removed if not needed):
-        // Deen_Buddy_Widgets()
-        // Deen_Buddy_WidgetsControl()
-        // Deen_Buddy_WidgetsLiveActivity()
+        HourlyVerseWidget() // Quran verse widget - updates hourly
+        DailyVerseWidget()  // Quran verse widget - updates daily
     }
 }

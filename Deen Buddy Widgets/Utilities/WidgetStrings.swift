@@ -27,6 +27,15 @@ struct WidgetStrings {
     static let widgetName = "Prayer Times"
     static let widgetDescription = "Shows next prayer time and countdown"
 
+    // Quran Verse Widget Strings
+    static let verseOfTheDay = "Verse of the Day"
+    static let verseOfTheHour = "Verse of the Hour"
+    static let dailyVerseWidgetName = "Daily Verse"
+    static let dailyVerseWidgetDescription = "A new verse every day"
+    static let hourlyVerseWidgetName = "Hourly Verse"
+    static let hourlyVerseWidgetDescription = "A new verse every hour"
+    static let quranVerse = "Quran Verse"
+
     // Helper to get prayer name from key
     static func prayerName(for key: String) -> String {
         switch key.lowercased() {
