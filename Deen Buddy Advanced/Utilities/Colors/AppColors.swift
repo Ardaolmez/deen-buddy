@@ -87,7 +87,37 @@ struct AppColors {
 
         static let primaryText = Color.primary
         static let secondaryText = Color.secondary
+        
+        // ===== Stats / Heatmap =====
+               /// Filled cells
+        // Jumu’ah (Friday Dhuhr) — DARK GREEN
+                static let heatmapJamaah = Color(hue: 0.34, saturation: 0.75, brightness: 0.55) // #2F8F4E-ish
+
+                // On time — LIGHT GREEN
+                static let heatmapOnTime = Color(hue: 0.35, saturation: 0.35, brightness: 0.92) // #CFEBD8-ish
+
+                // Late / Missed (unchanged)
+                static let heatmapLate   = Color(hue: 0.98, saturation: 0.80, brightness: 0.85) // red
+                static let heatmapMissed = Color.black.opacity(0.85)                             // near-black
+                             
+
+               /// Empty / no data cell
+               static let heatmapEmpty  = Color.gray.opacity(0.25)
+
+               /// Heatmap container background
+               static let statsHeatmapBackground = Color(.systemGray6)
+
+               /// Range selector (Weeks / Months / Years / All time)
+               static let segmentSelected       = Color.green.opacity(0.18)
+               static let segmentBackground     = Color(.systemGray5)
+               static let segmentTextSelected   = Color.green
+
+               /// Summary cards background
+               static let summaryCardBackground = Color(.systemGray6)
+        
     }
+    
+    
 
     // MARK: - Quiz Tab Colors
     struct Quiz {

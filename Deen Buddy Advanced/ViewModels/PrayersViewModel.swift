@@ -14,6 +14,8 @@ import WidgetKit
 
 
 final class PrayersViewModel: ObservableObject {
+    private let logger = PrayerLogger()
+    
     @Published private(set) var cityLine: String = AppStrings.prayers.locating
     @Published private(set) var header: DayTimes?
     @Published private(set) var entries: [PrayerEntry] = []
@@ -107,13 +109,18 @@ final class PrayersViewModel: ObservableObject {
     // MARK: - Completed prayers (persist per day)
 
     func toggleCompleted(_ name: PrayerName) {
+        
         if completedToday.contains(name) { completedToday.remove(name) }
         else { completedToday.insert(name) }
         saveCompleted()
+        logger.setCompleted(name, !logger.isCompleted(name))
+        
     }
 
     func isCompleted(_ name: PrayerName) -> Bool {
-        completedToday.contains(name)
+//        completedToday.contains(name)
+        logger.isCompleted(name)
+        
     }
 
     private var completedKey: String {

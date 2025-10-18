@@ -12,6 +12,11 @@ struct Deen_Buddy_AdvancedApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                                   #if DEBUG
+                                   DemoData.seed(daysBack: 120) // seeds only if empty
+                                   #endif
+                               }
         }
     }
 }

@@ -4,6 +4,7 @@ import SwiftUI
 struct PrayersView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var vm = PrayersViewModel()
+    @State private var openRecords = false   // ⬅️ state to push records
 
     var body: some View {
         NavigationView {
@@ -55,18 +56,14 @@ struct PrayersView: View {
             }
             .navigationBarTitle(AppStrings.prayers.navigationTitle, displayMode: .inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "chevron.left")
+                // ⬅️ Trailing "History / Stats" button
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: PrayerRecordsView(), isActive: $openRecords) {
+                        Label(AppStrings.prayers.history, systemImage: "chart.bar.xaxis")
+                            .labelStyle(.iconOnly)   // icon-only; remove if you want text
                             .font(.system(size: 18, weight: .semibold))
-                            .padding(8)
-                            .background(.thinMaterial)
-                            .clipShape(Circle())
                     }
-                }
-            }
+                }}
         }
     }
 

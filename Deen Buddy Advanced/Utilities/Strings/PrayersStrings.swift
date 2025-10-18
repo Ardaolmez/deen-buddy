@@ -25,6 +25,9 @@ struct PrayersStrings {
     static let zawal = "Zawal"
     static let undo = "Undo"
     static let yes = "Yes"
+    static let history = "Stats"
+    
+    
 
     // Location & Status
     static let locating = "Locating…"
