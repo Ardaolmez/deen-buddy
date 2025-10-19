@@ -38,6 +38,9 @@ struct AppColors {
         // Surah Selector
         static let selectorBadgeStart = Color.green
         static let selectorBadgeEnd = Color.teal
+
+        // Error State
+        static let errorIcon = Color.orange
     }
 
     // MARK: - Today Tab Colors
@@ -59,6 +62,23 @@ struct AppColors {
         static let learningIcon = Color.purple
         static let learningButton = Color.purple
         static let learningButtonText = Color.white
+
+        // Prayer Time Compact Widget
+        static let prayerCompactIcon = Color.orange
+
+        // Daily Reading Goal Card
+        static let readingGoalIcon = Color.blue
+        static let readingGoalProgress = Color.blue
+        static let readingGoalText = Color.blue
+        static let readingGoalButton = Color.blue
+
+        // Daily Verse Card
+        static let verseCardPrimaryText = Color.white
+        static let verseCardSecondaryText = Color.white.opacity(0.8)
+        static let verseCardGradientStart = Color.purple.opacity(0.8)
+        static let verseCardGradientEnd = Color.blue.opacity(0.6)
+        static let verseCardShadow = Color.black.opacity(0.1)
+        static let verseCardProgressTint = Color.white
     }
 
     // MARK: - Prayers Tab Colors
@@ -136,12 +156,37 @@ struct AppColors {
         static let retryButtonText = Color.blue
         static let shareButtonBackground = Color.black.opacity(0.1)
         static let shareButtonText = Color.primary
+
+        // Answer Row Colors
+        static let answerText = Color.primary
+        static let answerCorrectIcon = Color.green
+        static let answerWrongIcon = Color.red
+        static let answerNeutralBackground = Color(.systemGray6)
+        static let answerCorrectBackground = Color.green.opacity(0.15)
+        static let answerWrongBackground = Color.red.opacity(0.15)
+        static let answerNeutralBorder = Color.clear
+        static let answerCorrectBorder = Color.green
+        static let answerWrongBorder = Color.red
     }
 
     // MARK: - Explore Tab Colors
     struct Explore {
         static let icon = Color.orange
         static let secondaryText = Color.secondary
+    }
+
+    // MARK: - Chat Colors
+    struct Chat {
+        static let boxIcon = Color.secondary
+        static let boxText = Color.secondary
+        static let boxBackground = Color(.systemGray6)
+        static let boxBorder = Color(.systemGray4)
+
+        static let inputBackground = Color(.systemGray6)
+        static let sendButtonIcon = Color.white
+        static let sendButtonActive = Color.blue
+        static let sendButtonInactive = Color.gray
+        static let containerBackground = Color(.systemBackground)
     }
 
     // MARK: - Widget Colors

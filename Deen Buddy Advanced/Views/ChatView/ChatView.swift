@@ -20,7 +20,7 @@ struct ChatView: View {
                                     .padding(.horizontal, 16)
                             }
                             if vm.isSending {
-                                MessageRowView(message: .init(role: .bot, text: "…"))
+                                MessageRowView(message: .init(role: .bot, text: AppStrings.chat.loadingIndicator))
                                     .redacted(reason: .placeholder)
                                     .padding(.horizontal, 16)
                             }
@@ -40,7 +40,7 @@ struct ChatView: View {
                     TextField(AppStrings.chat.inputPlaceholder, text: $vm.input)
                         .padding(.vertical, 12)
                         .padding(.horizontal, 16)
-                        .background(Color(.systemGray6))
+                        .background(AppColors.Chat.inputBackground)
                         .cornerRadius(24)
 
                     let canSend = !vm.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -48,15 +48,15 @@ struct ChatView: View {
                     Button(action: vm.send) {
                         Image(systemName: "paperplane.fill")
                             .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(AppColors.Chat.sendButtonIcon)
                             .padding(12)
-                            .background(canSend ? Color.blue : Color.gray)
+                            .background(canSend ? AppColors.Chat.sendButtonActive : AppColors.Chat.sendButtonInactive)
                             .clipShape(Circle())
                     }
                     .disabled(!canSend)
                 }
                 .padding()
-                .background(Color(.systemBackground))
+                .background(AppColors.Chat.containerBackground)
             }
             .navigationBarTitle(AppStrings.chat.navigationTitle, displayMode: .inline)
             .toolbar {

@@ -15,31 +15,31 @@ struct DailyVerseCard: View {
             Text(AppStrings.today.dailyVerseTitle)
                 .font(.headline)
                 .fontWeight(.semibold)
-                .foregroundColor(.white)
+                .foregroundColor(AppColors.Today.verseCardPrimaryText)
 
             if viewModel.isLoading {
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    .progressViewStyle(CircularProgressViewStyle(tint: AppColors.Today.verseCardProgressTint))
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding()
             } else if let errorMessage = viewModel.errorMessage {
                 Text(errorMessage)
                     .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundColor(AppColors.Today.verseCardSecondaryText)
             } else {
                 // Show verse in selected language
                 if let translation = viewModel.translationText, !translation.isEmpty {
                     Text(translation)
                         .font(.title3)
                         .fontWeight(.medium)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Today.verseCardPrimaryText)
                         .multilineTextAlignment(.leading)
                 } else if !viewModel.arabicText.isEmpty {
                     // Fallback to Arabic if no translation available
                     Text(viewModel.arabicText)
                         .font(.title2)
                         .fontWeight(.medium)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Today.verseCardPrimaryText)
                         .multilineTextAlignment(.trailing)
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
@@ -47,7 +47,7 @@ struct DailyVerseCard: View {
                 // Reference
                 Text(viewModel.reference)
                     .font(.subheadline)
-                    .foregroundColor(.white.opacity(0.8))
+                    .foregroundColor(AppColors.Today.verseCardSecondaryText)
                     .padding(.top, 8)
             }
         }
@@ -55,13 +55,13 @@ struct DailyVerseCard: View {
         .padding(20)
         .background(
             LinearGradient(
-                gradient: Gradient(colors: [Color.purple.opacity(0.8), Color.blue.opacity(0.6)]),
+                gradient: Gradient(colors: [AppColors.Today.verseCardGradientStart, AppColors.Today.verseCardGradientEnd]),
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
         )
         .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 4)
+        .shadow(color: AppColors.Today.verseCardShadow, radius: 10, x: 0, y: 4)
     }
 }
 

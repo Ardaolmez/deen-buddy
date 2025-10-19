@@ -22,7 +22,7 @@ final class PrayersViewModel: ObservableObject {
 
     @Published private(set) var currentPrayer: PrayerEntry?
     @Published private(set) var nextPrayer: PrayerEntry?
-    @Published private(set) var countdownText: String = "--:--:--"
+    @Published private(set) var countdownText: String = AppStrings.prayers.timeCountdownPlaceholder
     @Published private(set) var isBetweenSunriseAndDhuhr: Bool = false
 
     // completed state (per-day)
@@ -125,7 +125,7 @@ final class PrayersViewModel: ObservableObject {
 
     private var completedKey: String {
         let ymd = DateFormatter.cached("yyyyMMdd").string(from: Date())
-        return "prayers.completed.\(ymd)"
+        return "\(AppStrings.prayers.completedKeyPrefix).\(ymd)"
     }
 
     private func loadCompleted() {

@@ -14,7 +14,7 @@ struct PrayerTimeCompact: View {
         HStack(spacing: 6) {
             Image(systemName: prayerIcon)
                 .font(.system(size: 18))
-                .foregroundColor(.orange)
+                .foregroundColor(AppColors.Today.prayerCompactIcon)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(prayerName)
@@ -38,7 +38,7 @@ struct PrayerTimeCompact: View {
 
     private var prayerTime: String {
         guard let prayer = nextPrayer else {
-            return "--:--"
+            return AppStrings.prayers.timePlaceholder
         }
         let formatter = DateFormatter()
         formatter.timeStyle = .short

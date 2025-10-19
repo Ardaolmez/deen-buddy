@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct PersonalizedLearningCard: View {
+    let currentLesson: Int = 3
+    let totalLessons: Int = 12
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -27,7 +30,7 @@ struct PersonalizedLearningCard: View {
                     Text(AppStrings.common.prophetsStories)
                         .font(.subheadline)
                         .fontWeight(.medium)
-                    Text("Lesson 3 of 12")
+                    Text(String(format: AppStrings.common.lessonProgress, currentLesson, totalLessons))
                         .font(.caption)
                         .foregroundColor(.secondary)
                 }

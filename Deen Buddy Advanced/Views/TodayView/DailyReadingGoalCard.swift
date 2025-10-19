@@ -14,7 +14,7 @@ struct DailyReadingGoalCard: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "book.fill")
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppColors.Today.readingGoalIcon)
                 Text(AppStrings.today.dailyReadingGoal)
                     .font(.headline)
                     .fontWeight(.semibold)
@@ -22,11 +22,11 @@ struct DailyReadingGoalCard: View {
                 Text("\(Int(progress * 100))%")
                     .font(.subheadline)
                     .fontWeight(.semibold)
-                    .foregroundColor(.blue)
+                    .foregroundColor(AppColors.Today.readingGoalText)
             }
 
             ProgressView(value: progress)
-                .progressViewStyle(LinearProgressViewStyle(tint: .blue))
+                .progressViewStyle(LinearProgressViewStyle(tint: AppColors.Today.readingGoalProgress))
                 .scaleEffect(x: 1, y: 2, anchor: .center)
 
             HStack {
@@ -40,14 +40,14 @@ struct DailyReadingGoalCard: View {
                     Text(AppStrings.today.continueReading)
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundColor(.blue)
+                        .foregroundColor(AppColors.Today.readingGoalButton)
                 }
             }
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(AppColors.Today.cardBackground)
         .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+        .shadow(color: AppColors.Today.cardShadow, radius: 8, x: 0, y: 2)
     }
 }
 

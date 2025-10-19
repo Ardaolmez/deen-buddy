@@ -29,8 +29,22 @@ struct PrayersStrings {
     
     
 
+    // Prayer Names
+    static let dhuhr = "Dhuhr"
+
+    // Time formats
+    static let timePlaceholder = "--:--"
+    static let timeCountdownPlaceholder = "--:--:--"
+
+    // Format Strings
+    static let nowPrayerFormat = "%@: %@ — %@"  // "Now: Fajr — 5:30 AM"
+    static let nextDhuhrFormat = "%@: %@ — %@"  // "Next: Dhuhr — 12:15 PM"
+
     // Location & Status
     static let locating = "Locating…"
     static let yourArea = "Your Area"
     static let countdownPlaceholder = "—"
+
+    // UserDefaults Keys
+    static let completedKeyPrefix = "prayers.completed"
 }

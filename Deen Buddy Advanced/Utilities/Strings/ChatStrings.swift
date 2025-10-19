@@ -15,4 +15,7 @@ struct ChatStrings {
     static let close = "Close"
     static let botName = "Deen Buddy:"
     static let welcomeMessage = "Deen Buddy:\nWhat's on your mind?"
+
+    // Loading
+    static let loadingIndicator = "…"
 }

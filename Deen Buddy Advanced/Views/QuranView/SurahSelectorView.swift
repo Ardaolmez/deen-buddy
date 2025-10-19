@@ -64,7 +64,7 @@ struct SurahRowView: View {
                     Circle()
                         .fill(
                             LinearGradient(
-                                gradient: Gradient(colors: [Color.green, Color.teal]),
+                                gradient: Gradient(colors: [AppColors.Quran.selectorBadgeStart, AppColors.Quran.selectorBadgeEnd]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
                             )
@@ -76,13 +76,13 @@ struct SurahRowView: View {
                 HStack {
                     Text(surah.transliteration)
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundColor(.primary)
+                        .foregroundColor(AppColors.Quran.surahNameTransliteration)
 
                     Spacer()
 
                     Text(surah.name)
                         .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(.green)
+                        .foregroundColor(AppColors.Quran.selectorBadgeStart)
                 }
 
                 HStack {

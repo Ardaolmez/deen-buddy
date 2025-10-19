@@ -17,21 +17,21 @@ struct ChatBoxView: View {
             HStack(spacing: 12) {
                 Image(systemName: "sparkles")
                     .font(.system(size: 18))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(AppColors.Chat.boxIcon)
 
                 Text(AppStrings.chat.chatBoxPrompt)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(AppColors.Chat.boxText)
                     .multilineTextAlignment(.leading)
 
                 Spacer()
             }
             .padding()
-            .background(Color(.systemGray6))
+            .background(AppColors.Chat.boxBackground)
             .cornerRadius(25)
             .overlay(
                 RoundedRectangle(cornerRadius: 25)
-                    .stroke(Color(.systemGray4), lineWidth: 1)
+                    .stroke(AppColors.Chat.boxBorder, lineWidth: 1)
             )
         }
         .sheet(isPresented: $showChat) {

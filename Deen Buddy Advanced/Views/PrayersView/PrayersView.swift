@@ -16,7 +16,7 @@ struct PrayersView: View {
                         HeaderCard(
                             cityLine: vm.cityLine,
                             currentLine: vm.isBetweenSunriseAndDhuhr
-                                ? "Next: Dhuhr — \(time(h.dhuhr))"
+                                ? String(format: AppStrings.prayers.nextDhuhrFormat, AppStrings.prayers.next, AppStrings.prayers.dhuhr, time(h.dhuhr))
                                 : nowLine(current: vm.currentPrayer),
                             countdown: vm.countdownText,
                             nextLine: nextLine(next: vm.nextPrayer, h: h),
@@ -75,18 +75,20 @@ struct PrayersView: View {
 
     private func nowLine(current: PrayerEntry?) -> String {
         if let c = current {
-            return "Now: \(c.name.title) — \(time(c.time))"
+            return String(format: AppStrings.prayers.nowPrayerFormat, AppStrings.prayers.now, c.name.title, time(c.time))
         }
-        return "Before Fajr"
+        return AppStrings.prayers.beforeFajr
     }
 
     private func nextLine(next: PrayerEntry?, h: DayTimes) -> String {
         if let n = next {
             // if next < now it's tomorrow's fajr, but ViewModel already handles countdown across days
             let isTomorrowFajr = Calendar.current.isDate(n.time, inSameDayAs: Date()) == false && n.name == .fajr
-            return isTomorrowFajr ? "Next: Fajr tomorrow" : "Next: \(n.name.title) at \(time(n.time))"
+            return isTomorrowFajr
+                ? String(format: AppStrings.prayers.nextPrayerTomorrow, n.name.title)
+                : String(format: AppStrings.prayers.nextPrayerAt, n.name.title, time(n.time))
         }
-        return "Next: Fajr tomorrow"
+        return String(format: AppStrings.prayers.nextPrayerTomorrow, "Fajr")
     }
 }
 
@@ -127,11 +129,11 @@ private struct HeaderCard: View {
 
             // Sunrise / Sunset / Zawal line (Islam360-style)
             HStack(spacing: 16) {
-                SunStat(icon: "sunrise.fill", title: "Sunrise", time: sunrise)
+                SunStat(icon: "sunrise.fill", title: AppStrings.prayers.sunrise, time: sunrise)
                 Divider().frame(height: 22)
-                SunStat(icon: "sun.max.fill", title: "Zawal", range: zawalStart...zawalEnd)
+                SunStat(icon: "sun.max.fill", title: AppStrings.prayers.zawal, range: zawalStart...zawalEnd)
                 Divider().frame(height: 22)
-                SunStat(icon: "sunset.fill", title: "Sunset", time: sunset)
+                SunStat(icon: "sunset.fill", title: AppStrings.prayers.sunset, time: sunset)
             }
             .padding(.top, 6)
         }

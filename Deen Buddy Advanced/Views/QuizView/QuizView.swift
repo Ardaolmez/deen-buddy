@@ -71,7 +71,7 @@ struct QuizView: View {
                 score: vm.score,
                 total: vm.totalQuestions,
                 gradeText: vm.gradeText,
-                onShare: { QuizShareSheet.present(text: "I scored \(vm.summaryLine) on Deen Buddy!") },
+                onShare: { QuizShareSheet.present(text: String(format: AppStrings.quiz.shareText, vm.summaryLine)) },
                 onDone: { dismiss() },
                 onRetry: { vm.restartSameQuiz() }
             )

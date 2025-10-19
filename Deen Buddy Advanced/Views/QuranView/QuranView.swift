@@ -25,7 +25,7 @@ struct QuranView: View {
                     VStack(spacing: 16) {
                         Image(systemName: "exclamationmark.triangle")
                             .font(.system(size: 50))
-                            .foregroundColor(.orange)
+                            .foregroundColor(AppColors.Quran.errorIcon)
 
                         Text(errorMessage)
                             .font(.system(size: 16, design: .serif))
@@ -98,7 +98,7 @@ struct QuranView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "list.bullet")
                             if let surah = viewModel.currentSurah {
-                                Text("\(surah.id)/114")
+                                Text(String(format: AppStrings.quran.surahCount, surah.id))
                             }
                         }
                         .font(.system(size: 14, weight: .semibold, design: .rounded))

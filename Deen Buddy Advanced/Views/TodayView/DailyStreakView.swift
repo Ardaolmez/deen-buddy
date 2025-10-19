@@ -9,7 +9,6 @@ import SwiftUI
 
 struct DailyStreakView: View {
     @Binding var streakDays: [Bool]
-    let daysOfWeek = ["M", "T", "W", "T", "F", "S", "S"]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -24,7 +23,7 @@ struct DailyStreakView: View {
             HStack(spacing: 12) {
                 ForEach(0..<7, id: \.self) { index in
                     VStack(spacing: 6) {
-                        Text(daysOfWeek[index])
+                        Text(AppStrings.common.daysOfWeek[index])
                             .font(.caption)
                             .foregroundColor(AppColors.Today.streakText)
 

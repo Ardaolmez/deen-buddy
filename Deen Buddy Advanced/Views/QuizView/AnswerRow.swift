@@ -16,13 +16,13 @@ struct AnswerRow: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                Text(text).foregroundColor(.primary)
+                Text(text).foregroundColor(AppColors.Quiz.answerText)
                 Spacer()
                 switch state {
                 case .correctHighlight:
-                    Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
+                    Image(systemName: "checkmark.circle.fill").foregroundColor(AppColors.Quiz.answerCorrectIcon)
                 case .wrongHighlight:
-                    Image(systemName: "xmark.circle.fill").foregroundColor(.red)
+                    Image(systemName: "xmark.circle.fill").foregroundColor(AppColors.Quiz.answerWrongIcon)
                 case .neutral:
                     EmptyView()
                 }
@@ -42,17 +42,17 @@ struct AnswerRow: View {
 
     private var backgroundColor: Color {
         switch state {
-        case .neutral:          return Color(.systemGray6)
-        case .correctHighlight: return Color.green.opacity(0.15)
-        case .wrongHighlight:   return Color.red.opacity(0.15)
+        case .neutral:          return AppColors.Quiz.answerNeutralBackground
+        case .correctHighlight: return AppColors.Quiz.answerCorrectBackground
+        case .wrongHighlight:   return AppColors.Quiz.answerWrongBackground
         }
     }
 
     private var borderColor: Color {
         switch state {
-        case .neutral:          return .clear
-        case .correctHighlight: return .green
-        case .wrongHighlight:   return .red
+        case .neutral:          return AppColors.Quiz.answerNeutralBorder
+        case .correctHighlight: return AppColors.Quiz.answerCorrectBorder
+        case .wrongHighlight:   return AppColors.Quiz.answerWrongBorder
         }
     }
 }
