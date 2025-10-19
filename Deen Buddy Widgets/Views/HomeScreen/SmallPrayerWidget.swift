@@ -15,7 +15,7 @@ struct SmallPrayerWidget: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        colors: [Color.green, Color.green.opacity(0.7)],
+                        colors: [AppColors.Widget.prayerBackgroundStart, AppColors.Widget.prayerBackgroundEnd],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -26,17 +26,17 @@ struct SmallPrayerWidget: View {
                 // Icon
                 Image(systemName: entry.prayerIcon)
                     .font(.system(size: 36))
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                 // Prayer name
                 Text(entry.prayerName)
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                 // Time
                 Text(entry.prayerTime, style: .time)
                     .font(.title2.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                 // Location
                 HStack(spacing: 4) {
@@ -47,7 +47,7 @@ struct SmallPrayerWidget: View {
                     }
                 }
                 .font(.caption2)
-                .foregroundColor(.white.opacity(0.8))
+                .foregroundColor(AppColors.Widget.prayerSecondaryText)
             }
             .padding()
         }

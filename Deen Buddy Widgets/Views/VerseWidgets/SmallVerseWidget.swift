@@ -17,7 +17,7 @@ struct SmallVerseWidget: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        colors: [Color(red: 0.2, green: 0.4, blue: 0.3), Color(red: 0.15, green: 0.35, blue: 0.25)],
+                        colors: [AppColors.Widget.verseBackgroundStart, AppColors.Widget.verseBackgroundEnd],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -27,20 +27,20 @@ struct SmallVerseWidget: View {
                 // Book icon
                 Image(systemName: "book.fill")
                     .font(.title2)
-                    .foregroundColor(.white.opacity(0.9))
+                    .foregroundColor(AppColors.Widget.verseSecondaryText)
 
                 // Verse text
                 Text(entry.verseText)
                     .font(.caption)
                     .lineLimit(4)
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Widget.versePrimaryText)
                     .minimumScaleFactor(0.8)
 
                 // Surah reference
                 Text(entry.verseReference)
                     .font(.caption2)
-                    .foregroundColor(.white.opacity(0.7))
+                    .foregroundColor(AppColors.Widget.verseTertiaryText)
             }
             .padding()
         }

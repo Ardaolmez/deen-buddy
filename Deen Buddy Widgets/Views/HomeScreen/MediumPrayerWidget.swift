@@ -14,7 +14,7 @@ struct MediumPrayerWidget: View {
             ContainerRelativeShape()
                 .fill(
                     LinearGradient(
-                        colors: [Color.green, Color.green.opacity(0.7)],
+                        colors: [AppColors.Widget.prayerBackgroundStart, AppColors.Widget.prayerBackgroundEnd],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
@@ -25,7 +25,7 @@ struct MediumPrayerWidget: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Text(WidgetStrings.nextPrayer)
                         .font(.caption)
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(AppColors.Widget.prayerSecondaryText)
 
                     HStack(spacing: 8) {
                         Image(systemName: entry.prayerIcon)
@@ -33,15 +33,15 @@ struct MediumPrayerWidget: View {
                         Text(entry.prayerName)
                             .font(.title2.bold())
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                     Text(entry.prayerTime, style: .time)
                         .font(.title3)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.prayerPrimaryText)
 
                     Text("\(entry.city), \(entry.country)")
                         .font(.caption2)
-                        .foregroundColor(.white.opacity(0.7))
+                        .foregroundColor(AppColors.Widget.prayerTertiaryText)
                 }
 
                 Spacer()
@@ -57,10 +57,10 @@ struct MediumPrayerWidget: View {
                             if prayer.isCompleted {
                                 Image(systemName: "checkmark.circle.fill")
                                     .font(.caption)
-                                    .foregroundColor(.green)
+                                    .foregroundColor(AppColors.Widget.prayerCheckmark)
                             }
                         }
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.Widget.prayerPrimaryText)
                     }
                 }
             }
