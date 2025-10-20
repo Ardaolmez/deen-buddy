@@ -7,7 +7,7 @@ struct PrayersView: View {
     @State private var openRecords = false   // ⬅️ state to push records
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
 
@@ -28,7 +28,7 @@ struct PrayersView: View {
                         .padding(.horizontal)
                     }
 
-                    // “Did you pray?” prompt for current prayer (if any)
+                    // "Did you pray?" prompt for current prayer (if any)
                     if let current = vm.currentPrayer {
                         CompletedPrompt(
                             prayer: current.name.title,
@@ -55,10 +55,15 @@ struct PrayersView: View {
                 .padding(.vertical)
             }
             .navigationBarTitle(AppStrings.prayers.navigationTitle, displayMode: .inline)
+            .navigationDestination(isPresented: $openRecords) {
+                PrayerRecordsView()
+            }
             .toolbar {
                 // ⬅️ Trailing "History / Stats" button
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    NavigationLink(destination: PrayerRecordsView(), isActive: $openRecords) {
+                    Button {
+                        openRecords = true
+                    } label: {
                         Label(AppStrings.prayers.history, systemImage: "chart.bar.xaxis")
                             .labelStyle(.iconOnly)   // icon-only; remove if you want text
                             .font(.system(size: 18, weight: .semibold))

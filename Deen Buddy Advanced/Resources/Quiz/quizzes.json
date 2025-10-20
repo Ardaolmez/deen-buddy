@@ -1,47 +1,33 @@
 [
   {
-    "title": "Basics 1",
+    "title": "Quran",
     "questions": [
       {
-        "question": "How many Surahs are in the Quran?",
-        "answers": ["114", "100", "120", "99"],
-        "correctIndex": 0
-      },
-      {
-        "question": "Which Surah is known as the heart of the Quran?",
-        "answers": ["Al-Fatiha", "Yasin", "Al-Baqarah", "Al-Ikhlas"],
-        "correctIndex": 1
-      },
-      {
-        "question": "How many times is Salah obligatory per day?",
-        "answers": ["3", "4", "5", "6"],
-        "correctIndex": 2
-      }
-    ]
-  },
-  {
-    "title": "Basics 2",
-    "questions": [
-      {
-        "question": "What is the first pillar of Islam?",
-        "answers": ["Zakat", "Salah", "Shahada", "Sawm"],
-        "correctIndex": 2
-      },
-      {
-        "question": "Which month is fasting obligatory?",
-        "answers": ["Muharram", "Sha'ban", "Ramadan", "Dhul-Hijjah"],
-        "correctIndex": 2
-      }
-    ]
-  },
-  {
-    "title": "Basics 3",
-    "questions": [
-      {
-        "question": "What is Zakat?",
-        "answers": ["Charity", "Pilgrimage", "Prayer", "Fasting"],
-        "correctIndex": 0
-      }
+        "question": "What does the first verse of the Quran 'Bismillaahir Rahmaanir Raheem' mean?",
+        "answers": [
+        "In the name of Allah, the Gracious, the Merciful.",
+        "Glory be to Allah in the highest.",
+        "There is no deity but Allah.",
+        "O mankind, be mindful of your Lord."
+        ],
+        "correctIndex": 0,
+        "surah": "Al-Fatiha",
+        "verse": 1,
+        "explanation": "The Al-Fatiha begins with the basmala, underlining Allah's grace and mercy at the opening of the Quran."
+        },
+        {
+        "question": "Whose path is identified as the Straight Path in Al-Fatiha?",
+        "answers": [
+        "Those who follow the Prophet Mohammed first",
+        "Those Allah has chosen from birth",
+        "Those Allah has blessed",
+        "Those who read the Quran"
+        ],
+        "correctIndex": 2,
+        "surah": "Al-Fatiha",
+        "verse": 7,
+        "explanation": "The Straight Path is associated with those blessed by Allah."
+        }
     ]
   }
 ]

@@ -72,7 +72,7 @@ struct TodayView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showQuiz) {
+            .fullScreenCover(isPresented: $showQuiz) {
                 QuizView()
             }
         }

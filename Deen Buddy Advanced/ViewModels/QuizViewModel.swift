@@ -9,8 +9,11 @@ final class QuizViewModel: ObservableObject {
     @Published private(set) var selectedIndex: Int? = nil
     @Published private(set) var isLocked: Bool = false
     @Published private(set) var score: Int = 0
-    
+
     @Published var didFinish: Bool = false   // ⬅️ trigger result screen
+
+    // Quran data for verse fetching
+    private let quranSurahs: [Surah]
 
         var totalQuestions: Int { quizOfDay.questions.count }
         var percent: Double {
@@ -36,6 +39,9 @@ final class QuizViewModel: ObservableObject {
         // Load quizzes from JSON file or use provided quizzes
         let resolvedQuizzes = quizzes ?? QuizViewModel.loadQuizzesFromJSON()
         let resolvedQuizOfDay = quiz ?? QuizViewModel.pickQuizOfDay(from: resolvedQuizzes)
+
+        // Load Quran data for verse fetching
+        self.quranSurahs = QuranService.shared.loadQuran(language: .english)
 
         // now assign to self
         self.quizzes = resolvedQuizzes
@@ -101,7 +107,39 @@ final class QuizViewModel: ObservableObject {
 
     var currentQuestion: QuizQuestion { quizOfDay.questions[currentIndex] }
     var isLastQuestion: Bool { currentIndex == max(quizOfDay.questions.count - 1, 0) }
-    var progressText: String { String(format: AppStrings.quiz.progressText, currentIndex + 1, quizOfDay.questions.count) }
+
+    // Answer correctness state
+    var isCorrectAnswer: Bool? {
+        guard let selected = selectedIndex else { return nil }
+        return selected == currentQuestion.correctIndex
+    }
+
+    // Verse reference in "Surah:Verse" format
+    var verseReference: String? {
+        guard let surah = currentQuestion.surah,
+              let verse = currentQuestion.verse else { return nil }
+        return "\(surah):\(verse)"
+    }
+
+    // Fetch the Quranic verse for the current question
+    func fetchVerseForCurrentQuestion() -> Verse? {
+        guard let surahName = currentQuestion.surah,
+              let verseNumber = currentQuestion.verse else { return nil }
+
+        // Find the surah by transliteration name
+        guard let surah = quranSurahs.first(where: { $0.transliteration == surahName }) else {
+            print("⚠️ QuizViewModel: Could not find surah '\(surahName)'")
+            return nil
+        }
+
+        // Find the verse by ID
+        guard let verse = surah.verses.first(where: { $0.id == verseNumber }) else {
+            print("⚠️ QuizViewModel: Could not find verse \(verseNumber) in \(surahName)")
+            return nil
+        }
+
+        return verse
+    }
 
     func selectAnswer(_ index: Int) {
         guard !isLocked, quizOfDay.questions.indices.contains(currentIndex) else { return }

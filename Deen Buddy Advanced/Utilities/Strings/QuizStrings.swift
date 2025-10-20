@@ -9,12 +9,8 @@ import Foundation
 
 struct QuizStrings {
     static let navigationTitle = "Daily Quiz"
-    static let score = "Score: %d"
-    static let progressText = "Question %d of %d"
     static let nextQuestion = "Next Question"
     static let seeResults = "See Results"
-    static let loading = "Loading..."
-    static let close = "Close"
 
     // Quiz Result
     static let yourIman = "Your Iman:"
@@ -30,4 +26,14 @@ struct QuizStrings {
 
     // Share
     static let shareText = "I scored %@ on Deen Buddy!"
+
+    // Answer Feedback
+    static let correct = "Correct!"
+    static let incorrect = "Incorrect"
+    static let correctAnswerIs = "The correct answer is:"
+    static let explanation = "Explanation:"
+    static let reference = "Reference:"
+
+    // Verse Display
+    static let quranVerse = "Quranic Reference:"
 }

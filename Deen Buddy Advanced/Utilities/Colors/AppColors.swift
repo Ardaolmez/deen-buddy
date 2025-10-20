@@ -141,12 +141,10 @@ struct AppColors {
 
     // MARK: - Quiz Tab Colors
     struct Quiz {
-        static let scoreText = Color.blue
         static let nextButtonActive = Color.blue
         static let nextButtonInactive = Color.gray
         static let buttonText = Color.white
 
-        static let secondaryText = Color.secondary
 
         // Quiz Result View
         static let progressBarBackground = Color.green.opacity(0.25)
@@ -159,14 +157,24 @@ struct AppColors {
 
         // Answer Row Colors
         static let answerText = Color.primary
-        static let answerCorrectIcon = Color.green
-        static let answerWrongIcon = Color.red
         static let answerNeutralBackground = Color(.systemGray6)
         static let answerCorrectBackground = Color.green.opacity(0.15)
         static let answerWrongBackground = Color.red.opacity(0.15)
         static let answerNeutralBorder = Color.clear
         static let answerCorrectBorder = Color.green
         static let answerWrongBorder = Color.red
+
+        // Explanation Card Colors
+        static let explanationCardBackground = Color(.systemGray6)
+        static let explanationCorrectHeader = Color.green
+        static let explanationIncorrectHeader = Color.red
+        static let explanationText = Color.primary
+        static let explanationReference = Color.secondary
+
+        // Verse Display Colors
+        static let verseArabicText = Color.primary
+        static let verseTranslationText = Color.secondary
+        static let verseCardBackground = Color(.systemBackground)
     }
 
     // MARK: - Explore Tab Colors
