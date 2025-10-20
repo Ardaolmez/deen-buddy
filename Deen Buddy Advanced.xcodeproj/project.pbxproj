@@ -534,6 +534,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Deen Journey";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to calculate accurate prayer times.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -574,6 +575,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Deen Journey";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to calculate accurate prayer times.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -702,7 +704,7 @@
 				DEVELOPMENT_TEAM = 8927GQ44C7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Deen Buddy Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Deen Buddy Widgets";
+				INFOPLIST_KEY_CFBundleDisplayName = "Deen Journey Widgets";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -731,7 +733,7 @@
 				DEVELOPMENT_TEAM = 8927GQ44C7;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Deen Buddy Widgets/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Deen Buddy Widgets";
+				INFOPLIST_KEY_CFBundleDisplayName = "Deen Journey Widgets";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
