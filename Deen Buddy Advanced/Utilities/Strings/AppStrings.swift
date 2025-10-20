@@ -9,6 +9,10 @@
 import Foundation
 
 struct AppStrings {
+    // App Identity
+    static let appName = "Murshid"
+    static let appTagline = "Your religious guide"
+
     // Tabs
     static let today = TodayStrings.self
     static let prayers = PrayersStrings.self
