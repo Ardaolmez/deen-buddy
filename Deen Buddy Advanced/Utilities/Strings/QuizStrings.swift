@@ -36,4 +36,10 @@ struct QuizStrings {
 
     // Verse Display
     static let quranVerse = "Quranic Reference:"
+
+    // Verse Popup
+    static let versePopupDone = "Done"
+    static let versePopupLoading = "Loading..."
+    static let versePopupError = "Surah not found"
+    static let verseLabel = "Verse"
 }

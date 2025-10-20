@@ -175,6 +175,11 @@ struct AppColors {
         static let verseArabicText = Color.primary
         static let verseTranslationText = Color.secondary
         static let verseCardBackground = Color(.systemBackground)
+
+        // Verse Popup Colors
+        static let referenceLink = Color.blue
+        static let versePopupHighlight = Color.yellow.opacity(0.2)
+        static let versePopupVerseNumber = Color.secondary
     }
 
     // MARK: - Explore Tab Colors

@@ -14,6 +14,7 @@ struct QuestionCard: View {
     let correctAnswer: String?
     let explanation: String?
     let reference: String?
+    let onReferenceClick: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -58,15 +59,22 @@ struct QuestionCard: View {
                     }
                 }
 
-                // Reference (Surah:Verse)
+                // Reference (Surah:Verse) - clickable
                 if let ref = reference {
                     HStack(spacing: 4) {
                         Text(AppStrings.quiz.reference)
                             .font(.subheadline)
                             .foregroundColor(AppColors.Quiz.explanationReference)
-                        Text(ref)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundColor(AppColors.Quiz.explanationReference)
+
+                        Button {
+                            onReferenceClick?()
+                        } label: {
+                            Text(ref)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundColor(AppColors.Quiz.referenceLink)
+                                .underline()
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }

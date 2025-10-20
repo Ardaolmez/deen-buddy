@@ -6,6 +6,7 @@ struct QuizView: View {
     @StateObject var vm: QuizViewModel = .init()
     @State private var showAnswers: Bool = true
     @State private var showExplanation: Bool = false
+    @State private var showVersePopup: Bool = false
 
     private var progress: Double {
         guard vm.totalQuestions > 0 else { return 0 }
@@ -54,7 +55,10 @@ struct QuizView: View {
                 isCorrect: vm.isCorrectAnswer,
                 correctAnswer: vm.isCorrectAnswer == false ? vm.currentQuestion.answers[vm.currentQuestion.correctIndex] : nil,
                 explanation: vm.currentQuestion.explanation,
-                reference: vm.verseReference
+                reference: vm.verseReference,
+                onReferenceClick: {
+                    showVersePopup = true
+                }
             )
 
             // Verse display (shown after explanation appears)
@@ -117,6 +121,12 @@ struct QuizView: View {
                 onDone: { dismiss() },
                 onRetry: { vm.restartSameQuiz() }
             )
+        }
+        .sheet(isPresented: $showVersePopup) {
+            if let surahName = vm.currentQuestion.surah,
+               let verseNum = vm.currentQuestion.verse {
+                VersePopupView(surahName: surahName, verseNumber: verseNum)
+            }
         }
     }
 }
