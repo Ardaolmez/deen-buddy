@@ -15,6 +15,11 @@ import WidgetKit
 
 final class PrayersViewModel: ObservableObject {
     private let logger = PrayerLogger()
+    private let recordsStore: PrayerRecordsStore
+    
+    // MARK: - Weekly streak (days this week with all five prayed)
+    @Published private(set) var weekStreakCount: Int = 0
+    @Published private(set) var isPerfectWeek: Bool = false
     
     @Published private(set) var cityLine: String = AppStrings.prayers.locating
     @Published private(set) var header: DayTimes?
@@ -33,12 +38,68 @@ final class PrayersViewModel: ObservableObject {
     private var timer: AnyCancellable?
     private var coord: CLLocationCoordinate2D?
 
-    init() {
+    init(recordsStore: PrayerRecordsStore = CoreDataPrayerRecordsStore()) {
+        self.recordsStore = recordsStore
         bindLocation()
         location.request()
         loadCompleted()
+        syncTodayToStoreIfNeeded()
         startTicker()
     }
+    
+    // MARK: - Toggle rules (today: only current/previous)
+    func canMark(_ entry: PrayerEntry, now: Date = Date()) -> Bool {
+        // Only for TODAY …
+        guard Calendar.current.isDateInToday(entry.time) else { return false }
+        // …and only current/previous prayers (time already reached)
+        return entry.time <= now
+    }
+
+
+
+    /// A day is “completed” if all 5 prayers were marked done for that day in UserDefaults.
+    /// A day is “completed” if every prayer has a non-`.notPrayed` record.
+    /// Prefer Core Data (recordsStore). If a prayer has no record yet, fall back to
+    /// the UserDefaults set you already keep for the Prayers screen.
+    private func allPrayersCompleted(on day: Date) -> Bool {
+        let d0 = Calendar.current.startOfDay(for: day)
+        let udSet = completedSet(for: d0)   // fallback
+
+        var sawAnyStoreRow = false
+        for p in PrayerName.allCases {
+            if let rec = recordsStore.fetch(day: d0, prayer: p) {
+                sawAnyStoreRow = true
+                if rec.statusEnum == .notPrayed { return false }
+            } else {
+                // No Core Data row yet → fall back to your per-day toggle set
+                if !udSet.contains(p) { return false }
+            }
+        }
+        // If we reached here, all five were either completed in store or toggled in UD.
+        // (If both stores were empty, the UD check above returns false on the first prayer.)
+        return true
+    }
+
+
+    // MARK: - Per-day completed sets in UserDefaults
+
+    /// Build the per-day key (yyyyMMdd) for any date
+    private func completedKey(for day: Date) -> String {
+        let ymd = DateFormatter.cached("yyyyMMdd").string(from: day)
+        return "\(AppStrings.prayers.completedKeyPrefix).\(ymd)"
+    }
+
+    /// Load the completion set for any day (defaults to empty)
+    private func completedSet(for day: Date) -> Set<PrayerName> {
+        let key = completedKey(for: day)
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let set = try? JSONDecoder().decode(Set<PrayerName>.self, from: data) else {
+            return []
+        }
+        return set
+    }
+
+    
 
     private func bindLocation() {
         location.publisher
@@ -50,12 +111,15 @@ final class PrayersViewModel: ObservableObject {
             }
             .store(in: &bag)
     }
+    
+    
 
     private func reload(for c: CLLocationCoordinate2D) {
         guard let (list, header) = PrayerTimesService.entries(for: c) else { return }
         self.header = header
         self.entries = list
         recompute(now: Date())
+        recomputeWeekStreak()   // ← add this line
     }
 
     private func startTicker() {
@@ -109,12 +173,61 @@ final class PrayersViewModel: ObservableObject {
     // MARK: - Completed prayers (persist per day)
 
     func toggleCompleted(_ name: PrayerName) {
-        
         if completedToday.contains(name) { completedToday.remove(name) }
         else { completedToday.insert(name) }
+
         saveCompleted()
         logger.setCompleted(name, !logger.isCompleted(name))
-        
+
+        // --- NEW: write to Core Data so PrayerRecordsViewModel sees it ---
+        let isNowCompleted = completedToday.contains(name)
+        let status: PrayerStatus = isNowCompleted ? computedStatus(for: name) : .notPrayed
+
+
+        // Jumu'ah heuristic: only Friday + Dhuhr → inJamaah = true (when completed)
+        let jumaah = isJumuah(name: name, on: Date()) && isNowCompleted
+
+        recordsStore.upsert(
+            day: Date(),
+            prayer: name,
+            status: status,
+            inJamaah: jumaah
+        )
+
+        recomputeWeekStreak()
+    }
+
+
+    private func computedStatus(for name: PrayerName, now: Date = Date()) -> PrayerStatus {
+        // find this prayer's scheduled time from today's entries
+        guard let scheduled = entries.first(where: { $0.name == name })?.time else {
+            return .onTime
+        }
+        // If user marks X minutes after scheduled time → late
+        let lateAfterMinutes = 30  // tweak to your preference
+        if now > scheduled.addingTimeInterval(TimeInterval(lateAfterMinutes * 60)) {
+            return .late
+        }
+        return .onTime
+    }
+
+    private func isJumuah(name: PrayerName, on date: Date) -> Bool {
+        name == .dhuhr && Calendar.current.component(.weekday, from: date) == 6 // Friday
+    }
+
+    private func syncTodayToStoreIfNeeded() {
+        // If Core Data already has any row for today, skip (simple guard)
+        let today = Date().startOfDay
+        let existing = recordsStore.fetchRange(from: today, to: today)
+        if !existing.isEmpty { return }
+
+        // Write whatever is in completedToday
+        for p in PrayerName.allCases {
+            let isDone = completedToday.contains(p)
+            let status: PrayerStatus = isDone ? .onTime : .notPrayed
+            let jamaah = isJumuah(name: p, on: Date()) && isDone
+            recordsStore.upsert(day: today, prayer: p, status: status, inJamaah: jamaah)
+        }
     }
 
     func isCompleted(_ name: PrayerName) -> Bool {
@@ -123,25 +236,22 @@ final class PrayersViewModel: ObservableObject {
         
     }
 
+    // Today-only versions (what you already had), unchanged API
     private var completedKey: String {
-        let ymd = DateFormatter.cached("yyyyMMdd").string(from: Date())
-        return "\(AppStrings.prayers.completedKeyPrefix).\(ymd)"
+        completedKey(for: Date())
     }
 
     private func loadCompleted() {
-        let key = completedKey
-        if let data = UserDefaults.standard.data(forKey: key),
-           let set = try? JSONDecoder().decode(Set<PrayerName>.self, from: data) {
-            completedToday = set
-        }
+        completedToday = completedSet(for: Date())
     }
 
     private func saveCompleted() {
-        let key = completedKey
+        let key = completedKey(for: Date())
         if let data = try? JSONEncoder().encode(completedToday) {
             UserDefaults.standard.set(data, forKey: key)
         }
     }
+
 
     // MARK: - Widget Data Saving
 
@@ -195,6 +305,51 @@ final class PrayersViewModel: ObservableObject {
         let components = cityLine.split(separator: ",")
         return components.count > 1 ? String(components.last ?? "").trimmingCharacters(in: .whitespaces) : ""
     }
+    
+    // MARK: - Weekly streak (days this week with all five prayed)
+    func recomputeWeekStreak() {
+        let (start, _, todayIdx) = weekBounds()
+
+        // Build this week's 7-day completion booleans (Mon…Sun)
+        var week: [Bool] = Array(repeating: false, count: 7)
+        for i in 0..<7 {
+            let day = Calendar.current.date(byAdding: .day, value: i, to: start)!
+            week[i] = allPrayersCompleted(on: day)
+        }
+
+        // Count only up to today (no future days in the streak)
+        weekStreakCount = week.prefix(todayIdx + 1).filter { $0 }.count
+        isPerfectWeek   = week.prefix(todayIdx + 1).allSatisfy { $0 }
+    }
+
+    /// Monday-first 7-slot array that the StreakCard consumes
+    var streakWeekStatus: [Bool] {
+        let (start, _, _) = weekBounds()
+        var week: [Bool] = Array(repeating: false, count: 7)
+        for i in 0..<7 {
+            let day = Calendar.current.date(byAdding: .day, value: i, to: start)!
+            week[i] = allPrayersCompleted(on: day)
+        }
+        return week
+    }
+
+    
+    // MARK: - Week helpers
+    private func weekBounds(for date: Date = Date()) -> (start: Date, end: Date, todayIndex: Int) {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: date)
+
+        // ISO week start (Monday)
+        var comp = cal.dateComponents([.yearForWeekOfYear, .weekOfYear], from: today)
+        comp.weekday = 2 // Monday
+        let start = cal.startOfDay(for: cal.date(from: comp) ?? today)
+
+        let end = cal.date(byAdding: .day, value: 6, to: start)!   // Sunday end-of-week
+        // Convert weekday (Sun=1) -> Mon=0…Sun=6
+        let todayIdx = (cal.component(.weekday, from: today) + 5) % 7
+        return (start, end, todayIdx)
+    }
+
 }
 
 private extension DateFormatter {

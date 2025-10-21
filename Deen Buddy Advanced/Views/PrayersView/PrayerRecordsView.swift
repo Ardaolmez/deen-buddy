@@ -39,6 +39,12 @@ struct PrayerRecordsView: View {
                             DemoData.seed(daysBack: 365, force: true)   // wipe + seed
                             vm.reload()                                // refresh UI
                         }
+                    } 
+            ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Wipe") {
+                            DemoData.wipe()  // wipe + seed
+                            vm.reload()                                // refresh UI
+                        }
                     }
                     #endif
                 }

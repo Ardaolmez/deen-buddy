@@ -27,7 +27,7 @@ enum DemoData {
         }
 
         let cal = Calendar.current
-        let today = cal.startOfDay(for: Date())
+        let today = cal.startOfDay(for: Date()-1)
 
         for i in 0..<daysBack {
             let day = cal.date(byAdding: .day, value: -i, to: today)!
@@ -37,7 +37,8 @@ enum DemoData {
                 rec.prayer = p.rawValue
 
                 let roll = Int.random(in: 0...99)
-                rec.statusEnum = roll < 65 ? .onTime : (roll < 85 ? .late : .notPrayed)
+//                rec.statusEnum = roll < 65 ? .onTime : (roll < 85 ? .late : .notPrayed)
+                rec.statusEnum = .onTime
 
                 // Only mark Jumu'ah (jamaah) on Friday Dhuhr
                 if p == .dhuhr, day.isFriday, rec.statusEnum != .notPrayed {

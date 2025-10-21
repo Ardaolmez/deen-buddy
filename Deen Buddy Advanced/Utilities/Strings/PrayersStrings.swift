@@ -26,6 +26,16 @@ struct PrayersStrings {
     static let undo = "Undo"
     static let yes = "Yes"
     static let history = "Stats"
+    static let prayerStreakTitle = "Prayer Streaks"
+    static let streakPerfect = "Perfect so far — keep it up!"
+    static let streakSoFarFormat = "Streaks this month: %@"
+    static let availableLater = "Available when time comes"
+    
+    // "Next: Dhuhr — 1:05 PM"
+            static let nextDhuhrCompact = "Next: %@ — %@"
+
+            // "Now: Asr — 4:22 PM"
+            static let nowPrayerCompact = "Now: %@ — %@"
     
     
 
