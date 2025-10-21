@@ -16,7 +16,7 @@ export default function PrivacyPolicy() {
               1. Introduction
             </h2>
             <p className="text-gray-600 mb-4">
-              myDeen ("we," "us," or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
+              myDeen (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">
@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">
-              6. Children's Privacy
+              6. Children&apos;s Privacy
             </h2>
             <p className="text-gray-600 mb-4">
               Our service is suitable for users of all ages. We do not knowingly collect personal information from children under 13. If you are a parent or guardian and believe your child has provided us with personal information, please contact us.
@@ -81,7 +81,7 @@ export default function PrivacyPolicy() {
               7. Changes to This Policy
             </h2>
             <p className="text-gray-600 mb-4">
-              We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+              We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">

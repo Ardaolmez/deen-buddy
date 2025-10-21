@@ -30,7 +30,7 @@ export default function TermsOfService() {
               3. Permitted Use
             </h2>
             <p className="text-gray-600 mb-4">
-              You may use this app for personal, non-commercial purposes. The app is provided "as is" without warranties of any kind.
+              You may use this app for personal, non-commercial purposes. The app is provided &quot;as is&quot; without warranties of any kind.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">

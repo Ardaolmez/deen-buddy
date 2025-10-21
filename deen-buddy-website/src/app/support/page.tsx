@@ -10,7 +10,7 @@ export default function Support() {
   const [errorMessage, setErrorMessage] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
     setErrorMessage("")
@@ -57,7 +57,7 @@ export default function Support() {
                 Get in Touch
               </h2>
               <p className="text-gray-600 mb-6">
-                If you have any questions or need support with myDeen, please fill out the contact form. We'll respond as soon as possible.
+                If you have any questions or need support with myDeen, please fill out the contact form. We&apos;ll respond as soon as possible.
               </p>
 
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
