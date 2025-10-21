@@ -1,0 +1,27 @@
+# Fastlane Snapshot Configuration for myDeen App
+
+# List of devices for App Store screenshots
+# Using iPhone 16 Pro Max for 6.9" display (perfect for App Store)
+devices([
+  "iPhone 16 Pro Max"
+])
+
+# Languages for localization
+languages([
+  "en-US"
+])
+
+# The name of the scheme which contains the UI Tests
+scheme("Deen Buddy Advanced")
+
+# Where should the resulting screenshots be stored?
+output_directory("./fastlane/screenshots")
+
+# Clear all previously generated screenshots before creating new ones
+clear_previous_screenshots(true)
+
+# Set the status bar to 9:41 AM, and show full battery and reception
+override_status_bar(true)
+
+# For more information about all available options run
+# fastlane action snapshot
