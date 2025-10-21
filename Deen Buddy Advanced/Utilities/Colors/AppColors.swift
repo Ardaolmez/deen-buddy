@@ -66,11 +66,25 @@ struct AppColors {
         // Prayer Time Compact Widget
         static let prayerCompactIcon = Color.orange
 
+
         // Daily Reading Goal Card
-        static let readingGoalIcon = Color.blue
-        static let readingGoalProgress = Color.blue
-        static let readingGoalText = Color.blue
-        static let readingGoalButton = Color.blue
+        static let quranGoalTitle = Color.primary
+        static let quranGoalMetric = Color.secondary
+        static let quranGoalPosition = Color.primary
+        static let quranGoalSurah = Color.primary
+        static let quranGoalVerse = Color.secondary
+        static let quranGoalStatusAhead = Color.green
+        static let quranGoalStatusBehind = Color.orange
+        static let quranGoalStatusOnTrack = Color.blue
+        static let quranGoalRemaining = Color.secondary
+        static let quranGoalButtonRead = Color.blue
+        static let quranGoalButtonListen = Color.purple
+        static let quranGoalButtonText = Color.white
+        static let quranGoalButtonBorder = Color(.systemGray4)
+        static let quranGoalExpandHint = Color.secondary
+        static let quranGoalDivider = Color(.systemGray4)
+        static let quranGoalSectionHeader = Color.secondary
+        static let quranGoalDetailText = Color.primary
 
         // Daily Verse Card
         static let verseCardPrimaryText = Color.white

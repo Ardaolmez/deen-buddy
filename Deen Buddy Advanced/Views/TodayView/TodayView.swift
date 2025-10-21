@@ -42,7 +42,7 @@ struct TodayView: View {
                     .padding(.horizontal)
 
                     // Daily Reading Goal
-                    DailyReadingGoalCard()
+                    DailyReadGoalCard()
                         .padding(.horizontal)
 
                     // Personalized Learning
