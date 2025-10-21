@@ -42,7 +42,7 @@ struct TodayView: View {
                     .padding(.horizontal)
 
                     // Daily Reading Goal
-                    DailyReadingGoalCard()
+                    DailyReadGoalCard()
                         .padding(.horizontal)
 
                     // Personalized Learning
@@ -72,7 +72,7 @@ struct TodayView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showQuiz) {
+            .fullScreenCover(isPresented: $showQuiz) {
                 QuizView()
             }
         }

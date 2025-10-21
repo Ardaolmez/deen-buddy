@@ -6,7 +6,7 @@
 //
 // Views/AnswerRow.swift
 import SwiftUI
-// Reusable row (with green/red highlight and lock after pick)
+// Answer button with color-based feedback
 struct AnswerRow: View {
     let text: String
     let state: QuizViewModel.AnswerState
@@ -15,25 +15,18 @@ struct AnswerRow: View {
 
     var body: some View {
         Button(action: onTap) {
-            HStack(spacing: 12) {
-                Text(text).foregroundColor(AppColors.Quiz.answerText)
-                Spacer()
-                switch state {
-                case .correctHighlight:
-                    Image(systemName: "checkmark.circle.fill").foregroundColor(AppColors.Quiz.answerCorrectIcon)
-                case .wrongHighlight:
-                    Image(systemName: "xmark.circle.fill").foregroundColor(AppColors.Quiz.answerWrongIcon)
-                case .neutral:
-                    EmptyView()
-                }
-            }
-            .padding()
-            .background(backgroundColor)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(borderColor, lineWidth: state == .neutral ? 0 : 1)
-            )
-            .cornerRadius(12)
+            Text(text)
+                .foregroundColor(AppColors.Quiz.answerText)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .frame(height: 80)
+                .background(backgroundColor)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(borderColor, lineWidth: state == .neutral ? 0 : 1)
+                )
+                .cornerRadius(12)
         }
         .buttonStyle(.plain)
         .disabled(isLocked || state != .neutral) // tap only when not locked and still neutral

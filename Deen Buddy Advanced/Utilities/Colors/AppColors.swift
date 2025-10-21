@@ -66,11 +66,25 @@ struct AppColors {
         // Prayer Time Compact Widget
         static let prayerCompactIcon = Color.orange
 
+
         // Daily Reading Goal Card
-        static let readingGoalIcon = Color.blue
-        static let readingGoalProgress = Color.blue
-        static let readingGoalText = Color.blue
-        static let readingGoalButton = Color.blue
+        static let quranGoalTitle = Color.primary
+        static let quranGoalMetric = Color.secondary
+        static let quranGoalPosition = Color.primary
+        static let quranGoalSurah = Color.primary
+        static let quranGoalVerse = Color.secondary
+        static let quranGoalStatusAhead = Color.green
+        static let quranGoalStatusBehind = Color.orange
+        static let quranGoalStatusOnTrack = Color.blue
+        static let quranGoalRemaining = Color.secondary
+        static let quranGoalButtonRead = Color.blue
+        static let quranGoalButtonListen = Color.purple
+        static let quranGoalButtonText = Color.white
+        static let quranGoalButtonBorder = Color(.systemGray4)
+        static let quranGoalExpandHint = Color.secondary
+        static let quranGoalDivider = Color(.systemGray4)
+        static let quranGoalSectionHeader = Color.secondary
+        static let quranGoalDetailText = Color.primary
 
         // Daily Verse Card
         static let verseCardPrimaryText = Color.white
@@ -141,12 +155,10 @@ struct AppColors {
 
     // MARK: - Quiz Tab Colors
     struct Quiz {
-        static let scoreText = Color.blue
         static let nextButtonActive = Color.blue
         static let nextButtonInactive = Color.gray
         static let buttonText = Color.white
 
-        static let secondaryText = Color.secondary
 
         // Quiz Result View
         static let progressBarBackground = Color.green.opacity(0.25)
@@ -159,14 +171,29 @@ struct AppColors {
 
         // Answer Row Colors
         static let answerText = Color.primary
-        static let answerCorrectIcon = Color.green
-        static let answerWrongIcon = Color.red
         static let answerNeutralBackground = Color(.systemGray6)
         static let answerCorrectBackground = Color.green.opacity(0.15)
         static let answerWrongBackground = Color.red.opacity(0.15)
         static let answerNeutralBorder = Color.clear
         static let answerCorrectBorder = Color.green
         static let answerWrongBorder = Color.red
+
+        // Explanation Card Colors
+        static let explanationCardBackground = Color(.systemGray6)
+        static let explanationCorrectHeader = Color.green
+        static let explanationIncorrectHeader = Color.red
+        static let explanationText = Color.primary
+        static let explanationReference = Color.secondary
+
+        // Verse Display Colors
+        static let verseArabicText = Color.primary
+        static let verseTranslationText = Color.secondary
+        static let verseCardBackground = Color(.systemBackground)
+
+        // Verse Popup Colors
+        static let referenceLink = Color.blue
+        static let versePopupHighlight = Color.yellow.opacity(0.2)
+        static let versePopupVerseNumber = Color.secondary
     }
 
     // MARK: - Explore Tab Colors
