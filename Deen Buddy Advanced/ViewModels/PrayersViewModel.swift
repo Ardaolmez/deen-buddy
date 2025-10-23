@@ -16,6 +16,7 @@ import WidgetKit
 final class PrayersViewModel: ObservableObject {
     private let logger = PrayerLogger()
     private let recordsStore: PrayerRecordsStore
+    private let cache: PrayerTimesCache = UserDefaultsPrayerTimesCache()
     
     // MARK: - Weekly streak (days this week with all five prayed)
     @Published private(set) var weekStreakCount: Int = 0
@@ -40,11 +41,24 @@ final class PrayersViewModel: ObservableObject {
 
     init(recordsStore: PrayerRecordsStore = CoreDataPrayerRecordsStore()) {
         self.recordsStore = recordsStore
+        
+        // 1) Try cached snapshot for instant UI
+            if let snap = cache.loadToday() {
+                self.cityLine = snap.cityLine
+                self.header   = snap.header
+                self.entries  = snap.entries
+                // derive current/next + countdown immediately
+                self.recompute(now: Date())
+            }
+
+            // 2) Then proceed with live location + updates
         bindLocation()
         location.request()
         loadCompleted()
-        syncTodayToStoreIfNeeded()
-        startTicker()
+        
+        // ✨ Do NOT mark all of today up-front. Only sync what's already completed.
+            syncTodayCompletedOnLaunch()
+            startTicker()
     }
     
     // MARK: - Toggle rules (today: only current/previous)
@@ -120,6 +134,9 @@ final class PrayersViewModel: ObservableObject {
         self.entries = list
         recompute(now: Date())
         recomputeWeekStreak()   // ← add this line
+        
+        // ⬅️ Save snapshot (use latest cityLine known; it will be refined by reverseGeocode)
+          cache.saveToday(cityLine: self.cityLine, header: header, entries: list, coord: c)
     }
 
     private func startTicker() {
@@ -160,75 +177,122 @@ final class PrayersViewModel: ObservableObject {
         return String(format: "%02d:%02d:%02d", h, m, s)
     }
 
+//    private func reverseGeocode(_ c: CLLocationCoordinate2D) {
+//        let g = CLGeocoder()
+//        g.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, _ in
+//            let p = placemarks?.first
+//            let city = p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea
+//            let country = p?.isoCountryCode ?? p?.country ?? ""
+//            self?.cityLine = country.isEmpty ? city : "\(city), \(country)"
+//            
+//            if let header = self.header {
+//                        self.cache.saveToday(cityLine: self.cityLine, header: header, entries: self.entries, coord: c)
+//                    }
+//        }
+//        
+//        
+//    }
+    
     private func reverseGeocode(_ c: CLLocationCoordinate2D) {
-        let g = CLGeocoder()
-        g.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, _ in
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, error in
+            guard let self = self else { return }
+
+            // If geocoder failed, keep previous cityLine and bail gracefully
+            if let _ = error {
+                return
+            }
+
             let p = placemarks?.first
-            let city = p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea
-            let country = p?.isoCountryCode ?? p?.country ?? ""
-            self?.cityLine = country.isEmpty ? city : "\(city), \(country)"
+            let city    = (p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea).trimmingCharacters(in: .whitespacesAndNewlines)
+            let country = ((p?.isoCountryCode ?? p?.country) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+
+            // Compose "City, CC" only if we have a country string
+            let newCityLine = country.isEmpty ? city : "\(city), \(country)"
+
+            DispatchQueue.main.async {
+                // Only update & save if the label changed
+                let didChange = (self.cityLine != newCityLine)
+                self.cityLine = newCityLine
+
+                // Save to cache if we have times already and something changed
+                if didChange, let header = self.header, !self.entries.isEmpty {
+                    self.cache.saveToday(cityLine: self.cityLine,
+                                         header: header,
+                                         entries: self.entries,
+                                         coord: c)
+                }
+            }
         }
     }
 
+
     // MARK: - Completed prayers (persist per day)
 
+
+    // Toggle
     func toggleCompleted(_ name: PrayerName) {
-        if completedToday.contains(name) { completedToday.remove(name) }
-        else { completedToday.insert(name) }
+        let now = Date()
+        let wasCompleted = completedToday.contains(name)
 
+        // Flip local state + UD + your logger
+        if wasCompleted { completedToday.remove(name) } else { completedToday.insert(name) }
         saveCompleted()
-        logger.setCompleted(name, !logger.isCompleted(name))
+        logger.setCompleted(name, !wasCompleted)
 
-        // --- NEW: write to Core Data so PrayerRecordsViewModel sees it ---
-        let isNowCompleted = completedToday.contains(name)
-        let status: PrayerStatus = isNowCompleted ? computedStatus(for: name) : .notPrayed
+        // Find schedule time for this prayer
+        let scheduled = entries.first(where: { $0.name == name })?.time
 
-
-        // Jumu'ah heuristic: only Friday + Dhuhr → inJamaah = true (when completed)
-        let jumaah = isJumuah(name: name, on: Date()) && isNowCompleted
-
-        recordsStore.upsert(
-            day: Date(),
-            prayer: name,
-            status: status,
-            inJamaah: jumaah
-        )
+        if !wasCompleted {
+            // Marking as completed → write an onTime/late row
+            let status = computedStatus(for: name, now: now)
+            let jumaah = isJumuah(name: name, on: now)
+            recordsStore.upsert(day: now, prayer: name, status: status, inJamaah: jumaah)
+        } else {
+            // Unmarking
+            if let scheduled {
+                let grace: TimeInterval = 30 * 60 // 30 minutes
+                if now < scheduled + grace {
+                    // It's before (or within grace of) scheduled → treat as "no data"
+                    recordsStore.delete(day: now, prayer: name)
+                } else {
+                    // After scheduled+grace → explicitly mark as missed
+                    recordsStore.upsert(day: now, prayer: name, status: .notPrayed, inJamaah: false)
+                }
+            } else {
+                // No schedule found → safest is delete (no data)
+                recordsStore.delete(day: now, prayer: name)
+            }
+        }
 
         recomputeWeekStreak()
     }
 
 
     private func computedStatus(for name: PrayerName, now: Date = Date()) -> PrayerStatus {
-        // find this prayer's scheduled time from today's entries
         guard let scheduled = entries.first(where: { $0.name == name })?.time else {
             return .onTime
         }
-        // If user marks X minutes after scheduled time → late
-        let lateAfterMinutes = 30  // tweak to your preference
-        if now > scheduled.addingTimeInterval(TimeInterval(lateAfterMinutes * 60)) {
-            return .late
-        }
-        return .onTime
+        let lateAfterMinutes = 30
+        return now > scheduled.addingTimeInterval(TimeInterval(lateAfterMinutes * 60)) ? .late : .onTime
     }
 
     private func isJumuah(name: PrayerName, on date: Date) -> Bool {
         name == .dhuhr && Calendar.current.component(.weekday, from: date) == 6 // Friday
     }
 
-    private func syncTodayToStoreIfNeeded() {
-        // If Core Data already has any row for today, skip (simple guard)
-        let today = Date().startOfDay
-        let existing = recordsStore.fetchRange(from: today, to: today)
-        if !existing.isEmpty { return }
-
-        // Write whatever is in completedToday
-        for p in PrayerName.allCases {
-            let isDone = completedToday.contains(p)
-            let status: PrayerStatus = isDone ? .onTime : .notPrayed
-            let jamaah = isJumuah(name: p, on: Date()) && isDone
-            recordsStore.upsert(day: today, prayer: p, status: status, inJamaah: jamaah)
+    private func syncTodayCompletedOnLaunch(now: Date = Date()) {
+        // Only write rows for prayers the user already marked completed today.
+        for p in completedToday {
+            // On launch, treat them as "onTime" unless already very late.
+            let status = computedStatus(for: p, now: now)
+            let jamaah = isJumuah(name: p, on: now)
+            recordsStore.upsert(day: now, prayer: p, status: status, inJamaah: jamaah)
         }
     }
+    
+    
+    
 
     func isCompleted(_ name: PrayerName) -> Bool {
 //        completedToday.contains(name)

@@ -12,6 +12,8 @@ protocol PrayerRecordsStore {
     func fetch(day: Date, prayer: PrayerName) -> PrayerRecord?
     func fetchRange(from: Date, to: Date) -> [PrayerRecord]
     func dailyMatrix(from: Date, to: Date) -> [Date: [PrayerName: PrayerRecord]]
+    // ✅ Add this:
+      func delete(day: Date, prayer: PrayerName)
 }
 
 final class CoreDataPrayerRecordsStore: PrayerRecordsStore {
@@ -55,6 +57,13 @@ final class CoreDataPrayerRecordsStore: PrayerRecordsStore {
         }
         return dict
     }
+    
+    func delete(day: Date, prayer: PrayerName) {
+            if let rec = fetch(day: day.startOfDay, prayer: prayer) {
+                ctx.delete(rec)
+                try? ctx.save()
+            }
+        }
 }
 
 // extension Date {

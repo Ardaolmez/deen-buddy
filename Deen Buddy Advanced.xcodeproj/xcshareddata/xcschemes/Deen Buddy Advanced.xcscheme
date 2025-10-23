@@ -35,7 +35,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "469C4F682E95C2A50006FC4D"
+               BlueprintIdentifier = "469C4F672E95C2A50006FC4D"
                BuildableName = "Deen Buddy AdvancedUITests.xctest"
                BlueprintName = "Deen Buddy AdvancedUITests"
                ReferencedContainer = "container:Deen Buddy Advanced.xcodeproj">
