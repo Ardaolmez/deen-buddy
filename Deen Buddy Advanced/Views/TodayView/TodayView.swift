@@ -45,14 +45,14 @@ struct TodayView: View {
                     DailyReadGoalCard()
                         .padding(.horizontal)
 
-                    // Personalized Learning
-                    PersonalizedLearningCard()
-                        .padding(.horizontal)
+                    // Personalized Learning - disable until Explore Page
+                    //PersonalizedLearningCard()
+                      //  .padding(.horizontal)
 
-                    // Chat Box
-                    ChatBoxView()
-                        .padding(.horizontal)
-                        .padding(.bottom, 20)
+                    // Chat Box - disable until RAG
+                    //ChatBoxView()
+                      //  .padding(.horizontal)
+                       // .padding(.bottom, 20)
                 }
                 .padding(.top, 10)
             }

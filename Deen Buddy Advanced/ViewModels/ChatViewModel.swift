@@ -19,9 +19,10 @@ final class ChatViewModel: ObservableObject {
     private let service: ChatService
 
     // ViewModels/ChatViewModel.swift (constructor)
+    
     init(service: ChatService = GeminiChatService(
 //        apiKey: Secrets.geminiAPIKey,
-        apiKey: "AIzaSyCCAnKlDRnX9ClbtxykO9PDYSYEGmtJowQ",
+        apiKey: "arda",
                                                  modelName: "gemini-2.5-flash",
                                                  systemInstruction: "You are Deen Buddy, a kind Islamic guide. Keep answers concise, gentle, and grounded in mainstream scholarship.")) {
         self.service = service
