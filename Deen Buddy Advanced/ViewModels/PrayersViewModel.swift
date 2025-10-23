@@ -43,13 +43,19 @@ final class PrayersViewModel: ObservableObject {
         self.recordsStore = recordsStore
         
         // 1) Try cached snapshot for instant UI
-            if let snap = cache.loadToday() {
-                self.cityLine = snap.cityLine
-                self.header   = snap.header
-                self.entries  = snap.entries
-                // derive current/next + countdown immediately
-                self.recompute(now: Date())
+        if let snap = cache.loadToday() {
+            self.cityLine = snap.cityLine
+            self.header   = snap.header
+            self.entries  = snap.entries
+
+            // Get coordinate from cache for recompute
+            if let cachedCoord = cache.getCachedCoordinate() {
+                self.coord = cachedCoord
             }
+
+            // derive current/next + countdown immediately
+            self.recompute(now: Date())
+        }
 
             // 2) Then proceed with live location + updates
         bindLocation()
@@ -119,11 +125,30 @@ final class PrayersViewModel: ObservableObject {
         location.publisher
             .receive(on: RunLoop.main)
             .sink { [weak self] c in
-                self?.coord = c
-                self?.reverseGeocode(c)
-                self?.reload(for: c)
+                self?.handleLocationUpdate(c)
             }
             .store(in: &bag)
+    }
+
+    private func handleLocationUpdate(_ newCoord: CLLocationCoordinate2D) {
+        // Always update coordinate reference
+        coord = newCoord
+
+        // Check if we should recalculate prayer times
+        let (shouldRecalculate, distance, reason) = cache.shouldRecalculate(for: newCoord)
+
+        if shouldRecalculate {
+            reverseGeocode(newCoord)
+            reload(for: newCoord)
+        } else {
+            // Just update the cached coordinate, don't recalculate prayer times
+            cache.updateLocationOnly(coord: newCoord)
+
+            // Still do reverse geocoding if city name is missing
+            if cityLine.isEmpty || cityLine == "Locating..." {
+                reverseGeocode(newCoord)
+            }
+        }
     }
     
     

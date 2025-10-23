@@ -23,13 +23,15 @@ struct DayTimes {
 }
 
 struct PrayerTimesService {
-    // Choose method for Pakistan
+    // Muslim World League calculation method
     private static var params: CalculationParameters = {
-          var p = CalculationMethod.karachi.params
+          var p = CalculationMethod.muslimWorldLeague.params
           p.madhab = .hanafi
           p.highLatitudeRule = .twilightAngle
           return p
       }()
+
+    static let currentMethodName = "Muslim World League"
 
       static func dayTimes(for coord: CLLocationCoordinate2D, on date: Date = Date()) -> DayTimes? {
           let cal = Calendar.current

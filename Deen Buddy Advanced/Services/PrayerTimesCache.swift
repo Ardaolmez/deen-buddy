@@ -34,6 +34,11 @@ private struct PrayerTimesSnapshot: Codable {
 protocol PrayerTimesCache {
     func loadToday() -> (cityLine: String, header: DayTimes, entries: [PrayerEntry])?
     func saveToday(cityLine: String, header: DayTimes, entries: [PrayerEntry], coord: CLLocationCoordinate2D)
+
+    // Smart location methods
+    func shouldRecalculate(for newCoord: CLLocationCoordinate2D) -> (shouldRecalculate: Bool, distance: Double?, reason: String)
+    func updateLocationOnly(coord: CLLocationCoordinate2D)
+    func getCachedCoordinate() -> CLLocationCoordinate2D?
 }
 
 final class UserDefaultsPrayerTimesCache: PrayerTimesCache {
@@ -86,6 +91,71 @@ final class UserDefaultsPrayerTimesCache: PrayerTimesCache {
         let f = DateFormatter()
         f.dateFormat = "yyyyMMdd"
         return f.string(from: d)
+    }
+
+    // MARK: - Smart Location Methods
+    func shouldRecalculate(for newCoord: CLLocationCoordinate2D) -> (shouldRecalculate: Bool, distance: Double?, reason: String) {
+        // Get current cached data
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let snap = try? JSONDecoder().decode(PrayerTimesSnapshot.self, from: data) else {
+            return (true, nil, "No cached data")
+        }
+
+        // Check if cache is for today
+        let todayKey = Self.ymd(Date())
+        guard snap.yyyymmdd == todayKey else {
+            return (true, nil, "Cache is from different day")
+        }
+
+        // Calculate distance from cached location
+        let cachedLocation = CLLocation(latitude: snap.lat, longitude: snap.lon)
+        let newLocation = CLLocation(latitude: newCoord.latitude, longitude: newCoord.longitude)
+        let distance = cachedLocation.distance(from: newLocation)
+
+        // Smart thresholds
+        if distance < 100 {
+            return (false, distance, "GPS noise (<100m)")
+        } else if distance < 500 {
+            return (false, distance, "Same area (<500m)")
+        } else if distance < 2000 {
+            return (false, distance, "Nearby location (<2km)")
+        } else if distance < 10000 {
+            return (true, distance, "Different area (>2km)")
+        } else {
+            return (true, distance, "Significant location change (>10km)")
+        }
+    }
+
+    func updateLocationOnly(coord: CLLocationCoordinate2D) {
+        // Update only the coordinate in existing cache
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let snap = try? JSONDecoder().decode(PrayerTimesSnapshot.self, from: data) else {
+            return
+        }
+
+        // Create new snapshot with updated coordinates
+        let updatedSnap = PrayerTimesSnapshot(
+            yyyymmdd: snap.yyyymmdd,
+            lat: coord.latitude,
+            lon: coord.longitude,
+            cityLine: snap.cityLine,
+            header: snap.header,
+            entries: snap.entries,
+            savedAt: Date()
+        )
+
+        if let updatedData = try? JSONEncoder().encode(updatedSnap) {
+            UserDefaults.standard.set(updatedData, forKey: key)
+        }
+    }
+
+    func getCachedCoordinate() -> CLLocationCoordinate2D? {
+        guard let data = UserDefaults.standard.data(forKey: key),
+              let snap = try? JSONDecoder().decode(PrayerTimesSnapshot.self, from: data) else {
+            return nil
+        }
+
+        return CLLocationCoordinate2D(latitude: snap.lat, longitude: snap.lon)
     }
 }
 
