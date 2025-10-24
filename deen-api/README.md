@@ -112,42 +112,37 @@ https://deen-api.your-subdomain.workers.dev
 
 ## Environment Variables
 
-```env
-ANTHROPIC_BASE_URL=https://your-api-url.com
-ANTHROPIC_AUTH_TOKEN=your-api-token
-PORT=3000
-NODE_ENV=production
+Set these as Cloudflare Workers secrets:
+
+```bash
+wrangler secret put ANTHROPIC_AUTH_TOKEN
+wrangler secret put ANTHROPIC_BASE_URL
 ```
 
 ## Useful Commands
 
-### PM2
+### Cloudflare Workers
 ```bash
-pm2 status              # Check status
-pm2 logs deen-api       # View logs
-pm2 restart deen-api    # Restart
+wrangler deploy          # Deploy to production
+wrangler dev             # Run locally
+wrangler tail            # View live logs
+wrangler secret put KEY  # Set environment variable
 ```
 
-### View Logs
+### Local Testing
 ```bash
-tail -f logs/dialogues-*.jsonl
-tail -f logs/auto-deploy.log
-```
-
-### Manual Deploy
-```bash
-cd /root/deen-buddy
-./auto-deploy.sh
+npm run chat             # Interactive CLI chat
+node myDeen.js           # Test core logic
 ```
 
 ## Security
 
-- HTTPS with auto-renewing SSL certificates
-- Rate limiting (100 req/15min per IP)
-- Security headers (Helmet.js)
-- Firewall configured (UFW)
-- Environment variables for secrets
+- HTTPS by default (Cloudflare)
+- DDoS protection included
+- Environment secrets encrypted
+- CORS headers configured
+- Input validation
 
 ## Support
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed documentation and troubleshooting.
+See [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md) for complete documentation and troubleshooting.
