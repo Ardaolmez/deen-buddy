@@ -39,6 +39,12 @@ struct PrayerRecordsView: View {
                             DemoData.seed(daysBack: 365, force: true)   // wipe + seed
                             vm.reload()                                // refresh UI
                         }
+                    } 
+            ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Wipe") {
+                            DemoData.wipe()  // wipe + seed
+                            vm.reload()                                // refresh UI
+                        }
                     }
                     #endif
                 }
@@ -348,16 +354,38 @@ fileprivate struct SummaryGrid: View {
                 .foregroundColor(.secondary)
                 .padding(.horizontal)
 
-            LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
-                SummaryCard(title: "In jamaah", pct: summary.jamaahPct, count: summary.jamaah, accent: AppColors.Prayers.heatmapJamaah)
-                SummaryCard(title: "On time",   pct: summary.onTimePct,  count: summary.onTime,  accent: AppColors.Prayers.heatmapOnTime)
-                SummaryCard(title: "Late",      pct: summary.latePct,    count: summary.late,    accent: AppColors.Prayers.heatmapLate)
-                SummaryCard(title: "Not prayed",pct: summary.notPrayedPct, count: summary.notPrayed, accent: AppColors.Prayers.heatmapMissed)
+            // 1) Full-width "On time"
+            SummaryCard(
+                title: "On time",
+                pct: summary.onTimePct,
+                count: summary.onTime,
+                accent: AppColors.Prayers.heatmapOnTime
+            )
+            .padding(.horizontal)
+
+            // 2) Two-up row: Late + Not prayed
+            HStack(spacing: 12) {
+                SummaryCard(
+                    title: "Late",
+                    pct: summary.latePct,
+                    count: summary.late,
+                    accent: AppColors.Prayers.heatmapLate
+                )
+                .frame(maxWidth: .infinity)
+
+                SummaryCard(
+                    title: "Not prayed",
+                    pct: summary.notPrayedPct,
+                    count: summary.notPrayed,
+                    accent: AppColors.Prayers.heatmapMissed
+                )
+                .frame(maxWidth: .infinity)
             }
             .padding(.horizontal)
         }
     }
 }
+
 
 fileprivate struct SummaryCard: View {
     let title: String
@@ -370,7 +398,7 @@ fileprivate struct SummaryCard: View {
             Text(title).font(.headline)
 
             Text("\(Int(round(pct * 100)))%")
-                .font(.system(size: 34, weight: .bold, design: .rounded))
+                .font(.system(size: 30, weight: .bold, design: .rounded))
 
             Text("\(count) times")
                 .foregroundColor(.secondary)
@@ -385,10 +413,7 @@ fileprivate struct SummaryCard: View {
             }
             .padding(.top, 4)
 
-            Text("—  Not applicable")
-                .font(.caption2)
-                .foregroundColor(.secondary)
-                .padding(.top, 6)
+            
         }
         .padding(14)
         .background(

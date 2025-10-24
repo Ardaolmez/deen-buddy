@@ -97,6 +97,22 @@ struct AppColors {
 
     // MARK: - Prayers Tab Colors
     struct Prayers {
+        // Minimal Design Colors
+        static let prayerGreen = Color.green
+        static let prayerBlue = Color.blue
+        static let prayerOrange = Color.orange
+
+        // Subtle backgrounds
+        static let subtleGreen = Color.green.opacity(0.08)
+        static let subtleBlue = Color.blue.opacity(0.08)
+        static let subtleGray = Color(.systemGray6)
+
+        // Shadow colors
+        static let greenShadow = Color.green.opacity(0.2)
+        static let blueShadow = Color.blue.opacity(0.2)
+        static let lightShadow = Color.black.opacity(0.05)
+
+        // Legacy colors (kept for compatibility)
         static let headerBackground = Color(.systemGray6)
         static let headerShadow = Color.black.opacity(0.06)
 
