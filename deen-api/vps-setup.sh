@@ -91,7 +91,18 @@ fi
 
 # Configure Nginx
 echo -e "\n${GREEN}Configuring Nginx...${NC}"
+echo -e "${YELLOW}IMPORTANT: This script requires a domain name for SSL.${NC}"
+echo -e "${YELLOW}If you only have an IP address, use vps-setup-ip.sh instead.${NC}"
+echo ""
 read -p "Enter your domain name (e.g., api.example.com): " DOMAIN
+
+# Validate it's not an IP address
+if [[ $DOMAIN =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    echo -e "${RED}ERROR: You entered an IP address ($DOMAIN).${NC}"
+    echo -e "${RED}This script requires a domain name for SSL certificates.${NC}"
+    echo -e "${YELLOW}Please use vps-setup-ip.sh for IP-only deployments.${NC}"
+    exit 1
+fi
 
 # Copy nginx config
 cd "$API_DIR"
