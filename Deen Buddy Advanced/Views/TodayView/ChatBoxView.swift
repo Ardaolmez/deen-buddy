@@ -34,7 +34,7 @@ struct ChatBoxView: View {
                     .stroke(AppColors.Chat.boxBorder, lineWidth: 1)
             )
         }
-        .sheet(isPresented: $showChat) {
+        .fullScreenCover(isPresented: $showChat) {
             ChatView()
         }
     }

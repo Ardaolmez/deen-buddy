@@ -15,12 +15,12 @@ struct NextPrayerHeader: View {
                     // Prayer icon with subtle background
                     ZStack {
                         Circle()
-                            .fill(nextPrayer != nil ? AppColors.Prayers.subtleBlue : AppColors.Prayers.subtleGray)
+                            .fill(AppColors.Prayers.subtleBlue)
                             .frame(width: MinimalDesign.largeCircle, height: MinimalDesign.largeCircle)
 
                         Image(systemName: prayer.name.icon)
                             .font(.system(size: MinimalDesign.largeIcon, weight: .light))
-                            .foregroundStyle(currentPrayer != nil ? AppColors.Prayers.prayerBlue : AppColors.Common.primary)
+                            .foregroundStyle( AppColors.Prayers.prayerBlue )
                     }
 
                     // Prayer name
@@ -30,7 +30,7 @@ struct NextPrayerHeader: View {
 
                     // Status and countdown in one line
                     HStack(spacing: MinimalDesign.smallSpacing) {
-                        if currentPrayer != nil {
+                       
                             HStack(spacing: 4) {
                                 Circle()
                                     .fill(AppColors.Prayers.prayerGreen)
@@ -39,12 +39,7 @@ struct NextPrayerHeader: View {
                                     .font(.caption)
                                     .foregroundStyle(AppColors.Prayers.prayerGreen)
                             }
-                        } else {
-                            Text(AppStrings.prayers.next)
-                                .font(.caption)
-                                .foregroundStyle(AppColors.Common.secondary)
-                        }
-
+                        
                         if !countdown.isEmpty && countdown != "—" && countdown != "--:--:--" {
                             Text("•")
                                 .font(.caption)

@@ -1,17 +1,5 @@
 import SwiftUI
 
-// Helper to make fullScreenCover background transparent
-struct BackgroundClearView: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView()
-        DispatchQueue.main.async {
-            view.superview?.superview?.backgroundColor = .clear
-        }
-        return view
-    }
-    func updateUIView(_ uiView: UIView, context: Context) {}
-}
-
 struct MessageRowView: View {
     let message: ChatMessage
     private var isUser: Bool { message.role == .user }
@@ -20,7 +8,6 @@ struct MessageRowView: View {
     private let brand = Color(red: 0.29, green: 0.55, blue: 0.42) // #4A8B6A
 
     @State private var selectedCitation: Citation?
-    @State private var showCitationPopup = false
 
     var body: some View {
         HStack(alignment: .bottom) {
@@ -55,17 +42,14 @@ struct MessageRowView: View {
         }
         .padding(.horizontal, 16)
         .transition(.move(edge: isUser ? .trailing : .leading).combined(with: .opacity))
-        .fullScreenCover(isPresented: $showCitationPopup) {
-            if let citation = selectedCitation {
-                CitationPopupView(citation: citation)
-                    .background(BackgroundClearView())
-            }
+        .sheet(item: $selectedCitation) { citation in
+            VersePopupView(surahName: citation.surah, verseNumber: citation.ayah)
         }
     }
 
     @ViewBuilder
     private func renderMessageWithCitations() -> some View {
-        let textSegments = parseTextWithCitations(message.text, citations: message.citations)
+        let textSegments = parseText()
 
         // Use HStack with wrapping to display text segments with clickable citations
         Text(textSegments.map { segment -> AttributedString in
@@ -97,7 +81,6 @@ struct MessageRowView: View {
                let number = Int(numberString),
                number > 0 && number <= message.citations.count {
                 selectedCitation = message.citations[number - 1]
-                showCitationPopup = true
             }
             return .handled
         })
@@ -106,6 +89,11 @@ struct MessageRowView: View {
     private enum TextSegment {
         case text(String)
         case citation(Int, Citation)
+    }
+
+    /// Helper function to parse text
+    private func parseText() -> [TextSegment] {
+        return parseTextWithCitations(message.text, citations: message.citations)
     }
 
     /// Parse message text and replace citation markers with numbered citations

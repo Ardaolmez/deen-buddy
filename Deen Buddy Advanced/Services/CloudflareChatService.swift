@@ -65,17 +65,35 @@ final class CloudflareChatService: ChatService {
                     throw URLError(.cannotParseResponse)
                 }
 
+
                 // Parse citations array
                 var citations: [Citation] = []
                 if let citationsArray = responseData["citations"] as? [[String: Any]] {
-                    citations = citationsArray.compactMap { citationDict in
+                    citations = citationsArray.compactMap { citationDict -> Citation? in
                         guard let ref = citationDict["ref"] as? String,
-                              let surah = citationDict["surah"] as? String,
-                              let ayah = citationDict["ayah"] as? Int,
-                              let text = citationDict["text"] as? String else {
+                              let surahNumber = citationDict["surah"] as? Int,
+                              let verseNumber = citationDict["verse"] as? Int else {
+                            print("🌐 [API] Failed to parse citation: \(citationDict)")
                             return nil
                         }
-                        return Citation(ref: ref, surah: surah, ayah: ayah, text: text)
+
+                        // Fetch surah name and verse text from QuranService
+                        let quranService = QuranService.shared
+                        let surahs = quranService.loadQuran()
+
+                        guard let surah = quranService.getSurah(id: surahNumber, from: surahs),
+                              let verse = surah.verses.first(where: { $0.id == verseNumber }),
+                              let verseText = verse.translation else {
+                            print("🌐 [API] Could not find Surah \(surahNumber) Verse \(verseNumber)")
+                            return nil
+                        }
+
+                        return Citation(
+                            ref: ref,
+                            surah: surah.transliteration,
+                            ayah: verseNumber,
+                            text: verseText
+                        )
                     }
                 }
 
