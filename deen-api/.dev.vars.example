@@ -1,0 +1,6 @@
+# Local development environment variables for Cloudflare Workers
+# Copy this file to .dev.vars and fill in your actual values
+# .dev.vars is automatically ignored by git
+
+ANTHROPIC_AUTH_TOKEN=your-api-token-here
+ANTHROPIC_BASE_URL=your-api-base-url-here

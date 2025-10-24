@@ -79,62 +79,36 @@ Content-Type: application/json
 }
 ```
 
-## VPS Deployment
+## Deployment - Cloudflare Workers
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
+**Why Cloudflare Workers?**
+- ✅ **Free tier**: 100,000 requests/day
+- ✅ **Zero maintenance**: No servers, no updates
+- ✅ **Global edge**: 200+ locations worldwide
+- ✅ **Auto-scaling**: Handles traffic spikes
+- ✅ **No cold starts**: Always fast
 
-### Quick Deploy on Hetzner VPS (3 Commands)
-
+**Deploy in 3 commands:**
 ```bash
-# SSH into your VPS
-ssh root@your-vps-ip
-
-# Clone repo and run setup
-git clone https://github.com/Ardaolmez/deen-buddy.git
-cd deen-buddy/deen-api && bash vps-setup-ip.sh
+npm install -g wrangler
+wrangler login
+wrangler deploy
 ```
 
-That's it! The script handles:
-- Installing Node.js, PM2, Nginx
-- Installing dependencies
-- Setting up your .env file
-- Configuring auto-deployment
-- Starting the API
+See [CLOUDFLARE_DEPLOYMENT.md](CLOUDFLARE_DEPLOYMENT.md) for complete deployment guide.
 
-**For SSL/HTTPS:** Use `vps-setup.sh` instead and provide a domain name
+### After Deployment
 
-### Auto-Deployment
-
-Once deployed, the API automatically:
-- Checks for git updates every 15 minutes
-- Pulls latest changes if available
-- Installs new dependencies if needed
-- Restarts the API with zero downtime
-
-Logs: `logs/auto-deploy.log`
-
-### Dialogue Logging
-
-All conversations are logged to:
+Your API will be live at:
 ```
-logs/dialogues-YYYY-MM-DD.jsonl
+https://deen-api.your-subdomain.workers.dev
 ```
 
-Format:
-```json
-{
-  "timestamp": "2024-01-15T10:30:00.000Z",
-  "question": "...",
-  "response": {...},
-  "metadata": {
-    "ip": "...",
-    "userAgent": "...",
-    "processingTime": 1234
-  }
-}
-```
+**Endpoints:**
+- `GET /health` - Health check
+- `POST /api/ask` - Ask a question
 
-**Note:** Logs are automatically excluded from git.
+**Updating:** Just run `wrangler deploy` again - changes are live instantly!
 
 ## Environment Variables
 

@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.production
+.dev.vars
 
 # Logs and dialogues
 logs/
@@ -18,3 +19,8 @@ Thumbs.db
 .pm2/
 pids/
 *.pid
+
+# Cloudflare Workers
+.wrangler/
+dist/
+worker-configuration.d.ts

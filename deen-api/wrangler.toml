@@ -1,0 +1,11 @@
+name = "deen-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Environment variables (set these with: wrangler secret put VARIABLE_NAME)
+# ANTHROPIC_AUTH_TOKEN - Your API token
+# ANTHROPIC_BASE_URL - Your API base URL
+
+[vars]
+# Non-sensitive environment variables
+NODE_ENV = "production"
