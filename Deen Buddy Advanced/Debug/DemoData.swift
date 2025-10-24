@@ -36,7 +36,7 @@ enum DemoData {
                 rec.day = day
                 rec.prayer = p.rawValue
 
-                let roll = Int.random(in: 0...99)
+             //   let roll = Int.random(in: 0...99)
 //                rec.statusEnum = roll < 65 ? .onTime : (roll < 85 ? .late : .notPrayed)
                 rec.statusEnum = .onTime
 

@@ -135,7 +135,7 @@ final class PrayersViewModel: ObservableObject {
         coord = newCoord
 
         // Check if we should recalculate prayer times
-        let (shouldRecalculate, distance, reason) = cache.shouldRecalculate(for: newCoord)
+        let (shouldRecalculate, _, _) = cache.shouldRecalculate(for: newCoord)
 
         if shouldRecalculate {
             reverseGeocode(newCoord)
