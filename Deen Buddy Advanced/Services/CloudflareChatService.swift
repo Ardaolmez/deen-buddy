@@ -21,10 +21,13 @@ final class CloudflareChatService: ChatService {
     }
 
     /// Send a message and get a reply from the backend
-    func reply(to userText: String) -> AnyPublisher<String, Never> {
+    func reply(to userText: String) -> AnyPublisher<ChatServiceResponse, Never> {
         // Build request
         guard let url = URL(string: "\(baseURL)/api/ask") else {
-            return Just("Error: Invalid backend URL").eraseToAnyPublisher()
+            return Just(ChatServiceResponse(
+                answer: "Error: Invalid backend URL",
+                citations: []
+            )).eraseToAnyPublisher()
         }
 
         var request = URLRequest(url: url)
@@ -34,13 +37,16 @@ final class CloudflareChatService: ChatService {
         // Request body
         let body: [String: Any] = ["question": userText]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
-            return Just("Error: Could not encode request").eraseToAnyPublisher()
+            return Just(ChatServiceResponse(
+                answer: "Error: Could not encode request",
+                citations: []
+            )).eraseToAnyPublisher()
         }
         request.httpBody = jsonData
 
         // Make API call
         return session.dataTaskPublisher(for: request)
-            .tryMap { data, response -> String in
+            .tryMap { data, response -> ChatServiceResponse in
                 // Check HTTP status
                 guard let httpResponse = response as? HTTPURLResponse else {
                     throw URLError(.badServerResponse)
@@ -54,18 +60,36 @@ final class CloudflareChatService: ChatService {
                 guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                       let success = json["success"] as? Bool,
                       success,
-                      let data = json["data"] as? [String: Any],
-                      let answer = data["answer"] as? String else {
+                      let responseData = json["data"] as? [String: Any],
+                      let answer = responseData["answer"] as? String else {
                     throw URLError(.cannotParseResponse)
                 }
 
-                return answer
+                // Parse citations array
+                var citations: [Citation] = []
+                if let citationsArray = responseData["citations"] as? [[String: Any]] {
+                    citations = citationsArray.compactMap { citationDict in
+                        guard let ref = citationDict["ref"] as? String,
+                              let surah = citationDict["surah"] as? String,
+                              let ayah = citationDict["ayah"] as? Int,
+                              let text = citationDict["text"] as? String else {
+                            return nil
+                        }
+                        return Citation(ref: ref, surah: surah, ayah: ayah, text: text)
+                    }
+                }
+
+                return ChatServiceResponse(answer: answer, citations: citations)
             }
-            .catch { error -> Just<String> in
+            .catch { error -> Just<ChatServiceResponse> in
                 // Handle all errors gracefully
                 print("CloudflareChatService error: \(error)")
-                return Just("Sorry, I couldn't reach myDeen right now. Please try again.")
+                return Just(ChatServiceResponse(
+                    answer: "Sorry, I couldn't reach myDeen right now. Please try again.",
+                    citations: []
+                ))
             }
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }

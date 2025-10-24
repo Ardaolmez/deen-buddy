@@ -9,6 +9,12 @@
 import Foundation
 import Combine
 
+/// Response from a chat service
+struct ChatServiceResponse {
+    let answer: String
+    let citations: [Citation]
+}
+
 protocol ChatService {
-    func reply(to userText: String) -> AnyPublisher<String, Never>
+    func reply(to userText: String) -> AnyPublisher<ChatServiceResponse, Never>
 }

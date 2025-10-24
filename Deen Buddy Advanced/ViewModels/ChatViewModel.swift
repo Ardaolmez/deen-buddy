@@ -35,9 +35,13 @@ final class ChatViewModel: ObservableObject {
         isSending = true
 
         service.reply(to: trimmed)
-            .sink { [weak self] text in
+            .sink { [weak self] response in
                 guard let self else { return }
-                self.messages.append(.init(role: .bot, text: text))
+                self.messages.append(.init(
+                    role: .bot,
+                    text: response.answer,
+                    citations: response.citations
+                ))
                 self.isSending = false
             }
             .store(in: &bag)
