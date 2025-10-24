@@ -19,7 +19,9 @@ NC='\033[0m' # No Color
 
 # Variables
 SERVER_IP="135.181.197.98"
+REPO_URL="https://github.com/Ardaolmez/deen-buddy.git"
 REPO_DIR="/root/deen-buddy"
+API_DIR="$REPO_DIR/deen-api"
 
 echo -e "${YELLOW}This script will set up deen-buddy API on your Hetzner VPS${NC}"
 echo ""
@@ -65,10 +67,6 @@ apt install -y git
 
 # Clone or update repository
 echo -e "\n${GREEN}[6/8] Setting up repository...${NC}"
-echo -e "${YELLOW}Enter your Git repository URL:${NC}"
-echo "Example: https://github.com/yourusername/deen-buddy.git"
-read -p "Repository URL: " REPO_URL
-
 cd /root
 if [ -d "$REPO_DIR" ]; then
     echo "Directory exists, pulling latest changes..."
@@ -81,10 +79,12 @@ fi
 
 # Install dependencies
 echo -e "\n${GREEN}[7/8] Installing Node.js dependencies...${NC}"
+cd "$API_DIR"
 npm install
 
 # Set up environment variables
 echo -e "\n${GREEN}[8/8] Setting up environment variables...${NC}"
+cd "$API_DIR"
 if [ ! -f .env ]; then
     echo "Creating .env file..."
     cat > .env << 'EOF'
@@ -105,6 +105,7 @@ fi
 
 # Configure Nginx
 echo -e "\n${GREEN}Configuring Nginx...${NC}"
+cd "$API_DIR"
 
 # Use IP-only nginx config
 cp nginx-ip.conf /etc/nginx/sites-available/deen-buddy
@@ -125,12 +126,14 @@ systemctl enable nginx
 
 # Start application with PM2
 echo -e "\n${GREEN}Starting application with PM2...${NC}"
+cd "$API_DIR"
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup systemd -u root --hp /root
 
 # Set up auto-deploy cron job
 echo -e "\n${GREEN}Setting up auto-deployment...${NC}"
+cd "$API_DIR"
 bash setup-cron.sh
 
 # Configure firewall
@@ -141,6 +144,7 @@ ufw allow 80/tcp   # HTTP
 ufw status
 
 # Create logs directory
+cd "$API_DIR"
 mkdir -p logs
 
 echo -e "\n${GREEN}====================================="

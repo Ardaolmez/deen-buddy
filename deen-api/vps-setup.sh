@@ -23,8 +23,7 @@ API_DIR="$REPO_DIR/deen-api"
 
 echo -e "${YELLOW}Please ensure you have:${NC}"
 echo "1. A domain pointing to this server's IP"
-echo "2. Git repository URL ready"
-echo "3. API credentials (.env file contents)"
+echo "2. API credentials (.env file contents)"
 echo ""
 read -p "Press Enter to continue or Ctrl+C to cancel..."
 
@@ -135,6 +134,7 @@ fi
 
 # Set up auto-deploy cron job
 echo -e "\n${GREEN}Setting up auto-deployment...${NC}"
+cd "$API_DIR"
 bash setup-cron.sh
 
 # Configure firewall
@@ -146,6 +146,7 @@ ufw allow 443/tcp  # HTTPS
 ufw status
 
 # Create logs directory
+cd "$API_DIR"
 mkdir -p logs
 
 echo -e "\n${GREEN}====================================="
