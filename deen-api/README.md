@@ -83,27 +83,25 @@ Content-Type: application/json
 
 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment guide.
 
-### Quick Deploy on Hetzner VPS
+### Quick Deploy on Hetzner VPS (3 Commands)
 
-1. **Upload setup script:**
 ```bash
-scp vps-setup.sh root@your-vps-ip:/root/
-```
-
-2. **Run setup:**
-```bash
+# SSH into your VPS
 ssh root@your-vps-ip
-cd /root
-chmod +x vps-setup.sh
-./vps-setup.sh
+
+# Clone repo and run setup
+git clone https://github.com/Ardaolmez/deen-buddy.git
+cd deen-buddy/deen-api && bash vps-setup-ip.sh
 ```
 
-The script handles:
-- Installing Node.js, PM2, Nginx, Certbot
-- Cloning repository
-- Setting up SSL
+That's it! The script handles:
+- Installing Node.js, PM2, Nginx
+- Installing dependencies
+- Setting up your .env file
 - Configuring auto-deployment
 - Starting the API
+
+**For SSL/HTTPS:** Use `vps-setup.sh` instead and provide a domain name
 
 ### Auto-Deployment
 
