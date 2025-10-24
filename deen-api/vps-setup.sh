@@ -16,10 +16,10 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Variables - CHANGE THESE
-DOMAIN="your-domain.com"  # Change this to your actual domain
-REPO_URL="https://github.com/yourusername/deen-buddy.git"  # Change this
+# Variables
+REPO_URL="https://github.com/Ardaolmez/deen-buddy.git"
 REPO_DIR="/root/deen-buddy"
+API_DIR="$REPO_DIR/deen-api"
 
 echo -e "${YELLOW}Please ensure you have:${NC}"
 echo "1. A domain pointing to this server's IP"
@@ -58,7 +58,6 @@ apt install -y git
 
 # Clone repository
 echo -e "\n${GREEN}[7/9] Cloning repository...${NC}"
-read -p "Enter your Git repository URL: " REPO_URL
 cd /root
 if [ -d "$REPO_DIR" ]; then
     echo "Directory exists, pulling latest changes..."
@@ -71,10 +70,12 @@ fi
 
 # Install dependencies
 echo -e "\n${GREEN}[8/9] Installing Node.js dependencies...${NC}"
+cd "$API_DIR"
 npm install
 
 # Set up environment variables
 echo -e "\n${GREEN}[9/9] Setting up environment variables...${NC}"
+cd "$API_DIR"
 if [ ! -f .env ]; then
     echo "Creating .env file..."
     cat > .env << EOF
@@ -85,7 +86,7 @@ PORT=3000
 NODE_ENV=production
 EOF
     echo -e "${YELLOW}IMPORTANT: Edit .env file with your actual credentials${NC}"
-    echo "Run: nano $REPO_DIR/.env"
+    echo "Run: nano $API_DIR/.env"
     read -p "Press Enter after you've edited the .env file..."
 fi
 
@@ -94,6 +95,7 @@ echo -e "\n${GREEN}Configuring Nginx...${NC}"
 read -p "Enter your domain name (e.g., api.example.com): " DOMAIN
 
 # Copy nginx config
+cd "$API_DIR"
 cp nginx.conf /etc/nginx/sites-available/deen-buddy
 
 # Update domain in nginx config
@@ -114,6 +116,7 @@ systemctl enable nginx
 
 # Start application with PM2
 echo -e "\n${GREEN}Starting application with PM2...${NC}"
+cd "$API_DIR"
 pm2 start ecosystem.config.js
 pm2 save
 pm2 startup systemd -u root --hp /root
