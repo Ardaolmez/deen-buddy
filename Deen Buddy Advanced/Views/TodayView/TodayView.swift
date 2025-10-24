@@ -49,10 +49,10 @@ struct TodayView: View {
                     //PersonalizedLearningCard()
                       //  .padding(.horizontal)
 
-                    // Chat Box - disable until RAG
-                    //ChatBoxView()
-                      //  .padding(.horizontal)
-                       // .padding(.bottom, 20)
+                    // Chat Box
+                    ChatBoxView()
+                        .padding(.horizontal)
+                        .padding(.bottom, 20)
                 }
                 .padding(.top, 10)
             }
