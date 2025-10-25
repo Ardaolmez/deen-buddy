@@ -80,7 +80,7 @@ struct StreamingAttributedTextView: View {
         } else {
             // Stream plain text first
             Text(displayedText)
-                .font(.system(size: 17, weight: .regular, design: .serif))
+                .font(.system(size: 18, weight: .regular, design: .serif))
                 .foregroundStyle(.primary)
                 .multilineTextAlignment(.leading)
                 .onAppear {
@@ -99,7 +99,7 @@ struct StreamingAttributedTextView: View {
             switch segment {
             case .text(let string):
                 var attributed = AttributedString(string)
-                attributed.font = .system(size: 17, weight: .regular, design: .serif)
+                attributed.font = .system(size: 18, weight: .regular, design: .serif)
                 attributed.foregroundColor = .primary
                 return attributed
             case .citation(let number, let citation):
@@ -111,7 +111,7 @@ struct StreamingAttributedTextView: View {
                 return attributed
             }
         }.reduce(AttributedString(), +))
-        .font(.system(size: 17, weight: .regular, design: .serif))
+        .font(.system(size: 18, weight: .regular, design: .serif))
         .foregroundStyle(.primary)
         .multilineTextAlignment(.leading)
     }

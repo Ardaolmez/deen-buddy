@@ -14,11 +14,12 @@ struct MessageRowView: View {
         HStack(alignment: .bottom) {
             if isUser { Spacer(minLength: 24) }
 
-            VStack(alignment: .leading, spacing: isUser ? 6 : 0) {
+            VStack(alignment: .leading, spacing: isUser ? 6 : 8) {
                 if !isUser {
                     Text(AppStrings.chat.botName)
-                        .font(.callout.weight(.semibold))
+                        .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(AppColors.Chat.headerTitle(for: colorScheme))
+                        .padding(.bottom, 2)
                 }
 
                 // Parse and render message with clickable citations
@@ -28,14 +29,14 @@ struct MessageRowView: View {
                     // Stream bot messages character by character
                     StreamingTextView(
                         fullText: message.text,
-                        font: .system(size: 17, weight: .regular, design: .serif),
+                        font: .system(size: 18, weight: .regular, design: .serif),
                         color: .primary,
                         isStreaming: true,
                         onTextUpdate: onStreamingUpdate
                     )
                 } else {
                     Text(message.text)
-                        .font(.system(size: 17, weight: .regular, design: .serif))
+                        .font(.system(size: 18, weight: .regular, design: .serif))
                         .foregroundStyle(isUser ? .white : .primary)
                         .multilineTextAlignment(.leading)
                 }
@@ -81,7 +82,7 @@ struct MessageRowView: View {
                 switch segment {
                 case .text(let string):
                     var attributed = AttributedString(string)
-                    attributed.font = .system(size: 17, weight: .regular, design: .serif)
+                    attributed.font = .system(size: 18, weight: .regular, design: .serif)
                     attributed.foregroundColor = .primary
                     return attributed
                 case .citation(let number, let citation):
@@ -96,7 +97,7 @@ struct MessageRowView: View {
                     return attributed
                 }
             }.reduce(AttributedString(), +))
-            .font(.system(size: 17, weight: .regular, design: .serif))
+            .font(.system(size: 18, weight: .regular, design: .serif))
             .foregroundStyle(.primary)
             .multilineTextAlignment(.leading)
             .environment(\.openURL, OpenURLAction { url in

@@ -20,7 +20,7 @@ struct ChatView: View {
                 // Messages
                 ScrollViewReader { proxy in
                     ScrollView {
-                        LazyVStack(spacing: 32) {
+                        LazyVStack(spacing: 36) {
                             ForEach(vm.messages) { msg in
                                 MessageRowView(
                                     message: msg,
