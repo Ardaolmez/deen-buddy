@@ -14,6 +14,7 @@ final class ChatViewModel: ObservableObject {
     @Published var messages: [ChatMessage] = []
     @Published var input: String = ""
     @Published var isSending = false
+    @Published var latestBotMessageId: UUID? = nil  // Track latest bot message for streaming
 
     private var bag = Set<AnyCancellable>()
     private let service: ChatService
@@ -37,11 +38,13 @@ final class ChatViewModel: ObservableObject {
         service.reply(to: trimmed)
             .sink { [weak self] response in
                 guard let self else { return }
-                self.messages.append(.init(
+                let botMessage = ChatMessage(
                     role: .bot,
                     text: response.answer,
                     citations: response.citations
-                ))
+                )
+                self.messages.append(botMessage)
+                self.latestBotMessageId = botMessage.id  // Mark for streaming animation
                 self.isSending = false
             }
             .store(in: &bag)

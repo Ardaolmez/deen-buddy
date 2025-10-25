@@ -15,7 +15,10 @@ struct ChatView: View {
                     ScrollView {
                         LazyVStack(spacing: 14) {
                             ForEach(vm.messages) { msg in
-                                MessageRowView(message: msg)
+                                MessageRowView(
+                                    message: msg,
+                                    isStreaming: msg.id == vm.latestBotMessageId && msg.role == .bot
+                                )
                                     .id(msg.id)
                                     .padding(.horizontal, 16)
                             }

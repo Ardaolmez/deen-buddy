@@ -2,6 +2,8 @@ import SwiftUI
 
 struct MessageRowView: View {
     let message: ChatMessage
+    var isStreaming: Bool = false  // Enable streaming animation for new bot messages
+
     private var isUser: Bool { message.role == .user }
 
     // brand green (fallback)
@@ -23,6 +25,14 @@ struct MessageRowView: View {
                 // Parse and render message with clickable citations
                 if !isUser && !message.citations.isEmpty {
                     renderMessageWithCitations()
+                } else if !isUser && isStreaming {
+                    // Stream bot messages character by character
+                    StreamingTextView(
+                        fullText: message.text,
+                        font: .system(size: 17, weight: .regular, design: .serif),
+                        color: .primary,
+                        isStreaming: true
+                    )
                 } else {
                     Text(message.text)
                         .font(.system(size: 17, weight: .regular, design: .serif))
@@ -51,42 +61,57 @@ struct MessageRowView: View {
     private func renderMessageWithCitations() -> some View {
         let textSegments = parseText()
 
-        // Use HStack with wrapping to display text segments with clickable citations
-        Text(textSegments.map { segment -> AttributedString in
-            switch segment {
-            case .text(let string):
-                var attributed = AttributedString(string)
-                attributed.font = .system(size: 17, weight: .regular, design: .serif)
-                attributed.foregroundColor = .primary
-                return attributed
-            case .citation(let number, let citation):
-                // Extract surah name and ayah from citation
-                // Format: (Surah ayah) e.g., (Al-Baqarah 2:45)
-                let citationText = " (\(citation.surah) \(citation.ayah))"
-                var attributed = AttributedString(citationText)
-                attributed.font = .system(size: 14, weight: .medium)
-                attributed.foregroundColor = Color(red: 0.29, green: 0.55, blue: 0.42)
-                // Store citation index in link attribute
-                attributed.link = URL(string: "citation://\(number)")
-                return attributed
-            }
-        }.reduce(AttributedString(), +))
-        .font(.system(size: 17, weight: .regular, design: .serif))
-        .foregroundStyle(.primary)
-        .multilineTextAlignment(.leading)
-        .environment(\.openURL, OpenURLAction { url in
-            // Handle citation taps
-            if url.scheme == "citation",
-               let numberString = url.host,
-               let number = Int(numberString),
-               number > 0 && number <= message.citations.count {
-                selectedCitation = message.citations[number - 1]
-            }
-            return .handled
-        })
+        if isStreaming {
+            // Stream text with citations
+            StreamingAttributedTextView(segments: textSegments, isStreaming: true)
+                .environment(\.openURL, OpenURLAction { url in
+                    // Handle citation taps
+                    if url.scheme == "citation",
+                       let numberString = url.host,
+                       let number = Int(numberString),
+                       number > 0 && number <= message.citations.count {
+                        selectedCitation = message.citations[number - 1]
+                    }
+                    return .handled
+                })
+        } else {
+            // Show full text immediately
+            Text(textSegments.map { segment -> AttributedString in
+                switch segment {
+                case .text(let string):
+                    var attributed = AttributedString(string)
+                    attributed.font = .system(size: 17, weight: .regular, design: .serif)
+                    attributed.foregroundColor = .primary
+                    return attributed
+                case .citation(let number, let citation):
+                    // Extract surah name and ayah from citation
+                    // Format: (Surah ayah) e.g., (Al-Baqarah 2:45)
+                    let citationText = " (\(citation.surah) \(citation.ayah))"
+                    var attributed = AttributedString(citationText)
+                    attributed.font = .system(size: 14, weight: .medium)
+                    attributed.foregroundColor = Color(red: 0.29, green: 0.55, blue: 0.42)
+                    // Store citation index in link attribute
+                    attributed.link = URL(string: "citation://\(number)")
+                    return attributed
+                }
+            }.reduce(AttributedString(), +))
+            .font(.system(size: 17, weight: .regular, design: .serif))
+            .foregroundStyle(.primary)
+            .multilineTextAlignment(.leading)
+            .environment(\.openURL, OpenURLAction { url in
+                // Handle citation taps
+                if url.scheme == "citation",
+                   let numberString = url.host,
+                   let number = Int(numberString),
+                   number > 0 && number <= message.citations.count {
+                    selectedCitation = message.citations[number - 1]
+                }
+                return .handled
+            })
+        }
     }
 
-    private enum TextSegment {
+    enum TextSegment {
         case text(String)
         case citation(Int, Citation)
     }
