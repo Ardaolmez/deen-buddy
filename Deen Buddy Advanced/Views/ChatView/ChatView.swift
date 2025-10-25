@@ -7,6 +7,7 @@ struct ChatView: View {
 
     private let bubbleMaxWidth: CGFloat = 280
     @State private var scrollTrigger: Int = 0  // Trigger for scroll updates
+    @FocusState private var isTextFieldFocused: Bool
 
     var body: some View {
         NavigationView {
@@ -41,6 +42,10 @@ struct ChatView: View {
                         }
                         .padding(.top, 12)
                     }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        isTextFieldFocused = false
+                    }
                     .onChange(of: vm.messages.count) { newCount in
                         withAnimation(.easeOut(duration: 0.2)) {
                             if let last = vm.messages.last { proxy.scrollTo(last.id, anchor: .bottom) }
@@ -66,10 +71,12 @@ struct ChatView: View {
 
                 // Input
                 HStack(spacing: 12) {
-                    TextField(AppStrings.chat.inputPlaceholder, text: $vm.input)
+                    TextField("", text: $vm.input, prompt: Text(AppStrings.chat.inputPlaceholder).foregroundColor(.black.opacity(0.5)))
+                        .focused($isTextFieldFocused)
                         .padding(.vertical, 12)
                         .padding(.horizontal, 16)
-                        .foregroundColor(colorScheme == .dark ? .black : .primary)
+                        .foregroundColor(.black)
+                        .tint(.black)
                         .background(AppColors.Chat.inputBackground)
                         .cornerRadius(24)
                         .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
