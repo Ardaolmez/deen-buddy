@@ -3,11 +3,9 @@ import SwiftUI
 struct MessageRowView: View {
     let message: ChatMessage
     var isStreaming: Bool = false  // Enable streaming animation for new bot messages
+    var onStreamingUpdate: ((String) -> Void)? = nil  // Callback for streaming text updates
 
     private var isUser: Bool { message.role == .user }
-
-    // brand green (fallback)
-    private let brand = Color(red: 0.29, green: 0.55, blue: 0.42) // #4A8B6A
 
     @State private var selectedCitation: Citation?
 
@@ -15,11 +13,11 @@ struct MessageRowView: View {
         HStack(alignment: .bottom) {
             if isUser { Spacer(minLength: 24) }
 
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: isUser ? 6 : 0) {
                 if !isUser {
                     Text(AppStrings.chat.botName)
                         .font(.callout.weight(.semibold))
-                        .foregroundStyle(brand)
+                        .foregroundStyle(AppColors.Chat.headerTitle)
                 }
 
                 // Parse and render message with clickable citations
@@ -31,7 +29,8 @@ struct MessageRowView: View {
                         fullText: message.text,
                         font: .system(size: 17, weight: .regular, design: .serif),
                         color: .primary,
-                        isStreaming: true
+                        isStreaming: true,
+                        onTextUpdate: onStreamingUpdate
                     )
                 } else {
                     Text(message.text)
@@ -40,17 +39,16 @@ struct MessageRowView: View {
                         .multilineTextAlignment(.leading)
                 }
             }
-            .padding(.vertical, 10)
-            .padding(.horizontal, 14)
+            .padding(.vertical, isUser ? 10 : 0)
+            .padding(.horizontal, isUser ? 14 : 0)
             .background(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(isUser ? brand : Color(.systemGray6))
-                    .shadow(color: .black.opacity(isUser ? 0.0 : 0.05), radius: 6, x: 0, y: 2)
+                    .fill(isUser ? AppColors.Chat.sendButtonActive : Color.clear)
             )
 
             if !isUser { Spacer(minLength: 24) }
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, isUser ? 16 : 0)
         .transition(.move(edge: isUser ? .trailing : .leading).combined(with: .opacity))
         .sheet(item: $selectedCitation) { citation in
             VersePopupView(surahName: citation.surah, verseNumber: citation.ayah)
@@ -63,7 +61,7 @@ struct MessageRowView: View {
 
         if isStreaming {
             // Stream text with citations
-            StreamingAttributedTextView(segments: textSegments, isStreaming: true)
+            StreamingAttributedTextView(segments: textSegments, isStreaming: true, onTextUpdate: onStreamingUpdate)
                 .environment(\.openURL, OpenURLAction { url in
                     // Handle citation taps
                     if url.scheme == "citation",
@@ -89,7 +87,7 @@ struct MessageRowView: View {
                     let citationText = " (\(citation.surah) \(citation.ayah))"
                     var attributed = AttributedString(citationText)
                     attributed.font = .system(size: 14, weight: .medium)
-                    attributed.foregroundColor = Color(red: 0.29, green: 0.55, blue: 0.42)
+                    attributed.foregroundColor = AppColors.Chat.headerTitle
                     // Store citation index in link attribute
                     attributed.link = URL(string: "citation://\(number)")
                     return attributed

@@ -12,12 +12,13 @@ struct StreamingTextView: View {
     let font: Font
     let color: Color
     let isStreaming: Bool
+    var onTextUpdate: ((String) -> Void)? = nil  // Callback for scroll updates
 
     @State private var displayedText: String = ""
     @State private var currentIndex: Int = 0
 
     // Animation speed (seconds per character)
-    private let characterDelay: Double = 0.03
+    private let characterDelay: Double = 0.05
 
     var body: some View {
         Text(displayedText)
@@ -53,6 +54,7 @@ struct StreamingTextView: View {
                 await MainActor.run {
                     displayedText.append(character)
                     currentIndex = index + 1
+                    onTextUpdate?(displayedText)  // Notify parent of text update
                 }
             }
         }
@@ -62,14 +64,13 @@ struct StreamingTextView: View {
 struct StreamingAttributedTextView: View {
     let segments: [MessageRowView.TextSegment]
     let isStreaming: Bool
+    var onTextUpdate: ((String) -> Void)? = nil  // Callback for scroll updates
 
     @State private var displayedText: String = ""
     @State private var streamingComplete: Bool = false
 
     // Animation speed (seconds per character)
     private let characterDelay: Double = 0.03
-
-    private let brand = Color(red: 0.29, green: 0.55, blue: 0.42) // #4A8B6A
 
     var body: some View {
         if streamingComplete || !isStreaming {
@@ -104,7 +105,7 @@ struct StreamingAttributedTextView: View {
                 let citationText = " (\(citation.surah) \(citation.ayah))"
                 var attributed = AttributedString(citationText)
                 attributed.font = .system(size: 14, weight: .medium)
-                attributed.foregroundColor = brand
+                attributed.foregroundColor = AppColors.Chat.headerTitle
                 attributed.link = URL(string: "citation://\(number)")
                 return attributed
             }
@@ -136,6 +137,7 @@ struct StreamingAttributedTextView: View {
 
                 await MainActor.run {
                     displayedText.append(character)
+                    onTextUpdate?(displayedText)  // Notify parent of text update
                 }
             }
 

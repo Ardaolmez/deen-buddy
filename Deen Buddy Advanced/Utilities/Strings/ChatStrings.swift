@@ -8,13 +8,13 @@
 import Foundation
 
 struct ChatStrings {
-    static let navigationTitle = "Islamic Chat"
-    static let chatBoxPrompt = "Ask Iman Buddy anything you're curious about Islam"
+    static let navigationTitle = "Ask a Question"
+    static let chatBoxPrompt = "Ask a Question"
     static let inputPlaceholder = "Type your question..."
     static let inputPlaceholderShort = "Ask me anything…"
     static let close = "Close"
     static let botName = "Iman Buddy:"
-    static let welcomeMessage = "What's on your mind?"
+    static let welcomeMessage = "What Can I Help With?"
 
     // Loading
     static let loadingIndicator = "…"
