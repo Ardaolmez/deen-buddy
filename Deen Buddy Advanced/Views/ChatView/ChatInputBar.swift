@@ -14,7 +14,7 @@ struct ChatInputBar: View {
                 .background(
                     RoundedRectangle(cornerRadius: 22, style: .continuous)
                         .fill(Color(.systemBackground))
-                        .shadow(color: .black.opacity(0.06), radius: 10, x: 0, y: 4)
+                        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 4)
                 )
                 .lineLimit(1...5)
 

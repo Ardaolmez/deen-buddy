@@ -227,13 +227,22 @@ struct AppColors {
 
         static let inputBackground = Color.white
         static let sendButtonIcon = Color.white
-        static let sendButtonActive = Color(red: 0.29, green: 0.55, blue: 0.42) // #4A8B6A - Iman Buddy green
+
+        static func sendButtonActive(for colorScheme: ColorScheme) -> Color {
+            colorScheme == .light ? Color(red: 0.29, green: 0.55, blue: 0.42) : Color(red: 0.78, green: 0.64, blue: 0.27) // #C7A345
+        }
+
         static let sendButtonInactive = Color.gray
         static let containerBackground = Color(.systemBackground)
 
-        // Header colors
-        static let headerTitle = Color(red: 0.29, green: 0.55, blue: 0.42) // #4A8B6A - Iman Buddy green
-        static let closeButton = Color(red: 0.29, green: 0.55, blue: 0.42) // #4A8B6A - Iman Buddy green
+        // Header colors (adaptive for light/dark mode)
+        static func headerTitle(for colorScheme: ColorScheme) -> Color {
+            colorScheme == .light ? Color(red: 0.29, green: 0.55, blue: 0.42) : Color(red: 1.0, green: 0.92, blue: 0.3) // Green in light, bright yellow in dark
+        }
+
+        static func closeButton(for colorScheme: ColorScheme) -> Color {
+            colorScheme == .light ? Color(red: 0.29, green: 0.55, blue: 0.42) : Color(red: 1.0, green: 0.92, blue: 0.3) // Green in light, bright yellow in dark
+        }
     }
 
     // MARK: - Widget Colors

@@ -7,6 +7,7 @@ struct MessageRowView: View {
 
     private var isUser: Bool { message.role == .user }
 
+    @Environment(\.colorScheme) var colorScheme
     @State private var selectedCitation: Citation?
 
     var body: some View {
@@ -17,7 +18,7 @@ struct MessageRowView: View {
                 if !isUser {
                     Text(AppStrings.chat.botName)
                         .font(.callout.weight(.semibold))
-                        .foregroundStyle(AppColors.Chat.headerTitle)
+                        .foregroundStyle(AppColors.Chat.headerTitle(for: colorScheme))
                 }
 
                 // Parse and render message with clickable citations
@@ -43,7 +44,9 @@ struct MessageRowView: View {
             .padding(.horizontal, isUser ? 14 : 0)
             .background(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(isUser ? AppColors.Chat.sendButtonActive : Color.clear)
+                    .fill(isUser ? AppColors.Chat.sendButtonActive(for: colorScheme) : Color.clear)
+                    .shadow(color: isUser ? Color.black.opacity(0.12) : Color.clear, radius: 8, x: 0, y: 3)
+                    .shadow(color: isUser ? Color.black.opacity(0.06) : Color.clear, radius: 2, x: 0, y: 1)
             )
 
             if !isUser { Spacer(minLength: 24) }
@@ -87,7 +90,7 @@ struct MessageRowView: View {
                     let citationText = " (\(citation.surah) \(citation.ayah))"
                     var attributed = AttributedString(citationText)
                     attributed.font = .system(size: 14, weight: .medium)
-                    attributed.foregroundColor = AppColors.Chat.headerTitle
+                    attributed.foregroundColor = AppColors.Chat.headerTitle(for: colorScheme)
                     // Store citation index in link attribute
                     attributed.link = URL(string: "citation://\(number)")
                     return attributed

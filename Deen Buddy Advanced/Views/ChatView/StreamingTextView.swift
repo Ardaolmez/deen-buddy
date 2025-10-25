@@ -66,6 +66,7 @@ struct StreamingAttributedTextView: View {
     let isStreaming: Bool
     var onTextUpdate: ((String) -> Void)? = nil  // Callback for scroll updates
 
+    @Environment(\.colorScheme) var colorScheme
     @State private var displayedText: String = ""
     @State private var streamingComplete: Bool = false
 
@@ -105,7 +106,7 @@ struct StreamingAttributedTextView: View {
                 let citationText = " (\(citation.surah) \(citation.ayah))"
                 var attributed = AttributedString(citationText)
                 attributed.font = .system(size: 14, weight: .medium)
-                attributed.foregroundColor = AppColors.Chat.headerTitle
+                attributed.foregroundColor = AppColors.Chat.headerTitle(for: colorScheme)
                 attributed.link = URL(string: "citation://\(number)")
                 return attributed
             }
