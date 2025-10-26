@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
 
           <div className="prose prose-lg max-w-none">
             <p className="text-gray-600 mb-6">
-              Last updated: October 21, 2025
+              Last updated: October 26, 2025
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">
@@ -44,6 +44,24 @@ export default function PrivacyPolicy() {
               We may collect information on how the app is accessed and used to improve our services. This includes crash reports and performance metrics.
             </p>
 
+            <h3 className="text-xl font-semibold text-gray-900 mt-6 mb-3">
+              2.4 AI Chat Conversations
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Our app includes an AI-powered chat feature that provides Islamic guidance and answers to your questions. This feature is powered by z.ai&apos;s API service. When you use the chat feature:
+            </p>
+            <ul className="list-disc list-inside text-gray-600 space-y-2 mb-4">
+              <li>Your messages are sent to z.ai for real-time processing to generate responses</li>
+              <li>z.ai does NOT store your conversation content on their servers</li>
+              <li>All messages are processed in real-time and immediately deleted after generating a response</li>
+              <li>Processing occurs on z.ai&apos;s servers located in Singapore</li>
+              <li>Your conversations are NOT used to train AI models</li>
+              <li>Chat history is only stored locally on your device</li>
+            </ul>
+            <p className="text-gray-600 mb-4">
+              For more information about z.ai&apos;s privacy practices, you can review their privacy policy at <a href="https://docs.z.ai/legal-agreement/privacy-policy" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">https://docs.z.ai/legal-agreement/privacy-policy</a>
+            </p>
+
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">
               3. How We Use Your Information
             </h2>
@@ -60,7 +78,10 @@ export default function PrivacyPolicy() {
               4. Data Storage and Security
             </h2>
             <p className="text-gray-600 mb-4">
-              All data is stored locally on your device. We do not store your personal information on our servers. Your location data and preferences are stored securely on your device and are not accessible to us or third parties.
+              All data is stored locally on your device. We do not store your personal information on our servers. Your location data, preferences, and chat history are stored securely on your device and are not accessible to us or third parties.
+            </p>
+            <p className="text-gray-600 mb-4">
+              When you use the AI chat feature, your messages are temporarily transmitted to z.ai&apos;s servers for processing but are not stored there. z.ai processes your messages in real-time to generate responses and immediately deletes them - they do not retain any conversation content on their servers.
             </p>
 
             <h2 className="text-2xl font-semibold text-gray-900 mt-8 mb-4">
