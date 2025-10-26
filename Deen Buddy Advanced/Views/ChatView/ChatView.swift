@@ -52,7 +52,6 @@ struct ChatView: View {
                         }
                     }
                     .onChange(of: vm.messages.last?.text) { newText in
-                        print("📝 Last message text changed: \(newText?.prefix(50) ?? "nil")...")
                         if let last = vm.messages.last {
                             withAnimation(.easeOut(duration: 0.2)) {
                                 proxy.scrollTo(last.id, anchor: .bottom)
@@ -87,7 +86,7 @@ struct ChatView: View {
                     Button(action: vm.send) {
                         Image(systemName: "paperplane.fill")
                             .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(AppColors.Chat.sendButtonIcon)
+                            .foregroundColor(AppColors.Chat.sendButtonIcon(for: colorScheme))
                             .padding(12)
                             .background(canSend ? AppColors.Chat.sendButtonActive(for: colorScheme) : AppColors.Chat.sendButtonInactive)
                             .clipShape(Circle())

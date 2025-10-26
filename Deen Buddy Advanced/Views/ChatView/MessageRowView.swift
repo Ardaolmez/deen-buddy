@@ -37,7 +37,7 @@ struct MessageRowView: View {
                 } else {
                     Text(message.text)
                         .font(.system(size: 18, weight: .regular, design: .serif))
-                        .foregroundStyle(isUser ? .white : .primary)
+                        .foregroundStyle(isUser ? AppColors.Chat.userText(for: colorScheme) : .primary)
                         .multilineTextAlignment(.leading)
                 }
             }

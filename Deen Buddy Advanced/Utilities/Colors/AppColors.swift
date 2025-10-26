@@ -226,10 +226,15 @@ struct AppColors {
         static let boxBorder = Color(.systemGray4)
 
         static let inputBackground = Color.white
-        static let sendButtonIcon = Color.white
-
+        static func sendButtonIcon (for colorScheme: ColorScheme) -> Color {
+            colorScheme == .light ? Color(red: 0.985, green: 0.97, blue: 0.90)
+:  Color(red: 0.08, green: 0.08, blue: 0.2)
+            }
+        static func userText(for colorScheme: ColorScheme) -> Color {
+            colorScheme == .light ? .white : .black
+        }
         static func sendButtonActive(for colorScheme: ColorScheme) -> Color {
-            colorScheme == .light ? Color(red: 0.29, green: 0.55, blue: 0.42) : Color(red: 0.78, green: 0.64, blue: 0.27) // #C7A345
+            colorScheme == .light ? Color(red: 0.29, green: 0.55, blue: 0.42) : Color(red: 1.0, green: 0.92, blue: 0.3)
         }
 
         static let sendButtonInactive = Color.gray
