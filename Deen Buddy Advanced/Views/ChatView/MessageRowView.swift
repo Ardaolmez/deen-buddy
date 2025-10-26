@@ -25,9 +25,20 @@ struct MessageRowView: View {
 
                 // Parse and render message with clickable citations
                 if !isUser && !message.citations.isEmpty {
-                    renderMessageWithCitations()
+                    // Message with citations - use streaming view with citation cards
+                    StreamingTextWithCitationsView(
+                        fullText: message.text,
+                        citations: message.citations,
+                        isStreaming: isStreaming,
+                        onTextUpdate: onStreamingUpdate,
+                        onStreamingComplete: onStreamingComplete,
+                        onCitationTap: { citation in
+                            selectedCitation = citation
+                        },
+                        initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
+                    )
                 } else if !isUser && message.shouldUseStreamingView {
-                    // Stream bot messages character by character
+                    // Stream bot messages character by character (no citations)
                     StreamingTextView(
                         fullText: message.text,
                         font: .system(size: 18, weight: .regular, design: .serif),

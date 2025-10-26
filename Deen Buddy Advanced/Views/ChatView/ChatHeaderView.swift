@@ -12,11 +12,14 @@ struct ChatHeaderView: View {
     var title: String
     var onBack: (() -> Void)? = nil
 
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         HStack {
             Button(action: { onBack?() }) {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(AppColors.Chat.closeButton(for: colorScheme))
                     .padding(10)
                     .background(.thinMaterial)
                     .clipShape(Circle())
@@ -26,7 +29,7 @@ struct ChatHeaderView: View {
             Spacer()
             Text(title)
                 .font(.system(.title2, design: .serif).weight(.semibold))
-                .foregroundStyle(Color("PrimaryGreen", bundle: .main))
+                .foregroundStyle(AppColors.Chat.headerTitle(for: colorScheme))
             Spacer()
 
             // placeholder to balance back button

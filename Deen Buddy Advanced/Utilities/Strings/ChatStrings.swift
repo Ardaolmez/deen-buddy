@@ -21,4 +21,7 @@ struct ChatStrings {
 
     // Stop button
     static let stopButton = "Stop"
+
+    // Citation card
+    static let citationIconName = "book.closed.fill"
 }

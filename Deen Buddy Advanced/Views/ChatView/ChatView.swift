@@ -79,16 +79,16 @@ struct ChatView: View {
 
                 // Input
                 HStack(spacing: 12) {
-                    TextField("", text: $vm.input, prompt: Text(AppStrings.chat.inputPlaceholder).foregroundColor(.black.opacity(0.5)))
+                    TextField("", text: $vm.input, prompt: Text(AppStrings.chat.inputPlaceholder).foregroundColor(AppColors.Chat.inputPlaceholder(for: colorScheme)))
                         .focused($isTextFieldFocused)
                         .padding(.vertical, 12)
                         .padding(.horizontal, 16)
-                        .foregroundColor(.black)
-                        .tint(.black)
-                        .background(AppColors.Chat.inputBackground)
+                        .foregroundColor(AppColors.Chat.inputText(for: colorScheme))
+                        .tint(AppColors.Chat.inputText(for: colorScheme))
+                        .background(AppColors.Chat.inputBackground(for: colorScheme))
                         .cornerRadius(24)
-                        .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
-                        .shadow(color: Color.black.opacity(0.04), radius: 2, x: 0, y: 1)
+                        .shadow(color: AppColors.Chat.shadowMedium, radius: 8, x: 0, y: 2)
+                        .shadow(color: AppColors.Chat.shadowLight, radius: 2, x: 0, y: 1)
 
                     let canSend = !vm.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
 
@@ -101,8 +101,8 @@ struct ChatView: View {
                                 .padding(12)
                                 .background(AppColors.Chat.stopButtonBackground(for: colorScheme))
                                 .clipShape(Circle())
-                                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 3)
-                                .shadow(color: Color.black.opacity(0.06), radius: 2, x: 0, y: 1)
+                                .shadow(color: AppColors.Chat.shadowStrong, radius: 8, x: 0, y: 3)
+                                .shadow(color: AppColors.Chat.shadowLight, radius: 2, x: 0, y: 1)
                         }
                     } else {
                         Button(action: vm.send) {
@@ -112,8 +112,8 @@ struct ChatView: View {
                                 .padding(12)
                                 .background(canSend ? AppColors.Chat.sendButtonActive(for: colorScheme) : AppColors.Chat.sendButtonInactive)
                                 .clipShape(Circle())
-                                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 3)
-                                .shadow(color: Color.black.opacity(0.06), radius: 2, x: 0, y: 1)
+                                .shadow(color: AppColors.Chat.shadowStrong, radius: 8, x: 0, y: 3)
+                                .shadow(color: AppColors.Chat.shadowLight, radius: 2, x: 0, y: 1)
                         }
                         .disabled(!canSend)
                     }
