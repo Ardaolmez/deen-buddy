@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 enum RecordsRange: String, CaseIterable, Identifiable {
-    case week = "Weeks", month = "Months", year = "Years", all = "All time"
+    case week = "Week", month = "Month"
     var id: String { rawValue }
 }
 
@@ -30,6 +30,8 @@ struct Summary {
 
 final class PrayerRecordsViewModel: ObservableObject {
     @Published var selectedRange: RecordsRange = .week
+    @Published var weekOffset: Int = 0  // 0 = current week, -1 = last week, etc.
+    @Published var monthOffset: Int = 0 // 0 = current month, -1 = last month, etc.
     @Published private(set) var days: [Date] = []                      // x-axis
     @Published private(set) var heatmap: [Date: [PrayerName: PrayerRecord]] = [:]
     @Published private(set) var summary = Summary()
@@ -41,6 +43,52 @@ final class PrayerRecordsViewModel: ObservableObject {
         reload()
     }
 
+    // MARK: - Navigation
+
+    func goToNextWeek() {
+        guard weekOffset < 0 else { return }
+        weekOffset += 1
+        reload()
+    }
+
+    func goToPreviousWeek() {
+        weekOffset -= 1
+        reload()
+    }
+
+    func goToNextMonth() {
+        guard monthOffset < 0 else { return }
+        monthOffset += 1
+        reload()
+    }
+
+    func goToPreviousMonth() {
+        monthOffset -= 1
+        reload()
+    }
+
+    var canGoForward: Bool {
+        selectedRange == .week ? weekOffset < 0 : monthOffset < 0
+    }
+
+    var dateRangeText: String {
+        guard !days.isEmpty else { return "" }
+
+        switch selectedRange {
+        case .week:
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d"
+            let start = formatter.string(from: days.first!)
+            let end = formatter.string(from: days.last!)
+            return "\(start) - \(end)"
+
+        case .month:
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM yyyy"
+            return formatter.string(from: days.first!)
+        }
+    }
+
     func reload() {
         let (from, to) = rangeDates(for: selectedRange)
         days = buildDays(from: from, to: to)
@@ -50,6 +98,8 @@ final class PrayerRecordsViewModel: ObservableObject {
 
     func setRange(_ r: RecordsRange) {
         selectedRange = r
+        weekOffset = 0
+        monthOffset = 0
         reload()
     }
 
@@ -83,25 +133,18 @@ final class PrayerRecordsViewModel: ObservableObject {
 
         switch r {
         case .week:
-            // keep exact 7 days, doesn’t need month rounding
-            let from = cal.date(byAdding: .day, value: -6, to: today)!
-            return (from, today)
+            // Apply week offset (each offset = 7 days)
+            let offsetDays = weekOffset * 7
+            let targetDate = cal.date(byAdding: .day, value: offsetDays, to: today)!
+            let from = cal.date(byAdding: .day, value: -6, to: targetDate)!
+            return (from, targetDate)
 
         case .month:
-            // current month
-            let from = monthStart(today)
-            let to   = monthEnd(today)
+            // Apply month offset
+            let targetDate = cal.date(byAdding: .month, value: monthOffset, to: today)!
+            let from = monthStart(targetDate)
+            let to   = monthEnd(targetDate)
             return (from, to)
-
-        case .year:
-            // last 12 full months (including current month)
-            let fromMonth = cal.date(byAdding: .month, value: -11, to: monthStart(today))!
-            return (fromMonth, monthEnd(today))
-
-        case .all:
-            // show last 24 full months (tweak if you prefer a different span)
-            let fromMonth = cal.date(byAdding: .month, value: -23, to: monthStart(today))!
-            return (fromMonth, monthEnd(today))
         }
     }
 

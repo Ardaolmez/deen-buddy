@@ -11,6 +11,21 @@ struct PrayerRecordsView: View {
 
     var body: some View {
         VStack(spacing: 16) {
+            // Range selector
+            SegmentedRange(selected: vm.selectedRange) { vm.setRange($0) }
+
+            // Navigation header with arrows
+            NavigationHeader(
+                dateRangeText: vm.dateRangeText,
+                canGoForward: vm.canGoForward,
+                onPrevious: {
+                    vm.selectedRange == .week ? vm.goToPreviousWeek() : vm.goToPreviousMonth()
+                },
+                onNext: {
+                    vm.selectedRange == .week ? vm.goToNextWeek() : vm.goToNextMonth()
+                }
+            )
+
             // Heatmap
             HeatmapSection(
                 days: vm.days,
@@ -19,35 +34,51 @@ struct PrayerRecordsView: View {
                 statusProvider: { day, prayer in vm.record(for: day, prayer: prayer) }
             )
 
-
-
-            // Range selector
-            SegmentedRange(selected: vm.selectedRange) { vm.setRange($0) }
-
             // Status summary grid
             SummaryGrid(summary: vm.summary)
         }
-        .padding(.vertical, 12)
+        .padding(.bottom, 12)
         .navigationTitle("Stats")
         .navigationBarTitleDisplayMode(.inline)
         .background(Color(.systemBackground))
         .onAppear { vm.reload() }
-        .toolbar {                               // ⬅️ add here
-                    #if DEBUG
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Reseed") {
-                            DemoData.seed(daysBack: 365, force: true)   // wipe + seed
-                            vm.reload()                                // refresh UI
-                        }
-                    } 
-            ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Wipe") {
-                            DemoData.wipe()  // wipe + seed
-                            vm.reload()                                // refresh UI
-                        }
-                    }
-                    #endif
-                }
+    }
+}
+
+// MARK: - Navigation Header
+
+fileprivate struct NavigationHeader: View {
+    let dateRangeText: String
+    let canGoForward: Bool
+    let onPrevious: () -> Void
+    let onNext: () -> Void
+
+    var body: some View {
+        HStack {
+            Button(action: onPrevious) {
+                Image(systemName: "chevron.left")
+                    .font(.title3)
+                    .foregroundColor(.primary)
+                    .frame(width: 44, height: 44)
+            }
+
+            Spacer()
+
+            Text(dateRangeText)
+                .font(.headline)
+                .foregroundColor(.primary)
+
+            Spacer()
+
+            Button(action: onNext) {
+                Image(systemName: "chevron.right")
+                    .font(.title3)
+                    .foregroundColor(canGoForward ? .primary : .gray.opacity(0.3))
+                    .frame(width: 44, height: 44)
+            }
+            .disabled(!canGoForward)
+        }
+        .padding(.horizontal, 8)
     }
 }
 
@@ -59,74 +90,109 @@ fileprivate struct HeatmapSection: View {
     let colorProvider: (_ day: Date, _ prayer: PrayerName) -> Color
     let statusProvider: (_ day: Date, _ prayer: PrayerName) -> PrayerRecord?
 
-    // Adaptive sizing (smaller when spanning big ranges)
-    private var cellSize: CGFloat {
-        switch range {
-        case .week:  return 22
-        case .month: return 20
-        case .year:  return 16
-        case .all:   return 14
-        }
-    }
     private let hGap: CGFloat = 6
+    private let monthCellSize: CGFloat = 14
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            if range == .week {
+                weekLayout
+            } else {
+                monthLayout
+            }
+        }
+    }
+
+    // MARK: - Week Layout (Screen-wide, no scroll)
+
+    @ViewBuilder
+    private var weekLayout: some View {
+        GeometryReader { geometry in
+            let prayerLabelWidth: CGFloat = 90
+            let internalPadding: CGFloat = 16
+            let totalGaps = hGap * CGFloat(days.count - 1)
+            let availableWidth = geometry.size.width - prayerLabelWidth - internalPadding - totalGaps
+            let cellSize = availableWidth / CGFloat(max(days.count, 1))
+
+            VStack(alignment: .leading, spacing: 10) {
+                heatmapContent(cellSize: cellSize, showMonthHeader: false)
+                    .padding(.horizontal, 8)
+
+                Legend().padding(.horizontal, 8)
+            }
+        }
+        .frame(height: 240)  // Fixed height for week layout
+    }
+
+    // MARK: - Month Layout (Scrollable)
+
+    @ViewBuilder
+    private var monthLayout: some View {
+        VStack(alignment: .leading, spacing: 10) {
             ScrollView(.horizontal, showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 8) {
-
-                    // ---- MONTH SPANS HEADER (e.g., "Nov 2025") ----
-                    MonthSpansHeader(days: days, cell: cellSize, hGap: hGap)
-
-                    // ---- GRID + LEFT LABELS ----
-                    HStack(alignment: .top, spacing: 10) {
-
-                        // left labels (prayer names + icons)
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(PrayerName.allCases) { p in
-                                HStack(spacing: 6) {
-                                    Image(systemName: p.icon)
-                                        .font(.footnote)
-                                        .foregroundColor(.secondary)
-                                        .frame(width: 16)
-                                    Text(p.title)
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                .frame(height: cellSize)
-                            }
-                        }
-                        .padding(.leading, 8)
-
-                        // grid
-                        VStack(alignment: .leading, spacing: 8) {
-                            ForEach(PrayerName.allCases) { p in
-                                HStack(spacing: hGap) {
-                                    ForEach(days, id: \.self) { d in
-                                        let color = colorProvider(d, p)
-                                        let rec   = statusProvider(d, p)
-                                        HeatCell(size: cellSize, color: color, record: rec)
-                                    }
-                                }
-                            }
-
-                            // ---- DAY TICKS (adaptive stride) ----
-                            DayTicks(days: days, cell: cellSize, hGap: hGap, range: range)
-                                .padding(.top, 2)
-                        }
-                    }
-                    .padding(.trailing, 8)
-                    .padding(.vertical, 8)
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(AppColors.Prayers.statsHeatmapBackground)
-                    )
+                    heatmapContent(cellSize: monthCellSize, showMonthHeader: true)
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 8)
                 .padding(.top, 4)
             }
 
-            Legend().padding(.horizontal)
+            Legend().padding(.horizontal, 8)
+        }
+    }
+
+    // MARK: - Shared Heatmap Content
+
+    @ViewBuilder
+    private func heatmapContent(cellSize: CGFloat, showMonthHeader: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Month header (only for month view)
+            if showMonthHeader {
+                MonthSpansHeader(days: days, cell: cellSize, hGap: hGap)
+            }
+
+            // Grid + Left Labels
+            HStack(alignment: .top, spacing: 10) {
+                // left labels (prayer names + icons)
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(PrayerName.allCases) { p in
+                        HStack(spacing: 6) {
+                            Image(systemName: p.icon)
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                                .frame(width: 16)
+                            Text(p.title)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(height: cellSize)
+                    }
+                }
+                .padding(.leading, 8)
+
+                // grid
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(PrayerName.allCases) { p in
+                        HStack(spacing: hGap) {
+                            ForEach(days, id: \.self) { d in
+                                let color = colorProvider(d, p)
+                                let rec   = statusProvider(d, p)
+                                HeatCell(size: cellSize, color: color, record: rec)
+                            }
+                        }
+                    }
+
+                    // Day Ticks
+                    DayTicks(days: days, cell: cellSize, hGap: hGap, range: range)
+                        .padding(.top, 2)
+                }
+            }
+            .padding(.trailing, 8)
+            .padding(.vertical, 8)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(AppColors.Prayers.statsHeatmapBackground)
+            )
         }
     }
 }
@@ -195,8 +261,6 @@ fileprivate struct DayTicks: View {
             return true // show every day
         case .month:
             return day == 1 || day % 2 == 0  // every 2 days + the 1st
-        case .year, .all:
-            return day == 1 || day == 15 || day == 28 // three anchors per month
         }
     }
 
@@ -317,16 +381,16 @@ fileprivate struct SegmentedRange: View {
     let selected: RecordsRange
     let didSelect: (RecordsRange) -> Void
 
-    
+    // Match the heatmap's adaptive padding
+    private let horizontalPadding: CGFloat = 8
+
     var body: some View {
         HStack(spacing: 10) {
             ForEach(RecordsRange.allCases) { r in
                 Button {
                     didSelect(r)
                 } label: {
-                    Text(r == .week ? "Weeks" :
-                         r == .month ? "Months" :
-                         r == .year ? "Years" : "All time")
+                    Text(r.rawValue)
                         .font(.subheadline.weight(.semibold))
                         .padding(.horizontal, 14)
                         .padding(.vertical, 8)
@@ -338,7 +402,7 @@ fileprivate struct SegmentedRange: View {
                 }
             }
         }
-        .padding(.horizontal)
+        .padding(.horizontal, horizontalPadding)
     }
 }
 
@@ -347,12 +411,15 @@ fileprivate struct SegmentedRange: View {
 fileprivate struct SummaryGrid: View {
     let summary: Summary
 
+    // Match the heatmap's adaptive padding
+    private let horizontalPadding: CGFloat = 8
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("STATUS SUMMARY")
                 .font(.caption.weight(.semibold))
                 .foregroundColor(.secondary)
-                .padding(.horizontal)
+                .padding(.horizontal, horizontalPadding)
 
             // 1) Full-width "On time"
             SummaryCard(
@@ -361,7 +428,7 @@ fileprivate struct SummaryGrid: View {
                 count: summary.onTime,
                 accent: AppColors.Prayers.heatmapOnTime
             )
-            .padding(.horizontal)
+            .padding(.horizontal, horizontalPadding)
 
             // 2) Two-up row: Late + Not prayed
             HStack(spacing: 12) {
@@ -381,7 +448,7 @@ fileprivate struct SummaryGrid: View {
                 )
                 .frame(maxWidth: .infinity)
             }
-            .padding(.horizontal)
+            .padding(.horizontal, horizontalPadding)
         }
     }
 }
