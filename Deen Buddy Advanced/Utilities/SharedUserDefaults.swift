@@ -14,6 +14,7 @@ extension UserDefaults {
 
     // Keys
     private static let prayerDataKey = "prayerWidgetData"
+    private static let lastCountryCodeKey = "lastCountryCode"
 
     // MARK: - Prayer Data
 
@@ -29,5 +30,16 @@ extension UserDefaults {
             return nil
         }
         return try? JSONDecoder().decode(PrayerWidgetData.self, from: data)
+    }
+
+    // MARK: - Location Context
+
+    func saveCountryCode(_ code: String?) {
+        set(code, forKey: Self.lastCountryCodeKey)
+        synchronize()
+    }
+
+    func loadCountryCode() -> String? {
+        return string(forKey: Self.lastCountryCodeKey)
     }
 }

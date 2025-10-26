@@ -41,7 +41,13 @@ final class PrayersViewModel: ObservableObject {
 
     init(recordsStore: PrayerRecordsStore = CoreDataPrayerRecordsStore()) {
         self.recordsStore = recordsStore
-        
+
+        // Initialize location context from cached data for smart calculation
+        if let cachedCountryCode = UserDefaults.shared.loadCountryCode(),
+           let cachedCoord = cache.getCachedCoordinate() {
+            PrayerTimesService.updateLocationContext(countryCode: cachedCountryCode, latitude: cachedCoord.latitude)
+        }
+
         // 1) Try cached snapshot for instant UI
         if let snap = cache.loadToday() {
             self.cityLine = snap.cityLine
@@ -61,7 +67,7 @@ final class PrayersViewModel: ObservableObject {
         bindLocation()
         location.request()
         loadCompleted()
-        
+
         // ✨ Do NOT mark all of today up-front. Only sync what's already completed.
             syncTodayCompletedOnLaunch()
             startTicker()
@@ -135,11 +141,18 @@ final class PrayersViewModel: ObservableObject {
         coord = newCoord
 
         // Check if we should recalculate prayer times
-        let (shouldRecalculate, _, _) = cache.shouldRecalculate(for: newCoord)
+        let (shouldRecalculate, distance, _) = cache.shouldRecalculate(for: newCoord)
 
         if shouldRecalculate {
-            reverseGeocode(newCoord)
-            reload(for: newCoord)
+            // For significant location changes (>10km), wait for geocoding to ensure correct method
+            if let dist = distance, dist > 10000 {
+                // Major location change - get country code first, then reload
+                reverseGeocodeAndReload(newCoord)
+            } else {
+                // Minor location change - reload immediately with current method
+                reverseGeocode(newCoord)
+                reload(for: newCoord)
+            }
         } else {
             // Just update the cached coordinate, don't recalculate prayer times
             cache.updateLocationOnly(coord: newCoord)
@@ -230,15 +243,29 @@ final class PrayersViewModel: ObservableObject {
 
             let p = placemarks?.first
             let city    = (p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea).trimmingCharacters(in: .whitespacesAndNewlines)
-            let country = ((p?.isoCountryCode ?? p?.country) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            let countryCode = p?.isoCountryCode?.trimmingCharacters(in: .whitespacesAndNewlines)
+            let country = ((countryCode ?? p?.country) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
 
             // Compose "City, CC" only if we have a country string
             let newCityLine = country.isEmpty ? city : "\(city), \(country)"
 
             DispatchQueue.main.async {
+                // Check if country changed - if so, we need to recalculate prayer times
+                let lastCountryCode = UserDefaults.shared.loadCountryCode()
+                let countryChanged = (lastCountryCode != countryCode) && lastCountryCode != nil
+
+                // Update location context for smart calculation method
+                PrayerTimesService.updateLocationContext(countryCode: countryCode, latitude: c.latitude)
+                UserDefaults.shared.saveCountryCode(countryCode)
+
                 // Only update & save if the label changed
                 let didChange = (self.cityLine != newCityLine)
                 self.cityLine = newCityLine
+
+                // Recalculate prayer times if country changed (different calculation method needed)
+                if countryChanged {
+                    self.reload(for: c)
+                }
 
                 // Save to cache if we have times already and something changed
                 if didChange, let header = self.header, !self.entries.isEmpty {
@@ -247,6 +274,33 @@ final class PrayersViewModel: ObservableObject {
                                          entries: self.entries,
                                          coord: c)
                 }
+            }
+        }
+    }
+
+    // Geocode first, then reload - ensures correct calculation method for international travel
+    private func reverseGeocodeAndReload(_ c: CLLocationCoordinate2D) {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, error in
+            guard let self = self else { return }
+
+            // Extract location info
+            let p = placemarks?.first
+            let city = (p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea).trimmingCharacters(in: .whitespacesAndNewlines)
+            let countryCode = p?.isoCountryCode?.trimmingCharacters(in: .whitespacesAndNewlines)
+            let country = ((countryCode ?? p?.country) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            let newCityLine = country.isEmpty ? city : "\(city), \(country)"
+
+            DispatchQueue.main.async {
+                // Update location context FIRST (before reload)
+                PrayerTimesService.updateLocationContext(countryCode: countryCode, latitude: c.latitude)
+                UserDefaults.shared.saveCountryCode(countryCode)
+
+                // Update city line
+                self.cityLine = newCityLine
+
+                // Now reload with correct calculation method
+                self.reload(for: c)
             }
         }
     }

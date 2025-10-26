@@ -23,15 +23,74 @@ struct DayTimes {
 }
 
 struct PrayerTimesService {
-    // Muslim World League calculation method
-    private static var params: CalculationParameters = {
-          var p = CalculationMethod.muslimWorldLeague.params
-          p.madhab = .hanafi
-          p.highLatitudeRule = .twilightAngle
-          return p
-      }()
+    // Cache for location-based calculation context
+    private static var currentCountryCode: String?
+    private static var currentLatitude: Double?
 
-    static let currentMethodName = "Muslim World League"
+    // Smart calculation method selection based on location
+    private static func recommendedMethod(for countryCode: String?, latitude: Double?) -> CalculationMethod {
+        // High latitude rule - above 55° needs special handling for midnight sun
+        if let lat = latitude, abs(lat) > 55 {
+            return .moonsightingCommittee
+        }
+
+        guard let code = countryCode?.uppercased() else {
+            return .muslimWorldLeague
+        }
+
+        switch code {
+        // Turkey
+        case "TR": return .turkey
+
+        // Saudi Arabia
+        case "SA": return .ummAlQura
+
+        // Egypt
+        case "EG": return .egyptian
+
+        // UAE
+        case "AE": return .dubai
+
+        // Qatar
+        case "QA": return .qatar
+
+        // Kuwait
+        case "KW": return .kuwait
+
+        // Iran
+        case "IR": return .tehran
+
+        // Southeast Asia
+        case "SG", "MY", "ID", "BN": return .singapore
+
+        // Pakistan
+        case "PK": return .karachi
+
+        // North America
+        case "US", "CA": return .moonsightingCommittee
+
+        // United Kingdom
+        case "GB": return .moonsightingCommittee
+
+        // Rest of the world - use Muslim World League
+        default: return .muslimWorldLeague
+        }
+    }
+
+    // Update location context for smart method selection
+    static func updateLocationContext(countryCode: String?, latitude: Double?) {
+        currentCountryCode = countryCode
+        currentLatitude = latitude
+    }
+
+    // Generate calculation parameters based on current location
+    private static var params: CalculationParameters {
+        let method = recommendedMethod(for: currentCountryCode, latitude: currentLatitude)
+        var p = method.params
+        p.madhab = .hanafi
+        p.highLatitudeRule = .twilightAngle
+        return p
+    }
 
       static func dayTimes(for coord: CLLocationCoordinate2D, on date: Date = Date()) -> DayTimes? {
           let cal = Calendar.current
