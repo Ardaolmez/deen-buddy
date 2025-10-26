@@ -23,7 +23,9 @@ final class ChatViewModel: ObservableObject {
 
     init(service: ChatService = CloudflareChatService()) {
         self.service = service
-        messages = [.init(role: .bot, text: AppStrings.chat.welcomeMessage)]
+        let welcomeMessage = ChatMessage(role: .bot, text: AppStrings.chat.welcomeMessage, isWelcomeMessage: true)
+        messages = [welcomeMessage]
+        latestBotMessageId = welcomeMessage.id  // Mark welcome message for streaming
     }
 
 

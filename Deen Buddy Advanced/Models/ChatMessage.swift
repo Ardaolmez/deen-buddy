@@ -32,4 +32,5 @@ struct ChatMessage: Identifiable, Equatable, Hashable {
     var text: String
     var citations: [Citation] = []  // Quran citations for this message
     var createdAt: Date = .init()
+    var isWelcomeMessage: Bool = false  // Flag for welcome message with initial delay
 }

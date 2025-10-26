@@ -13,6 +13,7 @@ struct StreamingTextView: View {
     let color: Color
     let isStreaming: Bool
     var onTextUpdate: ((String) -> Void)? = nil  // Callback for scroll updates
+    var initialDelay: Double = 0.5  // Optional delay before streaming starts
 
     @State private var displayedText: String = ""
     @State private var currentIndex: Int = 0
@@ -48,6 +49,11 @@ struct StreamingTextView: View {
         guard !fullText.isEmpty else { return }
 
         Task {
+            // Optional initial delay before streaming
+            if initialDelay > 0 {
+                try? await Task.sleep(nanoseconds: UInt64(initialDelay * 1_000_000_000))
+            }
+
             for (index, character) in fullText.enumerated() {
                 try? await Task.sleep(nanoseconds: UInt64(characterDelay * 1_000_000_000))
 

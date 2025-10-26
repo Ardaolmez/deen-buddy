@@ -32,7 +32,8 @@ struct MessageRowView: View {
                         font: .system(size: 18, weight: .regular, design: .serif),
                         color: .primary,
                         isStreaming: true,
-                        onTextUpdate: onStreamingUpdate
+                        onTextUpdate: onStreamingUpdate,
+                        initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
                     )
                 } else {
                     Text(message.text)
