@@ -32,6 +32,11 @@ struct ChatView: View {
                                     onStreamingComplete: {
                                         // Streaming finished, hide stop button
                                         vm.isStreaming = false
+
+                                        // Show keyboard when welcome message finishes
+                                        if msg.isWelcomeMessage {
+                                            isTextFieldFocused = true
+                                        }
                                     }
                                 )
                                     .id(msg.id)
