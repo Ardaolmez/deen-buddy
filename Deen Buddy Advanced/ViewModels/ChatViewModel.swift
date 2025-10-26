@@ -15,6 +15,7 @@ final class ChatViewModel: ObservableObject {
     @Published var input: String = ""
     @Published var isSending = false
     @Published var latestBotMessageId: UUID? = nil  // Track latest bot message for streaming
+    @Published var isStreaming = false  // Track if bot is currently typing
 
     private var bag = Set<AnyCancellable>()
     private let service: ChatService
@@ -26,6 +27,7 @@ final class ChatViewModel: ObservableObject {
         let welcomeMessage = ChatMessage(role: .bot, text: AppStrings.chat.welcomeMessage, isWelcomeMessage: true)
         messages = [welcomeMessage]
         latestBotMessageId = welcomeMessage.id  // Mark welcome message for streaming
+        // Don't show stop button for welcome message
     }
 
 
@@ -47,8 +49,14 @@ final class ChatViewModel: ObservableObject {
                 )
                 self.messages.append(botMessage)
                 self.latestBotMessageId = botMessage.id  // Mark for streaming animation
+                self.isStreaming = true  // Start streaming
                 self.isSending = false
             }
             .store(in: &bag)
+    }
+
+    func stopStreaming() {
+        isStreaming = false
+        latestBotMessageId = nil  // Clear streaming marker to stop animation
     }
 }

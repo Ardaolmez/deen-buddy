@@ -4,6 +4,7 @@ struct MessageRowView: View {
     let message: ChatMessage
     var isStreaming: Bool = false  // Enable streaming animation for new bot messages
     var onStreamingUpdate: ((String) -> Void)? = nil  // Callback for streaming text updates
+    var onStreamingComplete: (() -> Void)? = nil  // Callback when streaming finishes
 
     private var isUser: Bool { message.role == .user }
 
@@ -33,6 +34,7 @@ struct MessageRowView: View {
                         color: .primary,
                         isStreaming: true,
                         onTextUpdate: onStreamingUpdate,
+                        onStreamingComplete: onStreamingComplete,
                         initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
                     )
                 } else {

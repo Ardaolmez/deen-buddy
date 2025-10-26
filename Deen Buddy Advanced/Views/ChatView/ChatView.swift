@@ -28,6 +28,10 @@ struct ChatView: View {
                                     onStreamingUpdate: { _ in
                                         // Trigger scroll on each character update
                                         scrollTrigger += 1
+                                    },
+                                    onStreamingComplete: {
+                                        // Streaming finished, hide stop button
+                                        vm.isStreaming = false
                                     }
                                 )
                                     .id(msg.id)
@@ -83,17 +87,31 @@ struct ChatView: View {
 
                     let canSend = !vm.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
 
-                    Button(action: vm.send) {
-                        Image(systemName: "paperplane.fill")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(AppColors.Chat.sendButtonIcon(for: colorScheme))
-                            .padding(12)
-                            .background(canSend ? AppColors.Chat.sendButtonActive(for: colorScheme) : AppColors.Chat.sendButtonInactive)
-                            .clipShape(Circle())
-                            .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 3)
-                            .shadow(color: Color.black.opacity(0.06), radius: 2, x: 0, y: 1)
+                    // Show stop button when streaming, otherwise show send button
+                    if vm.isStreaming {
+                        Button(action: vm.stopStreaming) {
+                            Image(systemName: "stop.fill")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(AppColors.Chat.stopButtonIcon(for: colorScheme))
+                                .padding(12)
+                                .background(AppColors.Chat.stopButtonBackground(for: colorScheme))
+                                .clipShape(Circle())
+                                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 3)
+                                .shadow(color: Color.black.opacity(0.06), radius: 2, x: 0, y: 1)
+                        }
+                    } else {
+                        Button(action: vm.send) {
+                            Image(systemName: "paperplane.fill")
+                                .font(.system(size: 18, weight: .semibold))
+                                .foregroundColor(AppColors.Chat.sendButtonIcon(for: colorScheme))
+                                .padding(12)
+                                .background(canSend ? AppColors.Chat.sendButtonActive(for: colorScheme) : AppColors.Chat.sendButtonInactive)
+                                .clipShape(Circle())
+                                .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 3)
+                                .shadow(color: Color.black.opacity(0.06), radius: 2, x: 0, y: 1)
+                        }
+                        .disabled(!canSend)
                     }
-                    .disabled(!canSend)
                 }
                 .padding()
                 .background(Color.clear)

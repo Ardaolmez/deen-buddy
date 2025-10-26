@@ -18,4 +18,7 @@ struct ChatStrings {
 
     // Loading
     static let loadingIndicator = "…"
+
+    // Stop button
+    static let stopButton = "Stop"
 }

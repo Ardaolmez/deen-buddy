@@ -240,6 +240,14 @@ struct AppColors {
         static let sendButtonInactive = Color.gray
         static let containerBackground = Color(.systemBackground)
 
+        // Stop button (uses same colors as active send button)
+        static func stopButtonBackground(for colorScheme: ColorScheme) -> Color {
+            sendButtonActive(for: colorScheme)
+        }
+        static func stopButtonIcon(for colorScheme: ColorScheme) -> Color {
+            sendButtonIcon(for: colorScheme)
+        }
+
         // Header colors (adaptive for light/dark mode)
         static func headerTitle(for colorScheme: ColorScheme) -> Color {
             colorScheme == .light ? Color(red: 0.29, green: 0.55, blue: 0.42) : Color(red: 1.0, green: 0.92, blue: 0.3) // Green in light, bright yellow in dark
