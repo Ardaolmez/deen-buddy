@@ -24,7 +24,8 @@ final class ChatViewModel: ObservableObject {
 
     init(service: ChatService = CloudflareChatService()) {
         self.service = service
-        let welcomeMessage = ChatMessage(role: .bot, text: AppStrings.chat.welcomeMessage, isWelcomeMessage: true)
+        var welcomeMessage = ChatMessage(role: .bot, text: AppStrings.chat.welcomeMessage, isWelcomeMessage: true)
+        welcomeMessage.shouldUseStreamingView = true
         messages = [welcomeMessage]
         latestBotMessageId = welcomeMessage.id  // Mark welcome message for streaming
         // Don't show stop button for welcome message
@@ -42,11 +43,12 @@ final class ChatViewModel: ObservableObject {
         service.reply(to: trimmed)
             .sink { [weak self] response in
                 guard let self else { return }
-                let botMessage = ChatMessage(
+                var botMessage = ChatMessage(
                     role: .bot,
                     text: response.answer,
                     citations: response.citations
                 )
+                botMessage.shouldUseStreamingView = true
                 self.messages.append(botMessage)
                 self.latestBotMessageId = botMessage.id  // Mark for streaming animation
                 self.isStreaming = true  // Start streaming

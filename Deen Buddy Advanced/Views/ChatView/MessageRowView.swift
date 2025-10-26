@@ -26,13 +26,13 @@ struct MessageRowView: View {
                 // Parse and render message with clickable citations
                 if !isUser && !message.citations.isEmpty {
                     renderMessageWithCitations()
-                } else if !isUser && isStreaming {
+                } else if !isUser && message.shouldUseStreamingView {
                     // Stream bot messages character by character
                     StreamingTextView(
                         fullText: message.text,
                         font: .system(size: 18, weight: .regular, design: .serif),
                         color: .primary,
-                        isStreaming: true,
+                        isStreaming: isStreaming,
                         onTextUpdate: onStreamingUpdate,
                         onStreamingComplete: onStreamingComplete,
                         initialDelay: message.isWelcomeMessage ? 0.5 : 0.0

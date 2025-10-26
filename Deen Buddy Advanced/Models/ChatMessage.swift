@@ -33,4 +33,6 @@ struct ChatMessage: Identifiable, Equatable, Hashable {
     var citations: [Citation] = []  // Quran citations for this message
     var createdAt: Date = .init()
     var isWelcomeMessage: Bool = false  // Flag for welcome message with initial delay
+    var shouldUseStreamingView: Bool = false  // Whether this message should use StreamingTextView
+    var displayedText: String = ""  // Partial text to display when stopped
 }
