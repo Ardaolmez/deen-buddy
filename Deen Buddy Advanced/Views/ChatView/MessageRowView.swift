@@ -4,6 +4,7 @@ struct MessageRowView: View {
     let message: ChatMessage
     var isStreaming: Bool = false  // Enable streaming animation for new bot messages
     var onStreamingUpdate: ((String) -> Void)? = nil  // Callback for streaming text updates
+    var onStreamingComplete: (() -> Void)? = nil  // Callback when streaming finishes
 
     private var isUser: Bool { message.role == .user }
 
@@ -24,20 +25,33 @@ struct MessageRowView: View {
 
                 // Parse and render message with clickable citations
                 if !isUser && !message.citations.isEmpty {
-                    renderMessageWithCitations()
-                } else if !isUser && isStreaming {
-                    // Stream bot messages character by character
+                    // Message with citations - use streaming view with citation cards
+                    StreamingTextWithCitationsView(
+                        fullText: message.text,
+                        citations: message.citations,
+                        isStreaming: isStreaming,
+                        onTextUpdate: onStreamingUpdate,
+                        onStreamingComplete: onStreamingComplete,
+                        onCitationTap: { citation in
+                            selectedCitation = citation
+                        },
+                        initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
+                    )
+                } else if !isUser && message.shouldUseStreamingView {
+                    // Stream bot messages character by character (no citations)
                     StreamingTextView(
                         fullText: message.text,
                         font: .system(size: 18, weight: .regular, design: .serif),
                         color: .primary,
-                        isStreaming: true,
-                        onTextUpdate: onStreamingUpdate
+                        isStreaming: isStreaming,
+                        onTextUpdate: onStreamingUpdate,
+                        onStreamingComplete: onStreamingComplete,
+                        initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
                     )
                 } else {
                     Text(message.text)
                         .font(.system(size: 18, weight: .regular, design: .serif))
-                        .foregroundStyle(isUser ? .white : .primary)
+                        .foregroundStyle(isUser ? AppColors.Chat.userText(for: colorScheme) : .primary)
                         .multilineTextAlignment(.leading)
                 }
             }

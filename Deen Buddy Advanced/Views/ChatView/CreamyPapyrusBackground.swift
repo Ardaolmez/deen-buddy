@@ -39,27 +39,27 @@ struct StarryNightBackground: View {
             // Dark blue-purple gradient background
             LinearGradient(
                 colors: [
-                    Color(red: 0.1, green: 0.1, blue: 0.25),  // Dark blue
-                    Color(red: 0.15, green: 0.1, blue: 0.3),  // Purple-blue
-                    Color(red: 0.08, green: 0.08, blue: 0.2)  // Deep blue
+                    AppColors.Chat.darkBackgroundTop,
+                    AppColors.Chat.darkBackgroundMid,
+                    AppColors.Chat.darkBackgroundBottom
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
 
-            // Shining yellow stars
+            // Shining yellow stars (using cached star positions)
             Canvas { context, size in
-                for _ in 0..<80 {
-                    let x = CGFloat.random(in: 0...size.width)
-                    let y = CGFloat.random(in: 0...size.height)
-                    let starSize = CGFloat.random(in: 1...3)
-                    let brightness = Double.random(in: 0.6...1.0)
+                for star in StarFieldCache.shared.stars {
+                    let x = star.x * size.width
+                    let y = star.y * size.height
+                    let starSize = star.size
+                    let brightness = star.brightness
 
                     // Draw star
                     context.fill(
                         Path(ellipseIn: CGRect(x: x, y: y, width: starSize, height: starSize)),
-                        with: .color(Color.yellow.opacity(brightness))
+                        with: .color(AppColors.Chat.starColor.opacity(brightness))
                     )
 
                     // Add glow effect for some stars
@@ -67,7 +67,7 @@ struct StarryNightBackground: View {
                         context.opacity = 0.3
                         context.fill(
                             Path(ellipseIn: CGRect(x: x - 2, y: y - 2, width: starSize + 4, height: starSize + 4)),
-                            with: .color(.yellow)
+                            with: .color(AppColors.Chat.starGlow)
                         )
                         context.opacity = 1.0
                     }
