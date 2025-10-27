@@ -36,6 +36,7 @@ struct MinimalDesign {
     static let smallRadius: CGFloat = 8
     static let mediumRadius: CGFloat = 12
     static let largeRadius: CGFloat = 16
+    static let largeCornerRadius: CGFloat = 12
     
     // Icon sizes
     static let smallIcon: CGFloat = 16

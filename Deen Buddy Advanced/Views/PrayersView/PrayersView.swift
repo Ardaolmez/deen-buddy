@@ -29,6 +29,9 @@ struct PrayersView: View {
                         countdown: vm.countdownText,
                         isBetweenSunriseAndDhuhr: vm.isBetweenSunriseAndDhuhr
                     )
+
+                    // MARK: Qibla Compass
+                    QiblaCompassView()
                 }
                 .padding(.horizontal, MinimalDesign.mediumSpacing)
                 .padding(.vertical, MinimalDesign.mediumSpacing)
