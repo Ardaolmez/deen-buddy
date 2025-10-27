@@ -27,47 +27,48 @@ struct ArrowQiblaCompassView: View {
             Spacer()
 
             if vm.locationAvailable {
-                // Compass circle with Kaaba icon and arrow
+                // Compass with Kaaba at top and rotating arrow
                 ZStack {
-                    // Outer circle (compass boundary)
-                    Circle()
-                        .stroke(Color.gray.opacity(0.3), lineWidth: 2)
-                        .frame(width: 280, height: 280)
-
-                    // Kaaba icon at the Qibla direction
+                    // Kaaba icon at the top - ALWAYS FIXED at top
                     Image(systemName: "building.2.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(.black)
+                        .font(.system(size: 30))
+                        .foregroundColor(isAligned ? .green : .black)
+                        .offset(y: -140)
+
+                    // Shortest path indicator (arc from arrow to Kaaba at top)
+                    // Calculate arc parameters
+                    let arcFraction = abs(vm.angleDifference) / 360.0
+
+                    Circle()
+                        .trim(from: 0, to: arcFraction)
+                        .stroke(
+                            Color.blue.opacity(0.5),
+                            style: StrokeStyle(lineWidth: 4, lineCap: .round, dash: [8, 4])
+                        )
+                        .frame(width: 240, height: 240)
+                        .rotationEffect(.degrees(vm.angleDifference > 0 ? -90 : (-90 - abs(vm.angleDifference))))
+                        .opacity(isAligned ? 0 : 1)
+
+                    // Blue dot at arrow's current position (end of arc)
+                    Circle()
+                        .fill(Color.blue)
+                        .frame(width: 14, height: 14)
                         .offset(y: -120)
                         .rotationEffect(.degrees(vm.angleDifference))
+                        .opacity(isAligned ? 0 : 1)
 
-                    // Shortest path indicator (arc from arrow to Kaaba) - only show when not aligned
-                    if !isAligned {
-                        Circle()
-                            .trim(from: 0, to: min(abs(vm.angleDifference) / 360, 0.5))
-                            .stroke(
-                                Color.blue.opacity(0.4),
-                                style: StrokeStyle(lineWidth: 3, lineCap: .round, dash: [8, 4])
-                            )
-                            .frame(width: 240, height: 240)
-                            .rotationEffect(.degrees(-90)) // Start from top
-                            .rotationEffect(.degrees(vm.angleDifference > 0 ? 0 : vm.angleDifference)) // Rotate to show shortest path
-                    }
-
-                    // Center arrow pointing up (north/forward)
+                    // Center arrow - ROTATES to show direction difference
                     VStack(spacing: 4) {
                         Image(systemName: "arrow.up")
-                            .font(.system(size: 60, weight: .bold))
+                            .font(.system(size: 70, weight: .bold))
                             .foregroundColor(isAligned ? .green : .blue)
 
                         Text("Device")
-                            .font(.caption2)
+                            .font(.caption)
                             .foregroundColor(.secondary)
                     }
-                    .shadow(color: isAligned ? .green.opacity(0.5) : .clear, radius: 20)
+                    .rotationEffect(.degrees(vm.angleDifference), anchor: .center)
                 }
-                .animation(.easeInOut(duration: 0.3), value: isAligned)
-                .animation(.easeInOut(duration: 0.2), value: vm.angleDifference)
             } else {
                 // Loading state
                 VStack(spacing: 12) {

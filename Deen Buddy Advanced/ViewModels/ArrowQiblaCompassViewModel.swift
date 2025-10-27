@@ -22,6 +22,7 @@ final class ArrowQiblaCompassViewModel: ObservableObject {
     private var bag = Set<AnyCancellable>()
 
     private var userLocation: CLLocationCoordinate2D?
+    private var hasValidHeading: Bool = false
 
     init() {
         bindCompassService()
@@ -54,7 +55,12 @@ final class ArrowQiblaCompassViewModel: ObservableObject {
         // Listen to compass heading changes
         compassService.$heading
             .sink { [weak self] heading in
-                self?.updateCompassData(deviceHeading: heading)
+                guard let self = self else { return }
+
+                // Mark that we have a valid heading (after first real update)
+                self.hasValidHeading = true
+
+                self.updateCompassData(deviceHeading: heading)
             }
             .store(in: &bag)
 
@@ -73,19 +79,27 @@ final class ArrowQiblaCompassViewModel: ObservableObject {
 
     private func handleLocationUpdate(_ coordinate: CLLocationCoordinate2D) {
         userLocation = coordinate
-        locationAvailable = true
 
         // Calculate Qibla bearing
         qiblaBearing = QiblaService.calculateQiblaBearing(from: coordinate)
 
-        // Update compass data with current heading
-        updateCompassData(deviceHeading: deviceHeading)
+        // Only show UI if we have a valid compass heading
+        if hasValidHeading {
+            locationAvailable = true
+            // Update compass data with current heading
+            updateCompassData(deviceHeading: deviceHeading)
+        }
     }
 
     private func updateCompassData(deviceHeading: Double) {
-        guard locationAvailable else { return }
-
         self.deviceHeading = deviceHeading
+
+        // If we have location, show UI and calculate angle
+        if userLocation != nil && !locationAvailable {
+            locationAvailable = true
+        }
+
+        guard locationAvailable else { return }
 
         // Calculate the angle difference (how much to turn)
         var diff = qiblaBearing - deviceHeading
