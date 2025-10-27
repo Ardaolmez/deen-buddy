@@ -31,7 +31,7 @@ struct PrayersView: View {
                     )
 
                     // MARK: Qibla Compass
-                    QiblaCompassView()
+                    ArrowQiblaCompassView()
                 }
                 .padding(.horizontal, MinimalDesign.mediumSpacing)
                 .padding(.vertical, MinimalDesign.mediumSpacing)
