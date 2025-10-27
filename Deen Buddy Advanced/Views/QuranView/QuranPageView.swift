@@ -15,51 +15,77 @@ struct QuranPageView: View {
         ScrollView {
             VStack(spacing: 20) {
                 // Surah Header
-                VStack(spacing: 8) {
+                VStack(spacing: 12) {
+                    // Arabic name with decorative elements
                     Text(surah.name)
-                        .font(.system(size: 36, weight: .bold, design: .serif))
+                        .font(.system(size: 42, weight: .bold, design: .serif))
                         .foregroundColor(AppColors.Quran.surahNameArabic)
+                        .padding(.bottom, 4)
 
-                    Text(surah.transliteration)
-                        .font(.system(size: 24, weight: .semibold, design: .serif))
-                        .foregroundColor(AppColors.Quran.surahNameTransliteration)
+                    // Transliteration and translation
+                    VStack(spacing: 8) {
+                        Text(surah.transliteration)
+                            .font(.system(size: 26, weight: .semibold, design: .serif))
+                            .foregroundColor(AppColors.Quran.surahNameTransliteration)
 
-                    Text(surah.translation)
-                        .font(.system(size: 18, weight: .regular, design: .serif))
-                        .foregroundColor(AppColors.Quran.surahNameTranslation)
+                        Text(surah.translation)
+                            .font(.system(size: 20, weight: .regular, design: .serif))
+                            .foregroundColor(AppColors.Quran.surahNameTranslation)
+                    }
 
-                    HStack {
+                    // Metadata with better spacing
+                    HStack(spacing: 20) {
                         Text("\(surah.typeCapitalized)")
-                            .font(.system(size: 16, design: .serif))
+                            .font(.system(size: 17, weight: .medium, design: .serif))
                             .foregroundColor(AppColors.Quran.surahMetadata)
 
-                        Spacer()
+                        Text("•")
+                            .foregroundColor(AppColors.Quran.surahMetadata.opacity(0.5))
 
                         Text(String(format: AppStrings.quran.versesCount, surah.total_verses))
-                            .font(.system(size: 16, design: .serif))
+                            .font(.system(size: 17, weight: .medium, design: .serif))
                             .foregroundColor(AppColors.Quran.surahMetadata)
                     }
-                    .padding(.top, 8)
+                    .padding(.top, 12)
                 }
                 .padding(.horizontal, 24)
-                .padding(.top, 20)
+                .padding(.top, 24)
+                .padding(.bottom, 12)
 
                 // Bismillah (except for Surah 9)
                 if surah.id != 9 && surah.id != 1 {
-                    Text("بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ")
-                        .font(.system(size: 26, design: .serif))
-                        .foregroundColor(AppColors.Quran.bismillah)
-                        .multilineTextAlignment(.center)
-                        .padding(.vertical, 12)
+                    VStack(spacing: 8) {
+                        Text("بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ")
+                            .font(.system(size: 30, weight: .medium, design: .serif))
+                            .foregroundColor(AppColors.Quran.bismillah)
+                            .multilineTextAlignment(.center)
+                            .padding(.vertical, 16)
+
+                        // Decorative divider after Bismillah
+                        HStack(spacing: 12) {
+                            Rectangle()
+                                .fill(AppColors.Quran.verseNumber.opacity(0.2))
+                                .frame(width: 60, height: 1)
+
+                            Image(systemName: "star.fill")
+                                .font(.system(size: 10))
+                                .foregroundColor(AppColors.Quran.verseNumber.opacity(0.3))
+
+                            Rectangle()
+                                .fill(AppColors.Quran.verseNumber.opacity(0.2))
+                                .frame(width: 60, height: 1)
+                        }
+                        .padding(.bottom, 12)
+                    }
                 }
 
                 // Verses
-                VStack(spacing: 16) {
+                VStack(spacing: 0) {
                     ForEach(surah.verses) { verse in
                         VerseView(verse: verse, surahId: surah.id, language: language)
                     }
                 }
-                .padding(.horizontal, 24)
+                .padding(.horizontal, 20)
                 .padding(.bottom, 40)
             }
         }
@@ -87,31 +113,57 @@ struct VerseView: View {
     let language: QuranLanguage
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            // Verse number (no circle)
-            Text("\(verse.id)")
-                .font(.system(size: 20, weight: .bold, design: .serif))
-                .foregroundColor(AppColors.Quran.verseNumber)
+        VStack(alignment: .leading, spacing: 16) {
+            // Verse container with both Arabic and translation
+            HStack(alignment: .top, spacing: 16) {
+                // Verse number in decorative circle
+                ZStack {
+                    Circle()
+                        .fill(Color(red: 0.95, green: 0.93, blue: 0.88))
+                        .frame(width: 36, height: 36)
 
-            // Verse text
-            VStack(alignment: .leading, spacing: 8) {
-                if let translation = verse.translation, !translation.isEmpty {
-                    Text(translation)
-                        .font(.system(size: 20, weight: .regular, design: .serif))
-                        .foregroundColor(AppColors.Quran.verseText)
-                        .lineSpacing(6)
-                } else {
-                    // Fallback to Arabic if no translation
+                    Circle()
+                        .stroke(AppColors.Quran.verseNumber.opacity(0.3), lineWidth: 1)
+                        .frame(width: 36, height: 36)
+
+                    Text("\(verse.id)")
+                        .font(.system(size: 16, weight: .semibold, design: .serif))
+                        .foregroundColor(AppColors.Quran.verseNumber)
+                }
+
+                // Verse content
+                VStack(alignment: .leading, spacing: 12) {
+                    // Always show Arabic text first
                     Text(verse.text)
-                        .font(.system(size: 24, design: .serif))
+                        .font(.system(size: 28, design: .serif))
                         .foregroundColor(AppColors.Quran.verseText)
                         .multilineTextAlignment(.trailing)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        .lineSpacing(10)
+                        .lineSpacing(14)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    // Show translation if available and not Arabic language
+                    if let translation = verse.translation,
+                       !translation.isEmpty,
+                       language != .arabic {
+                        Text(translation)
+                            .font(.system(size: 18, weight: .regular, design: .serif))
+                            .foregroundColor(AppColors.Quran.verseText.opacity(0.85))
+                            .lineSpacing(8)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.top, 4)
+                    }
                 }
+                .frame(maxWidth: .infinity)
             }
+
+            // Subtle divider between verses
+            Divider()
+                .background(AppColors.Quran.verseNumber.opacity(0.15))
+                .padding(.top, 8)
         }
-        .padding(.vertical, 12)
+        .padding(.vertical, 16)
+        .padding(.horizontal, 4)
     }
 }
 
