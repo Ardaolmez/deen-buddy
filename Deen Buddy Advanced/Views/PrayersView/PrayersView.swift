@@ -22,6 +22,10 @@ struct PrayersView: View {
                     )
                     .frame(height: geometry.size.height * 0.12)
 
+                    // Additional spacer to push current prayer section lower
+                    Spacer()
+                        .frame(height: geometry.size.height * 0.025)
+
                     // MARK: Next Prayer Focus
                     NextPrayerHeader(
                         nextPrayer: vm.nextPrayer,

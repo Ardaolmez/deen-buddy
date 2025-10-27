@@ -83,13 +83,13 @@ struct DailyVerseCard: View {
                 showFullVerse = true
             }
         }
-        .fullScreenCover(isPresented: $showFullVerse) {
-            VerseDetailPopupView(
-                arabicText: viewModel.arabicText,
-                translationText: viewModel.translationText ?? "",
-                reference: viewModel.reference,
-                surahName: viewModel.surahName
-            )
+        .sheet(isPresented: $showFullVerse) {
+            if let verse = viewModel.verse {
+                VersePopupView(
+                    surahName: viewModel.surahName,
+                    verseNumber: verse.id
+                )
+            }
         }
     }
 }

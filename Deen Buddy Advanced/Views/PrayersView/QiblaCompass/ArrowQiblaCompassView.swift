@@ -30,7 +30,7 @@ struct ArrowQiblaCompassView: View {
             // Scale factors based on screen size
             let compassSize = min(screenWidth * 0.5, screenHeight * 0.25)
             let kaabaSize = compassSize * 0.15
-            let arrowSize = compassSize * 0.35
+            let arrowSize = compassSize * 0.525  // 1.5x larger than original 0.35
             let kaabaOffset = -compassSize * 0.58
             let dotOffset = -compassSize * 0.5
 
@@ -41,9 +41,9 @@ struct ArrowQiblaCompassView: View {
                     // Compass with Kaaba at top and rotating arrow
                     ZStack {
                         // Mosque icon at the top - ALWAYS FIXED at top
-                        Image(systemName: "mosque")
-                            .font(.system(size: kaabaSize * 0.7))
-                            .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.black)
+                        Image(systemName: "mosque.fill")
+                            .font(.system(size: kaabaSize * 3.5, weight: .medium))
+                            .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
                             .offset(y: kaabaOffset)
 
                         // Shortest path indicator (arc from arrow to Kaaba at top)
