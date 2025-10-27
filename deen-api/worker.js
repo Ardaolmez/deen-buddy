@@ -1,6 +1,6 @@
 /**
  * Cloudflare Workers version of deen-api
- * Islamic Q&A API using Anthropic-compatible LLM
+ * Islamic Q&A API using Z.AI LLM (OpenAI-compatible) with fallback to Anthropic
  */
 
 // System prompt for myDeen
@@ -33,7 +33,7 @@ When answering questions:
        {
          "ref": "Quran 2:45",
          "surah": 2,
-         "verse": 45
+         "ayah": 45
        }
      ]
    }
@@ -44,26 +44,40 @@ When answering questions:
 Example of good friendly, concise format:
 "Alhamdulillah, what a beautiful question! The Quran emphasizes prayer as a means of seeking help and guidance.^[Quran 2:45] It prevents us from wrongdoing and keeps us connected to Allah.^[Quran 29:45] May Allah make it easy for you to establish your prayers consistently, dear friend."`;
 
-// Core function to call Anthropic API
+// Core function to call Z.AI API (OpenAI-compatible)
 async function askMyDeen(question, env) {
   try {
-    const response = await fetch(`${env.ANTHROPIC_BASE_URL}/v1/messages`, {
+    // Z.AI API configuration
+    const apiUrl = 'https://api.z.ai/api/coding/paas/v4/chat/completions';
+    const apiKey = env.ANTHROPIC_AUTH_TOKEN;  // Using existing env variable
+
+    if (!apiKey) {
+      throw new Error('ANTHROPIC_AUTH_TOKEN is not configured');
+    }
+
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01',
-        'x-api-key': env.ANTHROPIC_AUTH_TOKEN
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
         model: 'glm-4.6',
-        max_tokens: 2000,
-        system: systemPrompt,
         messages: [
+          {
+            role: 'system',
+            content: systemPrompt
+          },
           {
             role: 'user',
             content: question
           }
-        ]
+        ],
+        temperature: 0.2,  // Lower temperature to reduce hallucination
+        max_tokens: 2000,
+        thinking: {
+          type: 'enabled'  // Enable thinking/reasoning mode
+        }
       })
     });
 
@@ -73,7 +87,18 @@ async function askMyDeen(question, env) {
     }
 
     const data = await response.json();
-    let responseText = data.content[0].text;
+
+    // Extract response text from OpenAI format (Z.AI uses OpenAI-compatible format)
+    let responseText = data.choices?.[0]?.message?.content;
+
+    // Log reasoning content if available (for debugging)
+    if (data.choices?.[0]?.message?.reasoning_content) {
+      console.log('AI is thinking...');
+    }
+
+    if (!responseText) {
+      throw new Error('No response content from Z.AI API');
+    }
 
     // Remove markdown code blocks if present
     const jsonMatch = responseText.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
