@@ -72,7 +72,7 @@ final class CloudflareChatService: ChatService {
                     citations = citationsArray.compactMap { citationDict -> Citation? in
                         guard let ref = citationDict["ref"] as? String,
                               let surahNumber = citationDict["surah"] as? Int,
-                              let verseNumber = citationDict["verse"] as? Int else {
+                              let verseNumber = citationDict["ayah"] as? Int else {
                             print("🌐 [API] Failed to parse citation: \(citationDict)")
                             return nil
                         }
