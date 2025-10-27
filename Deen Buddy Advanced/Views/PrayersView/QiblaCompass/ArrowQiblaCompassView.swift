@@ -15,11 +15,11 @@ struct ArrowQiblaCompassView: View {
         let absAngle = abs(vm.angleDifference)
 
         if isAligned {
-            return "Aligned to Qibla"
+            return ArrowQiblaStrings.alignedToQibla
         }
 
-        let direction = vm.angleDifference > 0 ? "right" : "left"
-        return "Turn \(Int(absAngle))° \(direction)"
+        let direction = vm.angleDifference > 0 ? ArrowQiblaStrings.right : ArrowQiblaStrings.left
+        return String(format: ArrowQiblaStrings.turnDirectionFormat, Int(absAngle), direction)
     }
 
     var body: some View {
@@ -32,7 +32,7 @@ struct ArrowQiblaCompassView: View {
                     // Kaaba icon at the top - ALWAYS FIXED at top
                     Image(systemName: "building.2.fill")
                         .font(.system(size: 30))
-                        .foregroundColor(isAligned ? .green : .black)
+                        .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.black)
                         .offset(y: -140)
 
                     // Shortest path indicator (arc from arrow to Kaaba at top)
@@ -42,7 +42,7 @@ struct ArrowQiblaCompassView: View {
                     Circle()
                         .trim(from: 0, to: arcFraction)
                         .stroke(
-                            Color.blue.opacity(0.5),
+                            AppColors.Prayers.prayerBlue.opacity(0.5),
                             style: StrokeStyle(lineWidth: 4, lineCap: .round, dash: [8, 4])
                         )
                         .frame(width: 240, height: 240)
@@ -51,7 +51,7 @@ struct ArrowQiblaCompassView: View {
 
                     // Blue dot at arrow's current position (end of arc)
                     Circle()
-                        .fill(Color.blue)
+                        .fill(AppColors.Prayers.prayerBlue)
                         .frame(width: 14, height: 14)
                         .offset(y: -120)
                         .rotationEffect(.degrees(vm.angleDifference))
@@ -61,11 +61,11 @@ struct ArrowQiblaCompassView: View {
                     VStack(spacing: 4) {
                         Image(systemName: "arrow.up")
                             .font(.system(size: 70, weight: .bold))
-                            .foregroundColor(isAligned ? .green : .blue)
+                            .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
 
-                        Text("Device")
+                        Text(ArrowQiblaStrings.device)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(AppColors.Common.secondary)
                     }
                     .rotationEffect(.degrees(vm.angleDifference), anchor: .center)
                 }
@@ -73,9 +73,9 @@ struct ArrowQiblaCompassView: View {
                 // Loading state
                 VStack(spacing: 12) {
                     ProgressView()
-                    Text("Getting location...")
+                    Text(ArrowQiblaStrings.gettingLocation)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(AppColors.Common.secondary)
                 }
             }
 
@@ -87,14 +87,14 @@ struct ArrowQiblaCompassView: View {
                 Text(directionText)
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .foregroundColor(isAligned ? .green : .primary)
+                    .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
 
                 // Angle details
                 HStack(spacing: 20) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Qibla Direction")
+                        Text(ArrowQiblaStrings.qiblaDirection)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(AppColors.Common.secondary)
                         Text("\(Int(vm.qiblaBearing))°")
                             .font(.headline)
                     }
@@ -103,9 +103,9 @@ struct ArrowQiblaCompassView: View {
                         .frame(height: 40)
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Current Heading")
+                        Text(ArrowQiblaStrings.currentHeading)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(AppColors.Common.secondary)
                         Text("\(Int(vm.deviceHeading))°")
                             .font(.headline)
                     }
@@ -114,26 +114,26 @@ struct ArrowQiblaCompassView: View {
                         .frame(height: 40)
 
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Difference")
+                        Text(ArrowQiblaStrings.difference)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(AppColors.Common.secondary)
                         Text("\(Int(abs(vm.angleDifference)))°")
                             .font(.headline)
-                            .foregroundColor(isAligned ? .green : .primary)
+                            .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
                     }
                 }
                 .padding()
-                .background(Color.gray.opacity(0.1))
+                .background(AppColors.Common.gray.opacity(0.1))
                 .cornerRadius(12)
 
                 // Compass accuracy indicator
                 if vm.isCalibrationNeeded {
                     HStack(spacing: 8) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.orange)
-                        Text("Low compass accuracy - calibrate your device")
+                            .foregroundColor(AppColors.Prayers.prayerOrange)
+                        Text(ArrowQiblaStrings.lowAccuracyWarning)
                             .font(.caption)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(AppColors.Common.secondary)
                     }
                     .padding(.horizontal)
                 }
