@@ -23,124 +23,137 @@ struct ArrowQiblaCompassView: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
-            Spacer()
+        GeometryReader { geometry in
+            let screenHeight = geometry.size.height
+            let screenWidth = geometry.size.width
 
-            if vm.locationAvailable {
-                // Compass with Kaaba at top and rotating arrow
-                ZStack {
-                    // Kaaba icon at the top - ALWAYS FIXED at top
-                    Image(systemName: "building.2.fill")
-                        .font(.system(size: 30))
-                        .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.black)
-                        .offset(y: -140)
+            // Scale factors based on screen size
+            let compassSize = min(screenWidth * 0.5, screenHeight * 0.25)
+            let kaabaSize = compassSize * 0.15
+            let arrowSize = compassSize * 0.35
+            let kaabaOffset = -compassSize * 0.58
+            let dotOffset = -compassSize * 0.5
 
-                    // Shortest path indicator (arc from arrow to Kaaba at top)
-                    // Calculate arc parameters
-                    let arcFraction = abs(vm.angleDifference) / 360.0
+            VStack(spacing: screenHeight * 0.02) {
+                Spacer()
 
-                    Circle()
-                        .trim(from: 0, to: arcFraction)
-                        .stroke(
-                            AppColors.Prayers.prayerBlue.opacity(0.5),
-                            style: StrokeStyle(lineWidth: 4, lineCap: .round, dash: [8, 4])
-                        )
-                        .frame(width: 240, height: 240)
-                        .rotationEffect(.degrees(vm.angleDifference > 0 ? -90 : (-90 - abs(vm.angleDifference))))
-                        .opacity(isAligned ? 0 : 1)
+                if vm.locationAvailable {
+                    // Compass with Kaaba at top and rotating arrow
+                    ZStack {
+                        // Mosque icon at the top - ALWAYS FIXED at top
+                        Image(systemName: "mosque")
+                            .font(.system(size: kaabaSize * 0.7))
+                            .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.black)
+                            .offset(y: kaabaOffset)
 
-                    // Blue dot at arrow's current position (end of arc)
-                    Circle()
-                        .fill(AppColors.Prayers.prayerBlue)
-                        .frame(width: 14, height: 14)
-                        .offset(y: -120)
-                        .rotationEffect(.degrees(vm.angleDifference))
-                        .opacity(isAligned ? 0 : 1)
+                        // Shortest path indicator (arc from arrow to Kaaba at top)
+                        let arcFraction = abs(vm.angleDifference) / 360.0
 
-                    // Center arrow - ROTATES to show direction difference
-                    VStack(spacing: 4) {
+                        Circle()
+                            .trim(from: 0, to: arcFraction)
+                            .stroke(
+                                AppColors.Prayers.prayerBlue.opacity(0.5),
+                                style: StrokeStyle(lineWidth: 4, lineCap: .round, dash: [8, 4])
+                            )
+                            .frame(width: compassSize, height: compassSize)
+                            .rotationEffect(.degrees(vm.angleDifference > 0 ? -90 : (-90 - abs(vm.angleDifference))))
+                            .opacity(isAligned ? 0 : 1)
+
+                        // Blue dot at arrow's current position (end of arc)
+                        Circle()
+                            .fill(AppColors.Prayers.prayerBlue)
+                            .frame(width: 14, height: 14)
+                            .offset(y: dotOffset)
+                            .rotationEffect(.degrees(vm.angleDifference))
+                            .opacity(isAligned ? 0 : 1)
+
+                        // Center arrow - ROTATES to show direction difference
                         Image(systemName: "arrow.up")
-                            .font(.system(size: 70, weight: .bold))
+                            .font(.system(size: arrowSize, weight: .bold))
                             .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
-
-                        Text(ArrowQiblaStrings.device)
+                            .rotationEffect(.degrees(vm.angleDifference), anchor: .center)
+                    }
+                    .frame(height: screenHeight * 0.4)
+                } else {
+                    // Loading state
+                    VStack(spacing: 12) {
+                        ProgressView()
+                        Text(ArrowQiblaStrings.gettingLocation)
                             .font(.caption)
                             .foregroundColor(AppColors.Common.secondary)
                     }
-                    .rotationEffect(.degrees(vm.angleDifference), anchor: .center)
+                    .frame(height: screenHeight * 0.4)
                 }
-            } else {
-                // Loading state
-                VStack(spacing: 12) {
-                    ProgressView()
-                    Text(ArrowQiblaStrings.gettingLocation)
-                        .font(.caption)
-                        .foregroundColor(AppColors.Common.secondary)
+
+                Spacer()
+
+                // Direction and angle text at the bottom
+                VStack(spacing: screenHeight * 0.015) {
+                    // Direction instruction
+                    Text(directionText)
+                        .font(.system(size: min(24, screenHeight * 0.028)))
+                        .fontWeight(.semibold)
+                        .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+
+                    // Angle details
+                    HStack(spacing: screenWidth * 0.04) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(ArrowQiblaStrings.qiblaDirection)
+                                .font(.caption)
+                                .foregroundColor(AppColors.Common.secondary)
+                            Text("\(Int(vm.qiblaBearing))°")
+                                .font(.headline)
+                        }
+                        .frame(maxWidth: .infinity)
+
+                        Divider()
+                            .frame(height: 40)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(ArrowQiblaStrings.currentHeading)
+                                .font(.caption)
+                                .foregroundColor(AppColors.Common.secondary)
+                            Text("\(Int(vm.deviceHeading))°")
+                                .font(.headline)
+                        }
+                        .frame(maxWidth: .infinity)
+
+                        Divider()
+                            .frame(height: 40)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(ArrowQiblaStrings.difference)
+                                .font(.caption)
+                                .foregroundColor(AppColors.Common.secondary)
+                            Text("\(Int(abs(vm.angleDifference)))°")
+                                .font(.headline)
+                                .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
+                    .padding(.vertical, screenHeight * 0.015)
+                    .padding(.horizontal, screenWidth * 0.04)
+                    .background(AppColors.Common.gray.opacity(0.1))
+                    .cornerRadius(12)
+
+                    // Compass accuracy indicator
+                    if vm.isCalibrationNeeded {
+                        HStack(spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(AppColors.Prayers.prayerOrange)
+                            Text(ArrowQiblaStrings.lowAccuracyWarning)
+                                .font(.caption)
+                                .foregroundColor(AppColors.Common.secondary)
+                        }
+                        .padding(.horizontal)
+                    }
                 }
+                .padding(.bottom, screenHeight * 0.02)
             }
-
-            Spacer()
-
-            // Direction and angle text at the bottom
-            VStack(spacing: 12) {
-                // Direction instruction
-                Text(directionText)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
-
-                // Angle details
-                HStack(spacing: 20) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(ArrowQiblaStrings.qiblaDirection)
-                            .font(.caption)
-                            .foregroundColor(AppColors.Common.secondary)
-                        Text("\(Int(vm.qiblaBearing))°")
-                            .font(.headline)
-                    }
-
-                    Divider()
-                        .frame(height: 40)
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(ArrowQiblaStrings.currentHeading)
-                            .font(.caption)
-                            .foregroundColor(AppColors.Common.secondary)
-                        Text("\(Int(vm.deviceHeading))°")
-                            .font(.headline)
-                    }
-
-                    Divider()
-                        .frame(height: 40)
-
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(ArrowQiblaStrings.difference)
-                            .font(.caption)
-                            .foregroundColor(AppColors.Common.secondary)
-                        Text("\(Int(abs(vm.angleDifference)))°")
-                            .font(.headline)
-                            .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
-                    }
-                }
-                .padding()
-                .background(AppColors.Common.gray.opacity(0.1))
-                .cornerRadius(12)
-
-                // Compass accuracy indicator
-                if vm.isCalibrationNeeded {
-                    HStack(spacing: 8) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(AppColors.Prayers.prayerOrange)
-                        Text(ArrowQiblaStrings.lowAccuracyWarning)
-                            .font(.caption)
-                            .foregroundColor(AppColors.Common.secondary)
-                    }
-                    .padding(.horizontal)
-                }
-            }
-            .padding(.bottom, 30)
+            .padding(.horizontal, screenWidth * 0.04)
         }
-        .padding()
         .onAppear {
             vm.start()
         }

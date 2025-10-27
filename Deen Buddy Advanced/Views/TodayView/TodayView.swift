@@ -18,11 +18,11 @@ struct TodayView: View {
                 VStack(spacing: 20) {
                     // Daily Streak Section
                     DailyStreakView(streakDays: $streakDays)
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
 
                     // Daily Quran Verse
                     DailyVerseCard()
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
 
                     // Daily Quiz Button
                     Button(action: {
@@ -30,31 +30,28 @@ struct TodayView: View {
                     }) {
                         HStack {
                             Image(systemName: "questionmark.circle.fill")
+                                .font(.system(size: 20))
                             Text(AppStrings.today.dailyQuiz)
-                                .fontWeight(.semibold)
+                                .font(.system(size: 18, weight: .semibold))
                         }
                         .frame(maxWidth: .infinity)
-                        .padding()
+                        .frame(height: 56)
                         .background(AppColors.Today.dailyQuizButton)
                         .foregroundColor(AppColors.Today.dailyQuizText)
-                        .cornerRadius(12)
+                        .cornerRadius(16)
                     }
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
 
                     // Daily Reading Goal
                     DailyReadGoalCard()
-                        .padding(.horizontal)
-
-                    // Personalized Learning - disable until Explore Page
-                    //PersonalizedLearningCard()
-                      //  .padding(.horizontal)
+                        .padding(.horizontal, 20)
 
                     // Chat Box
                     ChatBoxView()
-                        .padding(.horizontal)
+                        .padding(.horizontal, 20)
                         .padding(.bottom, 20)
                 }
-                .padding(.top, 10)
+                .padding(.top, 16)
             }
             .navigationTitle(AppStrings.today.navigationTitle)
             .navigationBarTitleDisplayMode(.large)

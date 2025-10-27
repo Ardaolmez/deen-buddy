@@ -42,4 +42,8 @@ struct CommonStrings {
     static let prophetsStories = "Prophets Stories"
     static let lessonProgress = "Lesson %d of %d"
     static let start = "Start"
+
+    // Text Labels
+    static let arabic = "Arabic"
+    static let translation = "Translation"
 }

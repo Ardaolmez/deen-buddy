@@ -7,10 +7,8 @@ struct PrayersView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: MinimalDesign.extraLargeSpacing) {
-                    // MARK: Weekly Progress
-               //    WeekProgress(weekStatus: vm.streakWeekStatus)
+            GeometryReader { geometry in
+                VStack(spacing: geometry.size.height * 0.015) {
                     // MARK: Prayer Icons Row
                     PrayerIconsRow(
                         entries: vm.entries,
@@ -22,6 +20,8 @@ struct PrayersView: View {
                             vm.recomputeWeekStreak()
                         }
                     )
+                    .frame(height: geometry.size.height * 0.12)
+
                     // MARK: Next Prayer Focus
                     NextPrayerHeader(
                         nextPrayer: vm.nextPrayer,
@@ -29,12 +29,14 @@ struct PrayersView: View {
                         countdown: vm.countdownText,
                         isBetweenSunriseAndDhuhr: vm.isBetweenSunriseAndDhuhr
                     )
+                    .frame(height: geometry.size.height * 0.12)
 
                     // MARK: Qibla Compass
                     ArrowQiblaCompassView()
+                        .frame(height: geometry.size.height * 0.68)
                 }
-                .padding(.horizontal, MinimalDesign.mediumSpacing)
-                .padding(.vertical, MinimalDesign.mediumSpacing)
+                .padding(.horizontal, geometry.size.width * 0.04)
+                .padding(.top, geometry.size.height * 0.03)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $openRecords) {

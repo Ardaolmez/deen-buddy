@@ -11,8 +11,12 @@ struct QuranPageView: View {
     let surah: Surah
     let language: QuranLanguage
 
+    @StateObject private var audioService = QuranAudioService.shared
+    @State private var showAudioPlayer = false
+
     var body: some View {
-        ScrollView {
+        ZStack(alignment: .bottom) {
+            ScrollView {
             VStack(spacing: 20) {
                 // Surah Header
                 VStack(spacing: 12) {
@@ -82,11 +86,20 @@ struct QuranPageView: View {
                 // Verses
                 VStack(spacing: 0) {
                     ForEach(surah.verses) { verse in
-                        VerseView(verse: verse, surahId: surah.id, language: language)
+                        VerseView(
+                            verse: verse,
+                            surahId: surah.id,
+                            language: language,
+                            audioService: audioService,
+                            onPlayTapped: {
+                                showAudioPlayer = true
+                                audioService.play(surahId: surah.id, verseId: verse.id)
+                            }
+                        )
                     }
                 }
                 .padding(.horizontal, 20)
-                .padding(.bottom, 40)
+                .padding(.bottom, showAudioPlayer ? 120 : 40)
             }
         }
         .background(
@@ -104,6 +117,14 @@ struct QuranPageView: View {
                 endRadius: 400
             )
         )
+
+            // Audio player at bottom
+            if showAudioPlayer {
+                AudioPlayerView(audioService: audioService, surah: surah)
+                    .transition(.move(edge: .bottom))
+            }
+        }
+        .animation(.spring(), value: showAudioPlayer)
     }
 }
 
@@ -111,25 +132,44 @@ struct VerseView: View {
     let verse: Verse
     let surahId: Int
     let language: QuranLanguage
+    @ObservedObject var audioService: QuranAudioService
+    let onPlayTapped: () -> Void
+
+    private var isCurrentlyPlaying: Bool {
+        guard let playbackInfo = audioService.currentPlaybackInfo else { return false }
+        return playbackInfo.surahId == surahId && playbackInfo.verseId == verse.id
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Verse container with both Arabic and translation
             HStack(alignment: .top, spacing: 16) {
-                // Verse number in decorative circle
-                ZStack {
-                    Circle()
-                        .fill(Color(red: 0.95, green: 0.93, blue: 0.88))
-                        .frame(width: 36, height: 36)
+                // Verse number in decorative circle (tappable for audio)
+                Button(action: onPlayTapped) {
+                    ZStack {
+                        Circle()
+                            .fill(isCurrentlyPlaying ? Color.green.opacity(0.2) : Color(red: 0.95, green: 0.93, blue: 0.88))
+                            .frame(width: 36, height: 36)
 
-                    Circle()
-                        .stroke(AppColors.Quran.verseNumber.opacity(0.3), lineWidth: 1)
-                        .frame(width: 36, height: 36)
+                        Circle()
+                            .stroke(
+                                isCurrentlyPlaying ? Color.green : AppColors.Quran.verseNumber.opacity(0.3),
+                                lineWidth: isCurrentlyPlaying ? 2 : 1
+                            )
+                            .frame(width: 36, height: 36)
 
-                    Text("\(verse.id)")
-                        .font(.system(size: 16, weight: .semibold, design: .serif))
-                        .foregroundColor(AppColors.Quran.verseNumber)
+                        if isCurrentlyPlaying && audioService.playbackState == .playing {
+                            Image(systemName: "waveform")
+                                .font(.system(size: 14))
+                                .foregroundColor(.green)
+                        } else {
+                            Text("\(verse.id)")
+                                .font(.system(size: 16, weight: .semibold, design: .serif))
+                                .foregroundColor(isCurrentlyPlaying ? .green : AppColors.Quran.verseNumber)
+                        }
+                    }
                 }
+                .buttonStyle(PlainButtonStyle())
 
                 // Verse content
                 VStack(alignment: .leading, spacing: 12) {
@@ -164,6 +204,13 @@ struct VerseView: View {
         }
         .padding(.vertical, 16)
         .padding(.horizontal, 4)
+        .background(
+            isCurrentlyPlaying ?
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.green.opacity(0.05))
+                : nil
+        )
+        .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
     }
 }
 

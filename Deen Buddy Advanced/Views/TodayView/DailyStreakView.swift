@@ -14,17 +14,17 @@ struct DailyStreakView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Image(systemName: "flame.fill")
+                    .font(.system(size: 18))
                     .foregroundColor(AppColors.Today.streakFlame)
                 Text(AppStrings.common.dailyStreak)
-                    .font(.headline)
-                    .fontWeight(.semibold)
+                    .font(.system(size: 18, weight: .semibold))
             }
 
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 ForEach(0..<7, id: \.self) { index in
                     VStack(spacing: 6) {
                         Text(AppStrings.common.daysOfWeek[index])
-                            .font(.caption)
+                            .font(.system(size: 11))
                             .foregroundColor(AppColors.Today.streakText)
 
                         ZStack {
@@ -35,14 +35,15 @@ struct DailyStreakView: View {
                             if streakDays[index] {
                                 Image(systemName: "flame.fill")
                                     .foregroundColor(AppColors.Common.white)
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 18))
                             }
                         }
                     }
                 }
             }
         }
-        .padding()
+        .padding(20)
+        .frame(maxWidth: .infinity)
         .background(AppColors.Today.cardBackground)
         .cornerRadius(16)
         .shadow(color: AppColors.Today.cardShadow, radius: 8, x: 0, y: 2)
@@ -50,5 +51,8 @@ struct DailyStreakView: View {
 }
 
 #Preview {
-    DailyStreakView(streakDays: .constant([true, true, true, false, false, false, false]))
+    DailyStreakView(
+        streakDays: .constant([true, true, true, false, false, false, false])
+    )
+    .padding()
 }

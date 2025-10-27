@@ -193,8 +193,8 @@ struct CompassRoseView: View {
                     .frame(width: 44, height: 44)
                     .shadow(color: isPointingToQibla ? AppColors.Prayers.greenShadow : AppColors.Prayers.blueShadow, radius: 8)
 
-                Image(systemName: "building.2.fill")
-                    .font(.system(size: 20))
+                Image(systemName: "mosque")
+                    .font(.system(size: 16))
                     .foregroundStyle(AppColors.Common.white)
             }
 

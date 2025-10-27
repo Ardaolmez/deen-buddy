@@ -14,23 +14,26 @@ struct ChatBoxView: View {
         Button(action: {
             showChat = true
         }) {
-            HStack(spacing: 12) {
+            HStack(spacing: 8) {
                 Image(systemName: "sparkles")
                     .font(.system(size: 18))
                     .foregroundColor(AppColors.Chat.boxIcon)
 
                 Text(AppStrings.chat.chatBoxPrompt)
-                    .font(.subheadline)
+                    .font(.system(size: 15))
                     .foregroundColor(AppColors.Chat.boxText)
                     .multilineTextAlignment(.leading)
+                    .lineLimit(1)
 
                 Spacer()
             }
-            .padding()
+            .padding(.horizontal, 20)
+            .frame(maxWidth: .infinity)
+            .frame(height: 60)
             .background(AppColors.Chat.boxBackground)
-            .cornerRadius(25)
+            .cornerRadius(30)
             .overlay(
-                RoundedRectangle(cornerRadius: 25)
+                RoundedRectangle(cornerRadius: 30)
                     .stroke(AppColors.Chat.boxBorder, lineWidth: 1)
             )
         }
@@ -42,4 +45,5 @@ struct ChatBoxView: View {
 
 #Preview {
     ChatBoxView()
+        .padding()
 }
