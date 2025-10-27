@@ -76,12 +76,31 @@
 			);
 			target = 46C2089B2EA308790038604E /* Deen Buddy WidgetsExtension */;
 		};
+		657344532EAFCAF00059D9E5 /* Exceptions for "Deen Buddy Advanced" folder in "Deen Buddy Advanced" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/CaliphateStories/HazratAbuBakr.json,
+			);
+			target = 469C4F4F2E95C2A40006FC4D /* Deen Buddy Advanced */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		657344542EAFCAF00059D9E5 /* Exceptions for "Deen Buddy Advanced" folder in "Compile Sources" phase from "Deen Buddy Advanced" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 469C4F4C2E95C2A40006FC4D /* Sources */;
+			membershipExceptions = (
+				Resources/CaliphateStories/HazratAbuBakr.json,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		469C4F522E95C2A40006FC4D /* Deen Buddy Advanced */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				657344532EAFCAF00059D9E5 /* Exceptions for "Deen Buddy Advanced" folder in "Deen Buddy Advanced" target */,
+				657344542EAFCAF00059D9E5 /* Exceptions for "Deen Buddy Advanced" folder in "Compile Sources" phase from "Deen Buddy Advanced" target */,
 				46B68FAD2EA32A7E002B2DF1 /* Exceptions for "Deen Buddy Advanced" folder in "Deen Buddy WidgetsExtension" target */,
 			);
 			path = "Deen Buddy Advanced";
