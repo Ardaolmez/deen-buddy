@@ -76,7 +76,7 @@ async function askMyDeen(question, env) {
         temperature: 0.2,  // Lower temperature to reduce hallucination
         max_tokens: 2000,
         thinking: {
-          type: 'enabled'  // Enable thinking/reasoning mode
+          type: 'disabled'  // Enable thinking/reasoning mode
         }
       })
     });
@@ -90,11 +90,6 @@ async function askMyDeen(question, env) {
 
     // Extract response text from OpenAI format (Z.AI uses OpenAI-compatible format)
     let responseText = data.choices?.[0]?.message?.content;
-
-    // Log reasoning content if available (for debugging)
-    if (data.choices?.[0]?.message?.reasoning_content) {
-      console.log('AI is thinking...');
-    }
 
     if (!responseText) {
       throw new Error('No response content from Z.AI API');
