@@ -27,13 +27,13 @@ struct PrayersView: View {
                         .frame(height: geometry.size.height * 0.025)
 
                     // MARK: Next Prayer Focus
-                 //   NextPrayerHeader(
-                   //     nextPrayer: vm.nextPrayer,
-                     //   currentPrayer: vm.currentPrayer,
-                        //countdown: vm.countdownText,
-                       // isBetweenSunriseAndDhuhr: vm.isBetweenSunriseAndDhuhr
-                    //)
-                    //.frame(height: geometry.size.height * 0.12)
+                   // NextPrayerHeader(
+                   // nextPrayer: vm.nextPrayer,
+                   // currentPrayer: vm.currentPrayer,
+                   // countdown: vm.countdownText,
+                   // isBetweenSunriseAndDhuhr: vm.isBetweenSunriseAndDhuhr
+                   // )
+                   //.frame(height: geometry.size.height * 0.2)
 
                     // MARK: Qibla Compass
                     ArrowQiblaCompassView()

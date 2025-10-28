@@ -93,7 +93,7 @@ struct ArrowQiblaCompassView: View {
                 VStack(spacing: screenHeight * 0.01) {  // Reduced spacing for tighter text layout
                     // Direction instruction - MUCH BIGGER TEXT for visual recognition
                     Text(directionText)
-                        .font(.system(size: min(40, screenHeight * 0.048)))  // Much larger: increased to 40 and 0.048
+                        .font(.system(size: min(40, screenHeight * 0.06)))  // Much larger: increased to 40 and 0.048
                         .fontWeight(.heavy)  // Even bolder than bold for maximum visual impact
                         .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
                         .lineLimit(2)  // Allow 2 lines for better text wrapping if needed
@@ -105,40 +105,19 @@ struct ArrowQiblaCompassView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(ArrowQiblaStrings.qiblaDirection)
                                 .font(.caption)
-                                .foregroundColor(AppColors.Common.secondary)
-                            Text("\(Int(vm.qiblaBearing))°")
-                                .font(.headline)
+                                .foregroundColor(AppColors.Common.secondary.opacity(0))
                         }
                         .frame(maxWidth: .infinity)
 
                         Divider()
                             .frame(height: 40)
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(ArrowQiblaStrings.currentHeading)
-                                .font(.caption)
-                                .foregroundColor(AppColors.Common.secondary)
-                            Text("\(Int(vm.deviceHeading))°")
-                                .font(.headline)
-                        }
-                        .frame(maxWidth: .infinity)
 
-                        Divider()
-                            .frame(height: 40)
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(ArrowQiblaStrings.difference)
-                                .font(.caption)
-                                .foregroundColor(AppColors.Common.secondary)
-                            Text("\(Int(abs(vm.angleDifference)))°")
-                                .font(.headline)
-                                .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
-                        }
-                        .frame(maxWidth: .infinity)
                     }
                     .padding(.vertical, screenHeight * 0.015)
                     .padding(.horizontal, screenWidth * 0.04)
-                    .background(AppColors.Common.gray.opacity(0.1))
+                    .background(AppColors.Common.gray.opacity(0))
                     .cornerRadius(12)
 
                     // Compass accuracy indicator

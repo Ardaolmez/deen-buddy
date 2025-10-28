@@ -102,6 +102,13 @@ struct AppColors {
         static let prayerBlue = Color.blue
         static let prayerOrange = Color.orange
 
+        // Time-of-day colors for prayer icons
+        static let fajrColor =  Color.primary
+        static let dhuhrColor = Color.primary
+        static let asrColor =  Color.primary
+        static let maghribColor =  Color.primary
+        static let ishaColor = Color.primary
+
         // Subtle backgrounds
         static let subtleGreen = Color.green.opacity(0.08)
         static let subtleBlue = Color.blue.opacity(0.08)
