@@ -41,8 +41,8 @@ struct ArrowQiblaCompassView: View {
                     // Compass with Kaaba at top and rotating arrow
                     ZStack {
                         // Mosque icon at the top - ALWAYS FIXED at top
-                        Image(systemName: "building.2.fill")
-                            .font(.system(size: kaabaSize * 1.2, weight: .medium))  // Increased multiplier for bigger compass
+                        Text("🕌")
+                            .font(.system(size: kaabaSize * 1.2))  // Increased multiplier for bigger compass
                             .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
                             .offset(y: kaabaOffset)
 
