@@ -93,7 +93,7 @@ struct SurahRowView: View {
                     Spacer()
 
                     HStack(spacing: 4) {
-                        Image(systemName: surah.type == "meccan" ? "moon.fill" : "building.2.fill")
+                        Text(surah.type == "meccan" ? "🌙" : "🕌")
                             .font(.system(size: 10))
 
                         Text(String(format: AppStrings.quran.surahType, surah.typeCapitalized, surah.total_verses))

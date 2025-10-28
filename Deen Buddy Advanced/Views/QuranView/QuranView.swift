@@ -61,23 +61,20 @@ struct QuranView: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                // Left: Language Selector
+                // Left: Settings
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        viewModel.showLanguageSelector = true
+                        viewModel.showSettings = true
                     }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "globe")
-                            Text(viewModel.selectedLanguage.rawValue.uppercased())
-                        }
-                        .font(.system(size: 14, weight: .semibold, design: .rounded))
-                        .foregroundColor(AppColors.Quran.toolbarText)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 6)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(AppColors.Quran.toolbarBackground)
-                        )
+                        Image(systemName: "slider.horizontal.3")
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(AppColors.Quran.toolbarText)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(AppColors.Quran.toolbarBackground)
+                            )
                     }
                 }
 
@@ -112,8 +109,8 @@ struct QuranView: View {
                     }
                 }
             }
-            .sheet(isPresented: $viewModel.showLanguageSelector) {
-                LanguageSelectorView()
+            .sheet(isPresented: $viewModel.showSettings) {
+                QuranSettingsView()
             }
             .sheet(isPresented: $viewModel.showSurahSelector) {
                 SurahSelectorView(viewModel: viewModel)
