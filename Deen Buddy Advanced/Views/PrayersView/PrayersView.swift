@@ -52,13 +52,13 @@ struct PrayersView: View {
                         .font(.system(.title2, weight: .bold))
                 }
 
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(AppStrings.prayers.history) {
-                        openRecords = true
-                    }
-                    .font(.system(.body))
-                    .foregroundStyle(AppColors.Common.secondary)
-                }
+                 //   ToolbarItem(placement: .navigationBarTrailing) {
+                 //     Button(AppStrings.prayers.history) {
+                 //       openRecords = true
+                 //   }
+                 //   .font(.system(.body))
+                 //  .foregroundStyle(AppColors.Common.secondary)
+                 // }
             }
         }
         .onAppear { vm.recomputeWeekStreak() }
