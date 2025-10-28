@@ -56,7 +56,7 @@ struct ArrowQiblaCompassView: View {
                                 style: StrokeStyle(lineWidth: 8, lineCap: .round, dash: [12, 8])  // Even thicker stroke for bigger compass
                             )
                             .frame(width: compassSize, height: compassSize)
-                            .rotationEffect(.degrees(vm.angleDifference > 0 ? -90 : (-90 - abs(vm.angleDifference))))
+                            .rotationEffect(.degrees(vm.angleDifference > 0 ? (-90 - abs(vm.angleDifference)) : -90))
                             .opacity(isAligned ? 0 : 1)
 
                         // Blue dot at arrow's current position (end of arc)
@@ -64,14 +64,14 @@ struct ArrowQiblaCompassView: View {
                             .fill(AppColors.Prayers.prayerBlue)
                             .frame(width: 18, height: 18)  // Larger dot for much bigger compass
                             .offset(y: dotOffset)
-                            .rotationEffect(.degrees(vm.angleDifference))
+                            .rotationEffect(.degrees(-vm.angleDifference))
                             .opacity(isAligned ? 0 : 1)
 
                         // Center arrow - ROTATES to show direction difference
                         Image(systemName: "arrow.up")
                             .font(.system(size: arrowSize, weight: .bold))
                             .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
-                            .rotationEffect(.degrees(vm.angleDifference), anchor: .center)
+                            .rotationEffect(.degrees(-vm.angleDifference), anchor: .center)
                     }
                     .frame(height: screenHeight * 0.55)  // Much larger container for bigger compass
                 } else {
