@@ -66,8 +66,8 @@ struct PrayersStrings {
 // MARK: - Arrow Qibla Compass Strings
 struct ArrowQiblaStrings {
     // Direction texts
-    static let alignedToQibla = "Aligned to Qibla"
-    static let turnDirectionFormat = "Turn %d° %@" // "Turn 75° left"
+    static let alignedToQibla = "Face to Qibla"
+    static let turnDirectionFormat = "Turn %@ %d°" // "Turn 75° left"
     static let left = "left"
     static let right = "right"
 

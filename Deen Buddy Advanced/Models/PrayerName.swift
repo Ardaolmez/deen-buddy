@@ -48,10 +48,10 @@ enum PrayerName: String, CaseIterable, Identifiable, Codable, Hashable {
     // SF Symbol used in the heatmap row labels / legend
     var icon: String {
         switch self {
-        case .fajr:    return "moon.circle.fill"
+        case .fajr:    return "sunrise.fill"
         case .dhuhr:   return "sun.max.fill"
-        case .asr:     return "sun.and.horizon.fill"
-        case .maghrib: return "sunset.fill"
+        case .asr:     return "sun.min.fill"
+        case .maghrib: return "sun.haze.fill"
         case .isha:    return "moon.stars.fill"
         }
     }

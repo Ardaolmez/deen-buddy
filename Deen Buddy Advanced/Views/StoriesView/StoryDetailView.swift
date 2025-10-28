@@ -13,7 +13,6 @@ struct StoryDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-
                 // Title / subtitle
                 VStack(alignment: .leading, spacing: 8) {
                     Text(vm.story.title)
@@ -49,12 +48,56 @@ struct StoryDetailView: View {
                         SectionBlock(section: section)
                     }
                 }
+
+                Divider()
+
+                VStack(alignment: .leading, spacing: 12) {
+                    if vm.isCompleted {
+                        Label {
+                            Text("Marked as read")
+                        } icon: {
+                            Image(systemName: "checkmark.circle.fill")
+                        }
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundColor(.green)
+
+                        if let date = vm.nextUnlockDate {
+                            Text("Next story unlocks \(relativeUnlockDescription(for: date)).")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                    } else {
+                        Button {
+                            vm.markAsRead()
+                        } label: {
+                            Label("Mark as Read", systemImage: "bookmark.fill")
+                                .font(.subheadline.weight(.semibold))
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(!vm.canMarkAsRead)
+
+                        if !vm.canMarkAsRead {
+                            Text("Only the most recent unlocked story can be marked as read.")
+                                .font(.footnote)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
         }
         .navigationTitle(vm.story.title)
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            vm.refresh()
+        }
+    }
+
+    private func relativeUnlockDescription(for date: Date) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .spellOut
+        return formatter.localizedString(for: date, relativeTo: Date())
     }
 }
 
