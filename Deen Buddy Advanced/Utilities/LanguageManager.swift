@@ -12,29 +12,11 @@ import Combine
 enum QuranLanguage: String, CaseIterable, Codable {
     case english = "en"
     case arabic = "ar"
-    case urdu = "ur"
-    case turkish = "tr"
-    case indonesian = "id"
-    case french = "fr"
-    case spanish = "es"
-    case russian = "ru"
-    case chinese = "zh"
-    case bengali = "bn"
-    case swedish = "sv"
 
     var displayName: String {
         switch self {
         case .english: return "English"
         case .arabic: return "العربية (Arabic)"
-        case .urdu: return "اردو (Urdu)"
-        case .turkish: return "Türkçe (Turkish)"
-        case .indonesian: return "Bahasa Indonesia"
-        case .french: return "Français (French)"
-        case .spanish: return "Español (Spanish)"
-        case .russian: return "Русский (Russian)"
-        case .chinese: return "中文 (Chinese)"
-        case .bengali: return "বাংলা (Bengali)"
-        case .swedish: return "Svenska (Swedish)"
         }
     }
 

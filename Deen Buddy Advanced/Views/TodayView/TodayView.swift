@@ -10,6 +10,7 @@ import SwiftUI
 struct TodayView: View {
     @State private var streakDays: [Bool] = [true, true, true, false, false, false, false]
     @State private var showQuiz = false
+    @State private var showFeedback = false
     @StateObject private var prayersVM = PrayersViewModel()
 
     var body: some View {
@@ -62,15 +63,18 @@ struct TodayView: View {
 
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        // Settings action
+                        showFeedback = true
                     }) {
-                        Image(systemName: "gearshape.fill")
+                        Image(systemName: "envelope.fill")
                             .foregroundColor(AppColors.Today.settingsIcon)
                     }
                 }
             }
             .fullScreenCover(isPresented: $showQuiz) {
                 QuizView()
+            }
+            .sheet(isPresented: $showFeedback) {
+                FeedbackPopupView()
             }
         }
     }
