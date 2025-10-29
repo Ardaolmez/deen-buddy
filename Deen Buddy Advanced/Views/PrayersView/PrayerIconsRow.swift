@@ -110,25 +110,25 @@ struct PrayerIconsRow: View {
     // Square background colors based on prayer state
     private func squareColorFor(_ entry: PrayerEntry) -> Color {
         // All prayers use same creamy papyrus background
-        return Color(red: 0.99, green: 0.98, blue: 0.94)
+        return AppColors.Quran.papyrusSquare
     }
 
     // Icon colors based on prayer state
     private func iconColorFor(_ entry: PrayerEntry) -> Color {
-        // Use chat view green color for light mode
-        return Color(red: 0.29, green: 0.55, blue: 0.42)
+        // Use prayer green color
+        return AppColors.Prayers.prayerGreen
     }
 
     // Time text colors based on prayer state
     private func timeColorFor(_ entry: PrayerEntry) -> Color {
-        // Use chat view green color for light mode
-        return Color(red: 0.29, green: 0.55, blue: 0.42)
+        // Use prayer green color
+        return AppColors.Prayers.prayerGreen
     }
 
     // Shadow colors based on prayer state
     private func shadowColorFor(_ entry: PrayerEntry) -> Color {
-        // Subtle shadow for all prayers without opacity
-        return Color(red: 0.29, green: 0.55, blue: 0.42)
+        // Subtle shadow using prayer green
+        return AppColors.Prayers.prayerGreen
     }
 
     private func timeString(_ date: Date) -> String {

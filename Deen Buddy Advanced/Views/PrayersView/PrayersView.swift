@@ -7,9 +7,12 @@ struct PrayersView: View {
 
     var body: some View {
         NavigationStack {
-            GeometryReader { geometry in
-                VStack(spacing: geometry.size.height * 0.01) {
-                    // MARK: Prayer Icons Row - 25%
+            ScrollView {
+                VStack(spacing: 0) {
+                    Spacer()
+                        .frame(height: 20)
+
+                    // MARK: Prayer Icons Row
                     PrayerIconsRow(
                         entries: vm.entries,
                         currentPrayer: vm.currentPrayer,
@@ -22,20 +25,19 @@ struct PrayersView: View {
                             vm.recomputeWeekStreak()
                         }
                     )
-                    .frame(height: geometry.size.height * 0.22)
 
-                    // MARK: Qibla Header - 5%
+                    Spacer()
+                        .frame(height: 20)
+
+                    // MARK: Qibla Header
                     QiblaHeader(cityLine: vm.cityLine)
-                        .frame(height: geometry.size.height * 0.05)
-
-                    // MARK: Qibla Compass - 68%
+                    // MARK: Qibla Compass
                     ArrowQiblaCompassView()
-                        .frame(height: geometry.size.height * 0.68)
+                        .frame(height: 500)
                 }
-                .padding(.horizontal, geometry.size.width * 0.04)
-                .padding(.top, geometry.size.height * 0.015)
+                .padding(.horizontal)
             }
-            .background(CreamyPapyrusBackground())
+            .background(AppColors.Quran.papyrusLight)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $openRecords) {
                 PrayerRecordsView()
@@ -45,14 +47,6 @@ struct PrayersView: View {
                     Text(AppStrings.prayers.myPrayers)
                         .font(.system(.title2, weight: .bold))
                 }
-
-                 //   ToolbarItem(placement: .navigationBarTrailing) {
-                 //     Button(AppStrings.prayers.history) {
-                 //       openRecords = true
-                 //   }
-                 //   .font(.system(.body))
-                 //  .foregroundStyle(AppColors.Common.secondary)
-                 // }
             }
         }
         .onAppear { vm.recomputeWeekStreak() }

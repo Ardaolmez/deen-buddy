@@ -10,9 +10,9 @@ struct QiblaHeader: View {
             HStack(spacing: 6) {
                 Image(systemName: "location.north.circle.fill")
                     .font(.title3)
-                    .foregroundColor(AppColors.Prayers.prayerBlue)
-                
-                Text("Qibla Direction")
+                    .foregroundColor(AppColors.Prayers.prayerGreen)
+
+                Text(ArrowQiblaStrings.qiblaDirection)
                     .font(.headline.weight(.medium))
                     .foregroundColor(AppColors.Common.primary)
             }

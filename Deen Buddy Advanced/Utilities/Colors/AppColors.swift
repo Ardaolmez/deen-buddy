@@ -22,6 +22,10 @@ struct AppColors {
         static let pageRing3 = Color(red: 0.99, green: 0.98, blue: 0.94)
         static let pageRing4 = Color(red: 0.985, green: 0.97, blue: 0.90)
 
+        // Papyrus Colors (for other views)
+        static let papyrusSquare = Color(red: 0.99, green: 0.98, blue: 0.94)  // Same as pageRing3
+        static let papyrusLight = Color(red: 0.995, green: 0.99, blue: 0.97)
+
         // Text Colors
         static let toolbarText = Color.brown
         static let toolbarBackground = Color.white.opacity(0.7)
