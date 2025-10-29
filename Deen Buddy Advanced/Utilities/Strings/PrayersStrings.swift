@@ -61,23 +61,35 @@ struct PrayersStrings {
 
     // UserDefaults Keys
     static let completedKeyPrefix = "prayers.completed"
-}
 
-// MARK: - Arrow Qibla Compass Strings
-struct ArrowQiblaStrings {
-    // Direction texts
+    // MARK: - Qibla Compass
+    static let qiblaDirection = "Qibla Direction"
     static let alignedToQibla = "Face to Qibla"
     static let turnDirectionFormat = "Turn %@ %d°" // "Turn 75° left"
     static let left = "left"
     static let right = "right"
-
-    // Labels
     static let device = "Device"
-    static let qiblaDirection = "Qibla Direction"
     static let currentHeading = "Current Heading"
     static let difference = "Difference"
-
-    // Status messages
     static let gettingLocation = "Getting location..."
     static let lowAccuracyWarning = "Low compass accuracy - calibrate your device"
+}
+
+// MARK: - Arrow Qibla Compass Strings (Deprecated - use AppStrings.prayers instead)
+struct ArrowQiblaStrings {
+    // Direction texts
+    static let alignedToQibla = AppStrings.prayers.alignedToQibla
+    static let turnDirectionFormat = AppStrings.prayers.turnDirectionFormat
+    static let left = AppStrings.prayers.left
+    static let right = AppStrings.prayers.right
+
+    // Labels
+    static let device = AppStrings.prayers.device
+    static let qiblaDirection = AppStrings.prayers.qiblaDirection
+    static let currentHeading = AppStrings.prayers.currentHeading
+    static let difference = AppStrings.prayers.difference
+
+    // Status messages
+    static let gettingLocation = AppStrings.prayers.gettingLocation
+    static let lowAccuracyWarning = AppStrings.prayers.lowAccuracyWarning
 }

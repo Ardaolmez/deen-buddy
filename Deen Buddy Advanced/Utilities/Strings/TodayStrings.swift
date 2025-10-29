@@ -58,4 +58,11 @@ struct TodayStrings {
     // Daily Verse Errors
     static let couldNotLoadQuranData = "Could not load Quran data"
     static let couldNotSelectDailyVerse = "Could not select daily verse"
+
+    // Daily Verse Card
+    static let tapToReadFull = "Tap to read full"
+
+    // Feedback Messages
+    static let feedbackThankYou = "Thank you for your feedback!"
+    static let feedbackError = "Failed to submit feedback. Please try again."
 }

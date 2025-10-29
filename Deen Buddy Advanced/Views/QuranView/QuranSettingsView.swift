@@ -11,8 +11,8 @@ struct QuranSettingsView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var languageManager = LanguageManager.shared
     @ObservedObject private var fontSizeManager = QuranFontSizeManager.shared
-    @State private var sampleArabicText = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
-    @State private var sampleEnglishText = "In the name of Allah, the Most Gracious, the Most Merciful"
+    @State private var sampleArabicText = AppStrings.quran.sampleBismillah
+    @State private var sampleEnglishText = AppStrings.quran.sampleBismillahTranslation
 
     var body: some View {
         NavigationStack {

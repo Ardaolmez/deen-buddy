@@ -60,14 +60,14 @@ struct FeedbackPopupView: View {
                 if showSuccessMessage {
                     HStack(spacing: 8) {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
-                        Text("Thank you for your feedback!")
+                            .foregroundColor(AppColors.Feedback.successIcon)
+                        Text(AppStrings.today.feedbackThankYou)
                             .font(.system(size: 14))
-                            .foregroundColor(.green)
+                            .foregroundColor(AppColors.Feedback.successText)
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal, 16)
-                    .background(Color.green.opacity(0.1))
+                    .background(AppColors.Feedback.successBackground)
                     .cornerRadius(8)
                 }
 
@@ -75,14 +75,14 @@ struct FeedbackPopupView: View {
                 if showErrorMessage {
                     HStack(spacing: 8) {
                         Image(systemName: "exclamationmark.triangle.fill")
-                            .foregroundColor(.red)
-                        Text(errorMessage.isEmpty ? "Failed to submit feedback. Please try again." : errorMessage)
+                            .foregroundColor(AppColors.Feedback.errorIcon)
+                        Text(errorMessage.isEmpty ? AppStrings.today.feedbackError : errorMessage)
                             .font(.system(size: 14))
-                            .foregroundColor(.red)
+                            .foregroundColor(AppColors.Feedback.errorText)
                     }
                     .padding(.vertical, 12)
                     .padding(.horizontal, 16)
-                    .background(Color.red.opacity(0.1))
+                    .background(AppColors.Feedback.errorBackground)
                     .cornerRadius(8)
                 }
 

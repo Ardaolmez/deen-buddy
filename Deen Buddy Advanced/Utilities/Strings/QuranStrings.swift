@@ -25,4 +25,8 @@ struct QuranStrings {
 
     // Error Messages
     static let couldNotLoadQuranData = "Could not load Quran data"
+
+    // Sample Text for Settings
+    static let sampleBismillah = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ"
+    static let sampleBismillahTranslation = "In the name of Allah, the Most Gracious, the Most Merciful"
 }

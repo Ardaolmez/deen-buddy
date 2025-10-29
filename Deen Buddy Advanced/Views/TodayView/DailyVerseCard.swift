@@ -56,7 +56,7 @@ struct DailyVerseCard: View {
                     Spacer()
 
                     HStack(spacing: 4) {
-                        Text("Tap to read full")
+                        Text(AppStrings.today.tapToReadFull)
                             .font(.system(size: 12))
                             .foregroundColor(AppColors.Today.verseCardSecondaryText.opacity(0.8))
                         Image(systemName: "arrow.up.right.circle")

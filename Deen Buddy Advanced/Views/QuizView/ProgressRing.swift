@@ -14,11 +14,11 @@ struct ProgressRing: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Color.black.opacity(0.08), lineWidth: 14)
+                .stroke(AppColors.Quiz.progressRingBackground, lineWidth: 14)
 
             Circle()
                 .trim(from: 0, to: progress)
-                .stroke(Color.green, style: StrokeStyle(lineWidth: 14, lineCap: .round))
+                .stroke(AppColors.Quiz.progressRingFill, style: StrokeStyle(lineWidth: 14, lineCap: .round))
                 .rotationEffect(.degrees(-90))
 
             Text("\(Int(round(progress * 100)))%")

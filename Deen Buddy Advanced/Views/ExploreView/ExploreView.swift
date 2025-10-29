@@ -13,7 +13,7 @@ struct ExploreView: View {
                         // Prophet Stories card (placeholder for now)
                         NavigationLink {
                             // TODO: hook up ProphetStoriesListView when you build it
-                            Text("Coming Soon: Stories of the Prophet ﷺ")
+                            Text(AppStrings.explore.prophetStoriesComingSoon)
                                 .font(.headline)
                                 .padding()
                         } label: {
@@ -41,7 +41,7 @@ struct ExploreView: View {
                 }
                 .padding(.vertical, 20)
             }
-            .navigationTitle("Explore")
+            .navigationTitle(AppStrings.explore.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -77,7 +77,7 @@ private struct ExploreCard: View {
             Spacer(minLength: 0)
 
             HStack(spacing: 4) {
-                Text("View")
+                Text(AppStrings.explore.view)
                     .font(.caption)
                     .fontWeight(.semibold)
                 Image(systemName: "chevron.right")

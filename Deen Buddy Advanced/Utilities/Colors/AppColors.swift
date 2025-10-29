@@ -221,6 +221,10 @@ struct AppColors {
         static let referenceLink = Color.blue
         static let versePopupHighlight = Color.yellow.opacity(0.2)
         static let versePopupVerseNumber = Color.secondary
+
+        // Progress Ring Colors
+        static let progressRingBackground = Color.black.opacity(0.08)
+        static let progressRingFill = Color.green
     }
 
     // MARK: - Explore Tab Colors
@@ -324,6 +328,16 @@ struct AppColors {
         static let verseDivider = Color.white.opacity(0.3)
     }
 
+    // MARK: - Feedback Colors
+    struct Feedback {
+        static let successIcon = Color.green
+        static let successText = Color.green
+        static let successBackground = Color.green.opacity(0.1)
+        static let errorIcon = Color.red
+        static let errorText = Color.red
+        static let errorBackground = Color.red.opacity(0.1)
+    }
+
     // MARK: - Common Colors (used across multiple views)
     struct Common {
         static let primary = Color.primary
@@ -331,6 +345,7 @@ struct AppColors {
 
         static let white = Color.white
         static let black = Color.black
+        static let clear = Color.clear
 
         static let systemBackground = Color(.systemBackground)
         static let systemGray5 = Color(.systemGray5)
@@ -340,6 +355,9 @@ struct AppColors {
         static let blue = Color.blue
         static let orange = Color.orange
         static let gray = Color.gray
+
+        // Selection states
+        static let checkmarkSelected = Color.green
 
         // Material
         static let thinMaterial = Material.thinMaterial

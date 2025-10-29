@@ -33,7 +33,7 @@ struct ChatHeaderView: View {
             Spacer()
 
             // placeholder to balance back button
-            Color.clear.frame(width: 38, height: 38)
+            AppColors.Common.clear.frame(width: 38, height: 38)
         }
         .padding(.horizontal, 16)
         .padding(.top, 8)

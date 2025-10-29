@@ -28,7 +28,7 @@ struct LanguageSelectorView: View {
 
                             if languageManager.selectedLanguage == language {
                                 Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.green)
+                                    .foregroundColor(AppColors.Common.checkmarkSelected)
                                     .font(.system(size: 20))
                             }
                         }
