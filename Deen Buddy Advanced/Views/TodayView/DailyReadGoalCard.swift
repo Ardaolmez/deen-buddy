@@ -13,6 +13,7 @@ struct DailyReadGoalCard: View {
     @State private var showReadTracking: Bool = false
     @State private var showListenTracking: Bool = false
     @State private var showGoalSelection: Bool = false
+    @State private var showQuranReading: Bool = false
 
     var body: some View {
         if viewModel.readingGoal == nil {
@@ -76,14 +77,23 @@ struct DailyReadGoalCard: View {
         .sheet(isPresented: $showReadTracking) {
             ReadingGoalTrackingView(viewModel: viewModel, mode: .reading)
         }
-        .sheet(isPresented: $showListenTracking) {
-            ReadingGoalTrackingView(viewModel: viewModel, mode: .listening)
+        .fullScreenCover(isPresented: $showListenTracking) {
+            VerseByVerseReadingView(
+                goalViewModel: viewModel,
+                isPresented: $showListenTracking
+            )
         }
         .fullScreenCover(isPresented: $isExpanded) {
             GoalDetailOverlay(
                 viewModel: viewModel,
                 isPresented: $isExpanded
-                
+
+            )
+        }
+        .fullScreenCover(isPresented: $showQuranReading) {
+            QuranReadingView(
+                goalViewModel: viewModel,
+                isPresented: $showQuranReading
             )
         }
     }
@@ -130,7 +140,7 @@ struct DailyReadGoalCard: View {
             // Read / Listen Buttons
             HStack(spacing: 10) {
                 Button {
-                    showReadTracking = true
+                    showQuranReading = true
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "book.fill")
@@ -146,8 +156,7 @@ struct DailyReadGoalCard: View {
                 }
 
                 Button {
-                    // Listening feature coming soon
-                    // showListenTracking = true
+                    showListenTracking = true
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "headphones")
@@ -155,13 +164,12 @@ struct DailyReadGoalCard: View {
                         Text(AppStrings.today.listen)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(AppColors.Today.quranGoalButtonText.opacity(0.5))
+                    .foregroundColor(AppColors.Today.quranGoalButtonText)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
-                    .background(AppColors.Today.quranGoalButtonListen.opacity(0.3))
+                    .background(AppColors.Today.quranGoalButtonListen)
                     .cornerRadius(8)
                 }
-                .disabled(true)
             }
         }
     }

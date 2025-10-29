@@ -21,6 +21,9 @@ struct AppStrings {
     static let explore = ExploreStrings.self
     static let chat = ChatStrings.self
 
+    // Features
+    static let reading = ReadingStrings.self
+
     // Shared
     static let common = CommonStrings.self
     static let settings = SettingsStrings.self

@@ -15,6 +15,7 @@ class ReadingGoalViewModel: ObservableObject {
 
     private let userDefaults = UserDefaults.standard
     private let goalKey = "readingGoal"
+    private let lastPositionKey = "lastReadPosition"
     private var surahs: [Surah] = []
 
     init() {
@@ -219,5 +220,50 @@ class ReadingGoalViewModel: ObservableObject {
         } else {
             return String(format: AppStrings.today.versesToGo, goal.todayRemainingVerses)
         }
+    }
+
+    // MARK: - Session Management
+
+    func saveLastReadPosition(surahId: Int, verseId: Int) {
+        let position = ["surahId": surahId, "verseId": verseId]
+        userDefaults.set(position, forKey: lastPositionKey)
+    }
+
+    func getLastReadPosition() -> (surahId: Int, verseId: Int)? {
+        guard let position = userDefaults.dictionary(forKey: lastPositionKey),
+              let surahId = position["surahId"] as? Int,
+              let verseId = position["verseId"] as? Int else {
+            return nil
+        }
+        return (surahId, verseId)
+    }
+
+    func getAbsolutePosition(surahId: Int, verseId: Int) -> Int {
+        var absolutePos = 0
+
+        for surah in surahs {
+            if surah.id == surahId {
+                // Find the verse in this surah
+                if let verseIndex = surah.verses.firstIndex(where: { $0.id == verseId }) {
+                    return absolutePos + verseIndex
+                }
+                return absolutePos
+            }
+            absolutePos += surah.verses.count
+        }
+
+        return 0
+    }
+
+    func updateCurrentPosition(to position: Int) {
+        guard var goal = readingGoal else { return }
+        goal.currentVersePosition = position
+        readingGoal = goal
+        saveGoal()
+        updateCurrentPosition()
+    }
+
+    func getSurahs() -> [Surah] {
+        return surahs
     }
 }
