@@ -66,6 +66,7 @@
 			membershipExceptions = (
 				Resources/Quran/quran_en.json,
 				Utilities/Colors/AppColors.swift,
+				Utilities/Colors/WidgetColors.swift,
 			);
 			target = 46C2089B2EA308790038604E /* Deen Buddy WidgetsExtension */;
 		};
