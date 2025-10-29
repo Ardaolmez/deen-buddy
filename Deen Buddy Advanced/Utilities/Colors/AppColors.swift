@@ -98,7 +98,7 @@ struct AppColors {
     // MARK: - Prayers Tab Colors
     struct Prayers {
         // Minimal Design Colors
-        static let prayerGreen = Color.green
+        static let prayerGreen = Color(red: 0.29, green: 0.55, blue: 0.42)
         static let prayerBlue = Color.blue
         static let prayerOrange = Color.orange
 

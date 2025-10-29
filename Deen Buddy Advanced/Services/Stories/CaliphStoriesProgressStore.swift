@@ -59,7 +59,7 @@ final class CaliphStoriesProgressStore: CaliphStoriesProgressStoreType {
 
     func snapshot(totalStories: Int, referenceDate: Date) -> CaliphStoriesProgressSnapshot {
         return queue.sync {
-            var didChange = refreshUnlockIfNeeded(totalStories: totalStories, referenceDate: referenceDate)
+            let didChange = refreshUnlockIfNeeded(totalStories: totalStories, referenceDate: referenceDate)
             sanitizeState(totalStories: totalStories)
             if didChange {
                 saveStateLocked()

@@ -4,6 +4,8 @@ import SwiftUI
 struct PrayerIconsRow: View {
     let entries: [PrayerEntry]
     let currentPrayer: PrayerEntry?
+    let nextPrayer: PrayerEntry?
+    let countdown: String
     let isCompleted: (PrayerName) -> Bool
     let canToggle: (PrayerEntry) -> Bool
     let onToggle: (PrayerName) -> Void
@@ -13,50 +15,59 @@ struct PrayerIconsRow: View {
 
     var body: some View {
         VStack(spacing: 20) {
-            // Header with progress
-            // Prayer icons in a row
             HStack(spacing: MinimalDesign.smallSpacing) {
                 ForEach(entries) { entry in
                     VStack(spacing: 10) {
+                        
                         // Prayer name at top
                         Text(entry.name.title)
-                            .font(.system(.caption, weight: .medium))
+                            .font(.caption.weight(.bold))
                             .foregroundStyle(Color.primary)
 
-                        // Prayer icon with enhanced visual feedback
+                        // All prayers use square design
                         ZStack {
-                            // Background circle with subtle shadow
-                            Circle()
-                                .fill(Color(.systemGray6).opacity(0.5))
-                                .frame(width: 60, height: 60)
-                                .shadow(color: timeOfDayColor(for: entry.name).opacity(0.2), radius: 4, x: 0, y: 2)
-
-                            // Background ring (gray outline) - always visible
-                            Circle()
-                                .stroke(Color.gray.opacity(0.3), style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                            // Background square
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(squareColorFor(entry))
                                 .frame(width: 68, height: 68)
+                                .shadow(color: shadowColorFor(entry), radius: 4, x: 0, y: 2)
 
-                            // Progress ring - fills based on prayer state
-                            let progress = progressForPrayer(entry)
-                            Circle()
-                                .trim(from: 0, to: progress)
-                                .stroke(timeOfDayColor(for: entry.name), style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                                .frame(width: 68, height: 68)
-                                .rotationEffect(.degrees(-90))
+                            // Border only for next prayer
+                            if isNextPrayer(entry) {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(AppColors.Prayers.prayerBlue, lineWidth: 4)
+                                    .frame(width: 68, height: 68)
+                            }
 
-                            // Prayer icon
-                            Image(systemName: entry.name.icon)
-                                .font(.system(size: 22, weight: .medium))
-                                .foregroundStyle(timeOfDayColor(for: entry.name))
+                            VStack(spacing: 2) {
+                                // Prayer icon
+                                Image(systemName: entry.name.icon)
+                                    .font(.system(size: 20, weight: .medium))
+                                    .foregroundColor(iconColorFor(entry))
 
+                                // Prayer time
+                                Text(timeString(entry.time))
+                                    .font(.caption2.weight(.semibold))
+                                    .foregroundColor(timeColorFor(entry))
+                                    .monospacedDigit()
+                            }
                         }
-                        .opacity(canToggle(entry) ? 1.0 : 0.5)
-                        .scaleEffect(canToggle(entry) ? 1.0 : 0.95)
+                        .opacity(canToggle(entry) ? 1.0 : 1)
+                        .scaleEffect(canToggle(entry) ? 1.0 : 1)
 
-                        // Prayer time below icon
-                        Text(timeString(entry.time))
-                            .font(.system(.caption2, design: .monospaced))
-                            .foregroundStyle(Color.primary)
+                        // Countdown only for next prayer - fixed height to prevent jump
+                        Group {
+                            if isNextPrayer(entry) && !countdown.isEmpty && countdown != "—" && countdown != "--:--:--" {
+                                Text(countdown)
+                                    .font(.caption2.weight(.bold))
+                                    .foregroundColor(Color.primary)
+                                    .monospacedDigit()
+                            } else {
+                                Text(" ")
+                                    .font(.caption2.weight(.medium))
+                            }
+                        }
+                        .frame(height: 16)
                     }
                     .frame(maxWidth: .infinity)
                     .contentShape(Rectangle())
@@ -75,34 +86,49 @@ struct PrayerIconsRow: View {
         }
     }
 
-    private func backgroundColorFor(_ entry: PrayerEntry) -> Color {
-        if isCompleted(entry.name) {
-            return AppColors.Prayers.subtleGreen
-        } else if entry.id == currentPrayer?.id {
-            return AppColors.Prayers.subtleBlue
+    private func isNextPrayer(_ entry: PrayerEntry) -> Bool {
+        return entry.id == nextPrayer?.id
+    }
+
+    // Prayer states for color coding
+    private enum PrayerState {
+        case completed, current, next, missed, future
+    }
+
+    // Helper function to determine prayer state
+    private func prayerState(_ entry: PrayerEntry) -> PrayerState {
+        // Ignore completion status for now
+        if entry.id == currentPrayer?.id {
+            return .current
+        } else if isNextPrayer(entry) {
+            return .next
         } else {
-            return AppColors.Prayers.subtleGray
+            return .future
         }
     }
 
+    // Square background colors based on prayer state
+    private func squareColorFor(_ entry: PrayerEntry) -> Color {
+        // All prayers use same creamy papyrus background
+        return Color(red: 0.99, green: 0.98, blue: 0.94)
+    }
+
+    // Icon colors based on prayer state
     private func iconColorFor(_ entry: PrayerEntry) -> Color {
-        if isCompleted(entry.name) {
-            return AppColors.Prayers.prayerGreen
-        } else if entry.id == currentPrayer?.id {
-            return AppColors.Prayers.prayerBlue
-        } else {
-            return AppColors.Common.primary
-        }
+        // Use chat view green color for light mode
+        return Color(red: 0.29, green: 0.55, blue: 0.42)
     }
 
+    // Time text colors based on prayer state
+    private func timeColorFor(_ entry: PrayerEntry) -> Color {
+        // Use chat view green color for light mode
+        return Color(red: 0.29, green: 0.55, blue: 0.42)
+    }
+
+    // Shadow colors based on prayer state
     private func shadowColorFor(_ entry: PrayerEntry) -> Color {
-        if isCompleted(entry.name) {
-            return AppColors.Prayers.greenShadow
-        } else if entry.id == currentPrayer?.id {
-            return AppColors.Prayers.blueShadow
-        } else {
-            return AppColors.Prayers.lightShadow
-        }
+        // Subtle shadow for all prayers without opacity
+        return Color(red: 0.29, green: 0.55, blue: 0.42)
     }
 
     private func timeString(_ date: Date) -> String {
@@ -111,69 +137,39 @@ struct PrayerIconsRow: View {
         return formatter.string(from: date)
     }
 
-    // MARK: - Time-of-day Color
     private func timeOfDayColor(for prayer: PrayerName) -> Color {
         switch prayer {
-        case .fajr:
-            return AppColors.Prayers.fajrColor
-        case .dhuhr:
-            return AppColors.Prayers.dhuhrColor
-        case .asr:
-            return AppColors.Prayers.asrColor
-        case .maghrib:
-            return AppColors.Prayers.maghribColor
-        case .isha:
-            return AppColors.Prayers.ishaColor
+        case .fajr: return AppColors.Prayers.fajrColor
+        case .dhuhr: return AppColors.Prayers.dhuhrColor
+        case .asr: return AppColors.Prayers.asrColor
+        case .maghrib: return AppColors.Prayers.maghribColor
+        case .isha: return AppColors.Prayers.ishaColor
         }
     }
 
-    // MARK: - Progress Calculation
     private func progressForPrayer(_ entry: PrayerEntry) -> CGFloat {
         let calendar = Calendar.current
         let entryDay = calendar.startOfDay(for: entry.time)
         let currentDay = calendar.startOfDay(for: currentTime)
 
-        // If prayer is from a previous day, reset to 0 (new day)
-        if entryDay < currentDay {
-            return 0.0
-        }
+        if entryDay < currentDay { return 0.0 }
+        if entry.time < currentTime { return 1.0 }
 
-        // If prayer time has passed (same day), it's completed
-        if entry.time < currentTime {
-            return 1.0
-        }
-
-        // Prayer is in the future
-        // Check if this is the next upcoming prayer
         let futurePrayers = entries.filter { $0.time > currentTime }.sorted { $0.time < $1.time }
-        guard let nextPrayer = futurePrayers.first else {
-            return 0.0
-        }
+        guard let nextPrayer = futurePrayers.first else { return 0.0 }
 
-        // If this IS the next prayer, show progress toward it
         if entry.id == nextPrayer.id {
-            // Find the previous prayer time (or start of day if this is first prayer)
-            let previousTime: Date
-            if let currentPrayerEntry = currentPrayer {
-                previousTime = currentPrayerEntry.time
-            } else {
-                // No current prayer - use start of day or find previous prayer
-                let pastPrayers = entries.filter { $0.time < currentTime }.sorted { $0.time < $1.time }
-                if let lastPrayer = pastPrayers.last {
-                    previousTime = lastPrayer.time
-                } else {
-                    // First prayer of the day - use midnight
-                    previousTime = calendar.startOfDay(for: currentTime)
-                }
-            }
+            let previousTime: Date =
+                currentPrayer?.time ??
+                entries.filter { $0.time < currentTime }.sorted { $0.time < $1.time }.last?.time ??
+                calendar.startOfDay(for: currentTime)
 
-            let totalDuration = entry.time.timeIntervalSince(previousTime)
+            let total = entry.time.timeIntervalSince(previousTime)
             let elapsed = currentTime.timeIntervalSince(previousTime)
-            let progress = min(max(elapsed / totalDuration, 0), 1.0)
-            return progress
+            return min(max(elapsed / total, 0), 1.0)
         }
 
-        // Not the next prayer - empty ring
         return 0.0
     }
 }
+

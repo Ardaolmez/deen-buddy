@@ -8,11 +8,13 @@ struct PrayersView: View {
     var body: some View {
         NavigationStack {
             GeometryReader { geometry in
-                VStack(spacing: geometry.size.height * 0.015) {
-                    // MARK: Prayer Icons Row
+                VStack(spacing: geometry.size.height * 0.01) {
+                    // MARK: Prayer Icons Row - 25%
                     PrayerIconsRow(
                         entries: vm.entries,
                         currentPrayer: vm.currentPrayer,
+                        nextPrayer: vm.nextPrayer,
+                        countdown: vm.countdownText,
                         isCompleted: { vm.isCompleted($0) },
                         canToggle: { vm.canMark($0) },
                         onToggle: { prayer in
@@ -20,28 +22,20 @@ struct PrayersView: View {
                             vm.recomputeWeekStreak()
                         }
                     )
-                    .frame(height: geometry.size.height * 0.12)
+                    .frame(height: geometry.size.height * 0.22)
 
-                    // Additional spacer to push current prayer section lower
-                    Spacer()
-                        .frame(height: geometry.size.height * 0.025)
+                    // MARK: Qibla Header - 5%
+                    QiblaHeader(cityLine: vm.cityLine)
+                        .frame(height: geometry.size.height * 0.05)
 
-                    // MARK: Next Prayer Focus
-                   // NextPrayerHeader(
-                   // nextPrayer: vm.nextPrayer,
-                   // currentPrayer: vm.currentPrayer,
-                   // countdown: vm.countdownText,
-                   // isBetweenSunriseAndDhuhr: vm.isBetweenSunriseAndDhuhr
-                   // )
-                   //.frame(height: geometry.size.height * 0.2)
-
-                    // MARK: Qibla Compass
+                    // MARK: Qibla Compass - 68%
                     ArrowQiblaCompassView()
                         .frame(height: geometry.size.height * 0.68)
                 }
                 .padding(.horizontal, geometry.size.width * 0.04)
-                .padding(.top, geometry.size.height * 0.03)
+                .padding(.top, geometry.size.height * 0.015)
             }
+            .background(CreamyPapyrusBackground())
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $openRecords) {
                 PrayerRecordsView()

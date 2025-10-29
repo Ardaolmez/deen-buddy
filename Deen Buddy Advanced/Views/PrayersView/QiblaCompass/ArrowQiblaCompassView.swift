@@ -27,12 +27,12 @@ struct ArrowQiblaCompassView: View {
             let screenHeight = geometry.size.height
             let screenWidth = geometry.size.width
 
-            // Scale factors based on screen size - EVEN BIGGER compass
-            let compassSize = min(screenWidth * 0.9, screenHeight * 0.45)  // Much larger: increased to 0.9 and 0.45
-            let kaabaSize = compassSize * 0.1   // Smaller ratio for bigger compass
-            let arrowSize = compassSize * 0.4   // Adjusted ratio for much bigger compass
-            let kaabaOffset = -compassSize * 0.65  // Position Kaaba slightly above the circle
-            let dotOffset = -compassSize * 0.5   // Keep same ratio for proper positioning
+            // Scale factors optimized for 68% container size - larger compass with bigger elements
+            let compassSize = min(screenWidth * 0.88, screenHeight * 0.48)  // Increased for 68% container
+            let kaabaSize = compassSize * 0.11   // Proportional mosque icon size
+            let arrowSize = compassSize * 0.38   // Larger arrow for better visibility
+            let kaabaOffset = -compassSize * 0.62  // Position Kaaba above the circle
+            let dotOffset = -compassSize * 0.49   // Proportional dot positioning
 
             VStack(spacing: screenHeight * 0.01) {  // Reduced spacing for tighter layout
                 Spacer()
@@ -42,7 +42,7 @@ struct ArrowQiblaCompassView: View {
                     ZStack {
                         // Mosque icon at the top - ALWAYS FIXED at top
                         Text("🕌")
-                            .font(.system(size: kaabaSize * 1.2))  // Increased multiplier for bigger compass
+                            .font(.system(size: kaabaSize * 1.3))  // Increased multiplier for 68% compass
                             .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
                             .offset(y: kaabaOffset)
 
@@ -53,7 +53,7 @@ struct ArrowQiblaCompassView: View {
                             .trim(from: 0, to: arcFraction)
                             .stroke(
                                 AppColors.Prayers.prayerBlue.opacity(0.5),
-                                style: StrokeStyle(lineWidth: 8, lineCap: .round, dash: [12, 8])  // Even thicker stroke for bigger compass
+                                style: StrokeStyle(lineWidth: 10, lineCap: .round, dash: [14, 10])  // Thicker stroke for 68% compass
                             )
                             .frame(width: compassSize, height: compassSize)
                             .rotationEffect(.degrees(vm.angleDifference > 0 ? (-90 - abs(vm.angleDifference)) : -90))
@@ -62,7 +62,7 @@ struct ArrowQiblaCompassView: View {
                         // Blue dot at arrow's current position (end of arc)
                         Circle()
                             .fill(AppColors.Prayers.prayerBlue)
-                            .frame(width: 18, height: 18)  // Larger dot for much bigger compass
+                            .frame(width: 20, height: 20)  // Larger dot for 68% compass
                             .offset(y: dotOffset)
                             .rotationEffect(.degrees(-vm.angleDifference))
                             .opacity(isAligned ? 0 : 1)
@@ -73,7 +73,7 @@ struct ArrowQiblaCompassView: View {
                             .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
                             .rotationEffect(.degrees(-vm.angleDifference), anchor: .center)
                     }
-                    .frame(height: screenHeight * 0.55)  // Much larger container for bigger compass
+                    .frame(height: screenHeight * 0.58)  // Optimized for 68% container
                 } else {
                     // Loading state
                     VStack(spacing: 12) {
@@ -82,7 +82,7 @@ struct ArrowQiblaCompassView: View {
                             .font(.caption)
                             .foregroundColor(AppColors.Common.secondary)
                     }
-                    .frame(height: screenHeight * 0.55)  // Match the compass container height
+                    .frame(height: screenHeight * 0.58)  // Match the compass container height
                 }
 
                 // Reduced gap between compass and text
@@ -91,10 +91,10 @@ struct ArrowQiblaCompassView: View {
 
                 // Direction and angle text at the bottom
                 VStack(spacing: screenHeight * 0.01) {  // Reduced spacing for tighter text layout
-                    // Direction instruction - MUCH BIGGER TEXT for visual recognition
+                    // Direction instruction - Bigger text for 68% compass container
                     Text(directionText)
-                        .font(.system(size: min(40, screenHeight * 0.06)))  // Much larger: increased to 40 and 0.048
-                        .fontWeight(.heavy)  // Even bolder than bold for maximum visual impact
+                        .font(.system(size: min(38, screenHeight * 0.058)))  // Increased to 38pt for bigger text
+                        .fontWeight(.heavy)  // Heavy weight for maximum visibility
                         .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Common.primary)
                         .lineLimit(2)  // Allow 2 lines for better text wrapping if needed
                         .minimumScaleFactor(0.7)  // Higher minimum scale to maintain readability
