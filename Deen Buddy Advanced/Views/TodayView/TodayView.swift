@@ -66,7 +66,7 @@ struct TodayView: View {
                 }
             }
             .navigationTitle(AppStrings.today.navigationTitle)
-            .navigationBarTitleDisplayMode(.large)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     PrayerTimeCompact(nextPrayer: prayersVM.nextPrayer)

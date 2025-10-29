@@ -1,41 +1,39 @@
 //
-//  ChatBoxView.swift
+//  TodayChatBoxView.swift
 //  Deen Buddy Advanced
 //
-//  Created by Arda Olmez on 2025-10-07.
+//  Chat box for Today view with custom prompt text
 //
 
 import SwiftUI
 
 struct ChatBoxView: View {
     @State private var showChat = false
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         Button(action: {
             showChat = true
         }) {
-            HStack(spacing: 8) {
-                Image(systemName: "sparkles")
-                    .font(.system(size: 18))
-                    .foregroundColor(AppColors.Chat.boxIcon)
-
-                Text(AppStrings.chat.chatBoxPrompt)
-                    .font(.system(size: 15))
-                    .foregroundColor(AppColors.Chat.boxText)
+            // Text input field styling matching ChatView
+            HStack {
+                Text(AppStrings.chat.todayChatBoxPrompt)
+                    .font(.system(size: 16))
+                    .foregroundColor(AppColors.Chat.inputPlaceholder(for: colorScheme))
                     .multilineTextAlignment(.leading)
-                    .lineLimit(1)
 
                 Spacer()
             }
-            .padding(.horizontal, 20)
-            .frame(maxWidth: .infinity)
-            .frame(height: 60)
-            .background(AppColors.Chat.boxBackground)
-            .cornerRadius(30)
-            .overlay(
-                RoundedRectangle(cornerRadius: 30)
-                    .stroke(AppColors.Chat.boxBorder, lineWidth: 1)
-            )
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .background(AppColors.Chat.inputBackground(for: colorScheme))
+            .cornerRadius(24)
+            // Enhanced 3D shadow effect with multiple layers
+            .shadow(color: AppColors.Chat.headerTitle(for: colorScheme).opacity(0.4), radius: 12, x: 0, y: 4)
+            .shadow(color: AppColors.Chat.headerTitle(for: colorScheme).opacity(0.2), radius: 8, x: 0, y: 2)
+            .shadow(color: Color.black.opacity(0.15), radius: 6, x: 0, y: 3)
+            .shadow(color: Color.black.opacity(0.08), radius: 3, x: 0, y: 1)
+            .shadow(color: Color.black.opacity(0.04), radius: 1, x: 0, y: 0.5)
         }
         .fullScreenCover(isPresented: $showChat) {
             ChatView()

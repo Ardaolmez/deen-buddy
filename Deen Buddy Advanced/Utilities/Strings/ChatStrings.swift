@@ -10,6 +10,7 @@ import Foundation
 struct ChatStrings {
     static let navigationTitle = "Ask a Question"
     static let chatBoxPrompt = "Ask a Question"
+    static let todayChatBoxPrompt = "What do you have in your mind?"
     static let inputPlaceholder = "Type your question..."
     static let inputPlaceholderShort = "Ask me anything…"
     static let close = "Close"
