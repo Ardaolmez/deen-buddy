@@ -37,7 +37,7 @@ struct PrayersView: View {
                 }
                 .padding(.horizontal)
             }
-            .background(AppColors.Quran.papyrusLight)
+           // .background(AppColors.Quran.papyrusLight)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $openRecords) {
                 PrayerRecordsView()
