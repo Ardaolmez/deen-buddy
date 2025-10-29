@@ -14,7 +14,7 @@ class QuranViewModel: ObservableObject {
     @Published var currentSurahIndex: Int = 0
     @Published var isLoading: Bool = true
     @Published var errorMessage: String?
-    @Published var showLanguageSelector: Bool = false
+    @Published var showSettings: Bool = false
     @Published var showSurahSelector: Bool = false
 
     private let quranService = QuranService.shared

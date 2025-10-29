@@ -10,6 +10,7 @@ import SwiftUI
 struct QuranPageView: View {
     let surah: Surah
     let language: QuranLanguage
+    @ObservedObject private var fontSizeManager = QuranFontSizeManager.shared
 
     var body: some View {
         ScrollView {
@@ -18,32 +19,32 @@ struct QuranPageView: View {
                 VStack(spacing: 12) {
                     // Arabic name with decorative elements
                     Text(surah.name)
-                        .font(.system(size: 42, weight: .bold, design: .serif))
+                        .font(.system(size: fontSizeManager.scaledFontSize(42), weight: .bold, design: .serif))
                         .foregroundColor(AppColors.Quran.surahNameArabic)
                         .padding(.bottom, 4)
 
                     // Transliteration and translation
                     VStack(spacing: 8) {
                         Text(surah.transliteration)
-                            .font(.system(size: 26, weight: .semibold, design: .serif))
+                            .font(.system(size: fontSizeManager.scaledFontSize(26), weight: .semibold, design: .serif))
                             .foregroundColor(AppColors.Quran.surahNameTransliteration)
 
                         Text(surah.translation)
-                            .font(.system(size: 20, weight: .regular, design: .serif))
+                            .font(.system(size: fontSizeManager.scaledFontSize(20), weight: .regular, design: .serif))
                             .foregroundColor(AppColors.Quran.surahNameTranslation)
                     }
 
                     // Metadata with better spacing
                     HStack(spacing: 20) {
                         Text("\(surah.typeCapitalized)")
-                            .font(.system(size: 17, weight: .medium, design: .serif))
+                            .font(.system(size: fontSizeManager.scaledFontSize(17), weight: .medium, design: .serif))
                             .foregroundColor(AppColors.Quran.surahMetadata)
 
                         Text("•")
                             .foregroundColor(AppColors.Quran.surahMetadata.opacity(0.5))
 
                         Text(String(format: AppStrings.quran.versesCount, surah.total_verses))
-                            .font(.system(size: 17, weight: .medium, design: .serif))
+                            .font(.system(size: fontSizeManager.scaledFontSize(17), weight: .medium, design: .serif))
                             .foregroundColor(AppColors.Quran.surahMetadata)
                     }
                     .padding(.top, 12)
@@ -56,7 +57,7 @@ struct QuranPageView: View {
                 if surah.id != 9 && surah.id != 1 {
                     VStack(spacing: 8) {
                         Text("بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ")
-                            .font(.system(size: 30, weight: .medium, design: .serif))
+                            .font(.system(size: fontSizeManager.scaledFontSize(30), weight: .medium, design: .serif))
                             .foregroundColor(AppColors.Quran.bismillah)
                             .multilineTextAlignment(.center)
                             .padding(.vertical, 16)
@@ -68,7 +69,7 @@ struct QuranPageView: View {
                                 .frame(width: 60, height: 1)
 
                             Image(systemName: "star.fill")
-                                .font(.system(size: 10))
+                                .font(.system(size: fontSizeManager.scaledFontSize(10)))
                                 .foregroundColor(AppColors.Quran.verseNumber.opacity(0.3))
 
                             Rectangle()
@@ -115,6 +116,7 @@ struct VerseView: View {
     let verse: Verse
     let surahId: Int
     let language: QuranLanguage
+    @ObservedObject private var fontSizeManager = QuranFontSizeManager.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -131,7 +133,7 @@ struct VerseView: View {
                         .frame(width: 36, height: 36)
 
                     Text("\(verse.id)")
-                        .font(.system(size: 16, weight: .semibold, design: .serif))
+                        .font(.system(size: fontSizeManager.scaledFontSize(16), weight: .semibold, design: .serif))
                         .foregroundColor(AppColors.Quran.verseNumber)
                 }
 
@@ -139,7 +141,7 @@ struct VerseView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     // Always show Arabic text first
                     Text(verse.text)
-                        .font(.system(size: 28, design: .serif))
+                        .font(.system(size: fontSizeManager.scaledFontSize(28), design: .serif))
                         .foregroundColor(AppColors.Quran.verseText)
                         .multilineTextAlignment(.trailing)
                         .frame(maxWidth: .infinity, alignment: .trailing)
@@ -151,7 +153,7 @@ struct VerseView: View {
                        !translation.isEmpty,
                        language != .arabic {
                         Text(translation)
-                            .font(.system(size: 18, weight: .regular, design: .serif))
+                            .font(.system(size: fontSizeManager.scaledFontSize(18), weight: .regular, design: .serif))
                             .foregroundColor(AppColors.Quran.verseText.opacity(0.85))
                             .lineSpacing(8)
                             .fixedSize(horizontal: false, vertical: true)
