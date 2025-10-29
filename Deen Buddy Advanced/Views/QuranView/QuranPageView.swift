@@ -29,9 +29,11 @@ struct QuranPageView: View {
                             .font(.system(size: fontSizeManager.scaledFontSize(26), weight: .semibold, design: .serif))
                             .foregroundColor(AppColors.Quran.surahNameTransliteration)
 
-                        Text(surah.translation)
-                            .font(.system(size: fontSizeManager.scaledFontSize(20), weight: .regular, design: .serif))
-                            .foregroundColor(AppColors.Quran.surahNameTranslation)
+                        if let translation = surah.translation {
+                            Text(translation)
+                                .font(.system(size: fontSizeManager.scaledFontSize(20), weight: .regular, design: .serif))
+                                .foregroundColor(AppColors.Quran.surahNameTranslation)
+                        }
                     }
 
                     // Metadata with better spacing

@@ -19,7 +19,7 @@ struct SurahSelectorView: View {
         return viewModel.surahs.filter {
             $0.name.localizedCaseInsensitiveContains(searchText) ||
             $0.transliteration.localizedCaseInsensitiveContains(searchText) ||
-            $0.translation.localizedCaseInsensitiveContains(searchText) ||
+            ($0.translation?.localizedCaseInsensitiveContains(searchText) ?? false) ||
             "\($0.id)".contains(searchText)
         }
     }
@@ -86,7 +86,7 @@ struct SurahRowView: View {
                 }
 
                 HStack {
-                    Text(surah.translation)
+                    Text(surah.translation ?? "")
                         .font(.system(size: 14))
                         .foregroundColor(.secondary)
 

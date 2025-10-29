@@ -71,7 +71,7 @@ class QuranService {
         return surahs.filter {
             $0.name.localizedCaseInsensitiveContains(query) ||
             $0.transliteration.localizedCaseInsensitiveContains(query) ||
-            $0.translation.localizedCaseInsensitiveContains(query)
+            $0.translation!.localizedCaseInsensitiveContains(query)
         }
     }
 

@@ -29,7 +29,7 @@ struct VersePopupView: View {
                                     Text(surah.transliteration)
                                         .font(.title3)
                                         .foregroundColor(AppColors.Common.secondary)
-                                    Text(surah.translation)
+                                    Text(surah.translation!)
                                         .font(.subheadline)
                                         .foregroundColor(AppColors.Common.secondary)
                                 }
