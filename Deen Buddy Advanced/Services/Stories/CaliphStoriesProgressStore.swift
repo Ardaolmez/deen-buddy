@@ -10,7 +10,7 @@ import Foundation
 protocol CaliphStoriesProgressStoreType {
     var unlockInterval: TimeInterval { get }
     func snapshot(totalStories: Int, referenceDate: Date) -> CaliphStoriesProgressSnapshot
-    func markStoryCompleted(globalIndex: Int, totalStories: Int, referenceDate: Date)
+    func markStoryCompleted(globalIndex: Int, totalStories: Int, referenceDate: Date, useUnlockTimer: Bool)
 }
 
 extension CaliphStoriesProgressStoreType {
@@ -18,8 +18,14 @@ extension CaliphStoriesProgressStoreType {
         snapshot(totalStories: totalStories, referenceDate: referenceDate)
     }
 
-    func markStoryCompleted(globalIndex: Int, totalStories: Int, referenceDate: Date = Date()) {
-        markStoryCompleted(globalIndex: globalIndex, totalStories: totalStories, referenceDate: referenceDate)
+    func markStoryCompleted(globalIndex: Int,
+                            totalStories: Int,
+                            referenceDate: Date = Date(),
+                            useUnlockTimer: Bool = true) {
+        markStoryCompleted(globalIndex: globalIndex,
+                           totalStories: totalStories,
+                           referenceDate: referenceDate,
+                           useUnlockTimer: useUnlockTimer)
     }
 }
 
@@ -78,10 +84,15 @@ final class CaliphStoriesProgressStore: CaliphStoriesProgressStoreType {
         }
     }
 
-    func markStoryCompleted(globalIndex: Int, totalStories: Int, referenceDate: Date) {
+    func markStoryCompleted(globalIndex: Int,
+                            totalStories: Int,
+                            referenceDate: Date,
+                            useUnlockTimer: Bool) {
         var shouldNotify = false
         queue.sync {
-            let unlockedChanged = refreshUnlockIfNeeded(totalStories: totalStories, referenceDate: referenceDate)
+            let unlockedChanged = useUnlockTimer
+                ? refreshUnlockIfNeeded(totalStories: totalStories, referenceDate: referenceDate)
+                : false
             var mutated = false
 
             guard totalStories > 0 else {
@@ -95,8 +106,17 @@ final class CaliphStoriesProgressStore: CaliphStoriesProgressStoreType {
 
             sanitizeState(totalStories: totalStories)
 
+            if !useUnlockTimer {
+                let desiredUnlocked = min(totalStories, globalIndex + 2)
+                if state.unlockedCount < desiredUnlocked {
+                    state.unlockedCount = desiredUnlocked
+                    mutated = true
+                }
+            }
+
             guard globalIndex < state.unlockedCount else {
-                if unlockedChanged {
+                if unlockedChanged || mutated {
+                    sanitizeState(totalStories: totalStories)
                     saveStateLocked()
                     shouldNotify = true
                 }

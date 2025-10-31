@@ -19,17 +19,20 @@ final class CaliphStoriesViewModel: ObservableObject {
     private let caliph: Caliph
     private let repo: StoriesRepositoryType
     private let progressStore: CaliphStoriesProgressStoreType
+    private let useUnlockTimer: Bool
     private let globalStartIndex: Int
     private var cancellables = Set<AnyCancellable>()
 
     init(caliph: Caliph,
          repo: StoriesRepositoryType = StoriesRepository.shared,
-         progressStore: CaliphStoriesProgressStoreType = CaliphStoriesProgressStore.shared) {
+         progressStore: CaliphStoriesProgressStoreType = CaliphStoriesProgressStore.shared,
+         useUnlockTimer: Bool = false) {
         self.caliph = caliph
         self.caliphName = caliph.name
         self.caliphTitle = caliph.title
         self.repo = repo
         self.progressStore = progressStore
+        self.useUnlockTimer = useUnlockTimer
 
         let orderedCaliphs = repo.allCaliphs()
             .sorted { $0.order < $1.order }
@@ -47,9 +50,11 @@ final class CaliphStoriesViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
+    var usesUnlockTimer: Bool { useUnlockTimer }
+
     func refresh(date: Date = Date()) {
         let snapshot = progressStore.snapshot(totalStories: totalStories, referenceDate: date)
-        nextUnlockDate = snapshot.nextUnlockDate
+        nextUnlockDate = useUnlockTimer ? snapshot.nextUnlockDate : nil
 
         storyItems = caliph.stories.enumerated().map { offset, article in
             let globalIndex = globalStartIndex + offset
@@ -69,7 +74,8 @@ final class CaliphStoriesViewModel: ObservableObject {
     func markStoryCompleted(_ item: StoryItem, date: Date = Date()) {
         progressStore.markStoryCompleted(globalIndex: item.globalIndex,
                                          totalStories: totalStories,
-                                         referenceDate: date)
+                                         referenceDate: date,
+                                         useUnlockTimer: useUnlockTimer)
     }
 
     private static func resolveIndices(for target: Caliph, within orderedCaliphs: [Caliph]) -> (start: Int, total: Int) {

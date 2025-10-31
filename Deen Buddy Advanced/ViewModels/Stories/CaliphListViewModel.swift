@@ -14,12 +14,15 @@ final class CaliphListViewModel: ObservableObject {
 
     private let repo: StoriesRepositoryType
     private let progressStore: CaliphStoriesProgressStoreType
+    private let useUnlockTimer: Bool
     private var cancellables = Set<AnyCancellable>()
 
     init(repo: StoriesRepositoryType = StoriesRepository.shared,
-         progressStore: CaliphStoriesProgressStoreType = CaliphStoriesProgressStore.shared) {
+         progressStore: CaliphStoriesProgressStoreType = CaliphStoriesProgressStore.shared,
+         useUnlockTimer: Bool = false) {
         self.repo = repo
         self.progressStore = progressStore
+        self.useUnlockTimer = useUnlockTimer
         load()
 
         NotificationCenter.default.publisher(for: CaliphStoriesProgressStore.progressDidChangeNotification)
@@ -28,6 +31,8 @@ final class CaliphListViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+
+    var usesUnlockTimer: Bool { useUnlockTimer }
 
     func refresh() {
         load()
@@ -61,7 +66,7 @@ final class CaliphListViewModel: ObservableObject {
             return CaliphListItem(caliph: caliph, isLocked: !isUnlocked, isCompleted: isCompleted)
         }
 
-        nextUnlockDate = snapshot.nextUnlockDate
+        nextUnlockDate = useUnlockTimer ? snapshot.nextUnlockDate : nil
     }
 
     struct CaliphListItem: Identifiable {
