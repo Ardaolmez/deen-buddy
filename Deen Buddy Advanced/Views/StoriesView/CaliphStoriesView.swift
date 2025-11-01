@@ -20,7 +20,8 @@ struct CaliphStoriesView: View {
                                 vm: StoryDetailViewModel(
                                     story: item.article,
                                     globalIndex: item.globalIndex,
-                                    totalStories: vm.totalStories
+                                    totalStories: vm.totalStories,
+                                    useUnlockTimer: vm.usesUnlockTimer
                                 )
                             )
                         } label: {

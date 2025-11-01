@@ -18,16 +18,19 @@ final class StoryDetailViewModel: ObservableObject {
     private let globalIndex: Int
     private let totalStories: Int
     private let progressStore: CaliphStoriesProgressStoreType
+    private let useUnlockTimer: Bool
     private var cancellables = Set<AnyCancellable>()
 
     init(story: StoryArticle,
          globalIndex: Int,
          totalStories: Int,
-         progressStore: CaliphStoriesProgressStoreType = CaliphStoriesProgressStore.shared) {
+         progressStore: CaliphStoriesProgressStoreType = CaliphStoriesProgressStore.shared,
+         useUnlockTimer: Bool = false) {
         self.story = story
         self.globalIndex = globalIndex
         self.totalStories = totalStories
         self.progressStore = progressStore
+        self.useUnlockTimer = useUnlockTimer
 
         refresh()
 
@@ -47,7 +50,8 @@ final class StoryDetailViewModel: ObservableObject {
         guard canMarkAsRead else { return }
         progressStore.markStoryCompleted(globalIndex: globalIndex,
                                          totalStories: totalStories,
-                                         referenceDate: date)
+                                         referenceDate: date,
+                                         useUnlockTimer: useUnlockTimer)
     }
 
     private func updateState(using snapshot: CaliphStoriesProgressSnapshot) {
@@ -56,6 +60,6 @@ final class StoryDetailViewModel: ObservableObject {
         let lastCompleted = snapshot.lastCompletedIndex ?? -1
         isCompleted = lastCompleted >= globalIndex
         canMarkAsRead = isUnlocked && !isCompleted && globalIndex == unlockedCount - 1
-        nextUnlockDate = snapshot.nextUnlockDate
+        nextUnlockDate = useUnlockTimer ? snapshot.nextUnlockDate : nil
     }
 }

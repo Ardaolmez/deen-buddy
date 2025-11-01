@@ -15,7 +15,8 @@ struct CaliphListView: View {
             Section {
                 ForEach(vm.items) { item in
                     NavigationLink {
-                        CaliphStoriesView(vm: CaliphStoriesViewModel(caliph: item.caliph))
+                        CaliphStoriesView(vm: CaliphStoriesViewModel(caliph: item.caliph,
+                                                                     useUnlockTimer: vm.usesUnlockTimer))
                     } label: {
                         CaliphRow(item: item)
                     }
