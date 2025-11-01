@@ -98,38 +98,38 @@ struct DailyReadGoalCard: View {
     // MARK: - Collapsed Content
 
     private var collapsedContent: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            // Title + Goal Metric
+        VStack(alignment: .leading, spacing: 12) {
+            // Top row: Title + Goal metric
             HStack {
                 Text(AppStrings.today.dailyQuranGoal)
-                    .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(AppColors.Today.quranGoalTitle)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(AppColors.Today.quranGoalMetric)
+
                 Spacer()
+
                 Text(viewModel.goalMetricText)
-                    .font(.system(size: 13))
+                    .font(.system(size: 12, weight: .medium))
                     .foregroundColor(AppColors.Today.quranGoalMetric)
             }
 
-            // Current Position (Surah:Verse)
-            if let positionInfo = viewModel.currentPositionInfo {
-                Text(positionInfo.displayText)
-                    .font(.system(size: 20, weight: .semibold, design: .serif))
-                    .foregroundColor(AppColors.Today.quranGoalSurah)
-                    .lineLimit(1)
-            }
+            // Main content: Position + Progress Ring
+            HStack(spacing: 12) {
+                // Current position - takes most space
+                if let positionInfo = viewModel.currentPositionInfo {
+                    Text(positionInfo.displayText)
+                        .font(.system(size: 18, weight: .semibold, design: .serif))
+                        .foregroundColor(AppColors.Today.quranGoalTitle)
+                        .lineLimit(1)
+                }
 
-            // Status + Remaining (shows live session time)
-            HStack(spacing: 4) {
-                Text(getLiveStatusText())
-                    .font(.system(size: 13))
-                    .foregroundColor(getLiveStatusColor())
+                Spacer()
 
-                Text("•")
-                    .foregroundColor(AppColors.Today.quranGoalRemaining)
-
-                Text(getLiveRemainingText())
-                    .font(.system(size: 13))
-                    .foregroundColor(AppColors.Today.quranGoalRemaining)
+                // Small progress ring on the right
+                SmallProgressRing(
+                    progress: getProgressPercentage(),
+                    text: getProgressText()
+                )
+                .frame(width: 44, height: 44)
             }
 
             Spacer()
@@ -171,62 +171,29 @@ struct DailyReadGoalCard: View {
         }
     }
 
-    // MARK: - Live Status Helpers
+    // MARK: - Progress Helpers
 
-    private func getLiveStatusText() -> String {
-        guard let goal = viewModel.readingGoal else { return "" }
+    private func getProgressPercentage() -> Double {
+        guard let goal = viewModel.readingGoal else { return 0.0 }
 
         if goal.goalType.isTimeBased {
-            // Just show the minutes completed
             let totalMinutes = sessionManager.elapsedSeconds / 60
-            return "\(totalMinutes) minutes completed"
+            let percentage = Double(totalMinutes) / Double(goal.goalType.minutesPerDay)
+            return min(percentage, 1.0)
         } else {
-            // For verse-based goals, use the original logic
-            if goal.isAhead {
-                return String(format: AppStrings.today.versesAhead, goal.versesDifference)
-            } else if goal.isBehind {
-                return String(format: AppStrings.today.versesBehind, abs(goal.versesDifference))
-            } else {
-                return AppStrings.today.onTrack
-            }
+            let percentage = Double(goal.todayActivity.totalVerses) / Double(goal.goalType.versesPerDay)
+            return min(percentage, 1.0)
         }
     }
 
-    private func getLiveStatusColor() -> Color {
-        guard let goal = viewModel.readingGoal else { return AppColors.Today.quranGoalStatusOnTrack }
+    private func getProgressText() -> String {
+        guard let goal = viewModel.readingGoal else { return "0" }
 
         if goal.goalType.isTimeBased {
             let totalMinutes = sessionManager.elapsedSeconds / 60
-            let diff = totalMinutes - goal.goalType.minutesPerDay
-
-            if diff > 0 {
-                return AppColors.Today.quranGoalStatusAhead
-            } else if diff < 0 {
-                return AppColors.Today.quranGoalStatusBehind
-            } else {
-                return AppColors.Today.quranGoalStatusOnTrack
-            }
+            return "\(totalMinutes)/\(goal.goalType.minutesPerDay)"
         } else {
-            if goal.isAhead {
-                return AppColors.Today.quranGoalStatusAhead
-            } else if goal.isBehind {
-                return AppColors.Today.quranGoalStatusBehind
-            } else {
-                return AppColors.Today.quranGoalStatusOnTrack
-            }
-        }
-    }
-
-    private func getLiveRemainingText() -> String {
-        guard let goal = viewModel.readingGoal else { return "" }
-
-        if goal.goalType.isTimeBased {
-            // Use the exact same time shown in reading views
-            let totalMinutes = sessionManager.elapsedSeconds / 60
-            let remaining = max(0, goal.goalType.minutesPerDay - totalMinutes)
-            return String(format: AppStrings.today.minutesToGo, remaining)
-        } else {
-            return String(format: AppStrings.today.versesToGo, goal.todayRemainingVerses)
+            return "\(goal.todayActivity.totalVerses)/\(goal.goalType.versesPerDay)"
         }
     }
 
