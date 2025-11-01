@@ -17,7 +17,7 @@ struct TodayStrings {
     static let dailyVerseTitle = "Daily Quran Verse for You"
 
     // Daily Quran Goal Card
-    static let dailyQuranGoal = "Daily Quran Goal"
+    static let dailyQuranGoal = "Daily Quran:"
     static let verses = "verses"
     static let minutes = "minutes"
     static let pages = "pages"

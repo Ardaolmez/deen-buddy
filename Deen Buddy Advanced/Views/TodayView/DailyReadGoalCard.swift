@@ -34,22 +34,49 @@ struct DailyReadGoalCard: View {
             HStack {
                 Image(systemName: "book.fill")
                     .font(.system(size: 18))
-                    .foregroundColor(AppColors.Today.quranGoalBrandColor)
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
                 Text(AppStrings.today.dailyQuranGoal)
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(AppColors.Today.quranGoalTitle)
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.7), radius: 5, x: 0, y: 3)
                 Spacer()
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 20))
-                    .foregroundColor(AppColors.Today.quranGoalBrandColor)
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
             }
             .padding(20)
 
-            .background(AppColors.Today.cardBackground)
+            .background(
+                ZStack {
+                    // Base background color
+                    AppColors.Today.cardBackground
+
+                    // Mosque painting background
+                    if let image = UIImage(named: "Quba mosque painting.jpg") {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .opacity(1)
+                    }
+
+                    // Subtle gradient overlay for text readability
+                    LinearGradient(
+                        colors: [
+                            AppColors.Today.cardBackground.opacity(0.7),
+                            AppColors.Today.cardBackground.opacity(0.5),
+                            AppColors.Today.cardBackground.opacity(0.7)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+            )
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.15), lineWidth: 1.5)
+                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.3), lineWidth: 2)
             )
             .shadow(color: Color.black.opacity(0.04), radius: 2, x: 0, y: 1)
             .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
@@ -71,11 +98,36 @@ struct DailyReadGoalCard: View {
             .padding(20)
 
             .frame(maxWidth: .infinity)
-            .background(AppColors.Today.cardBackground)
+            .background(
+                ZStack {
+                    // Base background color
+                    AppColors.Today.cardBackground
+
+                    // Mosque painting background
+                    if let image = UIImage(named: "Quba mosque painting.jpg") {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .opacity(0.8)
+                            .blur(radius: 1.1)
+                    }
+
+                    // Subtle gradient overlay for text readability
+                    LinearGradient(
+                        colors: [
+                            AppColors.Today.cardBackground.opacity(0.1),
+                            AppColors.Today.cardBackground.opacity(0.1),
+                            AppColors.Today.cardBackground.opacity(0.1)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+            )
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.15), lineWidth: 1.5)
+                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.3), lineWidth: 2)
             )
             .shadow(color: Color.black.opacity(0.04), radius: 2, x: 0, y: 1)
             .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
@@ -114,14 +166,13 @@ struct DailyReadGoalCard: View {
             // Top row: Title + Goal metric
             HStack {
                 Text(AppStrings.today.dailyQuranGoal)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(AppColors.Today.quranGoalMetric)
-
-                Spacer()
-
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.7), radius: 4, x: 0, y: 2)
                 Text(viewModel.goalMetricText)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(AppColors.Today.quranGoalMetric)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .shadow(color: .black.opacity(0.7), radius: 4, x: 0, y: 2)
             }
 
             // Main content: Position + Progress Ring
@@ -129,8 +180,9 @@ struct DailyReadGoalCard: View {
                 // Current position - takes most space
                 if let positionInfo = viewModel.currentPositionInfo {
                     Text(positionInfo.displayText)
-                        .font(.system(size: 18, weight: .semibold, design: .serif))
-                        .foregroundColor(AppColors.Today.quranGoalTitle)
+                        .font(.system(size: 24, weight: .bold, design: .serif))
+                        .foregroundColor(.white)
+                        .shadow(color: .black.opacity(0.7), radius: 5, x: 0, y: 3)
                         .lineLimit(1)
                 }
 
@@ -148,7 +200,7 @@ struct DailyReadGoalCard: View {
 
             // Read / Listen Buttons
             HStack(spacing: 10) {
-                // Read button - Outlined with brand color
+                // Read button - Filled with brand color
                 Button {
                     showQuranReading = true
                 } label: {
@@ -158,17 +210,16 @@ struct DailyReadGoalCard: View {
                         Text(AppStrings.today.read)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(AppColors.Today.quranGoalBrandColor)
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
-                    .background(Color.clear)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(AppColors.Today.quranGoalBrandColor, lineWidth: 1.5)
+                    .background(
+                        AppColors.Today.quranGoalBrandColor,
+                        in: RoundedRectangle(cornerRadius: 12)
                     )
                 }
 
-                // Listen button - Outlined
+                // Listen button - Filled with purple
                 Button {
                     showListenTracking = true
                 } label: {
@@ -178,13 +229,12 @@ struct DailyReadGoalCard: View {
                         Text(AppStrings.today.listen)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(AppColors.Today.quranGoalButtonListen)
+                    .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
-                    .background(Color.clear)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(AppColors.Today.quranGoalButtonListen, lineWidth: 1.5)
+                    .background(
+                        AppColors.Today.quranGoalBrandColor,
+                        in: RoundedRectangle(cornerRadius: 12)
                     )
                 }
             }
