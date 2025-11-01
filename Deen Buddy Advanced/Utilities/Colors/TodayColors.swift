@@ -43,6 +43,10 @@ extension AppColors {
         static let quranGoalStatusBehind = Color.orange
         static let quranGoalStatusOnTrack = Color.blue
         static let quranGoalRemaining = Color.secondary
+
+        // Brand color - Forest green for light mode (matches ChatView)
+        static let quranGoalBrandColor = Color(red: 0.29, green: 0.55, blue: 0.42)
+
         static let quranGoalButtonRead = Color.blue
         static let quranGoalButtonListen = Color.purple
         static let quranGoalButtonText = Color.white

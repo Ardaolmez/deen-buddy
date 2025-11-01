@@ -34,20 +34,26 @@ struct DailyReadGoalCard: View {
             HStack {
                 Image(systemName: "book.fill")
                     .font(.system(size: 18))
-                    .foregroundColor(AppColors.Today.quranGoalButtonRead)
+                    .foregroundColor(AppColors.Today.quranGoalBrandColor)
                 Text(AppStrings.today.dailyQuranGoal)
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(AppColors.Today.quranGoalTitle)
                 Spacer()
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 20))
-                    .foregroundColor(AppColors.Today.quranGoalButtonRead)
+                    .foregroundColor(AppColors.Today.quranGoalBrandColor)
             }
             .padding(20)
-            
+
             .background(AppColors.Today.cardBackground)
-            .cornerRadius(16)
-            .shadow(color: AppColors.Today.cardShadow, radius: 8, x: 0, y: 2)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.15), lineWidth: 1.5)
+            )
+            .shadow(color: Color.black.opacity(0.04), radius: 2, x: 0, y: 1)
+            .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
+            .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.05), radius: 16, x: 0, y: 8)
         }
         .sheet(isPresented: $showGoalSelection) {
             GoalSelectionView(viewModel: viewModel)
@@ -63,11 +69,17 @@ struct DailyReadGoalCard: View {
                 collapsedContent
             }
             .padding(20)
-            
+
             .frame(maxWidth: .infinity)
             .background(AppColors.Today.cardBackground)
-            .cornerRadius(16)
-            .shadow(color: AppColors.Today.cardShadow, radius: 8, x: 0, y: 2)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.15), lineWidth: 1.5)
+            )
+            .shadow(color: Color.black.opacity(0.04), radius: 2, x: 0, y: 1)
+            .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 4)
+            .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.05), radius: 16, x: 0, y: 8)
             .onTapGesture {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     isExpanded.toggle()
@@ -136,6 +148,7 @@ struct DailyReadGoalCard: View {
 
             // Read / Listen Buttons
             HStack(spacing: 10) {
+                // Read button - Outlined with brand color
                 Button {
                     showQuranReading = true
                 } label: {
@@ -145,13 +158,17 @@ struct DailyReadGoalCard: View {
                         Text(AppStrings.today.read)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(AppColors.Today.quranGoalButtonText)
+                    .foregroundColor(AppColors.Today.quranGoalBrandColor)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(AppColors.Today.quranGoalButtonRead)
-                    .cornerRadius(8)
+                    .padding(.vertical, 10)
+                    .background(Color.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(AppColors.Today.quranGoalBrandColor, lineWidth: 1.5)
+                    )
                 }
 
+                // Listen button - Outlined
                 Button {
                     showListenTracking = true
                 } label: {
@@ -161,11 +178,14 @@ struct DailyReadGoalCard: View {
                         Text(AppStrings.today.listen)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(AppColors.Today.quranGoalButtonText)
+                    .foregroundColor(AppColors.Today.quranGoalButtonListen)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(AppColors.Today.quranGoalButtonListen)
-                    .cornerRadius(8)
+                    .padding(.vertical, 10)
+                    .background(Color.clear)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(AppColors.Today.quranGoalButtonListen, lineWidth: 1.5)
+                    )
                 }
             }
         }
