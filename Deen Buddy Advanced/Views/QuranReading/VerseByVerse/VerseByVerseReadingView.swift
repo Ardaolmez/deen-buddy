@@ -10,7 +10,7 @@ import SwiftUI
 struct VerseByVerseReadingView: View {
     @ObservedObject var goalViewModel: ReadingGoalViewModel
     @Binding var isPresented: Bool
-    @StateObject private var sessionManager = ReadingSessionManager()
+    @ObservedObject private var sessionManager = ReadingSessionManager.shared
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var pages: [QuranReadingPage] = []
@@ -97,9 +97,6 @@ struct VerseByVerseReadingView: View {
                                 isCurrentPage: index == currentPageIndex
                             )
                             .tag(index)
-                            .onAppear {
-                                trackPageView(page: page)
-                            }
                         }
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))
@@ -247,11 +244,6 @@ struct VerseByVerseReadingView: View {
     }
 
     // MARK: - Page Tracking Methods
-
-    private func trackPageView(page: QuranReadingPage) {
-        // Track verse viewed for analytics
-        // Each page has exactly one verse in verse-by-verse mode
-    }
 
     private func handlePageChange(newIndex: Int) {
         guard newIndex < pages.count else { return }

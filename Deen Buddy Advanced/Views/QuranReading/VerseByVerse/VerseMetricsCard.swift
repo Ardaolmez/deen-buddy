@@ -93,8 +93,9 @@ struct VerseMetricsCard: View {
     // MARK: - Goal Formatter
 
     private func formatGoal() -> String {
-        let todayMinutes = (goalViewModel.readingGoal?.todayActivity.totalMinutes ?? 0)
-        return "\(todayMinutes)/5m"
+        // Show live total minutes (same as what Today View uses)
+        let liveMinutes = sessionManager.elapsedSeconds / 60
+        return "\(liveMinutes)/5m"
     }
 }
 

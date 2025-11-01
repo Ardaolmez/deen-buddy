@@ -30,7 +30,7 @@ class ReadingGoalViewModel: ObservableObject {
         surahs = QuranService.shared.loadQuran()
     }
 
-    private func loadGoal() {
+    func loadGoal() {
         guard let data = userDefaults.data(forKey: goalKey),
               let goal = try? JSONDecoder().decode(ReadingGoal.self, from: data) else {
             return
@@ -119,7 +119,7 @@ class ReadingGoalViewModel: ObservableObject {
         activity.minutesRead += minutes
 
         goal.dailyActivity[key] = activity
-        goal.currentVersePosition += verses
+        // Don't update position here - it's already being tracked by the reading views
 
         // Check if today's goal is completed
         if goal.goalType.isTimeBased {
@@ -147,7 +147,7 @@ class ReadingGoalViewModel: ObservableObject {
         activity.minutesListened += minutes
 
         goal.dailyActivity[key] = activity
-        goal.currentVersePosition += verses
+        // Don't update position here - it's already being tracked by the reading views
 
         // Check if today's goal is completed
         if goal.goalType.isTimeBased {

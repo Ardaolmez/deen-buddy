@@ -10,11 +10,14 @@ import SwiftUI
 import Combine
 
 class ReadingSessionManager: ObservableObject {
+    static let shared = ReadingSessionManager()
+
     @Published var elapsedSeconds: Int = 0
     @Published var isActive: Bool = false
 
     private var timer: Timer?
     private var sessionStartTime: Date?
+    private var sessionStartSeconds: Int = 0  // Track where this session started
     private let userDefaults = UserDefaults.standard
 
     // Keys for persistence
@@ -35,6 +38,7 @@ class ReadingSessionManager: ObservableObject {
 
         isActive = true
         sessionStartTime = Date()
+        sessionStartSeconds = elapsedSeconds  // Remember where we started this session
 
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.elapsedSeconds += 1
@@ -95,10 +99,12 @@ class ReadingSessionManager: ObservableObject {
     func endSession(versesRead: Int, currentSurahId: Int, currentVerseId: Int) {
         stopSession()
 
-        let minutes = elapsedSeconds / 60
+        // Calculate only the NEW minutes from this session
+        let sessionSeconds = elapsedSeconds - sessionStartSeconds
+        let sessionMinutes = sessionSeconds / 60
 
-        // Update ReadingGoalViewModel
-        goalViewModel?.recordReadingActivity(verses: versesRead, minutes: minutes)
+        // Update ReadingGoalViewModel with only the new session time
+        goalViewModel?.recordReadingActivity(verses: versesRead, minutes: sessionMinutes)
 
         // Save position
         goalViewModel?.saveLastReadPosition(surahId: currentSurahId, verseId: currentVerseId)

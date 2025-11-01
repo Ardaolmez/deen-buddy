@@ -9,8 +9,8 @@ import SwiftUI
 
 struct DailyReadGoalCard: View {
     @StateObject private var viewModel = ReadingGoalViewModel()
+    @ObservedObject private var sessionManager = ReadingSessionManager.shared
     @State private var isExpanded: Bool = false
-    @State private var showReadTracking: Bool = false
     @State private var showListenTracking: Bool = false
     @State private var showGoalSelection: Bool = false
     @State private var showQuranReading: Bool = false
@@ -74,9 +74,6 @@ struct DailyReadGoalCard: View {
                 }
             }
         }
-        .sheet(isPresented: $showReadTracking) {
-            ReadingGoalTrackingView(viewModel: viewModel, mode: .reading)
-        }
         .fullScreenCover(isPresented: $showListenTracking) {
             VerseByVerseReadingView(
                 goalViewModel: viewModel,
@@ -121,16 +118,16 @@ struct DailyReadGoalCard: View {
                     .lineLimit(1)
             }
 
-            // Status + Remaining
+            // Status + Remaining (shows live session time)
             HStack(spacing: 4) {
-                Text(viewModel.statusText)
+                Text(getLiveStatusText())
                     .font(.system(size: 13))
-                    .foregroundColor(viewModel.statusColor)
+                    .foregroundColor(getLiveStatusColor())
 
                 Text("•")
                     .foregroundColor(AppColors.Today.quranGoalRemaining)
 
-                Text(viewModel.remainingText)
+                Text(getLiveRemainingText())
                     .font(.system(size: 13))
                     .foregroundColor(AppColors.Today.quranGoalRemaining)
             }
@@ -171,6 +168,65 @@ struct DailyReadGoalCard: View {
                     .cornerRadius(8)
                 }
             }
+        }
+    }
+
+    // MARK: - Live Status Helpers
+
+    private func getLiveStatusText() -> String {
+        guard let goal = viewModel.readingGoal else { return "" }
+
+        if goal.goalType.isTimeBased {
+            // Just show the minutes completed
+            let totalMinutes = sessionManager.elapsedSeconds / 60
+            return "\(totalMinutes) minutes completed"
+        } else {
+            // For verse-based goals, use the original logic
+            if goal.isAhead {
+                return String(format: AppStrings.today.versesAhead, goal.versesDifference)
+            } else if goal.isBehind {
+                return String(format: AppStrings.today.versesBehind, abs(goal.versesDifference))
+            } else {
+                return AppStrings.today.onTrack
+            }
+        }
+    }
+
+    private func getLiveStatusColor() -> Color {
+        guard let goal = viewModel.readingGoal else { return AppColors.Today.quranGoalStatusOnTrack }
+
+        if goal.goalType.isTimeBased {
+            let totalMinutes = sessionManager.elapsedSeconds / 60
+            let diff = totalMinutes - goal.goalType.minutesPerDay
+
+            if diff > 0 {
+                return AppColors.Today.quranGoalStatusAhead
+            } else if diff < 0 {
+                return AppColors.Today.quranGoalStatusBehind
+            } else {
+                return AppColors.Today.quranGoalStatusOnTrack
+            }
+        } else {
+            if goal.isAhead {
+                return AppColors.Today.quranGoalStatusAhead
+            } else if goal.isBehind {
+                return AppColors.Today.quranGoalStatusBehind
+            } else {
+                return AppColors.Today.quranGoalStatusOnTrack
+            }
+        }
+    }
+
+    private func getLiveRemainingText() -> String {
+        guard let goal = viewModel.readingGoal else { return "" }
+
+        if goal.goalType.isTimeBased {
+            // Use the exact same time shown in reading views
+            let totalMinutes = sessionManager.elapsedSeconds / 60
+            let remaining = max(0, goal.goalType.minutesPerDay - totalMinutes)
+            return String(format: AppStrings.today.minutesToGo, remaining)
+        } else {
+            return String(format: AppStrings.today.versesToGo, goal.todayRemainingVerses)
         }
     }
 

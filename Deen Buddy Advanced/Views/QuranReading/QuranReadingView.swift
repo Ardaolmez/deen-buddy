@@ -10,15 +10,13 @@ import SwiftUI
 struct QuranReadingView: View {
     @ObservedObject var goalViewModel: ReadingGoalViewModel
     @Binding var isPresented: Bool
-    @StateObject private var sessionManager = ReadingSessionManager()
+    @ObservedObject private var sessionManager = ReadingSessionManager.shared
     @StateObject private var screenManager = ScreenDimensionManager.shared
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var pages: [QuranReadingPage] = []
     @State private var currentPageIndex: Int = 0
     @State private var startingPosition: Int = 0
-    @State private var versesReadThisSession: Int = 0
-    @State private var showReadingMetrics: Bool = false
 
     var currentSurahName: String {
         guard !pages.isEmpty,
@@ -55,9 +53,6 @@ struct QuranReadingView: View {
                                 pageConfiguration: screenManager.getOptimalPageConfiguration()
                             )
                             .tag(index)
-                            .onAppear {
-                                trackPageView(page: page)
-                            }
                         }
                     }
                     .tabViewStyle(.page(indexDisplayMode: .never))
@@ -175,12 +170,6 @@ struct QuranReadingView: View {
     }
 
     // MARK: - Page Tracking Methods
-
-    private func trackPageView(page: QuranReadingPage) {
-        // Track verses viewed for analytics
-        let versesOnPage = page.verses.count
-        versesReadThisSession += versesOnPage
-    }
 
     private func handlePageChange(newIndex: Int) {
         guard newIndex < pages.count else { return }

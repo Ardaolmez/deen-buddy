@@ -78,8 +78,9 @@ struct ReadingMetricsView: View {
 
     private func getDailyProgressText(for goal: ReadingGoal) -> String {
         if goal.goalType.isTimeBased {
-            // For time-based goals (5 minutes daily)
-            let remainingMinutes = max(0, goal.goalType.minutesPerDay - goal.todayActivity.totalMinutes)
+            // For time-based goals (5 minutes daily) - use live session time
+            let totalMinutes = sessionManager.elapsedSeconds / 60
+            let remainingMinutes = max(0, goal.goalType.minutesPerDay - totalMinutes)
             return remainingMinutes == 0 ? "Daily Goal Reached!" : "\(remainingMinutes)m left"
         } else {
             // For verse-based goals
@@ -92,7 +93,8 @@ struct ReadingMetricsView: View {
         let dailyProgress: Double
 
         if goal.goalType.isTimeBased {
-            dailyProgress = Double(goal.todayActivity.totalMinutes) / Double(max(goal.goalType.minutesPerDay, 1))
+            let totalMinutes = sessionManager.elapsedSeconds / 60
+            dailyProgress = Double(totalMinutes) / Double(max(goal.goalType.minutesPerDay, 1))
         } else {
             dailyProgress = Double(goal.todayActivity.totalVerses) / Double(max(goal.goalType.versesPerDay, 1))
         }
