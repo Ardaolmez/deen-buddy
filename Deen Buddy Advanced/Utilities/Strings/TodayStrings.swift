@@ -55,6 +55,10 @@ struct TodayStrings {
     static let startGoal = "Start Goal"
     static let cancel = "Cancel"
 
+    // Reading Goal Assets
+    static let mosquePaintingImage = "Quba mosque painting.jpg"
+    static let versePrefix = "Verse "
+
     // Daily Verse Errors
     static let couldNotLoadQuranData = "Could not load Quran data"
     static let couldNotSelectDailyVerse = "Could not select daily verse"

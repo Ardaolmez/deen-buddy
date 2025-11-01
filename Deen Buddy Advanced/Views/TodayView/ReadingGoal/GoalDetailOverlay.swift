@@ -17,7 +17,7 @@ struct GoalDetailOverlay: View {
     var body: some View {
         ZStack {
             // Semi-transparent background
-            Color.black.opacity(0.4)
+            AppColors.Today.quranGoalOverlayBackground.opacity(0.4)
                 .ignoresSafeArea()
                 .opacity(opacity)
                 .onTapGesture {
@@ -83,12 +83,12 @@ struct GoalDetailOverlay: View {
                             if let positionInfo = viewModel.currentPositionInfo {
                                 detailRow(
                                     label: AppStrings.today.expected,
-                                    value: "Verse \(goal.expectedVersePosition)"
+                                    value: "\(AppStrings.today.versePrefix)\(goal.expectedVersePosition)"
                                 )
 
                                 detailRow(
                                     label: AppStrings.today.actual,
-                                    value: "Verse \(positionInfo.absoluteVersePosition)"
+                                    value: "\(AppStrings.today.versePrefix)\(positionInfo.absoluteVersePosition)"
                                 )
 
                                 detailRow(
@@ -119,7 +119,7 @@ struct GoalDetailOverlay: View {
             }
             .background(AppColors.Today.cardBackground)
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
+            .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.2), radius: 20, x: 0, y: 10)
             .frame(maxWidth: min(UIScreen.main.bounds.width * 0.9, 500))
             .frame(maxHeight: UIScreen.main.bounds.height * 0.7)
             .scaleEffect(scale)

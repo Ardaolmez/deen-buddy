@@ -19,12 +19,12 @@ struct GoalCardContent: View {
             HStack {
                 Text(AppStrings.today.dailyQuranGoal)
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.7), radius: 4, x: 0, y: 2)
+                    .foregroundColor(AppColors.Today.quranGoalCardText)
+                    .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.7), radius: 4, x: 0, y: 2)
                 Text(viewModel.goalMetricText)
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.7), radius: 4, x: 0, y: 2)
+                    .foregroundColor(AppColors.Today.quranGoalCardText)
+                    .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.7), radius: 4, x: 0, y: 2)
             }
 
             // Main content: Position + Progress Ring
@@ -33,8 +33,8 @@ struct GoalCardContent: View {
                 if let positionInfo = viewModel.currentPositionInfo {
                     Text(positionInfo.displayText)
                         .font(.system(size: 24, weight: .bold, design: .serif))
-                        .foregroundColor(.white)
-                        .shadow(color: .black.opacity(0.7), radius: 5, x: 0, y: 3)
+                        .foregroundColor(AppColors.Today.quranGoalCardText)
+                        .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.7), radius: 5, x: 0, y: 3)
                         .lineLimit(1)
                 }
 
@@ -62,7 +62,7 @@ struct GoalCardContent: View {
                         Text(AppStrings.today.read)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Today.quranGoalCardText)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(
@@ -81,7 +81,7 @@ struct GoalCardContent: View {
                         Text(AppStrings.today.listen)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Today.quranGoalCardText)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(

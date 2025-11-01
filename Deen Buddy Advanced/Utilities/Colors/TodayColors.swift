@@ -63,5 +63,10 @@ extension AppColors {
         static let verseCardGradientEnd = Color.blue.opacity(0.6)
         static let verseCardShadow = Color.black.opacity(0.1)
         static let verseCardProgressTint = Color.white
+
+        // Reading Goal Card - Text and Shadows
+        static let quranGoalCardText = Color.white
+        static let quranGoalCardShadow = Color.black
+        static let quranGoalOverlayBackground = Color.black
     }
 }

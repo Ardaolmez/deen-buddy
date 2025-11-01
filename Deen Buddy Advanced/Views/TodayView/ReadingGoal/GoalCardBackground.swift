@@ -28,7 +28,7 @@ struct GoalCardBackground: View {
             AppColors.Today.cardBackground
 
             // Mosque painting background
-            if let image = UIImage(named: "Quba mosque painting.jpg") {
+            if let image = UIImage(named: AppStrings.today.mosquePaintingImage) {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
