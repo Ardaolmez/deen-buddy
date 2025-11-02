@@ -50,6 +50,7 @@ struct DailyReadGoalCard: View {
             .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.04), radius: 2, x: 0, y: 1)
             .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.08), radius: 8, x: 0, y: 4)
             .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.05), radius: 16, x: 0, y: 8)
+            .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .onTapGesture {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     isExpanded.toggle()
