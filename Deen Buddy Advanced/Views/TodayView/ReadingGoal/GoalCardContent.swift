@@ -66,8 +66,15 @@ struct GoalCardContent: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(
-                        AppColors.Today.quranGoalBrandColor,
-                        in: RoundedRectangle(cornerRadius: 12)
+                        ZStack {
+                            // Frosted glass blur
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.thinMaterial)
+
+                            // Brand color overlay
+                          //  RoundedRectangle(cornerRadius: 12)
+                            //    .fill(AppColors.Today.quranGoalBrandColor.opacity(0.2))
+                        }
                     )
                 }
 
@@ -85,8 +92,15 @@ struct GoalCardContent: View {
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(
-                        AppColors.Today.quranGoalBrandColor,
-                        in: RoundedRectangle(cornerRadius: 12)
+                        ZStack {
+                            // Frosted glass blur
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(.ultraThinMaterial)
+
+                            // Brand color overlay
+                          //  RoundedRectangle(cornerRadius: 12)
+                            //    .fill(AppColors.Today.quranGoalBrandColor.opacity(0.2))
+                        }
                     )
                 }
             }

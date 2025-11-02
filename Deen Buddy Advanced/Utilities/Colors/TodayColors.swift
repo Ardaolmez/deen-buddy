@@ -19,7 +19,7 @@ extension AppColors {
         static let streakInactive = Color(.systemGray5)
         static let streakText = Color.secondary
 
-        static let cardBackground = Color(.systemBackground)
+        static let cardBackground = Color.black
         static let cardShadow = Color.black.opacity(0.05)
 
         static let settingsIcon = Color.primary
@@ -61,7 +61,7 @@ extension AppColors {
         static let verseCardSecondaryText = Color.white.opacity(0.8)
         static let verseCardGradientStart = Color.purple.opacity(0.8)
         static let verseCardGradientEnd = Color.blue.opacity(0.6)
-        static let verseCardShadow = Color.black.opacity(0.1)
+        static let verseCardShadow = Color.black
         static let verseCardProgressTint = Color.white
 
         // Reading Goal Card - Text and Shadows

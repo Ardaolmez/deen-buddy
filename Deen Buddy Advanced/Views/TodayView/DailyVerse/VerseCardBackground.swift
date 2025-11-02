@@ -1,21 +1,21 @@
 //
-//  GoalCardBackground.swift
+//  VerseCardBackground.swift
 //  Deen Buddy Advanced
 //
-//  Reusable background component for reading goal cards
+//  Reusable background component for daily verse card
 //
 
 import SwiftUI
 
-struct GoalCardBackground: View {
+struct VerseCardBackground: View {
     let imageOpacity: Double
     let imageBlur: Double
     let gradientOpacity: Double
 
     init(
         imageOpacity: Double = 0.8,
-        imageBlur: Double = 1.2,
-        gradientOpacity: Double = 0.01
+        imageBlur: Double = 1.1,
+        gradientOpacity: Double = 0.2
     ) {
         self.imageOpacity = imageOpacity
         self.imageBlur = imageBlur
@@ -27,8 +27,8 @@ struct GoalCardBackground: View {
             // Base background color
             AppColors.Today.cardBackground
 
-            // Mosque painting background
-            if let image = UIImage(named: AppStrings.today.mosquePaintingImage) {
+            // Tile image background
+            if let image = UIImage(named: AppStrings.today.tileBackgroundImage) {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
@@ -36,12 +36,12 @@ struct GoalCardBackground: View {
                     .blur(radius: imageBlur)
             }
 
-            // Subtle gradient overlay for text readability
+            // Dark overlay for text readability and image darkening
             LinearGradient(
                 colors: [
-                    AppColors.Today.cardBackground.opacity(gradientOpacity),
-                    AppColors.Today.cardBackground.opacity(gradientOpacity),
-                    AppColors.Today.cardBackground.opacity(gradientOpacity)
+                    Color.black.opacity(gradientOpacity),
+                    Color.black.opacity(gradientOpacity),
+                    Color.black.opacity(gradientOpacity)
                 ],
                 startPoint: .top,
                 endPoint: .bottom

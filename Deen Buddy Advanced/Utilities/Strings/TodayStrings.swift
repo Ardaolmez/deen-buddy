@@ -59,6 +59,9 @@ struct TodayStrings {
     static let mosquePaintingImage = "Quba mosque painting.jpg"
     static let versePrefix = "Verse "
 
+    // Daily Verse Assets
+    static let tileBackgroundImage = "tile.jpg"
+
     // Daily Verse Errors
     static let couldNotLoadQuranData = "Could not load Quran data"
     static let couldNotSelectDailyVerse = "Could not select daily verse"

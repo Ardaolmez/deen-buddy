@@ -19,8 +19,8 @@ struct TodayView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         // Daily Streak Section
-                        DailyStreakView(streakDays: $streakDays)
-                            .padding(.horizontal, 20)
+                     //   DailyStreakView(streakDays: $streakDays)
+                       //     .padding(.horizontal, 20)
 
                         // Daily Quran Verse
                         DailyVerseCard()
