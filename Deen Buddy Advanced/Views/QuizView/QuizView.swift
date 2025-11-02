@@ -4,9 +4,13 @@ import SwiftUI
 struct QuizView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject var vm: QuizViewModel = .init()
-    @State private var showAnswers: Bool = true
+    @State private var showAnswers: Bool = false
     @State private var showExplanation: Bool = false
     @State private var showVersePopup: Bool = false
+    @State private var isQuestionStreaming: Bool = true
+    @State private var visibleAnswerCount: Int = 0
+    @State private var answerRevealTask: Task<Void, Never>? = nil
+    private let answerRevealStepDelay: Double = 0.14
 
     private var progress: Double {
         guard vm.totalQuestions > 0 else { return 0 }
@@ -58,6 +62,16 @@ struct QuizView: View {
                 reference: vm.verseReference,
                 onReferenceClick: {
                     showVersePopup = true
+                },
+                isStreaming: isQuestionStreaming,
+                onStreamingComplete: {
+                    isQuestionStreaming = false
+                    guard !showExplanation else { return }
+                    visibleAnswerCount = 0
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        showAnswers = true
+                    }
+                    startAnswerReveal()
                 }
             )
 
@@ -68,22 +82,28 @@ struct QuizView: View {
 
             // Answer list (vertical) - shown only when not answered
             if showAnswers {
+                let answers = vm.currentQuestion.answers
                 VStack(spacing: 12) {
-                    ForEach(vm.currentQuestion.answers.indices, id: \.self) { idx in
+                    ForEach(0..<min(visibleAnswerCount, answers.count), id: \.self) { idx in
                         AnswerRow(
-                            text: vm.currentQuestion.answers[idx],
+                            text: answers[idx],
                             state: vm.stateForAnswer(at: idx),
                             isLocked: vm.isLocked
                         ) {
+                            guard !vm.isLocked else { return }
                             vm.selectAnswer(idx)
+                            answerRevealTask?.cancel()
+                            answerRevealTask = nil
                             // Hide answers and show explanation after 1 second
                             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                                 withAnimation {
                                     showAnswers = false
+                                    visibleAnswerCount = 0
                                     showExplanation = true
                                 }
                             }
                         }
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
                 }
                 .padding(.horizontal)
@@ -94,10 +114,13 @@ struct QuizView: View {
             // Next / Finish (only show after explanation appears)
             if showExplanation {
                 Button {
+                    let isLastQuestion = vm.isLastQuestion
+                    if !isLastQuestion {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            prepareForNewQuestion()
+                        }
+                    }
                     vm.next()
-                    // Reset states for next question
-                    showAnswers = true
-                    showExplanation = false
                 } label: {
                     Text(vm.isLastQuestion ? AppStrings.quiz.seeResults : AppStrings.quiz.nextQuestion)
                         .fontWeight(.semibold)
@@ -126,6 +149,84 @@ struct QuizView: View {
             if let surahName = vm.currentQuestion.surah,
                let verseNum = vm.currentQuestion.verse {
                 VersePopupView(surahName: surahName, verseNumber: verseNum)
+            }
+        }
+        .onChange(of: vm.currentIndex) { _ in
+            prepareForNewQuestion()
+        }
+        .onChange(of: vm.didFinish) { finished in
+            if !finished {
+                prepareForNewQuestion()
+            }
+        }
+        .onDisappear {
+            answerRevealTask?.cancel()
+            answerRevealTask = nil
+        }
+    }
+}
+
+private extension QuizView {
+    func prepareForNewQuestion(resetExplanation: Bool = true) {
+        answerRevealTask?.cancel()
+        answerRevealTask = nil
+        if resetExplanation {
+            showExplanation = false
+        }
+        showAnswers = false
+        visibleAnswerCount = 0
+        isQuestionStreaming = true
+    }
+
+    func startAnswerReveal() {
+        answerRevealTask?.cancel()
+        answerRevealTask = nil
+
+        let answers = vm.currentQuestion.answers
+        guard !answers.isEmpty else { return }
+        let questionIndex = vm.currentIndex
+        let delay = UInt64(answerRevealStepDelay * 1_000_000_000)
+
+        visibleAnswerCount = 0
+
+        answerRevealTask = Task {
+            for idx in answers.indices {
+                guard !Task.isCancelled else {
+                    await MainActor.run {
+                        answerRevealTask = nil
+                    }
+                    return
+                }
+
+                try? await Task.sleep(nanoseconds: delay)
+
+                guard !Task.isCancelled else {
+                    await MainActor.run {
+                        answerRevealTask = nil
+                    }
+                    return
+                }
+
+                let didReveal = await MainActor.run { () -> Bool in
+                    guard vm.currentIndex == questionIndex, showAnswers else {
+                        return false
+                    }
+                    withAnimation(.easeOut(duration: 0.25)) {
+                        visibleAnswerCount = idx + 1
+                    }
+                    return true
+                }
+
+                guard didReveal else {
+                    await MainActor.run {
+                        answerRevealTask = nil
+                    }
+                    return
+                }
+            }
+
+            await MainActor.run {
+                answerRevealTask = nil
             }
         }
     }

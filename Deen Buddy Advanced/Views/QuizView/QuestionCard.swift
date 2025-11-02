@@ -15,14 +15,47 @@ struct QuestionCard: View {
     let explanation: String?
     let reference: String?
     let onReferenceClick: (() -> Void)?
+    let isStreaming: Bool
+    let streamingInitialDelay: Double
+    let onStreamingComplete: (() -> Void)?
+
+    init(
+        question: String,
+        showExplanation: Bool,
+        isCorrect: Bool?,
+        correctAnswer: String?,
+        explanation: String?,
+        reference: String?,
+        onReferenceClick: (() -> Void)?,
+        isStreaming: Bool = false,
+        streamingInitialDelay: Double = 0.2,
+        onStreamingComplete: (() -> Void)? = nil
+    ) {
+        self.question = question
+        self.showExplanation = showExplanation
+        self.isCorrect = isCorrect
+        self.correctAnswer = correctAnswer
+        self.explanation = explanation
+        self.reference = reference
+        self.onReferenceClick = onReferenceClick
+        self.isStreaming = isStreaming
+        self.streamingInitialDelay = streamingInitialDelay
+        self.onStreamingComplete = onStreamingComplete
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             // Question text
-            Text(question)
-                .font(.system(.title2, design: .serif).weight(.semibold))
-                .foregroundColor(AppColors.Quiz.explanationText)
-                .fixedSize(horizontal: false, vertical: true)
+            StreamingTextView(
+                fullText: question,
+                font: .system(.title2, design: .serif).weight(.semibold),
+                color: AppColors.Quiz.explanationText,
+                isStreaming: isStreaming,
+                onStreamingComplete: onStreamingComplete,
+                initialDelay: streamingInitialDelay
+            )
+            .fixedSize(horizontal: false, vertical: true)
+            .id(isStreaming ? "streaming-\(question)" : "static-\(question)")
 
             // Show feedback only when explanation should be shown
             if showExplanation {

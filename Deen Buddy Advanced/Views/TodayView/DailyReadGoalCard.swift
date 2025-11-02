@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct DailyReadGoalCard: View {
+    var onGoalDetailRequested: (ReadingGoalViewModel) -> Void = { _ in }
+
     @StateObject private var viewModel = ReadingGoalViewModel()
     @ObservedObject private var sessionManager = ReadingSessionManager.shared
-    @State private var isExpanded: Bool = false
     @State private var showListenTracking: Bool = false
     @State private var showGoalSelection: Bool = false
     @State private var showQuranReading: Bool = false
@@ -52,7 +53,7 @@ struct DailyReadGoalCard: View {
             .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.05), radius: 16, x: 0, y: 8)
             .onTapGesture {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    isExpanded.toggle()
+                    onGoalDetailRequested(viewModel)
                 }
             }
         }
@@ -60,12 +61,6 @@ struct DailyReadGoalCard: View {
             VerseByVerseReadingView(
                 goalViewModel: viewModel,
                 isPresented: $showListenTracking
-            )
-        }
-        .fullScreenCover(isPresented: $isExpanded) {
-            GoalDetailOverlay(
-                viewModel: viewModel,
-                isPresented: $isExpanded
             )
         }
         .fullScreenCover(isPresented: $showQuranReading) {
