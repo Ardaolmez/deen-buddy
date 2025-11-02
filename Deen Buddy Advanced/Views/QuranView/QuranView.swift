@@ -9,6 +9,7 @@ import SwiftUI
 
 struct QuranView: View {
     @StateObject private var viewModel = QuranViewModel()
+    @StateObject private var audioPlayer = QuranAudioPlayer()
 
     var body: some View {
         NavigationView {
@@ -39,24 +40,42 @@ struct QuranView: View {
                     }
                     .padding()
                 } else if viewModel.currentSurah != nil {
-                    // Main Quran Page
-                    TabView(selection: $viewModel.currentSurahIndex) {
-                        ForEach(Array(viewModel.surahs.enumerated()), id: \.element.id) { index, surah in
-                            QuranPageView(surah: surah, language: viewModel.selectedLanguage)
-                                .tag(index)
+                    // Main Quran Page with Audio
+                    VStack(spacing: 0) {
+                        TabView(selection: $viewModel.currentSurahIndex) {
+                            ForEach(Array(viewModel.surahs.enumerated()), id: \.element.id) { index, surah in
+                                QuranPageView(surah: surah, language: viewModel.selectedLanguage)
+                                    .tag(index)
+                            }
                         }
-                    }
-                    .tabViewStyle(.page(indexDisplayMode: .never))
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [
-                                AppColors.Quran.backgroundGradientStart,
-                                AppColors.Quran.backgroundGradientEnd
-                            ]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
+                        .tabViewStyle(.page(indexDisplayMode: .never))
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    AppColors.Quran.backgroundGradientStart,
+                                    AppColors.Quran.backgroundGradientEnd
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
                         )
-                    )
+                        .onChange(of: viewModel.currentSurahIndex) { newIndex in
+                            loadAudioForCurrentSurah(newIndex)
+                        }
+
+                        // Audio Player Bar
+                        QuranAudioBar(audioPlayer: audioPlayer)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        AppColors.Quran.backgroundGradientStart,
+                                        AppColors.Quran.backgroundGradientEnd
+                                    ]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                    }
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -115,6 +134,20 @@ struct QuranView: View {
             .sheet(isPresented: $viewModel.showSurahSelector) {
                 SurahSelectorView(viewModel: viewModel)
             }
+            .onAppear {
+                loadAudioForCurrentSurah(viewModel.currentSurahIndex)
+            }
+        }
+    }
+
+    // MARK: - Audio Integration
+    private func loadAudioForCurrentSurah(_ index: Int) {
+        guard index < viewModel.surahs.count else { return }
+
+        let surah = viewModel.surahs[index]
+
+        Task {
+            await audioPlayer.loadSurah(surah.id, startingAtVerse: 0)
         }
     }
 }
