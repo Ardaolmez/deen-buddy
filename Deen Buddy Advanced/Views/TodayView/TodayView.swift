@@ -51,7 +51,7 @@ struct TodayView: View {
                             goalDetailViewModel = viewModel
                             showGoalDetail = true
                         }
-//                            .padding(.horizontal, 20)
+                        .padding(.horizontal, 20)
 
                         // Chat Box
                         ChatBoxView()

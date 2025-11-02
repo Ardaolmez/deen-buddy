@@ -48,15 +48,19 @@ struct DailyReadGoalCard: View {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.3), lineWidth: 2)
             )
-            .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.04), radius: 2, x: 0, y: 1)
-            .shadow(color: AppColors.Today.quranGoalCardShadow.opacity(0.08), radius: 8, x: 0, y: 4)
-            .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.05), radius: 16, x: 0, y: 8)
-          //  .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-           // .onTapGesture {
-             //   withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-               //     isExpanded.toggle()
-                //}
-            // }
+            // Brand glow shadows
+            .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.2), radius: 8, x: 0, y: 0)
+            .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.12), radius: 20, x: 0, y: 0)
+            // Depth shadows (elevated effect)
+            .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4)
+            .shadow(color: Color.black.opacity(0.1), radius: 16, x: 0, y: 8)
+            // Glowing border overlay
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.6), lineWidth: 2)
+                    .blur(radius: 2)
+            )
+            .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .fullScreenCover(isPresented: $showListenTracking) {
             VerseByVerseReadingView(
