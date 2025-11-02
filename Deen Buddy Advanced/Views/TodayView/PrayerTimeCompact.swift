@@ -41,6 +41,7 @@ struct PrayerTimeCompact: View {
             Capsule()
                 .fill(Color(.systemGray6))
         )
+        .fixedSize(horizontal: true, vertical: false)
     }
 
     // MARK: - Computed Properties
