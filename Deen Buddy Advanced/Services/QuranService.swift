@@ -104,6 +104,36 @@ class QuranService {
         return nil
     }
 
+    // Get daily verse filtered by word count (4-20 words for optimal display)
+    func getDailyVerseFiltered(surahs: [Surah], minWords: Int = 4, maxWords: Int = 20) -> (verse: Verse, surah: Surah)? {
+        guard !surahs.isEmpty else { return nil }
+
+        // Build list of verses that meet length criteria
+        var filteredVerses: [(verse: Verse, surah: Surah)] = []
+
+        for surah in surahs {
+            for verse in surah.verses {
+                // Check translation length if available, otherwise Arabic text
+                let textToCheck = verse.translation ?? verse.text
+                let wordCount = textToCheck.split(separator: " ").count
+
+                // Only include verses within word count range
+                if wordCount >= minWords && wordCount <= maxWords {
+                    filteredVerses.append((verse: verse, surah: surah))
+                }
+            }
+        }
+
+        guard !filteredVerses.isEmpty else { return nil }
+
+        // Pick based on day of year (consistent each day)
+        let calendar = Calendar.current
+        let dayOfYear = calendar.ordinality(of: .day, in: .year, for: Date()) ?? 1
+        let index = (dayOfYear - 1) % filteredVerses.count
+
+        return filteredVerses[index]
+    }
+
     // Get a random verse (optional feature)
     func getRandomVerse(from surahs: [Surah]) -> (verse: Verse, surah: Surah)? {
         guard !surahs.isEmpty else { return nil }

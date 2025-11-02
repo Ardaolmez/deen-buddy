@@ -42,24 +42,25 @@ struct DailyReadGoalCard: View {
             )
             .padding(20)
             .frame(maxWidth: .infinity)
-            .background(GoalCardBackground(imageOpacity: 0.8, imageBlur: 1.1, gradientOpacity: 0.1))
+            .background(GoalCardBackground(imageOpacity: 0.8, imageBlur: 1.1, gradientOpacity: 0.05))
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.3), lineWidth: 2)
+                    .stroke(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(0.3),  // Bright at top
+                                Color.white.opacity(0.0)   // Fade to transparent
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ),
+                        lineWidth: 1
+                    )
             )
-            // Brand glow shadows
-            .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.2), radius: 8, x: 0, y: 0)
-            .shadow(color: AppColors.Today.quranGoalBrandColor.opacity(0.12), radius: 20, x: 0, y: 0)
-            // Depth shadows (elevated effect)
-            .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 4)
-            .shadow(color: Color.black.opacity(0.1), radius: 16, x: 0, y: 8)
-            // Glowing border overlay
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(AppColors.Today.quranGoalBrandColor.opacity(0.6), lineWidth: 2)
-                    .blur(radius: 2)
-            )
+            .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)   //
+            .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 6)   //
+            .shadow(color: Color.black.opacity(0.15), radius: 24, x: 0, y: 12) // Far
             .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .fullScreenCover(isPresented: $showListenTracking) {

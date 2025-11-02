@@ -52,8 +52,8 @@ class DailyVerseViewModel: ObservableObject {
                 return
             }
 
-            // Get daily verse
-            guard let (verse, surah) = self.quranService.getDailyVerse(surahs: surahs) else {
+            // Get daily verse (filtered to 4-20 words for optimal display)
+            guard let (verse, surah) = self.quranService.getDailyVerseFiltered(surahs: surahs, minWords: 4, maxWords: 20) else {
                 DispatchQueue.main.async {
                     self.isLoading = false
                     self.errorMessage = AppStrings.today.couldNotSelectDailyVerse

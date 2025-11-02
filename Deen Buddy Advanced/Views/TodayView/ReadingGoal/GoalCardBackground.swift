@@ -15,7 +15,7 @@ struct GoalCardBackground: View {
     init(
         imageOpacity: Double = 0.8,
         imageBlur: Double = 1.2,
-        gradientOpacity: Double = 0.01
+        gradientOpacity: Double = 0.2
     ) {
         self.imageOpacity = imageOpacity
         self.imageBlur = imageBlur

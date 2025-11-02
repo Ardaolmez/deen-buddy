@@ -72,8 +72,11 @@ struct GoalCardContent: View {
                                 .fill(.thinMaterial)
 
                             // Brand color overlay
-                          //  RoundedRectangle(cornerRadius: 12)
-                            //    .fill(AppColors.Today.quranGoalBrandColor.opacity(0.2))
+                        //    RoundedRectangle(cornerRadius: 12)
+                          //  .fill(AppColors.Today.quranGoalBrandColor.opacity(1))
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.black.opacity(0.1))
+
                         }
                     )
                 }
@@ -97,9 +100,9 @@ struct GoalCardContent: View {
                             RoundedRectangle(cornerRadius: 12)
                                 .fill(.ultraThinMaterial)
 
-                            // Brand color overlay
-                          //  RoundedRectangle(cornerRadius: 12)
-                            //    .fill(AppColors.Today.quranGoalBrandColor.opacity(0.2))
+                            //Brand color overlay
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.black.opacity(0.1))
                         }
                     )
                 }

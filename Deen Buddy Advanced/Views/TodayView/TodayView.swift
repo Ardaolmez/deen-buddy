@@ -17,55 +17,60 @@ struct TodayView: View {
 
     var body: some View {
         NavigationView {
-            ScrollViewReader { proxy in
-                ScrollView {
-                    VStack(spacing: 20) {
-                        // Daily Streak Section
-                     //   DailyStreakView(streakDays: $streakDays)
-                       //     .padding(.horizontal, 20)
+            ZStack {
+                // Background (adapts to light/dark mode)
+                CreamyPapyrusBackground()
 
-                        // Daily Quran Verse
-                        DailyVerseCard()
-                            .padding(.horizontal, 20)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            // Daily Streak Section
+                         //   DailyStreakView(streakDays: $streakDays)
+                           //     .padding(.horizontal, 20)
 
-                        // Daily Quiz Button
-                        Button(action: {
-                            showQuiz = true
-                        }) {
-                            HStack {
-                                Image(systemName: "questionmark.circle.fill")
-                                    .font(.system(size: 20))
-                                Text(AppStrings.today.dailyQuiz)
-                                    .font(.system(size: 18, weight: .semibold))
+                            // Daily Quran Verse
+                            DailyVerseCard()
+                                .padding(.horizontal, 20)
+
+                            // Daily Quiz Button
+                            Button(action: {
+                                showQuiz = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "questionmark.circle.fill")
+                                        .font(.system(size: 20))
+                                    Text(AppStrings.today.dailyQuiz)
+                                        .font(.system(size: 18, weight: .semibold))
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 56)
+                                .background(AppColors.Today.dailyQuizButton)
+                                .foregroundColor(AppColors.Today.dailyQuizText)
+                                .cornerRadius(16)
                             }
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 56)
-                            .background(AppColors.Today.dailyQuizButton)
-                            .foregroundColor(AppColors.Today.dailyQuizText)
-                            .cornerRadius(16)
-                        }
-                        .padding(.horizontal, 20)
-
-                        // Daily Reading Goal
-                        DailyReadGoalCard { viewModel in
-                            goalDetailViewModel = viewModel
-                            showGoalDetail = true
-                        }
-                        .padding(.horizontal, 20)
-
-                        // Chat Box
-                        ChatBoxView()
                             .padding(.horizontal, 20)
-                            .padding(.bottom, 20)
-                            .id("chatBox")
+
+                            // Daily Reading Goal
+                            DailyReadGoalCard { viewModel in
+                                goalDetailViewModel = viewModel
+                                showGoalDetail = true
+                            }
+                            .padding(.horizontal, 20)
+
+                            // Chat Box
+                            ChatBoxView()
+                                .padding(.horizontal, 20)
+                                .padding(.bottom, 20)
+                                .id("chatBox")
+                        }
+                        .padding(.top, 16)
                     }
-                    .padding(.top, 16)
-                }
-                .onAppear {
-                    // Scroll to bottom with a slight delay to ensure layout is complete
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                        withAnimation {
-                            proxy.scrollTo("chatBox", anchor: .bottom)
+                    .onAppear {
+                        // Scroll to bottom with a slight delay to ensure layout is complete
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            withAnimation {
+                                proxy.scrollTo("chatBox", anchor: .bottom)
+                            }
                         }
                     }
                 }

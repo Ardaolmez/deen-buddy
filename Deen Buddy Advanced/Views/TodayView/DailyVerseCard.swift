@@ -12,12 +12,14 @@ struct DailyVerseCard: View {
     @State private var showFullVerse = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            // Title
+        VStack(alignment: .center, spacing: 2) {
+            // Title - small, centered, subtle
             Text(AppStrings.today.dailyVerseTitle)
-                .font(.system(size: 18, weight: .semibold))
-                .foregroundColor(AppColors.Today.verseCardPrimaryText)
-                .shadow(color: AppColors.Today.verseCardShadow.opacity(0.7), radius: 4, x: 0, y: 2)
+                .font(.system(size: 11, weight: .medium))
+                .foregroundColor(AppColors.Today.verseCardSecondaryText)
+                .textCase(.uppercase)
+                .tracking(1)
+                .shadow(color: AppColors.Today.verseCardShadow.opacity(0.5), radius: 3, x: 0, y: 1)
 
             // State-based content
             if viewModel.isLoading {
@@ -32,9 +34,9 @@ struct DailyVerseCard: View {
                 )
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .center)
         .padding(20)
-        .background(VerseCardBackground(imageOpacity: 0.8, imageBlur: 1.1, gradientOpacity: 0.3))
+        .background(VerseCardBackground(imageOpacity: 0.8, imageBlur: 1.1, gradientOpacity: 0.2))
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 20, style: .continuous)
