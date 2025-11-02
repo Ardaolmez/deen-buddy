@@ -43,7 +43,8 @@ class QuranAudioService {
 
     /// Fetch available reciters
     func fetchReciters() async throws -> [Reciter] {
-        if let cached = cachedReciters {
+        // Return cached reciters if available (for fast loading)
+        if let cached = cachedReciters, !cached.isEmpty {
             return cached
         }
 
@@ -52,18 +53,32 @@ class QuranAudioService {
             throw QuranAudioError.invalidURL
         }
 
-        let (data, response) = try await session.data(from: url)
+        do {
+            let (data, response) = try await session.data(from: url)
 
-        guard let httpResponse = response as? HTTPURLResponse,
-              httpResponse.statusCode == 200 else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw QuranAudioError.networkError
+            }
+
+            guard httpResponse.statusCode == 200 else {
+                throw QuranAudioError.serverError(statusCode: httpResponse.statusCode)
+            }
+
+            let decoder = JSONDecoder()
+            do {
+                let recitersResponse = try decoder.decode(RecitersResponse.self, from: data)
+
+                // Cache the results
+                cachedReciters = recitersResponse.recitations
+                return recitersResponse.recitations
+            } catch {
+                throw QuranAudioError.decodingError
+            }
+        } catch let error as QuranAudioError {
+            throw error
+        } catch {
             throw QuranAudioError.networkError
         }
-
-        let decoder = JSONDecoder()
-        let recitersResponse = try decoder.decode(RecitersResponse.self, from: data)
-
-        cachedReciters = recitersResponse.recitations
-        return recitersResponse.recitations
     }
 
     /// Fetch verses with audio for a surah
@@ -115,6 +130,7 @@ class QuranAudioService {
 enum QuranAudioError: LocalizedError {
     case invalidURL
     case networkError
+    case serverError(statusCode: Int)
     case decodingError
 
     var errorDescription: String? {
@@ -122,9 +138,11 @@ enum QuranAudioError: LocalizedError {
         case .invalidURL:
             return "Invalid API URL"
         case .networkError:
-            return "Network error occurred"
+            return "Network connection failed. Please check your internet connection."
+        case .serverError(let statusCode):
+            return "Server error (code \(statusCode)). Please try again later."
         case .decodingError:
-            return "Failed to decode response"
+            return "Failed to process server response"
         }
     }
 }
