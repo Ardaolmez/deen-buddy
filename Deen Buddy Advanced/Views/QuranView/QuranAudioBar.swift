@@ -12,6 +12,8 @@ struct QuranAudioBar: View {
     @State private var showReciterSheet = false
     @State private var availableReciters: [Reciter] = []
     @State private var isLoadingReciters = false
+    @State private var showError = false
+    @State private var errorMessage = ""
 
     var body: some View {
         HStack(spacing: 16) {
@@ -55,15 +57,22 @@ struct QuranAudioBar: View {
                         loadRecitersAndShowSheet()
                     }) {
                         HStack(spacing: 4) {
-                            Text(reciterName)
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(.brown.opacity(0.7))
+                            if isLoadingReciters {
+                                ProgressView()
+                                    .scaleEffect(0.7)
+                                    .tint(.brown)
+                            } else {
+                                Text(reciterName)
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.brown.opacity(0.7))
 
-                            Image(systemName: "chevron.down")
-                                .font(.system(size: 9, weight: .semibold))
-                                .foregroundColor(.brown.opacity(0.7))
+                                Image(systemName: "chevron.down")
+                                    .font(.system(size: 9, weight: .semibold))
+                                    .foregroundColor(.brown.opacity(0.7))
+                            }
                         }
                     }
+                    .disabled(isLoadingReciters)
                 }
 
                 // Progress bar
@@ -150,6 +159,14 @@ struct QuranAudioBar: View {
                 }
             )
         }
+        .alert("Error", isPresented: $showError) {
+            Button("OK") { }
+            Button("Retry") {
+                loadRecitersAndShowSheet()
+            }
+        } message: {
+            Text(errorMessage)
+        }
     }
 
     // MARK: - Computed Properties
@@ -181,13 +198,19 @@ struct QuranAudioBar: View {
                 let reciters = try await QuranAudioService.shared.fetchReciters()
                 await MainActor.run {
                     availableReciters = reciters
-                    showReciterSheet = true
                     isLoadingReciters = false
+                    if reciters.isEmpty {
+                        errorMessage = "No reciters available. Please check your internet connection."
+                        showError = true
+                    } else {
+                        showReciterSheet = true
+                    }
                 }
             } catch {
-                print("Failed to load reciters: \(error)")
                 await MainActor.run {
                     isLoadingReciters = false
+                    errorMessage = "Failed to load reciters: \(error.localizedDescription)"
+                    showError = true
                 }
             }
         }
