@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct DailyReadGoalCard: View {
+    var onGoalDetailRequested: (ReadingGoalViewModel) -> Void = { _ in }
+
     @StateObject private var viewModel = ReadingGoalViewModel()
     @ObservedObject private var sessionManager = ReadingSessionManager.shared
-    @State private var isExpanded: Bool = false
     @State private var showListenTracking: Bool = false
     @State private var showGoalSelection: Bool = false
     @State private var showQuranReading: Bool = false
@@ -61,12 +62,6 @@ struct DailyReadGoalCard: View {
             VerseByVerseReadingView(
                 goalViewModel: viewModel,
                 isPresented: $showListenTracking
-            )
-        }
-        .fullScreenCover(isPresented: $isExpanded) {
-            GoalDetailOverlay(
-                viewModel: viewModel,
-                isPresented: $isExpanded
             )
         }
         .fullScreenCover(isPresented: $showQuranReading) {

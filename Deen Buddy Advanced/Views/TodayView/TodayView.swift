@@ -11,6 +11,8 @@ struct TodayView: View {
     @State private var streakDays: [Bool] = [true, true, true, false, false, false, false]
     @State private var showQuiz = false
     @State private var showFeedback = false
+    @State private var showGoalDetail = false
+    @State private var goalDetailViewModel: ReadingGoalViewModel?
     @StateObject private var prayersVM = PrayersViewModel()
 
     var body: some View {
@@ -45,8 +47,11 @@ struct TodayView: View {
                         .padding(.horizontal, 20)
 
                         // Daily Reading Goal
-                        DailyReadGoalCard()
-                            .padding(.horizontal, 20)
+                        DailyReadGoalCard { viewModel in
+                            goalDetailViewModel = viewModel
+                            showGoalDetail = true
+                        }
+//                            .padding(.horizontal, 20)
 
                         // Chat Box
                         ChatBoxView()
@@ -83,6 +88,21 @@ struct TodayView: View {
             }
             .fullScreenCover(isPresented: $showQuiz) {
                 QuizView()
+            }
+            .fullScreenCover(isPresented: $showGoalDetail) {
+                if let viewModel = goalDetailViewModel {
+                    GoalDetailOverlay(
+                        viewModel: viewModel,
+                        isPresented: $showGoalDetail
+                    )
+                } else {
+                    EmptyView()
+                }
+            }
+            .onChange(of: showGoalDetail) { isPresented in
+                if !isPresented {
+                    goalDetailViewModel = nil
+                }
             }
             .sheet(isPresented: $showFeedback) {
                 FeedbackPopupView()
