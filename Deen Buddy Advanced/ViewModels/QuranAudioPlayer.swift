@@ -20,6 +20,7 @@ class QuranAudioPlayer: NSObject, ObservableObject {
     @Published var currentTime: TimeInterval = 0
     @Published var duration: TimeInterval = 0
     @Published var selectedReciter: Reciter?
+    @Published var currentSurahID: Int?
 
     // MARK: - Private Properties
     private var player: AVPlayer?
@@ -27,7 +28,6 @@ class QuranAudioPlayer: NSObject, ObservableObject {
     private var verses: [AudioVerse] = []
     private var timeObserver: Any?
     private var cancellables = Set<AnyCancellable>()
-    private var currentSurahID: Int?
 
     // Auto-advance setting
     var autoAdvanceEnabled: Bool = true
@@ -162,8 +162,17 @@ class QuranAudioPlayer: NSObject, ObservableObject {
     // MARK: - Verse Navigation
     func playNextVerse() async {
         guard currentVerseIndex < verses.count - 1 else {
-            // End of surah
-            stop()
+            // End of current surah - check if we can continue to next surah
+            if let currentSurahID = currentSurahID, currentSurahID < 114 {
+                // Load and play next surah
+                await loadSurah(currentSurahID + 1, startingAtVerse: 0)
+                if playbackState != .error("") {
+                    loadAndPlayVerse(verses[0])
+                }
+            } else {
+                // End of entire Quran (surah 114)
+                stop()
+            }
             return
         }
 

@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedTab = 0
+    @StateObject private var appState = AppState()
 
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $appState.selectedTab) {
             TodayView()
                 .tabItem {
                     Label(AppStrings.common.todayTab, systemImage: "calendar")
@@ -36,6 +36,7 @@ struct ContentView: View {
                 }
                 .tag(3)
         }
+        .environmentObject(appState)
     }
 }
 

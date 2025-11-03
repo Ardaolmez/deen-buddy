@@ -178,7 +178,7 @@ struct QuranAudioBar: View {
         if let verse = audioPlayer.currentVerse {
             return "Verse \(verse.verseNumber)"
         }
-        return "Select a verse"
+        return "Loading..."
     }
 
     private var reciterName: String {

@@ -10,6 +10,8 @@ import SwiftUI
 struct QuranView: View {
     @StateObject private var viewModel = QuranViewModel()
     @StateObject private var audioPlayer = QuranAudioPlayer()
+    @EnvironmentObject var appState: AppState
+    @State private var isAudioDrivenNavigation = false
 
     var body: some View {
         NavigationView {
@@ -44,7 +46,7 @@ struct QuranView: View {
                     VStack(spacing: 0) {
                         TabView(selection: $viewModel.currentSurahIndex) {
                             ForEach(Array(viewModel.surahs.enumerated()), id: \.element.id) { index, surah in
-                                QuranPageView(surah: surah, language: viewModel.selectedLanguage)
+                                QuranPageView(surah: surah, language: viewModel.selectedLanguage, audioPlayer: audioPlayer)
                                     .tag(index)
                             }
                         }
@@ -60,7 +62,12 @@ struct QuranView: View {
                             )
                         )
                         .onChange(of: viewModel.currentSurahIndex) { newIndex in
-                            loadAudioForCurrentSurah(newIndex)
+                            // Only reload audio if user manually changed surah
+                            if !isAudioDrivenNavigation {
+                                loadAudioForCurrentSurah(newIndex)
+                            } else {
+                                isAudioDrivenNavigation = false
+                            }
                         }
 
                         // Audio Player Bar
@@ -137,6 +144,35 @@ struct QuranView: View {
             .onAppear {
                 loadAudioForCurrentSurah(viewModel.currentSurahIndex)
             }
+            .onChange(of: appState.navigateToQuranWithAudio) { shouldNavigate in
+                if shouldNavigate {
+                    handleNavigationFromMainPage()
+                }
+            }
+            .onChange(of: audioPlayer.currentSurahID) { newSurahID in
+                // Sync UI when audio player moves to a different surah
+                if let newSurahID = newSurahID {
+                    isAudioDrivenNavigation = true
+                    viewModel.goToSurahById(id: newSurahID)
+                }
+            }
+        }
+    }
+
+    // MARK: - Navigation Handler
+    private func handleNavigationFromMainPage() {
+        guard let targetSurahID = appState.targetSurahID else { return }
+
+        // Navigate to the target surah
+        viewModel.goToSurahById(id: targetSurahID)
+
+        // Load audio for the target surah and verse
+        Task {
+            await audioPlayer.loadSurah(targetSurahID, startingAtVerse: appState.targetVerseIndex)
+            // Auto-play after loading
+            audioPlayer.play()
+            // Reset the navigation flag
+            appState.resetNavigationFlag()
         }
     }
 

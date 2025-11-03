@@ -12,6 +12,7 @@ struct GoalCardContent: View {
     @ObservedObject var sessionManager: ReadingSessionManager
     @Binding var showQuranReading: Bool
     @Binding var showListenTracking: Bool
+    @EnvironmentObject var appState: AppState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -81,9 +82,15 @@ struct GoalCardContent: View {
                     )
                 }
 
-                // Listen button - Filled with brand color
+                // Listen button - Navigate to Quran and play audio
                 Button {
-                    showListenTracking = true
+                    if let positionInfo = viewModel.currentPositionInfo {
+                        // Navigate to Quran tab and start playing from current position
+                        appState.navigateToQuranAndPlay(
+                            surahID: positionInfo.surahID,
+                            verseIndex: positionInfo.verseNumber - 1  // Convert to 0-based index
+                        )
+                    }
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "headphones")

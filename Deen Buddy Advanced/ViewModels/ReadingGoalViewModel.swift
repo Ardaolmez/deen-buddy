@@ -83,6 +83,7 @@ class ReadingGoalViewModel: ObservableObject {
             if currentPosition + surahVerseCount > absolutePosition {
                 let verseInSurah = absolutePosition - currentPosition
                 return CurrentPositionInfo(
+                    surahID: surah.id,
                     surahName: surah.name,
                     surahTransliteration: surah.transliteration,
                     verseNumber: verseInSurah + 1,  // Verses are 1-indexed for display
@@ -96,6 +97,7 @@ class ReadingGoalViewModel: ObservableObject {
         // If position is beyond total verses, return last verse
         if let lastSurah = surahs.last {
             return CurrentPositionInfo(
+                surahID: lastSurah.id,
                 surahName: lastSurah.name,
                 surahTransliteration: lastSurah.transliteration,
                 verseNumber: lastSurah.verses.count,

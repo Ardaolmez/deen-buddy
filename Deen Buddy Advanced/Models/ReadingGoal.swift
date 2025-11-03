@@ -179,6 +179,7 @@ struct ReadingGoal: Codable {
 
 // MARK: - Current Position Info
 struct CurrentPositionInfo {
+    let surahID: Int
     let surahName: String
     let surahTransliteration: String
     let verseNumber: Int

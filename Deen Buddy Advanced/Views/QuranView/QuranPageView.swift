@@ -10,6 +10,7 @@ import SwiftUI
 struct QuranPageView: View {
     let surah: Surah
     let language: QuranLanguage
+    var audioPlayer: QuranAudioPlayer?
     @ObservedObject private var fontSizeManager = QuranFontSizeManager.shared
 
     var body: some View {
@@ -88,7 +89,8 @@ struct QuranPageView: View {
                         VerseView(
                             verse: verse,
                             surahId: surah.id,
-                            language: language
+                            language: language,
+                            isCurrentlyPlaying: isVersePlaying(verse)
                         )
                     }
                 }
@@ -112,12 +114,26 @@ struct QuranPageView: View {
             )
         )
     }
+
+    // MARK: - Helper Methods
+    private func isVersePlaying(_ verse: Verse) -> Bool {
+        guard let audioPlayer = audioPlayer,
+              let currentSurahID = audioPlayer.currentSurahID,
+              currentSurahID == surah.id,
+              audioPlayer.playbackState.isPlaying || audioPlayer.playbackState.isPaused else {
+            return false
+        }
+
+        // currentVerseIndex is 0-based, verse.id is 1-based
+        return audioPlayer.currentVerseIndex == verse.id - 1
+    }
 }
 
 struct VerseView: View {
     let verse: Verse
     let surahId: Int
     let language: QuranLanguage
+    var isCurrentlyPlaying: Bool = false
     @ObservedObject private var fontSizeManager = QuranFontSizeManager.shared
 
     var body: some View {
@@ -127,16 +143,19 @@ struct VerseView: View {
                 // Verse number in decorative circle
                 ZStack {
                     Circle()
-                        .fill(Color(red: 0.95, green: 0.93, blue: 0.88))
+                        .fill(isCurrentlyPlaying ? Color.brown.opacity(0.2) : Color(red: 0.95, green: 0.93, blue: 0.88))
                         .frame(width: 36, height: 36)
+                        .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
 
                     Circle()
-                        .stroke(AppColors.Quran.verseNumber.opacity(0.3), lineWidth: 1)
+                        .stroke(isCurrentlyPlaying ? Color.brown : AppColors.Quran.verseNumber.opacity(0.3), lineWidth: isCurrentlyPlaying ? 2 : 1)
                         .frame(width: 36, height: 36)
+                        .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
 
                     Text("\(verse.id)")
                         .font(.system(size: fontSizeManager.scaledFontSize(16), weight: .semibold, design: .serif))
-                        .foregroundColor(AppColors.Quran.verseNumber)
+                        .foregroundColor(isCurrentlyPlaying ? Color.brown : AppColors.Quran.verseNumber)
+                        .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
                 }
 
                 // Verse content
