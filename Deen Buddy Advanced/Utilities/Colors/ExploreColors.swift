@@ -27,6 +27,9 @@ extension AppColors {
         static let primaryText = Color.primary
         static let secondaryText = Color.secondary
         static let accentText = Color.green
+        static let hijriCardPrimaryText = Color.primary
+        static let hijriCardSecondaryText = Color.secondary
+        static let hijriCardAccent = Color(red: 0.29, green: 0.55, blue: 0.42)
 
         // State colors
         static let available = Color.green
@@ -41,6 +44,8 @@ extension AppColors {
         // Subtle backgrounds for emphasis
         static let subtleAccent = Color.green.opacity(0.08)
         static let subtleGray = Color(.systemGray6)
+        static let hijriCardBackground = Color(.systemBackground)
+        static let hijriCardBorder = Color.black.opacity(0.05)
 
         // Progress indicators
         static let progressFill = Color.green

@@ -10,7 +10,7 @@ import Foundation
 
 struct AppStrings {
     // App Identity
-    static let appName = "myDeen"
+    static let appName = "Iman Buddy"
     static let appTagline = "Your religious guide"
 
     // Tabs

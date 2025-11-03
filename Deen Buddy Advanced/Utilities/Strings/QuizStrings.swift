@@ -25,7 +25,7 @@ struct QuizStrings {
     static let gradeKeepGoing = "Keep Going 💪"
 
     // Share
-    static let shareText = "I scored %@ on Deen Buddy!"
+    static let shareText = "I scored %@ on Iman Buddy!"
 
     // Answer Feedback
     static let correct = "Correct!"

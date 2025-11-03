@@ -32,7 +32,6 @@ extension AppColors {
         // Prayer Time Compact Widget
         static let prayerCompactIcon = Color.orange
 
-
         // Daily Reading Goal Card
         static let quranGoalTitle = Color.primary
         static let quranGoalMetric = Color.secondary

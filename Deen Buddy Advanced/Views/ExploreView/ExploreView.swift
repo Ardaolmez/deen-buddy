@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ExploreView: View {
     @StateObject private var vm = ExploreViewModel()
+    @StateObject private var hijriViewModel = HijriDateViewModel()
+    @State private var showHijriCalendar = false
 
     var body: some View {
         NavigationView {
@@ -56,6 +58,17 @@ struct ExploreView: View {
             }
             .navigationTitle(AppStrings.explore.navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .sheet(isPresented: $showHijriCalendar) {
+                HijriCalendarView(viewModel: hijriViewModel)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HijriDateBadge(viewModel: hijriViewModel) { _ in
+                        showHijriCalendar = true
+                    }
+                    .padding(.top, 4)
+                }
+            }
         }
     }
 }
