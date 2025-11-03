@@ -10,7 +10,7 @@ import SwiftUI
 struct QuranPageView: View {
     let surah: Surah
     let language: QuranLanguage
-    var audioPlayer: QuranAudioPlayer?
+    @ObservedObject var audioPlayer: QuranAudioPlayer
     @ObservedObject private var fontSizeManager = QuranFontSizeManager.shared
 
     var body: some View {
@@ -117,15 +117,17 @@ struct QuranPageView: View {
 
     // MARK: - Helper Methods
     private func isVersePlaying(_ verse: Verse) -> Bool {
-        guard let audioPlayer = audioPlayer,
-              let currentSurahID = audioPlayer.currentSurahID,
-              currentSurahID == surah.id,
-              audioPlayer.playbackState.isPlaying || audioPlayer.playbackState.isPaused else {
+        guard let currentSurahID = audioPlayer.currentSurahID,
+              currentSurahID == surah.id else {
             return false
         }
 
-        // currentVerseIndex is 0-based, verse.id is 1-based
-        return audioPlayer.currentVerseIndex == verse.id - 1
+        // Compare using verseNumber from currentVerse (1-based) with verse.id (1-based)
+        if let currentVerse = audioPlayer.currentVerse {
+            return currentVerse.verseNumber == verse.id
+        }
+
+        return false
     }
 }
 
@@ -207,6 +209,7 @@ struct VerseView: View {
                 Verse(id: 1, text: "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ", translation: "In the name of Allah, the Entirely Merciful, the Especially Merciful")
             ]
         ),
-        language: .english
+        language: .english,
+        audioPlayer: QuranAudioPlayer()
     )
 }

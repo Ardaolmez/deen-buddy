@@ -104,9 +104,11 @@ class QuranAudioPlayer: NSObject, ObservableObject {
     func loadSurah(_ surahID: Int, startingAtVerse: Int = 0) async {
         currentSurahID = surahID
         playbackState = .loading
+        print("🎵 Loading surah \(surahID)...")
 
         do {
             verses = try await audioService.fetchVersesAudio(surahID: surahID)
+            print("🎵 Loaded \(verses.count) verses for surah \(surahID)")
 
             guard !verses.isEmpty else {
                 playbackState = .error("No verses found")
@@ -116,8 +118,10 @@ class QuranAudioPlayer: NSObject, ObservableObject {
             currentVerseIndex = min(startingAtVerse, verses.count - 1)
             currentVerse = verses[currentVerseIndex]
             playbackState = .idle
+            print("🎵 Ready to play from verse index \(currentVerseIndex)")
 
         } catch {
+            print("🎵 Error loading surah: \(error.localizedDescription)")
             playbackState = .error(error.localizedDescription)
         }
     }
@@ -161,7 +165,10 @@ class QuranAudioPlayer: NSObject, ObservableObject {
 
     // MARK: - Verse Navigation
     func playNextVerse() async {
+        print("🎵 playNextVerse called: currentIndex=\(currentVerseIndex), totalVerses=\(verses.count)")
+
         guard currentVerseIndex < verses.count - 1 else {
+            print("🎵 End of surah reached. Moving to next surah...")
             // End of current surah - check if we can continue to next surah
             if let currentSurahID = currentSurahID, currentSurahID < 114 {
                 // Load and play next surah
@@ -178,6 +185,7 @@ class QuranAudioPlayer: NSObject, ObservableObject {
 
         currentVerseIndex += 1
         currentVerse = verses[currentVerseIndex]
+        print("🎵 Playing next verse: index=\(currentVerseIndex), verseNumber=\(currentVerse?.verseNumber ?? 0)")
         loadAndPlayVerse(verses[currentVerseIndex])
     }
 
