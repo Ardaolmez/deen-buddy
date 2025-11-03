@@ -44,10 +44,10 @@ struct FeedbackPopupView: View {
 
                     TextEditor(text: $feedbackText)
                         .font(.system(size: 16))
-                        .foregroundColor(AppColors.Common.primary)
                         .scrollContentBackground(.hidden)
                         .frame(minHeight: 200)
                         .padding(4)
+                        .tint(.green)
                 }
                 .background(AppColors.Today.cardBackground)
                 .cornerRadius(12)
