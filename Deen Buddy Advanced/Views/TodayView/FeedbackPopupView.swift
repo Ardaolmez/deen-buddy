@@ -37,23 +37,24 @@ struct FeedbackPopupView: View {
                     if feedbackText.isEmpty {
                         Text("Type your suggestion here...")
                             .font(.system(size: 16))
-                            .foregroundColor(AppColors.Common.secondary.opacity(0.5))
+                            .foregroundColor(.gray)
                             .padding(.horizontal, 8)
                             .padding(.vertical, 12)
                     }
 
                     TextEditor(text: $feedbackText)
                         .font(.system(size: 16))
+                        .foregroundStyle(.black)
                         .scrollContentBackground(.hidden)
                         .frame(minHeight: 200)
                         .padding(4)
                         .tint(.green)
                 }
-                .background(AppColors.Today.cardBackground)
+                .background(.white)
                 .cornerRadius(12)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(AppColors.Chat.boxBorder, lineWidth: 1)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                 )
 
                 // Success message
