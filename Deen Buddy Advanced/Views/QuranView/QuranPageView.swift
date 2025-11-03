@@ -144,21 +144,27 @@ struct VerseView: View {
             HStack(alignment: .top, spacing: 16) {
                 // Verse number in decorative circle
                 ZStack {
-                    Circle()
-                        .fill(isCurrentlyPlaying ? Color.brown.opacity(0.2) : Color(red: 0.95, green: 0.93, blue: 0.88))
-                        .frame(width: 36, height: 36)
-                        .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
+                    // Outer glow for playing verse
+                    if isCurrentlyPlaying {
+                        Circle()
+                            .fill(Color.brown.opacity(0.3))
+                            .frame(width: 44, height: 44)
+                            .blur(radius: 4)
+                    }
 
                     Circle()
-                        .stroke(isCurrentlyPlaying ? Color.brown : AppColors.Quran.verseNumber.opacity(0.3), lineWidth: isCurrentlyPlaying ? 2 : 1)
+                        .fill(isCurrentlyPlaying ? Color.brown.opacity(0.85) : Color(red: 0.95, green: 0.93, blue: 0.88))
                         .frame(width: 36, height: 36)
-                        .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
+
+                    Circle()
+                        .stroke(isCurrentlyPlaying ? Color.brown : AppColors.Quran.verseNumber.opacity(0.3), lineWidth: isCurrentlyPlaying ? 2.5 : 1)
+                        .frame(width: 36, height: 36)
 
                     Text("\(verse.id)")
-                        .font(.system(size: fontSizeManager.scaledFontSize(16), weight: .semibold, design: .serif))
-                        .foregroundColor(isCurrentlyPlaying ? Color.brown : AppColors.Quran.verseNumber)
-                        .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
+                        .font(.system(size: fontSizeManager.scaledFontSize(16), weight: isCurrentlyPlaying ? .bold : .semibold, design: .serif))
+                        .foregroundColor(isCurrentlyPlaying ? Color.white : AppColors.Quran.verseNumber)
                 }
+                .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
 
                 // Verse content
                 VStack(alignment: .leading, spacing: 12) {
@@ -185,13 +191,25 @@ struct VerseView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isCurrentlyPlaying ? Color.brown.opacity(0.12) : Color.clear)
+                    .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isCurrentlyPlaying ? Color.brown.opacity(0.4) : Color.clear, lineWidth: 1.5)
+                    .animation(.easeInOut(duration: 0.3), value: isCurrentlyPlaying)
+            )
 
             // Subtle divider between verses
             Divider()
                 .background(AppColors.Quran.verseNumber.opacity(0.15))
                 .padding(.top, 8)
         }
-        .padding(.vertical, 16)
+        .padding(.vertical, 8)
         .padding(.horizontal, 4)
     }
 }
