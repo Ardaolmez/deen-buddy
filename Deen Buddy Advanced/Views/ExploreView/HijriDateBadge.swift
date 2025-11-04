@@ -17,36 +17,48 @@ struct HijriDateBadge: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: 12) {
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(AppStrings.appName)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(AppColors.Explore.hijriCardPrimaryText)
+        HStack(alignment: .center, spacing: 10) {
+            ZStack {
+                Circle()
+                    .fill(AppColors.Explore.accentLight)
+                    .frame(width: 30, height: 30)
 
+                Image(systemName: "moon.stars.fill")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(AppColors.Explore.hijriCardAccent)
+            }
+
+            VStack(alignment: .leading, spacing: 0) {
                 if viewModel.isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
-                        .scaleEffect(0.65)
-                        .frame(height: 14)
+                        .scaleEffect(0.6)
+                        .frame(width: 20, height: 20)
                 } else {
                     Text(viewModel.hijriShortDateText)
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundColor(AppColors.Explore.hijriCardSecondaryText)
+                        .font(.system(size: 14, weight: .semibold, design: .serif))
+                        .foregroundColor(AppColors.Explore.hijriCardPrimaryText)
                         .lineLimit(1)
-                        .minimumScaleFactor(0.8)
+                        .minimumScaleFactor(0.6)
+                        .layoutPriority(1)
                 }
             }
-
-            Image(systemName: "calendar")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(AppColors.Explore.hijriCardAccent)
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
         .background(
             Capsule(style: .continuous)
-                .fill(AppColors.Explore.hijriCardBackground.opacity(0.9))
-                .shadow(color: AppColors.Explore.cardShadow.opacity(0.5), radius: 8, x: 0, y: 3)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            AppColors.Explore.subtleAccent,
+                            AppColors.Explore.hijriCardBackground.opacity(0.95)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .shadow(color: AppColors.Explore.cardShadow.opacity(0.45), radius: 8, x: 0, y: 3)
         )
         .overlay(
             Capsule(style: .continuous)

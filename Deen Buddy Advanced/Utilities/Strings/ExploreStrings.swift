@@ -16,7 +16,8 @@ struct ExploreStrings {
     static let hijriLocationUnavailable = "Location unavailable"
     static let hijriLoading = "Fetching today's date..."
     static let hijriCalendarTitle = "Hijri Calendar"
-    static let hijriCalendarSubtitle = "Powered by your current location"
+    static let hijriCalendarSubtitle = "Select a date to explore the Hijri calendar"
+    static let hijriCalendarHint = "Compare Hijri and Gregorian timelines for any day."
     static let hijriCalendarHijriHeader = "Hijri"
     static let hijriCalendarGregorianHeader = "Gregorian"
 }
