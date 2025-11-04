@@ -36,7 +36,7 @@ struct HijriDateBadge: View {
                         .frame(width: 20, height: 20)
                 } else {
                     Text(viewModel.hijriShortDateText)
-                        .font(.system(size: 14, weight: .semibold, design: .serif))
+                        .font(.system(size: 12, weight: .medium, design: .serif))
                         .foregroundColor(AppColors.Explore.hijriCardPrimaryText)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)

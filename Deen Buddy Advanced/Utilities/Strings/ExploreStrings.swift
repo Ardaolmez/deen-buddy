@@ -20,4 +20,7 @@ struct ExploreStrings {
     static let hijriCalendarHint = "Compare Hijri and Gregorian timelines for any day."
     static let hijriCalendarHijriHeader = "Hijri"
     static let hijriCalendarGregorianHeader = "Gregorian"
+    static let hijriCalendarSpecialDatesTitle = "Jump to a blessed day"
+    static let hijriCalendarSpecialDatesPlaceholder = "Choose a special date"
+    static let hijriCalendarSpecialDatesReset = "Reset selection"
 }
