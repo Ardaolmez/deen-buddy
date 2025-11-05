@@ -46,6 +46,13 @@ final class CloudflareChatService: ChatService {
         // Add current user message
         messages.append(["role": "user", "content": userText])
 
+        // Debug logging
+        print("🌐 [CloudflareChat] History count: \(history.count), Total messages: \(messages.count)")
+        print("🌐 [CloudflareChat] Messages being sent:")
+        for (i, msg) in messages.enumerated() {
+            print("  [\(i)] \(msg["role"] ?? "?"): \(msg["content"]?.prefix(50) ?? "?")")
+        }
+
         // Request body
         let body: [String: Any] = ["messages": messages]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
@@ -64,7 +71,15 @@ final class CloudflareChatService: ChatService {
                     throw URLError(.badServerResponse)
                 }
 
+                print("🌐 [CloudflareChat] Response status: \(httpResponse.statusCode)")
+
+                // Log raw response for debugging
+                if let rawString = String(data: data, encoding: .utf8) {
+                    print("🌐 [CloudflareChat] Raw response: \(rawString.prefix(500))")
+                }
+
                 guard (200...299).contains(httpResponse.statusCode) else {
+                    print("🔴 [CloudflareChat] Bad status code: \(httpResponse.statusCode)")
                     throw URLError(.badServerResponse)
                 }
 
@@ -113,7 +128,11 @@ final class CloudflareChatService: ChatService {
             }
             .catch { error -> Just<ChatServiceResponse> in
                 // Handle all errors gracefully
-                print("CloudflareChatService error: \(error)")
+                print("🔴 [CloudflareChat] Error: \(error)")
+                print("🔴 [CloudflareChat] Error type: \(type(of: error))")
+                if let urlError = error as? URLError {
+                    print("🔴 [CloudflareChat] URLError code: \(urlError.code)")
+                }
                 return Just(ChatServiceResponse(
                     answer: "Sorry, I couldn't reach Imam Buddy right now. Please try again.",
                     citations: []
