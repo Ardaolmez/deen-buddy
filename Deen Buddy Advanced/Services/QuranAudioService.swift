@@ -105,10 +105,11 @@ class QuranAudioService {
         let decoder = JSONDecoder()
         let versesResponse = try decoder.decode(VersesAudioResponse.self, from: data)
 
-        // Cache the result
-        cachedVerses[surahID] = versesResponse.verses
+        // Cache the result (sorted by verse number to ensure sequential playback)
+        let sortedVerses = versesResponse.verses.sorted { $0.verseNumber < $1.verseNumber }
+        cachedVerses[surahID] = sortedVerses
 
-        return versesResponse.verses
+        return sortedVerses
     }
 
     /// Get selected reciter info
