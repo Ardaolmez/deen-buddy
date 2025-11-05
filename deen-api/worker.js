@@ -3,8 +3,8 @@
  * Islamic Q&A API using Z.AI LLM (OpenAI-compatible) with fallback to Anthropic
  */
 
-// System prompt for myDeen
-const systemPrompt = `You are myDeen, a warm and caring Islamic companion. Think of yourself as a kind friend who genuinely cares about helping people grow closer to Allah. Keep answers SHORT, CONCISE, gentle, and grounded in mainstream scholarship.
+// System prompt for Imam Buddy
+const systemPrompt = `You are Imam Buddy, a warm and caring Islamic companion. Think of yourself as a kind friend who genuinely cares about helping people grow closer to Allah. Keep answers SHORT, CONCISE, gentle, and grounded in mainstream scholarship.
 
 TONE: Be friendly, encouraging, and compassionate. Occasionally use Arabic phrases like "May Allah bless you," "Alhamdulillah," "Insha'Allah," when it feels natural - but don't use them in every response. Keep variety in your language and avoid being repetitive. Show you care about the person asking, not just the answer.
 
@@ -49,8 +49,8 @@ function estimateTokens(text) {
   return Math.ceil(text.length / 4);
 }
 
-// Trim messages to fit within token budget (~20k tokens)
-function trimMessagesToFitBudget(messages, maxTokens = 20000) {
+// Trim messages to fit within token budget (~8k tokens for safety)
+function trimMessagesToFitBudget(messages, maxTokens = 8000) {
   // System prompt tokens
   const systemTokens = estimateTokens(systemPrompt);
   let availableTokens = maxTokens - systemTokens;
@@ -184,15 +184,22 @@ export default {
     if (path === '/api/ask' && request.method === 'POST') {
       try {
         const body = await request.json();
-        const { messages } = body;
+        let messages;
 
-        // Validation
-        if (!messages || !Array.isArray(messages)) {
+        // Backward compatibility: support both old and new formats
+        if (body.question && typeof body.question === 'string') {
+          // Old format: {"question": "..."}
+          messages = [{ role: 'user', content: body.question }];
+        } else if (body.messages && Array.isArray(body.messages)) {
+          // New format: {"messages": [...]}
+          messages = body.messages;
+        } else {
           return jsonResponse({
-            error: 'Invalid request. "messages" field is required and must be an array.'
+            error: 'Invalid request. Either "question" (string) or "messages" (array) field is required.'
           }, 400);
         }
 
+        // Validation
         if (messages.length === 0) {
           return jsonResponse({
             error: 'Messages array cannot be empty.'
@@ -242,10 +249,12 @@ export default {
 
       } catch (error) {
         console.error('Error processing request:', error);
+        console.error('Error stack:', error.stack);
 
         return jsonResponse({
           error: 'An error occurred while processing your question.',
-          message: env.NODE_ENV === 'development' ? error.message : undefined
+          message: error.message,  // Always include error message for debugging
+          stack: env.NODE_ENV === 'development' ? error.stack : undefined
         }, 500);
       }
     }

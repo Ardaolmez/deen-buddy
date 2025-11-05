@@ -115,7 +115,7 @@ final class CloudflareChatService: ChatService {
                 // Handle all errors gracefully
                 print("CloudflareChatService error: \(error)")
                 return Just(ChatServiceResponse(
-                    answer: "Sorry, I couldn't reach myDeen right now. Please try again.",
+                    answer: "Sorry, I couldn't reach Imam Buddy right now. Please try again.",
                     citations: []
                 ))
             }
