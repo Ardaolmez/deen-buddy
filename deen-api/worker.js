@@ -1,6 +1,16 @@
 /**
  * Cloudflare Workers version of deen-api
  * Islamic Q&A API using Z.AI LLM (OpenAI-compatible) with fallback to Anthropic
+ *
+ * OBSERVABILITY:
+ * - Logs: All console.log/error outputs are captured in Cloudflare dashboard
+ * - Analytics Engine: Tracks custom metrics:
+ *   - Blobs: [endpoint, method, country, status]
+ *   - Doubles: [processingTime_ms, messageCount, citationCount]
+ *   - Indexes: [IP address]
+ *
+ * View logs at: https://dash.cloudflare.com → Workers → deen-api → Logs
+ * Query analytics: https://dash.cloudflare.com → Analytics & Logs → Workers Analytics
  */
 
 // System prompt for Imam Buddy
@@ -225,18 +235,38 @@ export default {
         const result = await askMyDeen(messages, env);
         const processingTime = Date.now() - startTime;
 
-        // Optional: Log to Cloudflare Analytics or KV
-        // For now, we'll just log to console
+        // Log to console for Cloudflare dashboard
         const ip = request.headers.get('CF-Connecting-IP');
         const userAgent = request.headers.get('User-Agent');
+        const country = request.headers.get('CF-IPCountry');
         console.log(JSON.stringify({
           timestamp: new Date().toISOString(),
           messageCount: messages.length,
           lastMessage: messages[messages.length - 1]?.content?.substring(0, 100),
           ip,
+          country,
           userAgent,
-          processingTime
+          processingTime,
+          status: 'success'
         }));
+
+        // Track analytics if available
+        if (env.ANALYTICS) {
+          env.ANALYTICS.writeDataPoint({
+            blobs: [
+              path,                          // endpoint
+              request.method,                // HTTP method
+              country || 'unknown',          // country code
+              'success'                      // status
+            ],
+            doubles: [
+              processingTime,                // response time in ms
+              messages.length,               // conversation length
+              result.citations?.length || 0  // citation count
+            ],
+            indexes: [ip]                    // IP address for filtering
+          });
+        }
 
         // Send response
         return jsonResponse({
@@ -250,6 +280,22 @@ export default {
       } catch (error) {
         console.error('Error processing request:', error);
         console.error('Error stack:', error.stack);
+
+        // Track error in analytics
+        if (env.ANALYTICS) {
+          const ip = request.headers.get('CF-Connecting-IP');
+          const country = request.headers.get('CF-IPCountry');
+          env.ANALYTICS.writeDataPoint({
+            blobs: [
+              path,
+              request.method,
+              country || 'unknown',
+              'error'                        // status
+            ],
+            doubles: [0, 0, 0],              // no timing/count data for errors
+            indexes: [ip || 'unknown']
+          });
+        }
 
         return jsonResponse({
           error: 'An error occurred while processing your question.',

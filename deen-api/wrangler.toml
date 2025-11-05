@@ -10,9 +10,16 @@ compatibility_date = "2024-01-01"
 # Non-sensitive environment variables
 NODE_ENV = "production"
 
+# Observability configuration for monitoring and debugging
 [observability]
+
+# Enable logging to Cloudflare dashboard
 [observability.logs]
-enabled = false
-head_sampling_rate = 1
-invocation_logs = true
-persist = true
+enabled = true                # Enable logs in Cloudflare dashboard
+head_sampling_rate = 1        # Sample 100% of requests for head logs
+invocation_logs = true        # Include console.log() outputs
+persist = true                # Store logs for later analysis
+
+# Analytics Engine - track custom metrics
+[[analytics_engine_datasets]]
+binding = "ANALYTICS"
