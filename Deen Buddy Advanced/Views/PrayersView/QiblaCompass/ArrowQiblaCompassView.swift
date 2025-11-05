@@ -59,18 +59,18 @@ struct ArrowQiblaCompassView: View {
                             .rotationEffect(.degrees(vm.angleDifference > 0 ? (-90 - abs(vm.angleDifference)) : -90))
                             .opacity(isAligned ? 0 : 1)
 
-                        // Blue dot at arrow's current position (end of arc)
+                        // Blue dot at TARGET position (where Kaaba is - top of circle)
                         Circle()
                             .fill(AppColors.Prayers.prayerBlue)
-                            .frame(width: 20, height: 20)  // Larger dot for 68% compass
-                            .offset(y: dotOffset)
-                            .rotationEffect(.degrees(-vm.angleDifference))
+                            .frame(width: 20, height: 20)
+                            .offset(y: kaabaOffset * 0.8)  // Position near Kaaba at top
                             .opacity(isAligned ? 0 : 1)
 
-                        // Center arrow - ROTATES to show direction difference
-                        Image(systemName: "arrow.up")
-                            .font(.system(size: arrowSize, weight: .bold))
+                        // Center compass needle - ROTATES to show direction difference
+                        Image(systemName: "location.north.fill")
+                            .font(.system(size: arrowSize, weight: .medium))
                             .foregroundColor(isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue)
+                            .shadow(color: (isAligned ? AppColors.Prayers.prayerGreen : AppColors.Prayers.prayerBlue).opacity(0.4), radius: 6, x: 0, y: 3)
                             .rotationEffect(.degrees(-vm.angleDifference), anchor: .center)
                     }
                     .frame(height: screenHeight * 0.58)  // Optimized for 68% container
