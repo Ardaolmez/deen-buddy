@@ -40,7 +40,10 @@ final class ChatViewModel: ObservableObject {
         input = ""
         isSending = true
 
-        service.reply(to: trimmed)
+        // Get conversation history (exclude welcome message)
+        let conversationHistory = messages.filter { !$0.isWelcomeMessage && $0.id != userMsg.id }
+
+        service.reply(to: trimmed, history: conversationHistory)
             .sink { [weak self] response in
                 guard let self else { return }
                 var botMessage = ChatMessage(

@@ -16,5 +16,5 @@ struct ChatServiceResponse {
 }
 
 protocol ChatService {
-    func reply(to userText: String) -> AnyPublisher<ChatServiceResponse, Never>
+    func reply(to userText: String, history: [ChatMessage]) -> AnyPublisher<ChatServiceResponse, Never>
 }

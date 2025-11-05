@@ -6,7 +6,7 @@
 // System prompt for myDeen
 const systemPrompt = `You are myDeen, a warm and caring Islamic companion. Think of yourself as a kind friend who genuinely cares about helping people grow closer to Allah. Keep answers SHORT, CONCISE, gentle, and grounded in mainstream scholarship.
 
-TONE: Be friendly, encouraging, and compassionate. Use phrases like "May Allah bless you," "Alhamdulillah," "Insha'Allah," naturally when appropriate. Show you care about the person asking, not just the answer.
+TONE: Be friendly, encouraging, and compassionate. Occasionally use Arabic phrases like "May Allah bless you," "Alhamdulillah," "Insha'Allah," when it feels natural - but don't use them in every response. Keep variety in your language and avoid being repetitive. Show you care about the person asking, not just the answer.
 
 IMPORTANT: Keep answers brief (2-4 sentences maximum). Be direct but warm.
 
@@ -44,8 +44,33 @@ When answering questions:
 Example of good friendly, concise format:
 "Alhamdulillah, what a beautiful question! The Quran emphasizes prayer as a means of seeking help and guidance.^[Quran 2:45] It prevents us from wrongdoing and keeps us connected to Allah.^[Quran 29:45] May Allah make it easy for you to establish your prayers consistently, dear friend."`;
 
+// Estimate tokens (rough approximation: ~4 chars per token)
+function estimateTokens(text) {
+  return Math.ceil(text.length / 4);
+}
+
+// Trim messages to fit within token budget (~20k tokens)
+function trimMessagesToFitBudget(messages, maxTokens = 20000) {
+  // System prompt tokens
+  const systemTokens = estimateTokens(systemPrompt);
+  let availableTokens = maxTokens - systemTokens;
+
+  // Count from most recent messages backwards
+  const trimmedMessages = [];
+  for (let i = messages.length - 1; i >= 0; i--) {
+    const msgTokens = estimateTokens(messages[i].content);
+    if (availableTokens - msgTokens < 0) {
+      break; // Skip older messages that don't fit
+    }
+    trimmedMessages.unshift(messages[i]);
+    availableTokens -= msgTokens;
+  }
+
+  return trimmedMessages;
+}
+
 // Core function to call Z.AI API (OpenAI-compatible)
-async function askMyDeen(question, env) {
+async function askMyDeen(messages, env) {
   try {
     // Z.AI API configuration
     const apiUrl = 'https://api.z.ai/api/coding/paas/v4/chat/completions';
@@ -54,6 +79,9 @@ async function askMyDeen(question, env) {
     if (!apiKey) {
       throw new Error('ANTHROPIC_AUTH_TOKEN is not configured');
     }
+
+    // Trim messages to fit budget
+    const trimmedMessages = trimMessagesToFitBudget(messages);
 
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -68,10 +96,7 @@ async function askMyDeen(question, env) {
             role: 'system',
             content: systemPrompt
           },
-          {
-            role: 'user',
-            content: question
-          }
+          ...trimmedMessages
         ],
         temperature: 0.2,  // Lower temperature to reduce hallucination
         max_tokens: 2000,
@@ -159,30 +184,38 @@ export default {
     if (path === '/api/ask' && request.method === 'POST') {
       try {
         const body = await request.json();
-        const { question } = body;
+        const { messages } = body;
 
         // Validation
-        if (!question || typeof question !== 'string') {
+        if (!messages || !Array.isArray(messages)) {
           return jsonResponse({
-            error: 'Invalid request. "question" field is required and must be a string.'
+            error: 'Invalid request. "messages" field is required and must be an array.'
           }, 400);
         }
 
-        if (question.trim().length === 0) {
+        if (messages.length === 0) {
           return jsonResponse({
-            error: 'Question cannot be empty.'
+            error: 'Messages array cannot be empty.'
           }, 400);
         }
 
-        if (question.length > 1000) {
-          return jsonResponse({
-            error: 'Question is too long. Maximum 1000 characters.'
-          }, 400);
+        // Validate message format
+        for (const msg of messages) {
+          if (!msg.role || !msg.content) {
+            return jsonResponse({
+              error: 'Each message must have "role" and "content" fields.'
+            }, 400);
+          }
+          if (!['user', 'assistant'].includes(msg.role)) {
+            return jsonResponse({
+              error: 'Message role must be "user" or "assistant".'
+            }, 400);
+          }
         }
 
-        // Process the question
+        // Process the conversation
         const startTime = Date.now();
-        const result = await askMyDeen(question, env);
+        const result = await askMyDeen(messages, env);
         const processingTime = Date.now() - startTime;
 
         // Optional: Log to Cloudflare Analytics or KV
@@ -191,7 +224,8 @@ export default {
         const userAgent = request.headers.get('User-Agent');
         console.log(JSON.stringify({
           timestamp: new Date().toISOString(),
-          question,
+          messageCount: messages.length,
+          lastMessage: messages[messages.length - 1]?.content?.substring(0, 100),
           ip,
           userAgent,
           processingTime

@@ -20,8 +20,8 @@ final class CloudflareChatService: ChatService {
         self.session = URLSession.shared
     }
 
-    /// Send a message and get a reply from the backend
-    func reply(to userText: String) -> AnyPublisher<ChatServiceResponse, Never> {
+    /// Send a message and get a reply from the backend with conversation history
+    func reply(to userText: String, history: [ChatMessage]) -> AnyPublisher<ChatServiceResponse, Never> {
         // Build request
         guard let url = URL(string: "\(baseURL)/api/ask") else {
             return Just(ChatServiceResponse(
@@ -34,8 +34,20 @@ final class CloudflareChatService: ChatService {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
+        // Build messages array in OpenAI format
+        var messages: [[String: String]] = []
+
+        // Add conversation history (user and bot messages)
+        for msg in history {
+            let role = msg.role == .user ? "user" : "assistant"
+            messages.append(["role": role, "content": msg.text])
+        }
+
+        // Add current user message
+        messages.append(["role": "user", "content": userText])
+
         // Request body
-        let body: [String: Any] = ["question": userText]
+        let body: [String: Any] = ["messages": messages]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
             return Just(ChatServiceResponse(
                 answer: "Error: Could not encode request",
