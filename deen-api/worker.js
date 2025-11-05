@@ -36,7 +36,7 @@ When answering questions:
 1. Start with warmth and care, then provide CONCISE answers based on the Quran
 2. Add citations inline using format: ^[Quran SURAH:VERSE]
 3. Use format like: Quran 2:45, Quran 29:45 (always "Quran" followed by chapter:verse)
-4. Return your response in JSON format:
+4. ⚠️ CRITICAL: ALWAYS return VALID JSON format - NEVER plain text:
    {
      "answer": "Warm greeting or acknowledgment. Short answer with inline citations.^[Quran 2:45] Encouraging closing if appropriate.",
      "citations": [
@@ -50,9 +50,16 @@ When answering questions:
 5. Show genuine care and encouragement in your responses
 6. If unsure, acknowledge limitations respectfully and with humility
 7. REMEMBER: ONLY Quran citations - NEVER hadith!
+8. ALWAYS respond with VALID JSON - the response MUST be parseable by JSON.parse()
 
-Example of good friendly, concise format:
-"Alhamdulillah, what a beautiful question! The Quran emphasizes prayer as a means of seeking help and guidance.^[Quran 2:45] It prevents us from wrongdoing and keeps us connected to Allah.^[Quran 29:45] May Allah make it easy for you to establish your prayers consistently, dear friend."`;
+Example of CORRECT JSON response:
+{
+  "answer": "Alhamdulillah, what a beautiful question! The Quran emphasizes prayer as a means of seeking help and guidance.^[Quran 2:45] It prevents us from wrongdoing and keeps us connected to Allah.^[Quran 29:45] May Allah make it easy for you to establish your prayers consistently, dear friend.",
+  "citations": [
+    {"ref": "Quran 2:45", "surah": 2, "ayah": 45},
+    {"ref": "Quran 29:45", "surah": 29, "ayah": 45}
+  ]
+}`;
 
 // Estimate tokens (rough approximation: ~4 chars per token)
 function estimateTokens(text) {
@@ -136,8 +143,33 @@ async function askMyDeen(messages, env) {
       responseText = jsonMatch[1];
     }
 
-    // Parse JSON response
-    const jsonResponse = JSON.parse(responseText);
+    // Try to parse as JSON
+    let jsonResponse;
+    try {
+      jsonResponse = JSON.parse(responseText);
+    } catch (parseError) {
+      // Fallback: If response is plain text instead of JSON, wrap it
+      console.warn('LLM returned plain text instead of JSON, wrapping it');
+      console.log('Raw text:', responseText.substring(0, 200));
+
+      // Extract any Quran citations from plain text
+      const citationRegex = /\^?\[Quran (\d+):(\d+)\]/g;
+      const citations = [];
+      let match;
+      while ((match = citationRegex.exec(responseText)) !== null) {
+        citations.push({
+          ref: `Quran ${match[1]}:${match[2]}`,
+          surah: parseInt(match[1]),
+          ayah: parseInt(match[2])
+        });
+      }
+
+      jsonResponse = {
+        answer: responseText.trim(),
+        citations: citations
+      };
+    }
+
     return jsonResponse;
   } catch (error) {
     console.error('Error calling myDeen:', error);
