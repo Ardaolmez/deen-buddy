@@ -59,11 +59,12 @@ struct ArrowQiblaCompassView: View {
                             .rotationEffect(.degrees(vm.angleDifference > 0 ? (-90 - abs(vm.angleDifference)) : -90))
                             .opacity(isAligned ? 0 : 1)
 
-                        // Blue dot at TARGET position (where Kaaba is - top of circle)
+                        // Blue dot at CURRENT position (moves along outer edge of arc)
                         Circle()
                             .fill(AppColors.Prayers.prayerBlue)
                             .frame(width: 20, height: 20)
-                            .offset(y: kaabaOffset * 0.8)  // Position near Kaaba at top
+                            .offset(y: -compassSize / 2)  // Position on outer edge of circle
+                            .rotationEffect(.degrees(-vm.angleDifference))  // Rotate with arrow
                             .opacity(isAligned ? 0 : 1)
 
                         // Center compass needle - ROTATES to show direction difference

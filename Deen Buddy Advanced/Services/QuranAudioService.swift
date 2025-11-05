@@ -90,7 +90,7 @@ class QuranAudioService {
             return cached
         }
 
-        let endpoint = "\(baseURL)/verses/by_chapter/\(surahID)?audio=\(reciter)&words=true"
+        let endpoint = "\(baseURL)/verses/by_chapter/\(surahID)?audio=\(reciter)&words=true&per_page=300"
         guard let url = URL(string: endpoint) else {
             throw QuranAudioError.invalidURL
         }
