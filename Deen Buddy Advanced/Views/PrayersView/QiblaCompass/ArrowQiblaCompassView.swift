@@ -52,8 +52,8 @@ struct ArrowQiblaCompassView: View {
                         Circle()
                             .trim(from: 0, to: arcFraction)
                             .stroke(
-                                AppColors.Prayers.prayerBlue.opacity(0.5),
-                                style: StrokeStyle(lineWidth: 10, lineCap: .round, dash: [14, 10])  // Thicker stroke for 68% compass
+                                AppColors.Prayers.prayerBlue.opacity(0.6),
+                                style: StrokeStyle(lineWidth: 12, lineCap: .round)
                             )
                             .frame(width: compassSize, height: compassSize)
                             .rotationEffect(.degrees(vm.angleDifference > 0 ? (-90 - abs(vm.angleDifference)) : -90))
