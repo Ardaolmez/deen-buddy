@@ -268,19 +268,31 @@ export default {
           }
         }
 
+        // Log incoming question
+        const ip = request.headers.get('CF-Connecting-IP');
+        const userAgent = request.headers.get('User-Agent');
+        const country = request.headers.get('CF-IPCountry');
+        const lastUserMessage = messages[messages.length - 1]?.content || '';
+
+        console.log('📥 INCOMING QUESTION:', JSON.stringify({
+          timestamp: new Date().toISOString(),
+          question: lastUserMessage,
+          conversationLength: messages.length,
+          ip,
+          country
+        }));
+
         // Process the conversation
         const startTime = Date.now();
         const result = await askMyDeen(messages, env);
         const processingTime = Date.now() - startTime;
 
-        // Log to console for Cloudflare dashboard
-        const ip = request.headers.get('CF-Connecting-IP');
-        const userAgent = request.headers.get('User-Agent');
-        const country = request.headers.get('CF-IPCountry');
-        console.log(JSON.stringify({
+        // Log successful response
+        console.log('✅ RESPONSE SUCCESS:', JSON.stringify({
           timestamp: new Date().toISOString(),
           messageCount: messages.length,
-          lastMessage: messages[messages.length - 1]?.content?.substring(0, 100),
+          answerPreview: result.answer?.substring(0, 100),
+          citationCount: result.citations?.length || 0,
           ip,
           country,
           userAgent,
@@ -316,7 +328,13 @@ export default {
         });
 
       } catch (error) {
-        console.error('Error processing request:', error);
+        console.error('❌ ERROR:', JSON.stringify({
+          timestamp: new Date().toISOString(),
+          error: error.message,
+          type: error.name,
+          ip: request.headers.get('CF-Connecting-IP'),
+          country: request.headers.get('CF-IPCountry')
+        }));
         console.error('Error stack:', error.stack);
 
         // Track error in analytics
