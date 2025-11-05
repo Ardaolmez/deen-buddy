@@ -201,8 +201,8 @@ class QuranAudioPlayer: NSObject, ObservableObject {
         // At first verse of current surah - load previous surah if available
         guard let currentSurahID = currentSurahID, currentSurahID > 1 else { return }
 
-        // Load previous surah
-        await loadSurah(currentSurahID - 1, startingAtVerse: nil) // nil means last verse
+        // Load previous surah (start at verse 0, then jump to last)
+        await loadSurah(currentSurahID - 1, startingAtVerse: 0)
 
         // Play last verse of previous surah
         if !verses.isEmpty && playbackState != .error("") {
