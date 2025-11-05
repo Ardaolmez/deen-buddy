@@ -190,11 +190,26 @@ class QuranAudioPlayer: NSObject, ObservableObject {
     }
 
     func playPreviousVerse() async {
-        guard currentVerseIndex > 0 else { return }
+        // If not at first verse of current surah, go to previous verse
+        if currentVerseIndex > 0 {
+            currentVerseIndex -= 1
+            currentVerse = verses[currentVerseIndex]
+            loadAndPlayVerse(verses[currentVerseIndex])
+            return
+        }
 
-        currentVerseIndex -= 1
-        currentVerse = verses[currentVerseIndex]
-        loadAndPlayVerse(verses[currentVerseIndex])
+        // At first verse of current surah - load previous surah if available
+        guard let currentSurahID = currentSurahID, currentSurahID > 1 else { return }
+
+        // Load previous surah
+        await loadSurah(currentSurahID - 1, startingAtVerse: nil) // nil means last verse
+
+        // Play last verse of previous surah
+        if !verses.isEmpty && playbackState != .error("") {
+            currentVerseIndex = verses.count - 1
+            currentVerse = verses[currentVerseIndex]
+            loadAndPlayVerse(verses[currentVerseIndex])
+        }
     }
 
     func playVerse(at index: Int) {
@@ -302,7 +317,12 @@ class QuranAudioPlayer: NSObject, ObservableObject {
     }
 
     var hasPreviousVerse: Bool {
-        currentVerseIndex > 0
+        // Can go to previous verse in current surah, or to previous surah if available
+        if currentVerseIndex > 0 {
+            return true
+        }
+        // At first verse of current surah - check if there's a previous surah
+        return currentSurahID != nil && currentSurahID! > 1
     }
 
     var totalVerses: Int {
