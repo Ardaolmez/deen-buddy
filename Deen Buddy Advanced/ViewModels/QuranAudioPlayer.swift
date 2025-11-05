@@ -293,7 +293,12 @@ class QuranAudioPlayer: NSObject, ObservableObject {
 
     // MARK: - Public Helpers
     var hasNextVerse: Bool {
-        currentVerseIndex < verses.count - 1
+        // Can go to next verse in current surah, or to next surah if available
+        if currentVerseIndex < verses.count - 1 {
+            return true
+        }
+        // At end of current surah - check if there's a next surah
+        return currentSurahID != nil && currentSurahID! < 114
     }
 
     var hasPreviousVerse: Bool {
