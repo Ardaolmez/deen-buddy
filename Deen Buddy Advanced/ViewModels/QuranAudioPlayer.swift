@@ -38,6 +38,7 @@ class QuranAudioPlayer: NSObject, ObservableObject {
         setupAudioSession()
         setupRemoteCommandCenter()
         loadSelectedReciter()
+        observePlaybackEnd()
     }
 
     deinit {
@@ -115,22 +116,10 @@ class QuranAudioPlayer: NSObject, ObservableObject {
                 return
             }
 
-            // startingAtVerse is a verse number (1-based), convert to array index
-            // Find the verse with matching verseNumber, or default to first verse
-            if startingAtVerse > 0 {
-                if let index = verses.firstIndex(where: { $0.verseNumber == startingAtVerse }) {
-                    currentVerseIndex = index
-                } else {
-                    // Verse number not found, use closest valid index
-                    currentVerseIndex = min(max(0, startingAtVerse - 1), verses.count - 1)
-                }
-            } else {
-                currentVerseIndex = 0
-            }
-
+            currentVerseIndex = min(startingAtVerse, verses.count - 1)
             currentVerse = verses[currentVerseIndex]
             playbackState = .idle
-            print("🎵 Ready to play from verse number \(currentVerse?.verseNumber ?? 0) at index \(currentVerseIndex)")
+            print("🎵 Ready to play from verse index \(currentVerseIndex)")
 
         } catch {
             print("🎵 Error loading surah: \(error.localizedDescription)")
@@ -249,7 +238,6 @@ class QuranAudioPlayer: NSObject, ObservableObject {
         player = AVPlayer(playerItem: playerItem)
 
         addTimeObserver()
-        observePlaybackEnd()
 
         player?.play()
         playbackState = .playing
