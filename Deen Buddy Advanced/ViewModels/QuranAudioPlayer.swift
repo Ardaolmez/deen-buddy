@@ -115,10 +115,22 @@ class QuranAudioPlayer: NSObject, ObservableObject {
                 return
             }
 
-            currentVerseIndex = min(startingAtVerse, verses.count - 1)
+            // startingAtVerse is a verse number (1-based), convert to array index
+            // Find the verse with matching verseNumber, or default to first verse
+            if startingAtVerse > 0 {
+                if let index = verses.firstIndex(where: { $0.verseNumber == startingAtVerse }) {
+                    currentVerseIndex = index
+                } else {
+                    // Verse number not found, use closest valid index
+                    currentVerseIndex = min(max(0, startingAtVerse - 1), verses.count - 1)
+                }
+            } else {
+                currentVerseIndex = 0
+            }
+
             currentVerse = verses[currentVerseIndex]
             playbackState = .idle
-            print("🎵 Ready to play from verse index \(currentVerseIndex)")
+            print("🎵 Ready to play from verse number \(currentVerse?.verseNumber ?? 0) at index \(currentVerseIndex)")
 
         } catch {
             print("🎵 Error loading surah: \(error.localizedDescription)")
