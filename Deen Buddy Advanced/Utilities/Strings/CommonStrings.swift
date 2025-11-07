@@ -35,7 +35,7 @@ struct CommonStrings {
 
     // Daily Streak
     static let dailyStreak = "Daily Streak"
-    static let daysOfWeek = ["M", "T", "W", "T", "F", "S", "S"]
+    static let daysOfWeek = ["S", "M", "T", "W", "T", "F", "S"]
 
     // Personalized Learning
     static let personalizedLearning = "Personalized Learning"

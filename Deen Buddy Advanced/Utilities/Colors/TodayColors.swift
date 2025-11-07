@@ -67,5 +67,30 @@ extension AppColors {
         static let quranGoalCardText = Color.white
         static let quranGoalCardShadow = Color.black
         static let quranGoalOverlayBackground = Color.black
+
+        // Daily Progress Cards
+        static let activityCardBackground = Color(.systemBackground)
+        static let activityCardBorder = Color(.systemGray4)
+        static let activityCardTitle = Color.primary
+        static let activityCardTime = Color.secondary
+        static let activityCardDone = Color.green
+        static let activityCardIcon = Color.blue
+        static let activityCardIconBackground = Color.blue.opacity(0.1)
+
+        // Progress Bar
+        static let progressBarBackground = Color(.systemGray5)
+        static let progressBarFill = Color.orange
+        static let progressText = Color.primary
+
+        // Activity Detail Modal
+        static let modalBackground = Color(.systemBackground)
+        static let modalOverlay = Color.black.opacity(0.3)
+        static let modalArabicText = Color.primary
+        static let modalTranslationText = Color.secondary
+        static let modalReferenceText = Color.secondary
+        static let modalTagBackground = Color.blue.opacity(0.1)
+        static let modalTagText = Color.blue
+        static let completeButton = Color.green
+        static let completeButtonText = Color.white
     }
 }

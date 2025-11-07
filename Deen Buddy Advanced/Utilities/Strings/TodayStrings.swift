@@ -72,4 +72,23 @@ struct TodayStrings {
     // Feedback Messages
     static let feedbackThankYou = "Thank you for your feedback!"
     static let feedbackError = "Failed to submit feedback. Please try again."
+
+    // Daily Progress
+    static let progressToday = "Progress today"
+    static let dailyStreakTitle = "Daily Streak"
+    static let currentStreak = "Current"
+    static let bestStreakLabel = "Best"
+    static let dayStreak = "%d day"
+    static let daysStreak = "%d days"
+
+    // Daily Activities
+    static let dailyVerseActivity = "Daily Verse"
+    static let dailyDuroodActivity = "Daily Durood"
+    static let dailyDuaActivity = "Daily Dua"
+    static let estimatedTime = "%d MIN"
+    static let activityDone = "DONE"
+    static let markComplete = "Mark Complete"
+    static let listenLabel = "Listen"
+    static let readLabel = "Read"
+    static let closeLabel = "Close"
 }

@@ -1,0 +1,152 @@
+[
+  {
+    "id": "verse_001",
+    "type": "daily_verse",
+    "title": "Patience and Prayer",
+    "arabicText": "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ",
+    "transliteration": "Wasta'eenoo bissabri wassalaah; wa innahaa lakabeeratun illaa 'alal khaashi'een",
+    "translation": "And seek help through patience and prayer, and indeed, it is difficult except for the humbly submissive to Allah.",
+    "reference": "Surah Al-Baqarah 2:45",
+    "tags": ["PATIENCE", "PRAYER", "HUMILITY"]
+  },
+  {
+    "id": "verse_002",
+    "type": "daily_verse",
+    "title": "Trust in Allah",
+    "arabicText": "وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ",
+    "transliteration": "Wa man yatawakkal 'alal laahi fahuwa hasbuh",
+    "translation": "And whoever relies upon Allah - then He is sufficient for him.",
+    "reference": "Surah At-Talaq 65:3",
+    "tags": ["TRUST", "RELIANCE", "FAITH"]
+  },
+  {
+    "id": "verse_003",
+    "type": "daily_verse",
+    "title": "Remember Allah",
+    "arabicText": "فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ",
+    "transliteration": "Fadhkurooneee adhkurkum washkuroo lee wa laa takfuroon",
+    "translation": "So remember Me; I will remember you. And be grateful to Me and do not deny Me.",
+    "reference": "Surah Al-Baqarah 2:152",
+    "tags": ["REMEMBRANCE", "GRATITUDE", "WORSHIP"]
+  },
+  {
+    "id": "verse_004",
+    "type": "daily_verse",
+    "title": "Ease After Hardship",
+    "arabicText": "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا، إِنَّ مَعَ الْعُسْرِ يُسْرًا",
+    "transliteration": "Fa inna ma'al 'usri yusra, inna ma'al 'usri yusra",
+    "translation": "For indeed, with hardship comes ease. Indeed, with hardship comes ease.",
+    "reference": "Surah Ash-Sharh 94:5-6",
+    "tags": ["HOPE", "COMFORT", "PERSEVERANCE"]
+  },
+  {
+    "id": "verse_005",
+    "type": "daily_verse",
+    "title": "Allah is Near",
+    "arabicText": "وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌ ۖ أُجِيبُ دَعْوَةَ الدَّاعِ إِذَا دَعَانِ",
+    "transliteration": "Wa idha sa-alaka 'ibaadee 'annee fa-innee qareeb; ujeebu da'watad daa'i idha da'aan",
+    "translation": "And when My servants ask you concerning Me - indeed I am near. I respond to the invocation of the supplicant when he calls upon Me.",
+    "reference": "Surah Al-Baqarah 2:186",
+    "tags": ["PRAYER", "CLOSENESS", "RESPONSE"]
+  },
+  {
+    "id": "verse_006",
+    "type": "daily_verse",
+    "title": "Divine Protection",
+    "arabicText": "وَاللَّهُ خَيْرٌ حَافِظًا ۖ وَهُوَ أَرْحَمُ الرَّاحِمِينَ",
+    "transliteration": "Wallaahu khayrun haafizaa; wa Huwa arhamur raahimeen",
+    "translation": "And Allah is the best Guardian, and He is the Most Merciful of the merciful.",
+    "reference": "Surah Yusuf 12:64",
+    "tags": ["PROTECTION", "MERCY", "TRUST"]
+  },
+  {
+    "id": "verse_007",
+    "type": "daily_verse",
+    "title": "Good Deeds",
+    "arabicText": "مَنْ عَمِلَ صَالِحًا مِّن ذَكَرٍ أَوْ أُنثَىٰ وَهُوَ مُؤْمِنٌ فَلَنُحْيِيَنَّهُ حَيَاةً طَيِّبَةً",
+    "transliteration": "Man 'amila saalihan min dhakarin aw unthaa wa huwa mu'minun falanuhyiyannahu hayaatan tayyibah",
+    "translation": "Whoever does righteousness, whether male or female, while being a believer - We will surely cause them to live a good life.",
+    "reference": "Surah An-Nahl 16:97",
+    "tags": ["RIGHTEOUSNESS", "REWARD", "GOODLIFE"]
+  },
+  {
+    "id": "verse_008",
+    "type": "daily_verse",
+    "title": "Forgiveness and Mercy",
+    "arabicText": "قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ ۚ إِنَّ اللَّهَ يَغْفِرُ الذُّنُوبَ جَمِيعًا",
+    "transliteration": "Qul yaa 'ibaadiyallazeena asrafoo 'alaaa anfusihim laa taqnatoo mir rahmatillaah; innallaaha yaghfirudh-dhunooba jamee'aa",
+    "translation": "Say: O My servants who have transgressed against themselves, do not despair of the mercy of Allah. Indeed, Allah forgives all sins.",
+    "reference": "Surah Az-Zumar 39:53",
+    "tags": ["FORGIVENESS", "HOPE", "MERCY"]
+  },
+  {
+    "id": "verse_009",
+    "type": "daily_verse",
+    "title": "Wisdom in Adversity",
+    "arabicText": "وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ ۖ وَعَسَىٰ أَن تُحِبُّوا شَيْئًا وَهُوَ شَرٌّ لَّكُمْ ۗ وَاللَّهُ يَعْلَمُ وَأَنتُمْ لَا تَعْلَمُونَ",
+    "transliteration": "Wa 'asaaa an takrahoo shay'anw wa huwa khayrul lakum; wa 'asaaa an tuhibboo shay'anw wa huwa sharrul lakum; wallaahu ya'lamu wa antum laa ta'lamoon",
+    "translation": "But perhaps you hate a thing and it is good for you; and perhaps you love a thing and it is bad for you. And Allah knows, while you know not.",
+    "reference": "Surah Al-Baqarah 2:216",
+    "tags": ["WISDOM", "TRUST", "KNOWLEDGE"]
+  },
+  {
+    "id": "verse_010",
+    "type": "daily_verse",
+    "title": "Peace of Heart",
+    "arabicText": "أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ",
+    "transliteration": "Alaa bidhikrillaahi tatma'innul quloob",
+    "translation": "Verily, in the remembrance of Allah do hearts find rest.",
+    "reference": "Surah Ar-Ra'd 13:28",
+    "tags": ["PEACE", "REMEMBRANCE", "TRANQUILITY"]
+  },
+  {
+    "id": "verse_011",
+    "type": "daily_verse",
+    "title": "Guidance and Light",
+    "arabicText": "يَهْدِي بِهِ اللَّهُ مَنِ اتَّبَعَ رِضْوَانَهُ سُبُلَ السَّلَامِ وَيُخْرِجُهُم مِّنَ الظُّلُمَاتِ إِلَى النُّورِ",
+    "transliteration": "Yahdee bihil laahu manit taba'a ridwaanahu subulas salaami wa yukhrijuhum minaz zulumaati ilan noor",
+    "translation": "By which Allah guides those who pursue His pleasure to the ways of peace and brings them out from darknesses into the light.",
+    "reference": "Surah Al-Ma'idah 5:16",
+    "tags": ["GUIDANCE", "LIGHT", "PEACE"]
+  },
+  {
+    "id": "verse_012",
+    "type": "daily_verse",
+    "title": "Gratitude",
+    "arabicText": "لَئِن شَكَرْتُمْ لَأَزِيدَنَّكُمْ",
+    "transliteration": "La'in shakartum la-azeedannakum",
+    "translation": "If you are grateful, I will surely increase you in favor.",
+    "reference": "Surah Ibrahim 14:7",
+    "tags": ["GRATITUDE", "BLESSINGS", "INCREASE"]
+  },
+  {
+    "id": "verse_013",
+    "type": "daily_verse",
+    "title": "Seeking Help",
+    "arabicText": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+    "transliteration": "Iyyaaka na'budu wa iyyaaka nasta'een",
+    "translation": "It is You we worship and You we ask for help.",
+    "reference": "Surah Al-Fatihah 1:5",
+    "tags": ["WORSHIP", "HELP", "DEVOTION"]
+  },
+  {
+    "id": "verse_014",
+    "type": "daily_verse",
+    "title": "Charity and Kindness",
+    "arabicText": "وَمَا تُنفِقُوا مِنْ خَيْرٍ فَإِنَّ اللَّهَ بِهِ عَلِيمٌ",
+    "transliteration": "Wa maa tunfiqoo min khayrin fa innallaaha bihee 'aleem",
+    "translation": "And whatever you spend of good - indeed, Allah is Knowing of it.",
+    "reference": "Surah Al-Baqarah 2:273",
+    "tags": ["CHARITY", "KINDNESS", "REWARD"]
+  },
+  {
+    "id": "verse_015",
+    "type": "daily_verse",
+    "title": "Contentment",
+    "arabicText": "وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا وَيَرْزُقْهُ مِنْ حَيْثُ لَا يَحْتَسِبُ",
+    "transliteration": "Wa many-yattaqil laaha yaj'al lahoo makhrajaa, wa yarzuqhu min haythu laa yahtasib",
+    "translation": "And whoever fears Allah - He will make for him a way out, and will provide for him from where he does not expect.",
+    "reference": "Surah At-Talaq 65:2-3",
+    "tags": ["TRUST", "PROVISION", "TAQWA"]
+  }
+]

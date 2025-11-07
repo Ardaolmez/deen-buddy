@@ -1,0 +1,202 @@
+[
+  {
+    "id": "dua_001",
+    "type": "daily_dua",
+    "title": "Morning Protection",
+    "arabicText": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+    "transliteration": "Asbahna wa asbahal mulku lillah, walhamdu lillah, la ilaha illallahu wahdahu la shareeka lah, lahul mulku walahul hamdu wa huwa 'ala kulli shay'in qadeer",
+    "translation": "We have entered a new day and with it all dominion belongs to Allah. Praise is to Allah. None has the right to be worshipped but Allah alone, Who has no partner. To Allah belongs the dominion, and to Him is the praise and He is Able to do all things.",
+    "reference": "Morning Dhikr",
+    "tags": ["MORNING", "PROTECTION", "PRAISE"]
+  },
+  {
+    "id": "dua_002",
+    "type": "daily_dua",
+    "title": "Seeking Forgiveness",
+    "arabicText": "أَسْتَغْفِرُ اللَّهَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ",
+    "transliteration": "Astaghfirullaha alladhi la ilaha illa huwal hayyul qayyumu wa atubu ilayh",
+    "translation": "I seek the forgiveness of Allah, there is no god but He, the Ever-Living, the Self-Subsisting, and I turn to Him in repentance.",
+    "reference": "Sayyid al-Istighfar",
+    "tags": ["FORGIVENESS", "REPENTANCE", "MERCY"]
+  },
+  {
+    "id": "dua_003",
+    "type": "daily_dua",
+    "title": "Guidance and Ease",
+    "arabicText": "رَبِّ اشْرَحْ لِي صَدْرِي، وَيَسِّرْ لِي أَمْرِي",
+    "transliteration": "Rabbi ishrah li sadri wa yassir li amri",
+    "translation": "My Lord, expand for me my breast and ease for me my task.",
+    "reference": "Surah Ta-Ha 20:25-26",
+    "tags": ["GUIDANCE", "EASE", "WISDOM"]
+  },
+  {
+    "id": "dua_004",
+    "type": "daily_dua",
+    "title": "Protection from Evil",
+    "arabicText": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+    "transliteration": "A'udhu bikalimatillahit-tammati min sharri ma khalaq",
+    "translation": "I seek refuge in the perfect words of Allah from the evil of what He has created.",
+    "reference": "Protection Dua",
+    "tags": ["PROTECTION", "REFUGE", "SAFETY"]
+  },
+  {
+    "id": "dua_005",
+    "type": "daily_dua",
+    "title": "Goodness in Both Worlds",
+    "arabicText": "رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ",
+    "transliteration": "Rabbana atina fid-dunya hasanatan wa fil-akhirati hasanatan wa qina 'adhabannar",
+    "translation": "Our Lord, grant us good in this world and good in the Hereafter, and protect us from the punishment of the Fire.",
+    "reference": "Surah Al-Baqarah 2:201",
+    "tags": ["GOODNESS", "PROTECTION", "BALANCE"]
+  },
+  {
+    "id": "dua_006",
+    "type": "daily_dua",
+    "title": "Patience and Victory",
+    "arabicText": "رَبَّنَا أَفْرِغْ عَلَيْنَا صَبْرًا وَثَبِّتْ أَقْدَامَنَا وَانصُرْنَا عَلَى الْقَوْمِ الْكَافِرِينَ",
+    "transliteration": "Rabbana afrigh 'alayna sabran wa thabbit aqdamana wansurna 'alal qawmil kafireen",
+    "translation": "Our Lord, pour upon us patience and plant firmly our feet and give us victory over the disbelieving people.",
+    "reference": "Surah Al-Baqarah 2:250",
+    "tags": ["PATIENCE", "STEADFASTNESS", "VICTORY"]
+  },
+  {
+    "id": "dua_007",
+    "type": "daily_dua",
+    "title": "Seeking Knowledge",
+    "arabicText": "رَبِّ زِدْنِي عِلْمًا",
+    "transliteration": "Rabbi zidni 'ilma",
+    "translation": "My Lord, increase me in knowledge.",
+    "reference": "Surah Ta-Ha 20:114",
+    "tags": ["KNOWLEDGE", "LEARNING", "WISDOM"]
+  },
+  {
+    "id": "dua_008",
+    "type": "daily_dua",
+    "title": "Entering the Home",
+    "arabicText": "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ الْمَوْلِجِ وَخَيْرَ الْمَخْرَجِ، بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ خَرَجْنَا، وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا",
+    "transliteration": "Allahumma inni as'aluka khayral mawliji wa khayral makhraji, bismillahi walajna, wa bismillahi kharajna, wa 'alallahi rabbina tawakkalna",
+    "translation": "O Allah, I ask You for the good of entering and the good of exiting. In the name of Allah we enter, in the name of Allah we exit, and upon Allah our Lord we depend.",
+    "reference": "Home Entry Dua",
+    "tags": ["HOME", "ENTRY", "BLESSING"]
+  },
+  {
+    "id": "dua_009",
+    "type": "daily_dua",
+    "title": "Before Sleep",
+    "arabicText": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+    "transliteration": "Bismika Allahumma amutu wa ahya",
+    "translation": "In Your name O Allah, I die and I live.",
+    "reference": "Sleep Dua",
+    "tags": ["SLEEP", "REST", "TRUST"]
+  },
+  {
+    "id": "dua_010",
+    "type": "daily_dua",
+    "title": "Upon Waking",
+    "arabicText": "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+    "transliteration": "Alhamdulillahil-ladhi ahyana ba'da ma amatana wa ilayhin-nushur",
+    "translation": "All praise is for Allah who gave us life after having taken it from us, and unto Him is the resurrection.",
+    "reference": "Waking Dua",
+    "tags": ["MORNING", "GRATITUDE", "LIFE"]
+  },
+  {
+    "id": "dua_011",
+    "type": "daily_dua",
+    "title": "Before Eating",
+    "arabicText": "بِسْمِ اللَّهِ وَعَلَى بَرَكَةِ اللَّهِ",
+    "transliteration": "Bismillahi wa 'ala barakatillah",
+    "translation": "In the name of Allah and with the blessings of Allah.",
+    "reference": "Eating Dua",
+    "tags": ["FOOD", "BLESSING", "GRATITUDE"]
+  },
+  {
+    "id": "dua_012",
+    "type": "daily_dua",
+    "title": "After Eating",
+    "arabicText": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ",
+    "transliteration": "Alhamdulillahil-ladhi at'amani hadha wa razaqanihi min ghayri hawlin minni wa la quwwah",
+    "translation": "All praise is for Allah who fed me this and provided it for me without any might or power from myself.",
+    "reference": "After Meal Dua",
+    "tags": ["GRATITUDE", "PROVISION", "THANKS"]
+  },
+  {
+    "id": "dua_013",
+    "type": "daily_dua",
+    "title": "Leaving the Home",
+    "arabicText": "بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+    "transliteration": "Bismillah, tawakkaltu 'alallah, la hawla wa la quwwata illa billah",
+    "translation": "In the name of Allah, I place my trust in Allah, there is no might and no power except by Allah.",
+    "reference": "Leaving Home Dua",
+    "tags": ["DEPARTURE", "TRUST", "PROTECTION"]
+  },
+  {
+    "id": "dua_014",
+    "type": "daily_dua",
+    "title": "For Parents",
+    "arabicText": "رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+    "transliteration": "Rabbir-hamhuma kama rabbayani saghira",
+    "translation": "My Lord, have mercy upon them as they brought me up when I was small.",
+    "reference": "Surah Al-Isra 17:24",
+    "tags": ["PARENTS", "MERCY", "GRATITUDE"]
+  },
+  {
+    "id": "dua_015",
+    "type": "daily_dua",
+    "title": "Anxiety Relief",
+    "arabicText": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْبُخْلِ وَالْجُبْنِ، وَضَلَعِ الدَّيْنِ، وَغَلَبَةِ الرِّجَالِ",
+    "transliteration": "Allahumma inni a'udhu bika minal-hammi wal-hazan, wal-'ajzi wal-kasal, wal-bukhli wal-jubn, wa dala'id-dayn, wa ghalabatir-rijal",
+    "translation": "O Allah, I seek refuge in You from grief and sadness, from weakness and from laziness, from miserliness and from cowardice, from being overcome by debt and from being overpowered by men.",
+    "reference": "Anxiety Dua",
+    "tags": ["ANXIETY", "PROTECTION", "STRENGTH"]
+  },
+  {
+    "id": "dua_016",
+    "type": "daily_dua",
+    "title": "Entering the Mosque",
+    "arabicText": "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+    "transliteration": "Allahumma aftah li abwaba rahmatik",
+    "translation": "O Allah, open for me the doors of Your mercy.",
+    "reference": "Mosque Entry Dua",
+    "tags": ["MOSQUE", "MERCY", "WORSHIP"]
+  },
+  {
+    "id": "dua_017",
+    "type": "daily_dua",
+    "title": "Leaving the Mosque",
+    "arabicText": "اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+    "transliteration": "Allahumma inni as'aluka min fadlik",
+    "translation": "O Allah, I ask You from Your bounty.",
+    "reference": "Mosque Exit Dua",
+    "tags": ["MOSQUE", "BOUNTY", "REQUEST"]
+  },
+  {
+    "id": "dua_018",
+    "type": "daily_dua",
+    "title": "Difficulty and Hardship",
+    "arabicText": "حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ",
+    "transliteration": "Hasbunallahu wa ni'mal wakeel",
+    "translation": "Sufficient for us is Allah, and He is the best Disposer of affairs.",
+    "reference": "Surah Al-Imran 3:173",
+    "tags": ["HARDSHIP", "TRUST", "RELIANCE"]
+  },
+  {
+    "id": "dua_019",
+    "type": "daily_dua",
+    "title": "Acceptance of Deeds",
+    "arabicText": "رَبَّنَا تَقَبَّلْ مِنَّا ۖ إِنَّكَ أَنتَ السَّمِيعُ الْعَلِيمُ",
+    "transliteration": "Rabbana taqabbal minna innaka antas samee'ul 'aleem",
+    "translation": "Our Lord, accept this from us. Indeed, You are the Hearing, the Knowing.",
+    "reference": "Surah Al-Baqarah 2:127",
+    "tags": ["ACCEPTANCE", "DEEDS", "WORSHIP"]
+  },
+  {
+    "id": "dua_020",
+    "type": "daily_dua",
+    "title": "Rain and Blessings",
+    "arabicText": "اللَّهُمَّ صَيِّبًا نَافِعًا",
+    "transliteration": "Allahumma sayyiban nafi'a",
+    "translation": "O Allah, may it be beneficial rain.",
+    "reference": "Rain Dua",
+    "tags": ["RAIN", "BLESSING", "BENEFIT"]
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "durood_001",
+    "type": "daily_durood",
+    "title": "Durood Ibrahim",
+    "arabicText": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ",
+    "transliteration": "Allahumma salli 'ala Muhammadin wa 'ala ali Muhammadin kama sallayta 'ala Ibrahima wa 'ala ali Ibrahima innaka Hamidun Majid. Allahumma barik 'ala Muhammadin wa 'ala ali Muhammadin kama barakta 'ala Ibrahima wa 'ala ali Ibrahima innaka Hamidun Majid.",
+    "translation": "O Allah, send prayers upon Muhammad and the followers of Muhammad, just as You sent prayers upon Ibrahim and the followers of Ibrahim. Verily, You are full of praise and majesty. O Allah, send blessings upon Muhammad and upon the family of Muhammad, just as You sent blessings upon Ibrahim and upon the family of Ibrahim. Verily, You are full of praise and majesty.",
+    "reference": "Salat al-Ibrahimiyyah",
+    "tags": ["BLESSINGS", "PROPHET", "PEACE"]
+  },
+  {
+    "id": "durood_002",
+    "type": "daily_durood",
+    "title": "Simple Durood",
+    "arabicText": "اللَّهُمَّ صَلِّ وَسَلِّمْ عَلَى نَبِيِّنَا مُحَمَّدٍ",
+    "transliteration": "Allahumma salli wa sallim 'ala nabiyyina Muhammad",
+    "translation": "O Allah, send prayers and peace upon our Prophet Muhammad.",
+    "reference": "Common Salawat",
+    "tags": ["SIMPLE", "BLESSINGS", "PROPHET"]
+  },
+  {
+    "id": "durood_003",
+    "type": "daily_durood",
+    "title": "Durood Nariya",
+    "arabicText": "اللَّهُمَّ صَلِّ صَلَاةً كَامِلَةً وَسَلِّمْ سَلَامًا تَامًّا عَلَى سَيِّدِنَا مُحَمَّدٍ الَّذِي تَنْحَلُّ بِهِ الْعُقَدُ وَتَنْفَرِجُ بِهِ الْكُرَبُ وَتُقْضَى بِهِ الْحَوَائِجُ وَتُنَالُ بِهِ الرَّغَائِبُ وَحُسْنُ الْخَوَاتِمِ وَيُسْتَسْقَى الْغَمَامُ بِوَجْهِهِ الْكَرِيمِ وَعَلَى آلِهِ وَصَحْبِهِ فِي كُلِّ لَمْحَةٍ وَنَفَسٍ بِعَدَدِ كُلِّ مَعْلُومٍ لَكَ",
+    "transliteration": "Allahumma salli salatan kamilatan wa sallim salaman tamman 'ala sayyidina Muhammadinil-ladhi tanhallu bihil 'uqadu wa tanfariju bihil kurab, wa tuqda bihil hawa'iju wa tunalu bihi ar-ragha'ibu wa husnul khawatimi wa yustasqa al-ghimamu biwajihi al-kareem, wa 'ala alihi wa sahbihi fi kulli lamhatin wa nafasin bi'adadi kulli ma'lumin lak",
+    "translation": "O Allah, bestow complete blessings and perfect peace upon our Master Muhammad, through whom problems are solved, anxieties are removed, needs are fulfilled, aspirations are attained, good endings are received, and through whose noble countenance clouds give rain. And upon his family and companions in every moment and breath, as many times as is in Your knowledge.",
+    "reference": "Durood Nariya",
+    "tags": ["RELIEF", "NEEDS", "BLESSINGS"]
+  },
+  {
+    "id": "durood_004",
+    "type": "daily_durood",
+    "title": "Durood Taj",
+    "arabicText": "اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا وَمَوْلَانَا مُحَمَّدٍ صَاحِبِ التَّاجِ وَالْمِعْرَاجِ وَالْبُرَاقِ وَالْعَلَمْ، دَافِعِ الْبَلَاءِ وَالْوَبَاءِ وَالْقَحْطِ وَالْمَرَضِ وَالْأَلَمْ",
+    "transliteration": "Allahumma salli 'ala sayyidina wa mawlana Muhammadin sahib at-taji wal mi'raji wal buraqi wal 'alam, dafi'il bala'i wal waba'i wal qahti wal maradi wal alam",
+    "translation": "O Allah, bestow blessings upon our Master Muhammad, the possessor of the Crown, the Mi'raj, the Buraq and the Flag, the repeller of afflictions, epidemics, droughts, diseases and pains.",
+    "reference": "Durood Taj",
+    "tags": ["PROTECTION", "HEALING", "HONOR"]
+  },
+  {
+    "id": "durood_005",
+    "type": "daily_durood",
+    "title": "Durood Tunajjina",
+    "arabicText": "اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ صَلَاةً تُنْجِينَا بِهَا مِنْ جَمِيعِ الْأَهْوَالِ وَالْآفَاتِ، وَتَقْضِي لَنَا بِهَا جَمِيعَ الْحَاجَاتِ، وَتُطَهِّرُنَا بِهَا مِنْ جَمِيعِ السَّيِّئَاتِ، وَتَرْفَعُنَا بِهَا عِنْدَكَ أَعْلَى الدَّرَجَاتِ، وَتُبَلِّغُنَا بِهَا أَقْصَى الْغَايَاتِ مِنْ جَمِيعِ الْخَيْرَاتِ فِي الْحَيَاةِ وَبَعْدَ الْمَمَاتِ",
+    "transliteration": "Allahumma salli 'ala sayyidina Muhammadin salatan tunajjina biha min jami'il ahwali wal afat, wa taqdi lana biha jami'al hajat, wa tutahhiruna biha min jami'is sayyi'at, wa tarfa'una biha 'indaka a'lad darajat, wa tuballighuna biha aqsal ghayat min jami'il khayrat fil hayati wa ba'dal mamat",
+    "translation": "O Allah, bestow blessings upon our Master Muhammad, such blessings by which You save us from all terrors and calamities, fulfill all our needs, purify us from all evils, elevate us to the highest ranks in Your sight, and help us attain the ultimate goals of all good, in this life and after death.",
+    "reference": "Durood Tunajjina",
+    "tags": ["SALVATION", "NEEDS", "PURIFICATION"]
+  },
+  {
+    "id": "durood_006",
+    "type": "daily_durood",
+    "title": "Durood Lakhi",
+    "arabicText": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ عَدَدَ مَا فِي عِلْمِ اللَّهِ صَلَاةً دَائِمَةً بِدَوَامِ مُلْكِ اللَّهِ",
+    "transliteration": "Allahumma salli 'ala Muhammadin 'adada ma fi 'ilmillah, salatan da'imatan bidawami mulkillah",
+    "translation": "O Allah, send blessings upon Muhammad equal to what is in Allah's knowledge, blessings that are perpetual with the perpetuity of Allah's Kingdom.",
+    "reference": "Durood Lakhi",
+    "tags": ["PERPETUAL", "INFINITE", "BLESSINGS"]
+  },
+  {
+    "id": "durood_007",
+    "type": "daily_durood",
+    "title": "Durood Mahi",
+    "arabicText": "اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ صَلَاةً تَكُونُ لَكَ رِضَاءً وَلِحَقِّهِ أَدَاءً",
+    "transliteration": "Allahumma salli 'ala sayyidina Muhammadin salatan takoonu laka ridaa wa lihaqqi ada'",
+    "translation": "O Allah, send blessings upon our Master Muhammad, such blessings that will be pleasing to You and fulfilling his right.",
+    "reference": "Durood Mahi",
+    "tags": ["PLEASURE", "RIGHTS", "FULFILLMENT"]
+  },
+  {
+    "id": "durood_008",
+    "type": "daily_durood",
+    "title": "Brief Salawat",
+    "arabicText": "صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ",
+    "transliteration": "Sallallahu 'alayhi wa sallam",
+    "translation": "May Allah's peace and blessings be upon him.",
+    "reference": "Common Invocation",
+    "tags": ["SIMPLE", "PEACE", "BLESSINGS"]
+  },
+  {
+    "id": "durood_009",
+    "type": "daily_durood",
+    "title": "Durood Akbar",
+    "arabicText": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ وَبَارِكْ وَسَلِّمْ عَلَيْهِ",
+    "transliteration": "Allahumma salli 'ala Muhammadin wa 'ala ali Muhammad wa barik wa sallim 'alayh",
+    "translation": "O Allah, send prayers upon Muhammad and the family of Muhammad, and send blessings and peace upon him.",
+    "reference": "Common Salawat",
+    "tags": ["FAMILY", "PEACE", "BLESSINGS"]
+  },
+  {
+    "id": "durood_010",
+    "type": "daily_durood",
+    "title": "Durood for Friday",
+    "arabicText": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ عَبْدِكَ وَرَسُولِكَ النَّبِيِّ الْأُمِّيِّ وَعَلَى آلِهِ وَأَصْحَابِهِ وَسَلِّمْ تَسْلِيمًا",
+    "transliteration": "Allahumma salli 'ala Muhammadin 'abdika wa rasulikan nabiyyil ummiyyi wa 'ala alihi wa as-habihi wa sallim taslima",
+    "translation": "O Allah, send blessings upon Muhammad, Your servant and messenger, the unlettered Prophet, and upon his family and companions, and grant them abundant peace.",
+    "reference": "Friday Salawat",
+    "tags": ["FRIDAY", "MESSENGER", "COMPANIONS"]
+  }
+]
