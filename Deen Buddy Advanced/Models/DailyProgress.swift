@@ -189,9 +189,9 @@ struct DailyProgressTracker: Codable {
 
     // MARK: - Mark Activity Complete
 
-    mutating func markActivityComplete(_ type: DailyActivityType) {
-        let key = dateKey(from: Date())
-        var record = completionHistory[key] ?? DailyCompletionRecord()
+    mutating func markActivityComplete(_ type: DailyActivityType, for date: Date = Date()) {
+        let key = dateKey(from: date)
+        var record = completionHistory[key] ?? DailyCompletionRecord(date: date)
 
         record.completedActivities.insert(type)
         record.completionTimes[type] = Date()

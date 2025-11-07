@@ -131,7 +131,7 @@ class DailyProgressViewModel: ObservableObject {
     // MARK: - Mark Complete
 
     func markActivityComplete(_ type: DailyActivityType) {
-        progressTracker.markActivityComplete(type)
+        progressTracker.markActivityComplete(type, for: selectedDate)
         save()
     }
 

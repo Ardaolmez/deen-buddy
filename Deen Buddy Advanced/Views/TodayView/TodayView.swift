@@ -194,7 +194,7 @@ struct TodayView: View {
                 if let activity = selectedActivity {
                     DailyActivityDetailView(
                         activity: activity,
-                        isCompleted: dailyProgressVM.isActivityCompleted(activity.type),
+                        isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(activity.type),
                         onComplete: {
                             dailyProgressVM.markActivityComplete(activity.type)
                         }
