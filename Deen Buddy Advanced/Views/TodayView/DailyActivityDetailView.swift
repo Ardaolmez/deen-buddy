@@ -19,6 +19,7 @@ struct DailyActivityDetailView: View {
     @State private var currentActivity: DailyActivityContent
     @State private var currentIsCompleted: Bool
     @State private var currentProgress: Int
+    @State private var showChat = false
 
     init(activity: DailyActivityContent,
          isCompleted: Bool,
@@ -136,6 +137,7 @@ struct DailyActivityDetailView: View {
                                 .font(.system(size: 17, weight: .semibold))
                                 .foregroundColor(Color.orange)
                                 .padding(.top, 8)
+                            
 
                             // English Translation
                             Text(currentActivity.translation)
@@ -176,7 +178,7 @@ struct DailyActivityDetailView: View {
 
                         // Chat to learn more button
                         Button(action: {
-                            // Chat functionality
+                            showChat = true
                         }) {
                             HStack(spacing: 8) {
                                 Text("Chat to learn more")
@@ -238,10 +240,36 @@ struct DailyActivityDetailView: View {
                 }
             }
             .toolbarBackground(.hidden, for: .navigationBar)
+            .fullScreenCover(isPresented: $showChat) {
+                ChatView(initialMessage: generateChatMessage())
+            }
         }
     }
 
     // MARK: - Helper Functions
+
+    private func generateChatMessage() -> String {
+        let activityName = currentActivity.type.displayName
+        let reference = currentActivity.reference ?? ""
+        let translation = currentActivity.translation
+
+        // Create a contextual message based on activity type
+        var message = "I would like to learn more about this \(activityName)"
+
+        if !reference.isEmpty {
+            message += " (\(reference))"
+        }
+
+        message += ".\n\n"
+        message += "The translation is: \"\(translation)\"\n\n"
+        message += "Please tell me about:\n"
+        message += "• Its significance and context\n"
+        message += "• The meaning and benefits\n"
+        message += "• When and how to use it\n"
+        message += "• Any related teachings or lessons"
+
+        return message
+    }
 
     private func handleComplete() {
         // Mark current activity as complete

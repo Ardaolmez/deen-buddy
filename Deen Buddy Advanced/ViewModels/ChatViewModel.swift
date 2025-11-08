@@ -22,13 +22,21 @@ final class ChatViewModel: ObservableObject {
 
     // ViewModels/ChatViewModel.swift (constructor)
 
-    init(service: ChatService = CloudflareChatService()) {
+    init(service: ChatService = CloudflareChatService(), initialMessage: String? = nil) {
         self.service = service
         var welcomeMessage = ChatMessage(role: .bot, text: AppStrings.chat.welcomeMessage, isWelcomeMessage: true)
         welcomeMessage.shouldUseStreamingView = true
         messages = [welcomeMessage]
         latestBotMessageId = welcomeMessage.id  // Mark welcome message for streaming
         // Don't show stop button for welcome message
+
+        // If there's an initial message, send it automatically
+        if let initialMessage = initialMessage {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.input = initialMessage
+                self.send()
+            }
+        }
     }
 
 

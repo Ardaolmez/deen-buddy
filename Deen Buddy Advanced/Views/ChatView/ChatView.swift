@@ -3,11 +3,17 @@ import SwiftUI
 struct ChatView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.colorScheme) var colorScheme
-    @StateObject var vm = ChatViewModel()
+    let initialMessage: String?
+    @StateObject private var vm: ChatViewModel
 
     private let bubbleMaxWidth: CGFloat = 280
     @State private var scrollTrigger: Int = 0  // Trigger for scroll updates
     @FocusState private var isTextFieldFocused: Bool
+
+    init(initialMessage: String? = nil) {
+        self.initialMessage = initialMessage
+        _vm = StateObject(wrappedValue: ChatViewModel(initialMessage: initialMessage))
+    }
 
     var body: some View {
         NavigationView {
