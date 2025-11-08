@@ -7,37 +7,41 @@ struct PrayersView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 0) {
-                    Spacer()
-                        .frame(height: 20)
+            ZStack {
+                // Creamy Papyrus Background
+                CreamyPapyrusBackground()
 
-                    // MARK: Prayer Icons Row
-                    PrayerIconsRow(
-                        entries: vm.entries,
-                        currentPrayer: vm.currentPrayer,
-                        nextPrayer: vm.nextPrayer,
-                        countdown: vm.countdownText,
-                        isCompleted: { vm.isCompleted($0) },
-                        canToggle: { vm.canMark($0) },
-                        onToggle: { prayer in
-                            vm.toggleCompleted(prayer)
-                            vm.recomputeWeekStreak()
-                        }
-                    )
+                ScrollView {
+                    VStack(spacing: 0) {
+                        Spacer()
+                            .frame(height: 20)
 
-                    Spacer()
-                        .frame(height: 20)
+                        // MARK: Prayer Icons Row
+                        PrayerIconsRow(
+                            entries: vm.entries,
+                            currentPrayer: vm.currentPrayer,
+                            nextPrayer: vm.nextPrayer,
+                            countdown: vm.countdownText,
+                            isCompleted: { vm.isCompleted($0) },
+                            canToggle: { vm.canMark($0) },
+                            onToggle: { prayer in
+                                vm.toggleCompleted(prayer)
+                                vm.recomputeWeekStreak()
+                            }
+                        )
 
-                    // MARK: Qibla Header
-                    QiblaHeader(cityLine: vm.cityLine)
-                    // MARK: Qibla Compass
-                    ArrowQiblaCompassView()
-                        .frame(height: 500)
+                        Spacer()
+                            .frame(height: 20)
+
+                        // MARK: Qibla Header
+                        QiblaHeader(cityLine: vm.cityLine)
+                        // MARK: Qibla Compass
+                        ArrowQiblaCompassView()
+                            .frame(height: 500)
+                    }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
             }
-           // .background(AppColors.Quran.papyrusLight)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(isPresented: $openRecords) {
                 PrayerRecordsView()

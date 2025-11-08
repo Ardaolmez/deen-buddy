@@ -119,22 +119,78 @@ struct TodayView: View {
                             DailyVerseCard()
                                 .padding(.horizontal, 20)
 
-                            // Daily Quiz Button
+                            // Daily Quiz Button - styled to match activity cards
                             Button(action: {
                                 showQuiz = true
                             }) {
-                                HStack {
-                                    Image(systemName: "questionmark.circle.fill")
-                                        .font(.system(size: 20))
-                                    Text(AppStrings.today.dailyQuiz)
-                                        .font(.system(size: 18, weight: .semibold))
+                                HStack(spacing: 12) {
+                                    // Icon
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.white.opacity(0.3))
+                                            .frame(width: 48, height: 48)
+
+                                        Image(systemName: "questionmark.circle.fill")
+                                            .font(.system(size: 20))
+                                            .foregroundColor(.white)
+                                    }
+
+                                    // Title and time
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("DAILY QUIZ")
+                                            .font(.system(size: 12, weight: .bold))
+                                            .foregroundColor(.white)
+                                            .tracking(0.5)
+
+                                        Text("5 MIN")
+                                            .font(.system(size: 14, weight: .medium))
+                                            .foregroundColor(.white.opacity(0.9))
+                                    }
+
+                                    Spacer()
+
+                                    // Start button
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "play.fill")
+                                            .font(.system(size: 14))
+                                        Text("Start")
+                                            .font(.system(size: 14, weight: .semibold))
+                                    }
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 16)
+                                    .padding(.vertical, 8)
+                                    .background(Color.white.opacity(0.3))
+                                    .cornerRadius(12)
                                 }
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 56)
-                                .background(AppColors.Today.dailyQuizButton)
-                                .foregroundColor(AppColors.Today.dailyQuizText)
-                                .cornerRadius(16)
+                                .padding(16)
+                                .frame(height: 80)
+                                .background(
+                                    ZStack {
+                                        // Brand green gradient background
+                                        LinearGradient(
+                                            colors: [
+                                                AppColors.Today.brandGreen,
+                                                AppColors.Today.brandGreen.opacity(0.8)
+                                            ],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
+
+                                        // Overlay gradient for depth
+                                        LinearGradient(
+                                            colors: [
+                                                Color.black.opacity(0.1),
+                                                Color.black.opacity(0.3)
+                                            ],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                    }
+                                )
+                                .cornerRadius(20)
+                                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 4)
                             }
+                            .buttonStyle(PlainButtonStyle())
                             .padding(.horizontal, 20)
 
                             // Daily Reading Goal
