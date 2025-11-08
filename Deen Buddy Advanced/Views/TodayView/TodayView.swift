@@ -47,12 +47,12 @@ struct TodayView: View {
                             .padding(.horizontal, 20)
 
                             // Content based on selected date
-                            if dailyProgressVM.isSelectedDateFuture() {
-                                // Show locked view for future dates
+                            if dailyProgressVM.shouldLockSelectedDate() {
+                                // Show locked view for future dates and past dates with no progress
                                 LockedDayView(date: dailyProgressVM.selectedDate)
                                     .padding(.horizontal, 20)
                             } else {
-                                // Daily Activity Cards
+                                // Daily Activity Cards - Show for today and past dates with progress
                                 VStack(spacing: 16) {
                                     // Daily Verse
                                     if let verse = dailyProgressVM.dailyVerse {
@@ -60,7 +60,10 @@ struct TodayView: View {
                                             activity: verse,
                                             isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(.verse),
                                             onMarkComplete: {
-                                                dailyProgressVM.markActivityComplete(.verse)
+                                                // Only allow marking complete if it's today
+                                                if dailyProgressVM.isSelectedDateToday() {
+                                                    dailyProgressVM.markActivityComplete(.verse)
+                                                }
                                             },
                                             onShowDetail: {
                                                 selectedActivity = verse
@@ -75,7 +78,10 @@ struct TodayView: View {
                                             activity: durood,
                                             isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(.durood),
                                             onMarkComplete: {
-                                                dailyProgressVM.markActivityComplete(.durood)
+                                                // Only allow marking complete if it's today
+                                                if dailyProgressVM.isSelectedDateToday() {
+                                                    dailyProgressVM.markActivityComplete(.durood)
+                                                }
                                             },
                                             onShowDetail: {
                                                 selectedActivity = durood
@@ -90,7 +96,10 @@ struct TodayView: View {
                                             activity: dua,
                                             isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(.dua),
                                             onMarkComplete: {
-                                                dailyProgressVM.markActivityComplete(.dua)
+                                                // Only allow marking complete if it's today
+                                                if dailyProgressVM.isSelectedDateToday() {
+                                                    dailyProgressVM.markActivityComplete(.dua)
+                                                }
                                             },
                                             onShowDetail: {
                                                 selectedActivity = dua

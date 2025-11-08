@@ -196,6 +196,29 @@ class DailyProgressViewModel: ObservableObject {
         return false
     }
 
+    func hasProgressForSelectedDate() -> Bool {
+        let key = progressTracker.dateKey(from: selectedDate)
+        if let record = progressTracker.completionHistory[key] {
+            return !record.completedActivities.isEmpty
+        }
+        return false
+    }
+
+    func shouldLockSelectedDate() -> Bool {
+        // Future dates are always locked
+        if isSelectedDateFuture() {
+            return true
+        }
+
+        // Today is never locked
+        if isSelectedDateToday() {
+            return false
+        }
+
+        // Past dates: lock only if they have no progress
+        return !hasProgressForSelectedDate()
+    }
+
     // MARK: - Persistence
 
     private func save() {
