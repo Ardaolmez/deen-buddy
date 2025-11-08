@@ -197,11 +197,32 @@ struct TodayView: View {
                         isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(activity.type),
                         onComplete: {
                             dailyProgressVM.markActivityComplete(activity.type)
+                        },
+                        allActivities: getAllActivities(),
+                        dailyProgress: dailyProgressVM.getProgressForSelectedDate(),
+                        checkIsCompleted: { type in
+                            dailyProgressVM.isActivityCompletedForSelectedDate(type)
                         }
                     )
                 }
             }
         }
+    }
+
+    // MARK: - Helper Functions
+
+    private func getAllActivities() -> [DailyActivityContent] {
+        var activities: [DailyActivityContent] = []
+        if let verse = dailyProgressVM.dailyVerse {
+            activities.append(verse)
+        }
+        if let durood = dailyProgressVM.dailyDurood {
+            activities.append(durood)
+        }
+        if let dua = dailyProgressVM.dailyDua {
+            activities.append(dua)
+        }
+        return activities
     }
 }
 
