@@ -15,6 +15,7 @@ struct DailyActivityDetailView: View {
     let allActivities: [DailyActivityContent]
     let dailyProgress: Int
     let checkIsCompleted: (DailyActivityType) -> Bool
+    let markComplete: (DailyActivityType) -> Void  // New: callback to mark any activity complete
 
     @State private var currentActivity: DailyActivityContent
     @State private var currentIsCompleted: Bool
@@ -26,13 +27,15 @@ struct DailyActivityDetailView: View {
          onComplete: @escaping () -> Void,
          allActivities: [DailyActivityContent] = [],
          dailyProgress: Int = 0,
-         checkIsCompleted: @escaping (DailyActivityType) -> Bool = { _ in false }) {
+         checkIsCompleted: @escaping (DailyActivityType) -> Bool = { _ in false },
+         markComplete: @escaping (DailyActivityType) -> Void = { _ in }) {
         self.activity = activity
         self.isCompleted = isCompleted
         self.onComplete = onComplete
         self.allActivities = allActivities
         self.dailyProgress = dailyProgress
         self.checkIsCompleted = checkIsCompleted
+        self.markComplete = markComplete
         self._currentActivity = State(initialValue: activity)
         self._currentIsCompleted = State(initialValue: isCompleted)
         self._currentProgress = State(initialValue: dailyProgress)
@@ -272,8 +275,8 @@ struct DailyActivityDetailView: View {
     }
 
     private func handleComplete() {
-        // Mark current activity as complete
-        onComplete()
+        // Mark the CURRENT activity as complete (not the original one)
+        markComplete(currentActivity.type)
         currentIsCompleted = true
 
         // Update progress

@@ -211,6 +211,9 @@ struct TodayView: View {
                         dailyProgress: dailyProgressVM.getProgressForSelectedDate(),
                         checkIsCompleted: { type in
                             dailyProgressVM.isActivityCompletedForSelectedDate(type)
+                        },
+                        markComplete: { type in
+                            dailyProgressVM.markActivityComplete(type)
                         }
                     )
                 }
