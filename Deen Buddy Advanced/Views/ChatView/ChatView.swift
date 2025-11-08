@@ -27,7 +27,7 @@ struct ChatView: View {
                 ScrollViewReader { proxy in
                     ScrollView {
                         LazyVStack(spacing: 36) {
-                            ForEach(vm.messages) { msg in
+                            ForEach(vm.messages.filter { !$0.isHidden }) { msg in
                                 MessageRowView(
                                     message: msg,
                                     isStreaming: msg.id == vm.latestBotMessageId && msg.role == .bot,

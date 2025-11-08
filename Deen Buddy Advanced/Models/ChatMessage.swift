@@ -35,4 +35,5 @@ struct ChatMessage: Identifiable, Equatable, Hashable {
     var isWelcomeMessage: Bool = false  // Flag for welcome message with initial delay
     var shouldUseStreamingView: Bool = false  // Whether this message should use StreamingTextView
     var displayedText: String = ""  // Partial text to display when stopped
+    var isHidden: Bool = false  // Flag to hide message from UI (for auto-sent context messages)
 }
