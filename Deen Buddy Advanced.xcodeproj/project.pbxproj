@@ -64,7 +64,6 @@
 		46B68FAD2EA32A7E002B2DF1 /* Exceptions for "Deen Buddy Advanced" folder in "Deen Buddy WidgetsExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"Resources/Images/Quba mosque painting.jpg",
 				Resources/Quran/quran_en.json,
 				Utilities/Colors/AppColors.swift,
 				Utilities/Colors/WidgetColors.swift,

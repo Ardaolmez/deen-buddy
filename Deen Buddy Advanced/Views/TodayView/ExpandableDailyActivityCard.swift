@@ -25,10 +25,14 @@ struct ExpandableDailyActivityCard: View {
     }
 
     private var backgroundImageName: String {
+        // Get random image for each activity type (stable per day)
         switch activity.type {
-        case .verse: return "tile.jpg"
-        case .durood: return "Quba mosque painting.jpg"
-        case .dua: return "tile.jpg"
+        case .verse:
+            return BackgroundImageManager.shared.getRandomImage(for: .verse)
+        case .durood:
+            return BackgroundImageManager.shared.getRandomImage(for: .durood)
+        case .dua:
+            return BackgroundImageManager.shared.getRandomImage(for: .dua)
         }
     }
 
@@ -167,11 +171,14 @@ struct ExpandableDailyActivityCard: View {
                     )
                 }
 
-                // Overlay gradient
+                // Dark overlay to make text more prominent
+                Color.black.opacity(0.5)
+
+                // Additional gradient for depth
                 LinearGradient(
                     colors: [
-                        Color.black.opacity(0.4),
-                        Color.black.opacity(0.6)
+                        Color.black.opacity(0.2),
+                        Color.black.opacity(0.4)
                     ],
                     startPoint: .top,
                     endPoint: .bottom

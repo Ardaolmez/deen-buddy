@@ -22,6 +22,18 @@ struct DailyActivityDetailView: View {
     @State private var currentProgress: Int
     @State private var showChat = false
 
+    // Random background image for this activity type
+    private var backgroundImageName: String {
+        switch currentActivity.type {
+        case .verse:
+            return BackgroundImageManager.shared.getRandomImage(for: .verse)
+        case .durood:
+            return BackgroundImageManager.shared.getRandomImage(for: .durood)
+        case .dua:
+            return BackgroundImageManager.shared.getRandomImage(for: .dua)
+        }
+    }
+
     init(activity: DailyActivityContent,
          isCompleted: Bool,
          onComplete: @escaping () -> Void,
@@ -43,41 +55,65 @@ struct DailyActivityDetailView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                // Background - Scenic gradient to simulate nature image
+            GeometryReader { geometry in
                 ZStack {
-                    // Base gradient background
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color(red: 0.4, green: 0.45, blue: 0.5),
-                            Color(red: 0.3, green: 0.4, blue: 0.45),
-                            Color(red: 0.2, green: 0.3, blue: 0.35)
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                    .ignoresSafeArea()
+                    // Background - Beautiful Islamic artwork
+                    ZStack {
+                        // Base background color
+                        AppColors.Today.cardBackground
+                            .ignoresSafeArea()
 
-                    // Overlay for depth
-                    Color.black.opacity(0.3)
-                        .ignoresSafeArea()
-                }
-
-                VStack(spacing: 0) {
-                    // Progress Section at the top - Fixed
-                    VStack(alignment: .leading, spacing: 12) {
-                        HStack {
-                            Text("Progress today")
-                                .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(.white)
-                            Spacer()
-                            Text("\(currentProgress)%")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(Color.yellow)
+                        // Random background image
+                        if let image = UIImage(named: backgroundImageName) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .ignoresSafeArea()
+                        } else {
+                            // Fallback gradient background
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color(red: 0.4, green: 0.45, blue: 0.5),
+                                    Color(red: 0.3, green: 0.4, blue: 0.45),
+                                    Color(red: 0.2, green: 0.3, blue: 0.35)
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                            .ignoresSafeArea()
                         }
 
-                        // Progress bar
-                        GeometryReader { geometry in
+                        // Dark overlay to make text more prominent
+                        Color.black.opacity(0.6)
+                            .ignoresSafeArea()
+
+                        // Additional gradient for depth
+                        LinearGradient(
+                            gradient: Gradient(colors: [
+                                Color.black.opacity(0.2),
+                                Color.black.opacity(0.3),
+                                Color.black.opacity(0.4)
+                            ]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .ignoresSafeArea()
+                    }
+
+                    VStack(spacing: 0) {
+                        // Progress Section at the top - Fixed
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Text("Progress today")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(.white)
+                                Spacer()
+                                Text("\(currentProgress)%")
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(Color.yellow)
+                            }
+
+                            // Progress bar
                             ZStack(alignment: .leading) {
                                 // Background track
                                 RoundedRectangle(cornerRadius: 4)
@@ -85,90 +121,114 @@ struct DailyActivityDetailView: View {
                                     .frame(height: 8)
 
                                 // Progress fill
-                                RoundedRectangle(cornerRadius: 4)
-                                    .fill(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: [Color.orange, Color.yellow]),
-                                            startPoint: .leading,
-                                            endPoint: .trailing
+                                GeometryReader { progressGeometry in
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [Color.orange, Color.yellow]),
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            )
                                         )
-                                    )
-                                    .frame(width: geometry.size.width * CGFloat(currentProgress) / 100.0, height: 8)
-                                    .animation(.easeInOut, value: currentProgress)
+                                        .frame(width: progressGeometry.size.width * CGFloat(currentProgress) / 100.0, height: 8)
+                                        .animation(.easeInOut, value: currentProgress)
+                                }
                             }
-                        }
-                        .frame(height: 8)
+                            .frame(height: 8)
 
-                        // Activity type badge
-                        HStack(spacing: 8) {
-                            Image(systemName: currentActivity.type.iconName)
-                                .font(.system(size: 16))
-                            Text(currentActivity.type.displayName.uppercased())
-                                .font(.system(size: 13, weight: .bold))
-                                .tracking(1)
-                            Text("• \(currentActivity.type.estimatedMinutes) MIN")
-                                .font(.system(size: 13, weight: .medium))
+                            // Activity type badge
+                            HStack(spacing: 8) {
+                                Image(systemName: currentActivity.type.iconName)
+                                    .font(.system(size: 16))
+                                Text(currentActivity.type.displayName.uppercased())
+                                    .font(.system(size: 13, weight: .bold))
+                                    .tracking(1)
+                                Text("• \(currentActivity.type.estimatedMinutes) MIN")
+                                    .font(.system(size: 13, weight: .medium))
+                            }
+                            .foregroundColor(.white)
                         }
-                        .foregroundColor(.white)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 20)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 20)
+                        .padding(.bottom, 16)
 
-                    // Scrollable Content Area
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack(spacing: 24) {
-                            // Reference at top
-                            if let reference = currentActivity.reference {
-                                Text(reference)
+                        // Scrollable Content Area
+                        ScrollView(.vertical, showsIndicators: false) {
+                            VStack(spacing: 24) {
+                                // Reference at top
+                                if let reference = currentActivity.reference {
+                                    Text(reference)
+                                        .font(.system(size: 17, weight: .semibold))
+                                        .foregroundColor(Color.orange)
+                                        .multilineTextAlignment(.center)
+                                        .padding(.top, 20)
+                                }
+
+                                // Arabic Text
+                                Text(currentActivity.arabicText)
+                                    .font(.system(size: 26, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .multilineTextAlignment(.center)
+                                    .lineSpacing(12)
+                                    .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
+
+                                // Translation Label
+                                Text("Translation")
                                     .font(.system(size: 17, weight: .semibold))
                                     .foregroundColor(Color.orange)
-                                    .padding(.top, 20)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top, 8)
+
+                                // English Translation
+                                Text(currentActivity.translation)
+                                    .font(.system(size: 16, weight: .regular))
+                                    .foregroundColor(.white.opacity(0.95))
+                                    .multilineTextAlignment(.center)
+                                    .lineSpacing(6)
+                                    .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
+
+                                // Bottom padding for scroll
+                                Spacer()
+                                    .frame(height: 40)
+                            }
+                            .padding(.horizontal, 24)
+                        }
+
+                        // Action Buttons Section at the bottom
+                        HStack(spacing: 12) {
+                            // Share button
+                            Button(action: {
+                                // Share functionality
+                            }) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .font(.system(size: 20))
+                                    .foregroundColor(.white)
+                                    .frame(width: 56, height: 56)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .fill(Color.white.opacity(0.2))
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 16)
+                                                    .fill(.ultraThinMaterial)
+                                            )
+                                    )
                             }
 
-                            // Arabic Text
-                            Text(currentActivity.arabicText)
-                                .font(.system(size: 32, weight: .medium))
+                            // Chat to learn more button
+                            Button(action: {
+                                showChat = true
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: "message.fill")
+                                        .font(.system(size: 14))
+                                    Text("Chat to learn more")
+                                        .font(.system(size: 14, weight: .medium))
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.8)
+                                }
                                 .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(12)
-                                .padding(.horizontal, 30)
-                                .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
-                                .fixedSize(horizontal: false, vertical: true)
-
-                            // Translation Label
-                            Text("Translation")
-                                .font(.system(size: 17, weight: .semibold))
-                                .foregroundColor(Color.orange)
-                                .padding(.top, 8)
-                            
-
-                            // English Translation
-                            Text(currentActivity.translation)
-                                .font(.system(size: 19, weight: .regular))
-                                .foregroundColor(.white.opacity(0.95))
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(6)
-                                .padding(.horizontal, 30)
-                                .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
-                                .fixedSize(horizontal: false, vertical: true)
-
-                            // Bottom padding for scroll
-                            Spacer()
-                                .frame(height: 40)
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-
-                    // Action Buttons Section at the bottom
-                    HStack(spacing: 12) {
-                        // Share button
-                        Button(action: {
-                            // Share functionality
-                        }) {
-                            Image(systemName: "square.and.arrow.up")
-                                .font(.system(size: 22))
-                                .foregroundColor(.white)
-                                .frame(width: 64, height: 64)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 56)
                                 .background(
                                     RoundedRectangle(cornerRadius: 16)
                                         .fill(Color.white.opacity(0.2))
@@ -177,49 +237,28 @@ struct DailyActivityDetailView: View {
                                                 .fill(.ultraThinMaterial)
                                         )
                                 )
-                        }
-
-                        // Chat to learn more button
-                        Button(action: {
-                            showChat = true
-                        }) {
-                            HStack(spacing: 8) {
-                                Text("Chat to learn more")
-                                    .font(.system(size: 16, weight: .medium))
-                                Image(systemName: "message.fill")
-                                    .font(.system(size: 16))
                             }
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 64)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color.white.opacity(0.2))
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(.ultraThinMaterial)
-                                    )
-                            )
-                        }
 
-                        // Next button
-                        if !currentIsCompleted {
-                            Button(action: {
-                                handleComplete()
-                            }) {
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 22, weight: .semibold))
-                                    .foregroundColor(.black)
-                                    .frame(width: 64, height: 64)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(Color.white)
-                                    )
+                            // Next button
+                            if !currentIsCompleted {
+                                Button(action: {
+                                    handleComplete()
+                                }) {
+                                    Image(systemName: "arrow.right")
+                                        .font(.system(size: 20, weight: .semibold))
+                                        .foregroundColor(.black)
+                                        .frame(width: 56, height: 56)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .fill(Color.white)
+                                        )
+                                }
                             }
                         }
+                        .padding(.horizontal, 24)
+                        .padding(.top, 16)
+                        .padding(.bottom, 8)
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 40)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

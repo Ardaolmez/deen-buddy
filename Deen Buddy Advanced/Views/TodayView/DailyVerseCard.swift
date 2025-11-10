@@ -9,12 +9,12 @@ import SwiftUI
 
 struct DailyVerseCard: View {
     @StateObject private var viewModel = DailyVerseViewModel()
-    @State private var showFullVerse = false
+    @State private var showWordOfWisdom = false
 
     var body: some View {
         VStack(alignment: .center, spacing: 2) {
-            // Title - small, centered, subtle
-            Text(AppStrings.today.dailyVerseTitle)
+            // Title - Changed to "Word of Wisdom"
+            Text("Word of Wisdom")
                 .font(.system(size: 11, weight: .medium))
                 .foregroundColor(AppColors.Today.verseCardSecondaryText)
                 .textCase(.uppercase)
@@ -48,14 +48,15 @@ struct DailyVerseCard: View {
         .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .onTapGesture {
             if !viewModel.isLoading && viewModel.errorMessage == nil {
-                showFullVerse = true
+                showWordOfWisdom = true
             }
         }
-        .sheet(isPresented: $showFullVerse) {
+        .fullScreenCover(isPresented: $showWordOfWisdom) {
             if let verse = viewModel.verse {
-                VersePopupView(
+                WordOfWisdomDetailView(
+                    verse: verse,
                     surahName: viewModel.surahName,
-                    verseNumber: verse.id
+                    reference: viewModel.reference
                 )
             }
         }
