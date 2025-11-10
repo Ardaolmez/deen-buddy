@@ -1,33 +1,239 @@
 [
   {
-    "title": "Quran",
+    "title": "Islamic Knowledge",
     "questions": [
       {
         "question": "What does the first verse of the Quran 'Bismillaahir Rahmaanir Raheem' mean?",
         "answers": [
-        "In the name of Allah, the Gracious, the Merciful.",
-        "Glory be to Allah in the highest.",
-        "There is no deity but Allah.",
-        "O mankind, be mindful of your Lord."
+          "In the name of Allah, the Gracious, the Merciful.",
+          "Glory be to Allah in the highest.",
+          "There is no deity but Allah.",
+          "O mankind, be mindful of your Lord."
         ],
         "correctIndex": 0,
         "surah": "Al-Fatihah",
         "verse": 1,
         "explanation": "The Al-Fatiha begins with the basmala, underlining Allah's grace and mercy at the opening of the Quran."
-        },
-        {
+      },
+      {
         "question": "Whose path is identified as the Straight Path in Al-Fatiha?",
         "answers": [
-        "Those who follow the Prophet Mohammed first",
-        "Those Allah has chosen from birth",
-        "Those Allah has blessed",
-        "Those who read the Quran"
+          "Those who follow the Prophet Mohammed first",
+          "Those Allah has chosen from birth",
+          "Those Allah has blessed",
+          "Those who read the Quran"
         ],
         "correctIndex": 2,
         "surah": "Al-Fatihah",
         "verse": 7,
         "explanation": "The Straight Path is associated with those blessed by Allah."
-        }
+      },
+      {
+        "question": "How many pillars are there in Islam?",
+        "answers": [
+          "Three",
+          "Four",
+          "Five",
+          "Six"
+        ],
+        "correctIndex": 2,
+        "explanation": "The Five Pillars of Islam are: Shahada (faith), Salah (prayer), Zakat (charity), Sawm (fasting), and Hajj (pilgrimage)."
+      },
+      {
+        "question": "What is the first pillar of Islam?",
+        "answers": [
+          "Prayer (Salah)",
+          "Declaration of Faith (Shahada)",
+          "Charity (Zakat)",
+          "Fasting (Sawm)"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Shahada is the declaration of faith: 'There is no god but Allah, and Muhammad is His messenger.' It is the foundation of Islam."
+      },
+      {
+        "question": "How many times a day must Muslims perform obligatory prayers?",
+        "answers": [
+          "Three times",
+          "Four times",
+          "Five times",
+          "Six times"
+        ],
+        "correctIndex": 2,
+        "explanation": "Muslims perform five daily prayers: Fajr (dawn), Dhuhr (noon), Asr (afternoon), Maghrib (sunset), and Isha (night)."
+      },
+      {
+        "question": "In which Islamic month is fasting obligatory?",
+        "answers": [
+          "Muharram",
+          "Rajab",
+          "Ramadan",
+          "Dhul-Hijjah"
+        ],
+        "correctIndex": 2,
+        "explanation": "Ramadan is the ninth month of the Islamic calendar, during which Muslims fast from dawn to sunset."
+      },
+      {
+        "question": "How many Surahs (chapters) are in the Quran?",
+        "answers": [
+          "99",
+          "100",
+          "114",
+          "120"
+        ],
+        "correctIndex": 2,
+        "explanation": "The Quran contains 114 Surahs, ranging from the longest (Al-Baqarah with 286 verses) to the shortest (Al-Kawthar with 3 verses)."
+      },
+      {
+        "question": "Which Surah is known as the 'Heart of the Quran'?",
+        "answers": [
+          "Al-Fatiha",
+          "Yasin",
+          "Al-Baqarah",
+          "Al-Ikhlas"
+        ],
+        "correctIndex": 1,
+        "surah": "Yasin",
+        "verse": 1,
+        "explanation": "Surah Yasin (Chapter 36) is often called the 'Heart of the Quran' due to its profound spiritual significance and comprehensive message."
+      },
+      {
+        "question": "What is the longest Surah in the Quran?",
+        "answers": [
+          "Al-Fatiha",
+          "Al-Baqarah",
+          "Aal-e-Imran",
+          "An-Nisa"
+        ],
+        "correctIndex": 1,
+        "surah": "Al-Baqarah",
+        "verse": 1,
+        "explanation": "Surah Al-Baqarah (The Cow) is the longest chapter in the Quran with 286 verses, covering various aspects of faith, law, and guidance."
+      },
+      {
+        "question": "Which surah is recited in every unit (rak'ah) of prayer?",
+        "answers": [
+          "Al-Ikhlas",
+          "Al-Fatiha",
+          "An-Nas",
+          "Al-Falaq"
+        ],
+        "correctIndex": 1,
+        "surah": "Al-Fatiha",
+        "verse": 1,
+        "explanation": "Surah Al-Fatiha (The Opening) must be recited in every rak'ah of prayer, making it the most recited chapter of the Quran."
+      },
+      {
+        "question": "What does 'Zakat' mean?",
+        "answers": [
+          "Voluntary charity",
+          "Obligatory almsgiving",
+          "Prayer",
+          "Pilgrimage"
+        ],
+        "correctIndex": 1,
+        "explanation": "Zakat is the obligatory annual payment of 2.5% of one's wealth to help the poor and needy, one of the Five Pillars of Islam."
+      },
+      {
+        "question": "What is the name of the night journey of Prophet Muhammad (PBUH)?",
+        "answers": [
+          "Hijrah",
+          "Isra and Mi'raj",
+          "Badr",
+          "Uhud"
+        ],
+        "correctIndex": 1,
+        "explanation": "Isra and Mi'raj refers to the miraculous night journey from Mecca to Jerusalem and the ascension to the heavens."
+      },
+      {
+        "question": "What is the Islamic term for the pilgrimage to Mecca?",
+        "answers": [
+          "Umrah",
+          "Hijrah",
+          "Hajj",
+          "Ziyarah"
+        ],
+        "correctIndex": 2,
+        "explanation": "Hajj is the major pilgrimage to Mecca, obligatory once in a lifetime for those who are physically and financially able."
+      },
+      {
+        "question": "Which angel brought revelations to Prophet Muhammad (PBUH)?",
+        "answers": [
+          "Mikail (Michael)",
+          "Israfil",
+          "Jibril (Gabriel)",
+          "Azrail"
+        ],
+        "correctIndex": 2,
+        "explanation": "Angel Jibril (Gabriel) was responsible for delivering Allah's revelations to Prophet Muhammad (PBUH) over 23 years."
+      },
+      {
+        "question": "What is the Arabic term for the migration of Muslims from Mecca to Medina?",
+        "answers": [
+          "Hijrah",
+          "Jihad",
+          "Hajj",
+          "Umrah"
+        ],
+        "correctIndex": 0,
+        "explanation": "The Hijrah (migration) in 622 CE marks the beginning of the Islamic calendar and was a pivotal moment in Islamic history."
+      },
+      {
+        "question": "How many articles of faith (Iman) are there in Islam?",
+        "answers": [
+          "Four",
+          "Five",
+          "Six",
+          "Seven"
+        ],
+        "correctIndex": 2,
+        "explanation": "The Six Articles of Faith are: belief in Allah, angels, revealed books, prophets, the Day of Judgment, and divine decree (Qadar)."
+      },
+      {
+        "question": "Which Surah is equivalent to one-third of the Quran in reward?",
+        "answers": [
+          "Al-Fatiha",
+          "Al-Ikhlas",
+          "Ayat al-Kursi",
+          "Al-Baqarah"
+        ],
+        "correctIndex": 1,
+        "surah": "Al-Ikhlas",
+        "verse": 1,
+        "explanation": "Surah Al-Ikhlas (Chapter 112) describes the oneness of Allah and reciting it is equivalent to reciting one-third of the Quran in reward."
+      },
+      {
+        "question": "What is the holiest city in Islam?",
+        "answers": [
+          "Medina",
+          "Jerusalem",
+          "Mecca",
+          "Cairo"
+        ],
+        "correctIndex": 2,
+        "explanation": "Mecca is the holiest city in Islam, home to the Kaaba, and the direction Muslims face during prayer."
+      },
+      {
+        "question": "What does 'Subhanallah' mean?",
+        "answers": [
+          "Praise be to Allah",
+          "Glory be to Allah",
+          "Allah is the Greatest",
+          "Thanks be to Allah"
+        ],
+        "correctIndex": 1,
+        "explanation": "Subhanallah means 'Glory be to Allah' or 'Allah is perfect and free from all defects.' It is a phrase of glorification."
+      },
+      {
+        "question": "Which battle was the first major battle in Islamic history?",
+        "answers": [
+          "Battle of Uhud",
+          "Battle of Badr",
+          "Battle of Khandaq",
+          "Battle of Tabuk"
+        ],
+        "correctIndex": 1,
+        "explanation": "The Battle of Badr (624 CE) was the first major military victory for Muslims, where they defeated a much larger Meccan army."
+      }
     ]
   }
 ]

@@ -38,10 +38,12 @@ final class QuizViewModel: ObservableObject {
     init(quizzes: [QuizModel]? = nil, preselected quiz: QuizModel? = nil) {
         // Load quizzes from JSON file or use provided quizzes
         let resolvedQuizzes = quizzes ?? QuizViewModel.loadQuizzesFromJSON()
-        let resolvedQuizOfDay = quiz ?? QuizViewModel.pickQuizOfDay(from: resolvedQuizzes)
 
         // Load Quran data for verse fetching
         self.quranSurahs = QuranService.shared.loadQuran(language: .english)
+
+        // Pick 5 random questions for today (or use preselected quiz)
+        let resolvedQuizOfDay = quiz ?? QuizViewModel.pickDailyRandomQuestions(from: resolvedQuizzes)
 
         // now assign to self
         self.quizzes = resolvedQuizzes
@@ -98,11 +100,43 @@ final class QuizViewModel: ObservableObject {
         ]
     }
 
-    private static func pickQuizOfDay(from quizzes: [QuizModel]) -> QuizModel {
-        guard !quizzes.isEmpty else { return QuizModel(title: "Empty", questions: []) }
+    private static func pickDailyRandomQuestions(from quizzes: [QuizModel]) -> QuizModel {
+        // Collect all questions from all quizzes
+        let allQuestions = quizzes.flatMap { $0.questions }
+
+        guard !allQuestions.isEmpty else {
+            return QuizModel(title: "Daily Quiz", questions: [])
+        }
+
+        // Use day of year as seed for consistent daily selection
         let cal = Calendar.current
         let dayOfYear = cal.ordinality(of: .day, in: .year, for: Date()) ?? 1
-        return quizzes[(dayOfYear - 1) % quizzes.count]
+
+        // Create a seeded random number generator for consistent results per day
+        var generator = SeededRandomNumberGenerator(seed: UInt64(dayOfYear))
+
+        // Shuffle questions with the seeded generator
+        let shuffledQuestions = allQuestions.shuffled(using: &generator)
+
+        // Take up to 5 questions (or all if less than 5 available)
+        let dailyQuestions = Array(shuffledQuestions.prefix(5))
+
+        return QuizModel(title: "Daily Quiz", questions: dailyQuestions)
+    }
+
+    // Seeded random number generator for consistent daily quiz selection
+    private struct SeededRandomNumberGenerator: RandomNumberGenerator {
+        private var state: UInt64
+
+        init(seed: UInt64) {
+            self.state = seed
+        }
+
+        mutating func next() -> UInt64 {
+            // Linear congruential generator
+            state = state &* 6364136223846793005 &+ 1442695040888963407
+            return state
+        }
     }
 
     var currentQuestion: QuizQuestion { quizOfDay.questions[currentIndex] }
