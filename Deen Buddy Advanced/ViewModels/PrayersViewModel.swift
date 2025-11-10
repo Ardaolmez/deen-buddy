@@ -39,6 +39,10 @@ final class PrayersViewModel: ObservableObject {
     private var timer: AnyCancellable?
     private var coord: CLLocationCoordinate2D?
 
+    // Debouncing for geocoding to prevent excessive API calls
+    private var geocodingWorkItem: DispatchWorkItem?
+    private let geocoder = CLGeocoder()
+
     init(recordsStore: PrayerRecordsStore = CoreDataPrayerRecordsStore()) {
         self.recordsStore = recordsStore
 
@@ -48,7 +52,7 @@ final class PrayersViewModel: ObservableObject {
             PrayerTimesService.updateLocationContext(countryCode: cachedCountryCode, latitude: cachedCoord.latitude)
         }
 
-        // 1) Try cached snapshot for instant UI
+        // 1) Try cached snapshot for instant UI (no "Locating..." shown)
         if let snap = cache.loadToday() {
             self.cityLine = snap.cityLine
             self.header   = snap.header
@@ -61,16 +65,32 @@ final class PrayersViewModel: ObservableObject {
 
             // derive current/next + countdown immediately
             self.recompute(now: Date())
+        } else {
+            // No cache available - this is likely first launch
+            // Check if we have a cached location to avoid showing "Locating..."
+            if let cachedCoord = location.getCachedLocationIfAvailable() {
+                self.coord = cachedCoord
+                // Load prayer times immediately from cached location
+                if let (list, header) = PrayerTimesService.entries(for: cachedCoord) {
+                    self.header = header
+                    self.entries = list
+                    self.cityLine = AppStrings.prayers.locating // Will be updated by geocoding
+                    self.recompute(now: Date())
+                }
+            }
         }
 
-            // 2) Then proceed with live location + updates
+        // 2) Bind location updates BEFORE requesting
         bindLocation()
-        location.request()
+
+        // 3) Smart location request - uses cache if available, refreshes in background
+        location.request(forceRefresh: false)
+
         loadCompleted()
 
         // ✨ Do NOT mark all of today up-front. Only sync what's already completed.
-            syncTodayCompletedOnLaunch()
-            startTicker()
+        syncTodayCompletedOnLaunch()
+        startTicker()
     }
     
     // MARK: - Toggle rules (today: only current/previous)
@@ -232,55 +252,73 @@ final class PrayersViewModel: ObservableObject {
 //    }
     
     private func reverseGeocode(_ c: CLLocationCoordinate2D) {
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, error in
+        // Cancel any pending geocoding request
+        geocodingWorkItem?.cancel()
+
+        // Debounce geocoding by 1 second to avoid excessive API calls
+        let workItem = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
 
-            // If geocoder failed, keep previous cityLine and bail gracefully
-            if let _ = error {
-                return
-            }
+            // Cancel any in-flight requests
+            self.geocoder.cancelGeocode()
 
-            let p = placemarks?.first
-            let city    = (p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea).trimmingCharacters(in: .whitespacesAndNewlines)
-            let countryCode = p?.isoCountryCode?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let country = ((countryCode ?? p?.country) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            self.geocoder.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, error in
+                guard let self = self else { return }
 
-            // Compose "City, CC" only if we have a country string
-            let newCityLine = country.isEmpty ? city : "\(city), \(country)"
-
-            DispatchQueue.main.async {
-                // Check if country changed - if so, we need to recalculate prayer times
-                let lastCountryCode = UserDefaults.shared.loadCountryCode()
-                let countryChanged = (lastCountryCode != countryCode) && lastCountryCode != nil
-
-                // Update location context for smart calculation method
-                PrayerTimesService.updateLocationContext(countryCode: countryCode, latitude: c.latitude)
-                UserDefaults.shared.saveCountryCode(countryCode)
-
-                // Only update & save if the label changed
-                let didChange = (self.cityLine != newCityLine)
-                self.cityLine = newCityLine
-
-                // Recalculate prayer times if country changed (different calculation method needed)
-                if countryChanged {
-                    self.reload(for: c)
+                // If geocoder failed, keep previous cityLine and bail gracefully
+                if let _ = error {
+                    return
                 }
 
-                // Save to cache if we have times already and something changed
-                if didChange, let header = self.header, !self.entries.isEmpty {
-                    self.cache.saveToday(cityLine: self.cityLine,
-                                         header: header,
-                                         entries: self.entries,
-                                         coord: c)
+                let p = placemarks?.first
+                let city    = (p?.locality ?? p?.subAdministrativeArea ?? AppStrings.prayers.yourArea).trimmingCharacters(in: .whitespacesAndNewlines)
+                let countryCode = p?.isoCountryCode?.trimmingCharacters(in: .whitespacesAndNewlines)
+                let country = ((countryCode ?? p?.country) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+
+                // Compose "City, CC" only if we have a country string
+                let newCityLine = country.isEmpty ? city : "\(city), \(country)"
+
+                DispatchQueue.main.async {
+                    // Check if country changed - if so, we need to recalculate prayer times
+                    let lastCountryCode = UserDefaults.shared.loadCountryCode()
+                    let countryChanged = (lastCountryCode != countryCode) && lastCountryCode != nil
+
+                    // Update location context for smart calculation method
+                    PrayerTimesService.updateLocationContext(countryCode: countryCode, latitude: c.latitude)
+                    UserDefaults.shared.saveCountryCode(countryCode)
+
+                    // Only update & save if the label changed
+                    let didChange = (self.cityLine != newCityLine)
+                    self.cityLine = newCityLine
+
+                    // Recalculate prayer times if country changed (different calculation method needed)
+                    if countryChanged {
+                        self.reload(for: c)
+                    }
+
+                    // Save to cache if we have times already and something changed
+                    if didChange, let header = self.header, !self.entries.isEmpty {
+                        self.cache.saveToday(cityLine: self.cityLine,
+                                             header: header,
+                                             entries: self.entries,
+                                             coord: c)
+                    }
                 }
             }
         }
+
+        geocodingWorkItem = workItem
+        // Run geocoding in background after 1 second delay
+        DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 1.0, execute: workItem)
     }
 
     // Geocode first, then reload - ensures correct calculation method for international travel
     private func reverseGeocodeAndReload(_ c: CLLocationCoordinate2D) {
-        let geocoder = CLGeocoder()
+        // Cancel any pending geocoding request
+        geocodingWorkItem?.cancel()
+        geocoder.cancelGeocode()
+
+        // Use shared geocoder instance
         geocoder.reverseGeocodeLocation(CLLocation(latitude: c.latitude, longitude: c.longitude)) { [weak self] placemarks, error in
             guard let self = self else { return }
 
