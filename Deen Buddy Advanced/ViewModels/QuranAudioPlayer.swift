@@ -298,7 +298,7 @@ class QuranAudioPlayer: NSObject, ObservableObject {
 
         nowPlayingInfo[MPMediaItemPropertyTitle] = "Verse \(verse.verseNumber)"
         nowPlayingInfo[MPMediaItemPropertyArtist] = "\(reciter.displayName) - Surah \(verse.surahNumber)"
-        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "Deen Buddy"
+        nowPlayingInfo[MPMediaItemPropertyAlbumTitle] = "Iman Buddy"
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = duration
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentTime
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = playbackState.isPlaying ? 1.0 : 0.0

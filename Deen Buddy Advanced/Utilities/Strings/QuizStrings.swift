@@ -16,7 +16,7 @@ struct QuizStrings {
     static let yourIman = "Your Iman:"
     static let retry = "Retry"
     static let share = "Share"
-    static let tailoredQuizzes = "Deen Buddy will tailor custom quizzes for you each day based on your knowledge level. Keep going to steadily strengthen your Iman."
+    static let tailoredQuizzes = "Iman Buddy will tailor custom quizzes for you each day based on your knowledge level. Keep going to steadily strengthen your Iman."
 
     // Grade Messages
     static let gradeExcellent = "Excellent 🌟"
