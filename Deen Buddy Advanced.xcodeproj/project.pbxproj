@@ -534,6 +534,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Iman Buddy";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to calculate accurate prayer times.";
+				INFOPLIST_KEY_NSUserNotificationsUsageDescription = "We send you reminders when it's time for each prayer.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -577,6 +578,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Iman Buddy";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to calculate accurate prayer times.";
+				INFOPLIST_KEY_NSUserNotificationsUsageDescription = "We send you reminders when it's time for each prayer.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

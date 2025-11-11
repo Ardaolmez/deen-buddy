@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct Deen_Buddy_AdvancedApp: App {
+    init() {
+        // Initialize notification manager on app launch
+        _ = PrayerNotificationManager.shared
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

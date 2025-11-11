@@ -17,7 +17,8 @@ final class PrayersViewModel: ObservableObject {
     private let logger = PrayerLogger()
     private let recordsStore: PrayerRecordsStore
     private let cache: PrayerTimesCache = UserDefaultsPrayerTimesCache()
-    
+    private let notificationManager = PrayerNotificationManager.shared
+
     // MARK: - Weekly streak (days this week with all five prayed)
     @Published private(set) var weekStreakCount: Int = 0
     @Published private(set) var isPerfectWeek: Bool = false
@@ -192,9 +193,12 @@ final class PrayersViewModel: ObservableObject {
         self.entries = list
         recompute(now: Date())
         recomputeWeekStreak()   // ← add this line
-        
+
         // ⬅️ Save snapshot (use latest cityLine known; it will be refined by reverseGeocode)
           cache.saveToday(cityLine: self.cityLine, header: header, entries: list, coord: c)
+
+        // Schedule prayer notifications
+        scheduleNotificationsIfNeeded(header: header)
     }
 
     private func startTicker() {
@@ -529,6 +533,45 @@ final class PrayersViewModel: ObservableObject {
         // Convert weekday (Sun=1) -> Mon=0…Sun=6
         let todayIdx = (cal.component(.weekday, from: today) + 5) % 7
         return (start, end, todayIdx)
+    }
+
+    // MARK: - Prayer Notifications
+
+    /// Schedule notifications for prayer times
+    private func scheduleNotificationsIfNeeded(header: DayTimes) {
+        notificationManager.checkPermissionStatus { [weak self] status in
+            guard let self = self else { return }
+
+            if status == .authorized {
+                // Permission already granted, schedule notifications
+                self.notificationManager.schedulePrayerNotifications(for: header, cityLine: self.cityLine)
+            } else if status == .notDetermined {
+                // Permission not yet requested, request it
+                self.requestNotificationPermission(header: header)
+            }
+            // If denied, we don't schedule (user can enable in Settings)
+        }
+    }
+
+    /// Request notification permission and schedule if granted
+    private func requestNotificationPermission(header: DayTimes) {
+        notificationManager.requestPermission { [weak self] granted in
+            guard let self = self, granted else { return }
+            self.notificationManager.schedulePrayerNotifications(for: header, cityLine: self.cityLine)
+        }
+    }
+
+    /// Manually request notification permission (can be called from UI)
+    func requestNotificationPermission() {
+        notificationManager.requestPermission { [weak self] granted in
+            guard let self = self, granted, let header = self.header else { return }
+            self.notificationManager.schedulePrayerNotifications(for: header, cityLine: self.cityLine)
+        }
+    }
+
+    /// Cancel all prayer notifications
+    func cancelAllNotifications() {
+        notificationManager.cancelAllPrayerNotifications()
     }
 
 }
