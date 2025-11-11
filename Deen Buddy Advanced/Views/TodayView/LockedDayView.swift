@@ -30,7 +30,7 @@ struct LockedDayView: View {
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundColor(AppColors.Today.activityCardTitle)
 
-                Text("Check back \(dateFormatter.string(from: date).lowercased()) for your Daily Plan session")
+                Text("Check back on \(dateFormatter.string(from: date)) for your Daily Plan session")
                     .font(.system(size: 16))
                     .foregroundColor(AppColors.Today.streakText)
                     .multilineTextAlignment(.center)

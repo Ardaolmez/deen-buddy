@@ -133,13 +133,8 @@ struct GoalCardContent: View {
     }
 
     private func getProgressText() -> String {
-        guard let goal = viewModel.readingGoal else { return "0" }
-
-        if goal.goalType.isTimeBased {
-            let totalMinutes = sessionManager.elapsedSeconds / 60
-            return "\(totalMinutes)/\(goal.goalType.minutesPerDay)"
-        } else {
-            return "\(goal.todayActivity.totalVerses)/\(goal.goalType.versesPerDay)"
-        }
+        let percentage = getProgressPercentage()
+        let percentValue = Int(percentage * 100)
+        return "\(percentValue)%"
     }
 }
