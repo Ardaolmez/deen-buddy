@@ -72,15 +72,14 @@ struct SimpleDailyActivityCard: View {
                 Spacer()
 
                 // Read button or Done status
-                if isCompleted {
-                    Text("DONE")
-                        .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.white.opacity(0.3))
-                        .cornerRadius(12)
-                } else {
+                if !isCompleted {
+//                    Text("DONE")
+//                        .font(.system(size: 12, weight: .bold))
+//                        .foregroundColor(.white)
+//                        .padding(.horizontal, 16)
+//                        .padding(.vertical, 8)
+//                        .background(Color.white.opacity(0.3))
+//                        .cornerRadius(12)
                     HStack(spacing: 6) {
                         Image(systemName: "doc.text")
                             .font(.system(size: 14))
@@ -92,7 +91,7 @@ struct SimpleDailyActivityCard: View {
                     .padding(.vertical, 8)
                     .background(Color.white.opacity(0.3))
                     .cornerRadius(12)
-                }
+                } 
             }
             .padding(16)
             .frame(height: 80)

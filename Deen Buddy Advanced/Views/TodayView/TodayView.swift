@@ -17,6 +17,9 @@ struct TodayView: View {
     @StateObject private var dailyProgressVM = DailyProgressViewModel()
     @State private var selectedActivity: DailyActivityContent?
     @State private var showActivityDetail = false
+    @State private var showStreakFeedback = false
+    @State private var streakCount = 0
+    @State private var weeklyStreak: [Bool] = []
 
     var body: some View {
         NavigationView {
@@ -209,6 +212,13 @@ struct TodayView: View {
                         .padding(.top, 16)
                     }
                     .onAppear {
+                        // Set up the streak completion callback
+                        dailyProgressVM.onDailyStreakCompleted = { streak, last7Days in
+                            streakCount = streak
+                            weeklyStreak = last7Days
+                            showStreakFeedback = true
+                        }
+
                         // Scroll to bottom with a slight delay to ensure layout is complete
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                             withAnimation {
@@ -273,6 +283,13 @@ struct TodayView: View {
                         }
                     )
                 }
+            }
+            .fullScreenCover(isPresented: $showStreakFeedback) {
+                StreakFeedbackOverlay(
+                    isPresented: $showStreakFeedback,
+                    streakCount: streakCount,
+                    last7Days: weeklyStreak
+                )
             }
         }
     }

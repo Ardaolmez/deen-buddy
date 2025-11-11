@@ -17,6 +17,9 @@ class DailyProgressViewModel: ObservableObject {
 
     private let userDefaultsKey = "dailyProgressTracker"
 
+    // Callback for when daily activities are completed
+    var onDailyStreakCompleted: ((Int, [Bool]) -> Void)?
+
     init() {
         // Load saved progress tracker
         if let data = UserDefaults.standard.data(forKey: userDefaultsKey),
@@ -131,8 +134,14 @@ class DailyProgressViewModel: ObservableObject {
     // MARK: - Mark Complete
 
     func markActivityComplete(_ type: DailyActivityType) {
+        let wasFullyCompleted = progressTracker.todayRecord.isFullyCompleted
         progressTracker.markActivityComplete(type, for: selectedDate)
         save()
+
+        // Check if all activities are now completed for today and trigger callback
+        if !wasFullyCompleted && progressTracker.todayRecord.isFullyCompleted && isSelectedDateToday() {
+            onDailyStreakCompleted?(currentStreak, last7Days)
+        }
     }
 
     func isActivityCompleted(_ type: DailyActivityType) -> Bool {
