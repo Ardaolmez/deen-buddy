@@ -34,6 +34,8 @@ struct WordOfWisdomDetailView: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .clipped()
                                 .ignoresSafeArea()
                         } else {
                             // Fallback gradient background
@@ -74,35 +76,24 @@ struct WordOfWisdomDetailView: View {
                                 Spacer()
                                     .frame(height: 20)
 
-                                // Word of Wisdom badge
-                                HStack(spacing: 8) {
-                                    Image(systemName: "quote.bubble.fill")
-                                        .font(.system(size: 16))
-                                    Text("WORD OF WISDOM")
-                                        .font(.system(size: 13, weight: .bold))
-                                        .tracking(1)
-                                }
-                                .foregroundColor(.white)
-                                .padding(.top, 8)
-
                                 // Opening quote mark - decorative
                                 Text("\u{201C}")
-                                    .font(.system(size: 72, weight: .bold))
+                                    .font(.system(size: min(geometry.size.width * 0.15, 48), weight: .bold))
                                     .foregroundColor(Color.orange.opacity(0.3))
                                     .padding(.top, 16)
 
                                 // Quote Text
                                 Text(wisdom.quote)
-                                    .font(.system(size: 28, weight: .semibold, design: .rounded))
+                                    .font(.system(size: min(geometry.size.width * 0.07, 28), weight: .semibold, design: .rounded))
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.center)
                                     .lineSpacing(12)
+                                    .minimumScaleFactor(0.7)
                                     .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
-                                    .padding(.horizontal, 8)
 
                                 // Closing quote mark - decorative
                                 Text("\u{201D}")
-                                    .font(.system(size: 72, weight: .bold))
+                                    .font(.system(size: min(geometry.size.width * 0.15, 48), weight: .bold))
                                     .foregroundColor(Color.orange.opacity(0.3))
 
                                 // Author with decorative elements
@@ -113,9 +104,10 @@ struct WordOfWisdomDetailView: View {
                                         .cornerRadius(1.5)
 
                                     Text("- \(wisdom.author)")
-                                        .font(.system(size: 20, weight: .medium, design: .serif))
+                                        .font(.system(size: min(geometry.size.width * 0.05, 20), weight: .medium, design: .serif))
                                         .foregroundColor(Color.orange)
                                         .italic()
+                                        .minimumScaleFactor(0.8)
                                         .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
                                 }
                                 .padding(.top, 8)
@@ -152,9 +144,9 @@ struct WordOfWisdomDetailView: View {
                                         .font(.system(size: 17, weight: .regular, design: .rounded))
                                         .foregroundColor(.white.opacity(0.95))
                                         .lineSpacing(8)
+                                        .minimumScaleFactor(0.85)
                                         .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
                                 }
-                                .padding(.horizontal, 8)
                                 .padding(.top, 12)
 
                                 // Bottom padding for scroll
@@ -162,6 +154,7 @@ struct WordOfWisdomDetailView: View {
                                     .frame(height: 40)
                             }
                             .padding(.horizontal, 24)
+                            .frame(maxWidth: geometry.size.width)
                         }
 
                         // Action Buttons Section at the bottom
@@ -211,7 +204,7 @@ struct WordOfWisdomDetailView: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
-                        .padding(.bottom, 8)
+                        .padding(.bottom, max(geometry.safeAreaInsets.bottom, 16))
                     }
                 }
             }

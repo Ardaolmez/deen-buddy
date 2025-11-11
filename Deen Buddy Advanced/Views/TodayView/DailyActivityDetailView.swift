@@ -68,6 +68,8 @@ struct DailyActivityDetailView: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
+                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .clipped()
                                 .ignoresSafeArea()
                         } else {
                             // Fallback gradient background
@@ -161,15 +163,17 @@ struct DailyActivityDetailView: View {
                                         .font(.system(size: 17, weight: .semibold))
                                         .foregroundColor(Color.orange)
                                         .multilineTextAlignment(.center)
+                                        .minimumScaleFactor(0.9)
                                         .padding(.top, 20)
                                 }
 
                                 // Arabic Text
                                 Text(currentActivity.arabicText)
-                                    .font(.system(size: 26, weight: .medium))
+                                    .font(.system(size: min(geometry.size.width * 0.065, 26), weight: .medium))
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.center)
                                     .lineSpacing(12)
+                                    .minimumScaleFactor(0.7)
                                     .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
 
                                 // Translation Label
@@ -185,6 +189,7 @@ struct DailyActivityDetailView: View {
                                     .foregroundColor(.white.opacity(0.95))
                                     .multilineTextAlignment(.center)
                                     .lineSpacing(6)
+                                    .minimumScaleFactor(0.85)
                                     .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
 
                                 // Bottom padding for scroll
@@ -192,6 +197,7 @@ struct DailyActivityDetailView: View {
                                     .frame(height: 40)
                             }
                             .padding(.horizontal, 24)
+                            .frame(maxWidth: geometry.size.width)
                         }
 
                         // Action Buttons Section at the bottom
@@ -257,7 +263,7 @@ struct DailyActivityDetailView: View {
                         }
                         .padding(.horizontal, 24)
                         .padding(.top, 16)
-                        .padding(.bottom, 8)
+                        .padding(.bottom, max(geometry.safeAreaInsets.bottom, 16))
                     }
                 }
             }
