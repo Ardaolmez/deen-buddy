@@ -115,8 +115,8 @@ struct TodayView: View {
                             DailyTasksSeparator()
                                 .padding(.horizontal, 20)
 
-                            // Daily Quran Verse (Keep original if needed)
-                            DailyVerseCard()
+                            // Word of Wisdom Card
+                            WordOfWisdomCard()
                                 .padding(.horizontal, 20)
 
                             // Daily Quiz Button - styled to match activity cards

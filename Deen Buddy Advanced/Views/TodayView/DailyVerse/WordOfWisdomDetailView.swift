@@ -2,21 +2,19 @@
 //  WordOfWisdomDetailView.swift
 //  Deen Buddy Advanced
 //
-//  Full-screen modal displaying Word of Wisdom (daily verse) content
+//  Full-screen modal displaying Word of Wisdom content
 //
 
 import SwiftUI
 
 struct WordOfWisdomDetailView: View {
     @Environment(\.presentationMode) var presentationMode
-    let verse: Verse
-    let surahName: String
-    let reference: String
+    let wisdom: WordOfWisdom
 
     @State private var showChat = false
     @State private var showShareSheet = false
 
-    // Random background image for verses
+    // Random background image for wisdom cards
     private var backgroundImageName: String {
         BackgroundImageManager.shared.getRandomImage(for: .verse)
     }
@@ -78,7 +76,7 @@ struct WordOfWisdomDetailView: View {
 
                                 // Word of Wisdom badge
                                 HStack(spacing: 8) {
-                                    Image(systemName: "book.closed.fill")
+                                    Image(systemName: "quote.bubble.fill")
                                         .font(.system(size: 16))
                                     Text("WORD OF WISDOM")
                                         .font(.system(size: 13, weight: .bold))
@@ -87,37 +85,77 @@ struct WordOfWisdomDetailView: View {
                                 .foregroundColor(.white)
                                 .padding(.top, 8)
 
-                                // Reference
-                                Text(reference)
-                                    .font(.system(size: 17, weight: .semibold))
-                                    .foregroundColor(Color.orange)
-                                    .multilineTextAlignment(.center)
-                                    .padding(.top, 8)
+                                // Opening quote mark - decorative
+                                Text("\u{201C}")
+                                    .font(.system(size: 72, weight: .bold))
+                                    .foregroundColor(Color.orange.opacity(0.3))
+                                    .padding(.top, 16)
 
-                                // Arabic Text
-                                Text(verse.text)
-                                    .font(.system(size: 26, weight: .medium))
+                                // Quote Text
+                                Text(wisdom.quote)
+                                    .font(.system(size: 28, weight: .semibold, design: .rounded))
                                     .foregroundColor(.white)
                                     .multilineTextAlignment(.center)
                                     .lineSpacing(12)
                                     .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
-                                    .padding(.top, 12)
+                                    .padding(.horizontal, 8)
 
-                                // Translation Label and Text
-                                if let translation = verse.translation {
-                                    Text("Translation")
-                                        .font(.system(size: 17, weight: .semibold))
+                                // Closing quote mark - decorative
+                                Text("\u{201D}")
+                                    .font(.system(size: 72, weight: .bold))
+                                    .foregroundColor(Color.orange.opacity(0.3))
+
+                                // Author with decorative elements
+                                VStack(spacing: 12) {
+                                    Rectangle()
+                                        .fill(Color.orange.opacity(0.6))
+                                        .frame(width: 60, height: 3)
+                                        .cornerRadius(1.5)
+
+                                    Text("- \(wisdom.author)")
+                                        .font(.system(size: 20, weight: .medium, design: .serif))
                                         .foregroundColor(Color.orange)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.top, 20)
-
-                                    Text(translation)
-                                        .font(.system(size: 16, weight: .regular))
-                                        .foregroundColor(.white.opacity(0.95))
-                                        .multilineTextAlignment(.center)
-                                        .lineSpacing(6)
+                                        .italic()
                                         .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
                                 }
+                                .padding(.top, 8)
+
+                                // Explanation Section
+                                VStack(alignment: .leading, spacing: 12) {
+                                    // Divider line
+                                    Rectangle()
+                                        .fill(LinearGradient(
+                                            gradient: Gradient(colors: [
+                                                Color.white.opacity(0.0),
+                                                Color.white.opacity(0.3),
+                                                Color.white.opacity(0.0)
+                                            ]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        ))
+                                        .frame(height: 1)
+                                        .padding(.vertical, 16)
+
+                                    // Explanation Label
+                                    HStack {
+                                        Image(systemName: "lightbulb.fill")
+                                            .font(.system(size: 14))
+                                            .foregroundColor(Color.yellow)
+
+                                        Text("Understanding")
+                                            .font(.system(size: 17, weight: .semibold))
+                                            .foregroundColor(Color.yellow)
+                                    }
+
+                                    // Explanation Text
+                                    Text(wisdom.explanation)
+                                        .font(.system(size: 17, weight: .regular, design: .rounded))
+                                        .foregroundColor(.white.opacity(0.95))
+                                        .lineSpacing(8)
+                                        .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.top, 12)
 
                                 // Bottom padding for scroll
                                 Spacer()
@@ -209,31 +247,24 @@ struct WordOfWisdomDetailView: View {
     // MARK: - Helper Functions
 
     private func generateChatMessage() -> String {
-        var message = "I would like to learn more about this verse from the Quran"
-        message += " (\(reference)).\n\n"
-
-        if let translation = verse.translation {
-            message += "The translation is: \"\(translation)\"\n\n"
-        }
-
-        message += "Please tell me about:\n"
-        message += "• Its context and revelation\n"
-        message += "• The deeper meaning and lessons\n"
-        message += "• How to apply this wisdom in daily life\n"
-        message += "• Related verses or teachings"
+        var message = "I would like to learn more about this wisdom quote by \(wisdom.author).\n\n"
+        message += "Quote: \"\(wisdom.quote)\"\n\n"
+        message += "The explanation given is: \"\(wisdom.explanation)\"\n\n"
+        message += "Please tell me more about:\n"
+        message += "• The deeper meaning and context of this wisdom\n"
+        message += "• How to apply this in daily life\n"
+        message += "• Related teachings from Islam\n"
+        message += "• Practical examples of living by this principle"
 
         return message
     }
 
     private func generateShareText() -> String {
-        var shareText = "Word of Wisdom - \(reference)\n\n"
-        shareText += verse.text
-
-        if let translation = verse.translation {
-            shareText += "\n\n\(translation)"
-        }
-
-        shareText += "\n\nShared from Deen Buddy"
+        var shareText = "Word of Wisdom\n\n"
+        shareText += "\"\(wisdom.quote)\"\n\n"
+        shareText += "- \(wisdom.author)\n\n"
+        shareText += "\(wisdom.explanation)\n\n"
+        shareText += "Shared from Deen Buddy"
         return shareText
     }
 }
@@ -253,12 +284,10 @@ struct ShareSheet: UIViewControllerRepresentable {
 
 #Preview {
     WordOfWisdomDetailView(
-        verse: Verse(
-            id: 45,
-            text: "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى الْخَاشِعِينَ",
-            translation: "And seek help through patience and prayer, and indeed, it is difficult except for the humbly submissive to Allah."
-        ),
-        surahName: "Al-Baqarah",
-        reference: "Surah Al-Baqarah 2:45"
+        wisdom: WordOfWisdom(
+            quote: "The best revenge is to improve yourself.",
+            author: "Ali ibn Abi Talib",
+            explanation: "Instead of seeking to harm those who hurt you or holding onto resentment, focus your energy on bettering yourself - your character, your actions, your faith. Self-improvement becomes the most dignified response."
+        )
     )
 }
