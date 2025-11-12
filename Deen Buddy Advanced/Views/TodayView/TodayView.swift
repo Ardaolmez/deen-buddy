@@ -20,7 +20,7 @@ struct TodayView: View {
     @State private var showStreakFeedback = false
     @State private var streakCount = 0
     @State private var weeklyStreak: [Bool] = []
-    @State private var isVerseExpanded = false
+    @State private var isVerseExpanded = true  // First card expanded by default
     @State private var isDuroodExpanded = false
     @State private var isDuaExpanded = false
 
@@ -76,7 +76,17 @@ struct TodayView: View {
                                                 selectedActivity = verse
                                                 showActivityDetail = true
                                             },
-                                            isExpanded: $isVerseExpanded
+                                            isExpanded: Binding(
+                                                get: { isVerseExpanded },
+                                                set: { newValue in
+                                                    isVerseExpanded = newValue
+                                                    if newValue {
+                                                        // Close other cards when this opens
+                                                        isDuroodExpanded = false
+                                                        isDuaExpanded = false
+                                                    }
+                                                }
+                                            )
                                         )
                                     }
 
@@ -95,7 +105,17 @@ struct TodayView: View {
                                                 selectedActivity = durood
                                                 showActivityDetail = true
                                             },
-                                            isExpanded: $isDuroodExpanded
+                                            isExpanded: Binding(
+                                                get: { isDuroodExpanded },
+                                                set: { newValue in
+                                                    isDuroodExpanded = newValue
+                                                    if newValue {
+                                                        // Close other cards when this opens
+                                                        isVerseExpanded = false
+                                                        isDuaExpanded = false
+                                                    }
+                                                }
+                                            )
                                         )
                                     }
 
@@ -114,7 +134,17 @@ struct TodayView: View {
                                                 selectedActivity = dua
                                                 showActivityDetail = true
                                             },
-                                            isExpanded: $isDuaExpanded
+                                            isExpanded: Binding(
+                                                get: { isDuaExpanded },
+                                                set: { newValue in
+                                                    isDuaExpanded = newValue
+                                                    if newValue {
+                                                        // Close other cards when this opens
+                                                        isVerseExpanded = false
+                                                        isDuroodExpanded = false
+                                                    }
+                                                }
+                                            )
                                         )
                                     }
                                 }
