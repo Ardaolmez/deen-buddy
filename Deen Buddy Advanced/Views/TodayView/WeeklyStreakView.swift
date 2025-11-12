@@ -24,12 +24,12 @@ struct WeeklyStreakView: View {
     }
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 10) {
             // Days of week
             HStack(spacing: 0) {
                 ForEach(0..<7, id: \.self) { index in
                     Text(AppStrings.common.daysOfWeek[index])
-                        .font(.system(size: 13, weight: .medium))
+                        .font(.system(size: 11, weight: .medium))
                         .foregroundColor(AppColors.Today.streakText)
                         .frame(maxWidth: .infinity)
                 }
@@ -55,9 +55,9 @@ struct WeeklyStreakView: View {
                                 .strokeBorder(
                                     isSelected ? AppColors.Today.streakFlame :
                                     hasProgress ? AppColors.Today.streakFlame.opacity(0.6) :
-                                    isPast && !hasProgress ? Color(.systemGray2) :  // Darker border for past incomplete
+                                    isPast && !hasProgress ? Color(.systemGray3) :
                                     Color(.systemGray4),
-                                    lineWidth: isSelected ? 3 : 2
+                                    lineWidth: isSelected ? 2.5 : 1.5
                                 )
                                 .background(
                                     Circle()
@@ -65,42 +65,28 @@ struct WeeklyStreakView: View {
                                             isSelected && hasProgress ? AppColors.Today.streakFlame.opacity(0.15) :
                                             isSelected ? Color(.systemGray5) :
                                             hasProgress ? AppColors.Today.streakFlame.opacity(0.1) :
-                                            isPast && !hasProgress ? Color(.systemGray4) :  // Darker background for past incomplete
+                                            isPast && !hasProgress ? Color(.systemGray5) :
                                             Color(.systemGray6)
                                         )
                                 )
-                                .frame(width: 44, height: 44)
+                                .frame(width: 38, height: 38)
 
                             if hasProgress {
                                 // Show flame for completed days
                                 Image(systemName: "flame.fill")
                                     .foregroundColor(AppColors.Today.streakFlame)
-                                    .font(.system(size: 20))
-                            } else if isPast && !hasProgress {
-                                // Show lock icon for past incomplete days (not clickable)
-                                Image(systemName: "lock.fill")
-                                    .foregroundColor(Color(.systemGray))
-                                    .font(.system(size: 14))
-                            } else if isFuture {
-                                // Show day number for future days (clickable to show "not quite time yet")
-                                let dayNumber = getDayNumber(for: index)
-                                if dayNumber > 0 {
-                                    Text("\(dayNumber)")
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(Color(.systemGray2))
-                                }
+                                    .font(.system(size: 18))
                             } else {
-                                // Today or other edge cases
+                                // Show day number for all non-completed days
                                 let dayNumber = getDayNumber(for: index)
                                 if dayNumber > 0 {
                                     Text("\(dayNumber)")
-                                        .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(Color(.systemGray2))
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundColor(isSelected ? Color(.systemGray) : Color(.systemGray2))
                                 }
                             }
                         }
                         .frame(maxWidth: .infinity)
-                        .opacity(isClickable ? 1.0 : 0.7)  // Slightly more visible for locked days
                     }
                     .buttonStyle(PlainButtonStyle())
                     .disabled(!isClickable)
@@ -108,28 +94,28 @@ struct WeeklyStreakView: View {
             }
 
             // Progress section
-            VStack(spacing: 12) {
+            VStack(spacing: 8) {
                 HStack {
                     Text(progressText)
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(AppColors.Today.activityCardTitle)
 
                     Spacer()
 
                     Text("\(progress)%")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.system(size: 14, weight: .bold))
                         .foregroundColor(progress == 100 ? AppColors.Today.activityCardDone : AppColors.Today.progressBarFill)
                 }
 
                 // Progress bar
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 8)
                             .fill(Color(red: 0.95, green: 0.93, blue: 0.88))
-                            .frame(height: 8)
+                            .frame(height: 6)
 
                         if progress > 0 {
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 8)
                                 .fill(
                                     LinearGradient(
                                         colors: [Color(red: 1.0, green: 0.7, blue: 0.3), Color(red: 1.0, green: 0.5, blue: 0.2)],
@@ -137,18 +123,20 @@ struct WeeklyStreakView: View {
                                         endPoint: .trailing
                                     )
                                 )
-                                .frame(width: geometry.size.width * CGFloat(progress) / 100.0, height: 8)
+                                .frame(width: geometry.size.width * CGFloat(progress) / 100.0, height: 6)
                                 .animation(.easeInOut(duration: 0.3), value: progress)
                         }
                     }
                 }
-                .frame(height: 8)
+                .frame(height: 6)
             }
         }
-        .padding(20)
+        .padding(16)
         .background(Color(.systemBackground))
-        .cornerRadius(20)
-        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 4)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 6)
+        .shadow(color: Color.black.opacity(0.15), radius: 24, x: 0, y: 12)
     }
 
     private func getDayNumber(for index: Int) -> Int {
@@ -186,8 +174,8 @@ struct WeeklyStreakView: View {
             return true
         }
 
-        // Past days are only clickable if they have progress
-        return hasProgress
+        // All past days are clickable - allow viewing history
+        return true
     }
 }
 

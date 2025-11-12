@@ -68,8 +68,7 @@ struct DailyActivityDetailView: View {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.width, height: geometry.size.height)
-                                .clipped()
+                                .frame(width: geometry.size.width)
                                 .ignoresSafeArea()
                         } else {
                             // Fallback gradient background
@@ -245,20 +244,18 @@ struct DailyActivityDetailView: View {
                                 )
                             }
 
-                            // Next button
-                            if !currentIsCompleted {
-                                Button(action: {
-                                    handleComplete()
-                                }) {
-                                    Image(systemName: "arrow.right")
-                                        .font(.system(size: 20, weight: .semibold))
-                                        .foregroundColor(.black)
-                                        .frame(width: 56, height: 56)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 16)
-                                                .fill(Color.white)
-                                        )
-                                }
+                            // Next button - always visible
+                            Button(action: {
+                                navigateToNext()
+                            }) {
+                                Image(systemName: "arrow.right")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundColor(.black)
+                                    .frame(width: 56, height: 56)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .fill(Color.white)
+                                    )
                             }
                         }
                         .padding(.horizontal, 24)
@@ -291,6 +288,10 @@ struct DailyActivityDetailView: View {
             .fullScreenCover(isPresented: $showChat) {
                 ChatView(initialMessage: generateChatMessage())
             }
+            .onAppear {
+                // Auto-mark as complete when view opens
+                markAsComplete()
+            }
         }
     }
 
@@ -317,6 +318,35 @@ struct DailyActivityDetailView: View {
         message += "• Any related teachings or lessons"
 
         return message
+    }
+
+    private func markAsComplete() {
+        // Mark the current activity as complete
+        if !currentIsCompleted {
+            markComplete(currentActivity.type)
+            currentIsCompleted = true
+            updateProgress()
+        }
+    }
+
+    private func navigateToNext() {
+        guard !allActivities.isEmpty else { return }
+
+        // Find current activity index
+        guard let currentIndex = allActivities.firstIndex(where: { $0.type == currentActivity.type }) else {
+            return
+        }
+
+        // Get next index (cycle back to 0 if at the end)
+        let nextIndex = (currentIndex + 1) % allActivities.count
+        let nextActivity = allActivities[nextIndex]
+
+        withAnimation(.easeInOut(duration: 0.3)) {
+            currentActivity = nextActivity
+            currentIsCompleted = checkIsCompleted(nextActivity.type)
+            // Mark new activity as complete when we navigate to it
+            markAsComplete()
+        }
     }
 
     private func handleComplete() {

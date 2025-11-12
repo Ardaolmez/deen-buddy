@@ -214,18 +214,8 @@ class DailyProgressViewModel: ObservableObject {
     }
 
     func shouldLockSelectedDate() -> Bool {
-        // Future dates are always locked
-        if isSelectedDateFuture() {
-            return true
-        }
-
-        // Today is never locked
-        if isSelectedDateToday() {
-            return false
-        }
-
-        // Past dates: lock only if they have no progress
-        return !hasProgressForSelectedDate()
+        // Only future dates are locked - allow viewing all past dates
+        return isSelectedDateFuture()
     }
 
     // MARK: - Persistence

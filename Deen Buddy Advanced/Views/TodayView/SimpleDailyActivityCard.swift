@@ -38,11 +38,9 @@ struct SimpleDailyActivityCard: View {
         VStack(spacing: 0) {
             // Header (tappable area)
             Button(action: {
-                print("🔵 Card tapped: \(activity.type.displayName), current state: \(isExpanded)")
                 withAnimation(.easeInOut(duration: 0.3)) {
                     isExpanded.toggle()
                 }
-                print("🟢 Card toggled: \(activity.type.displayName), new state: \(isExpanded)")
             }) {
                 HStack(spacing: 10) {
                     // Icon - smaller
@@ -65,13 +63,13 @@ struct SimpleDailyActivityCard: View {
                     // Title and time - more compact
                     VStack(alignment: .leading, spacing: 2) {
                         Text(activity.type.displayName.uppercased())
-                            .font(.system(size: 11, weight: .bold))
+                            .font(.system(size: 13, weight: .bold))
                             .foregroundColor(.white)
                             .tracking(0.5)
 
                         Text("\(activity.type.estimatedMinutes) MIN")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundColor(.white.opacity(0.9))
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(.white.opacity(0.8))
                     }
 
                     Spacer()
