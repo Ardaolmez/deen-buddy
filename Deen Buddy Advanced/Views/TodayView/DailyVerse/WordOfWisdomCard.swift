@@ -19,7 +19,7 @@ struct WordOfWisdomCard: View {
                     .font(.system(size: 12))
                     .foregroundColor(AppColors.Today.verseCardSecondaryText)
 
-                Text("Word of Wisdom")
+                Text(TodayStrings.wisdomShareTitle)
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(AppColors.Today.verseCardSecondaryText)
                     .textCase(.uppercase)

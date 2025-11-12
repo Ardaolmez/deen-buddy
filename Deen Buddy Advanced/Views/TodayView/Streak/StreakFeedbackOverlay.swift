@@ -15,7 +15,7 @@ struct StreakFeedbackOverlay: View {
     var body: some View {
         ZStack {
             // Dark background
-            Color.black
+            AppColors.Today.streakFeedbackBackground
                 .ignoresSafeArea()
 
             VStack(spacing: 40) {
@@ -30,17 +30,17 @@ struct StreakFeedbackOverlay: View {
                 // Streak count
                 Text("\(streakCount)")
                     .font(.system(size: 72, weight: .bold))
-                    .foregroundColor(Color(red: 0.85, green: 0.65, blue: 0.13))
+                    .foregroundColor(AppColors.Today.streakFeedbackCount)
 
                 // Streak text
-                Text("day streak")
+                Text(TodayStrings.streakDayLabel)
                     .font(.system(size: 32, weight: .medium))
-                    .foregroundColor(Color(red: 0.85, green: 0.65, blue: 0.13))
+                    .foregroundColor(AppColors.Today.streakFeedbackText)
 
                 // Encouragement text
-                Text("Come back tomorrow to keep your streak going\nand get closer to God")
+                Text(TodayStrings.streakEncouragement)
                     .font(.system(size: 16))
-                    .foregroundColor(.white)
+                    .foregroundColor(AppColors.Today.streakFeedbackEncouragement)
                     .multilineTextAlignment(.center)
                     .lineSpacing(4)
                     .padding(.top, 10)
@@ -48,10 +48,10 @@ struct StreakFeedbackOverlay: View {
                 // Weekly calendar view
                 VStack(spacing: 12) {
                     HStack(spacing: 0) {
-                        ForEach(["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"], id: \.self) { day in
+                        ForEach(TodayStrings.streakDayAbbreviations, id: \.self) { day in
                             Text(day)
                                 .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(Color.white.opacity(0.6))
+                                .foregroundColor(AppColors.Today.streakFeedbackDayText)
                                 .frame(maxWidth: .infinity)
                         }
                     }
@@ -60,7 +60,7 @@ struct StreakFeedbackOverlay: View {
                         ForEach(Array(last7Days.enumerated()), id: \.offset) { index, isCompleted in
                             ZStack {
                                 Circle()
-                                    .fill(isCompleted ? Color(red: 0.85, green: 0.65, blue: 0.13) : Color.white.opacity(0.2))
+                                    .fill(isCompleted ? AppColors.Today.streakFeedbackCount : AppColors.Today.streakFeedbackDayInactive)
                                     .frame(width: 44, height: 44)
 
                                 if isCompleted {
@@ -69,7 +69,7 @@ struct StreakFeedbackOverlay: View {
                                 } else {
                                     Text("\(getDayNumber(for: index))")
                                         .font(.system(size: 14, weight: .medium))
-                                        .foregroundColor(.white.opacity(0.5))
+                                        .foregroundColor(AppColors.Today.streakFeedbackDayNumber)
                                 }
                             }
                         }
@@ -77,7 +77,7 @@ struct StreakFeedbackOverlay: View {
                 }
                 .padding(.horizontal, 30)
                 .padding(.vertical, 20)
-                .background(Color.white.opacity(0.1))
+                .background(AppColors.Today.streakFeedbackCalendarBg)
                 .cornerRadius(16)
                 .padding(.horizontal, 20)
 
@@ -87,12 +87,12 @@ struct StreakFeedbackOverlay: View {
                 Button(action: {
                     isPresented = false
                 }) {
-                    Text("Done")
+                    Text(TodayStrings.streakDoneButton)
                         .font(.system(size: 18, weight: .semibold))
-                        .foregroundColor(.black)
+                        .foregroundColor(AppColors.Today.streakFeedbackButtonText)
                         .frame(maxWidth: .infinity)
                         .frame(height: 56)
-                        .background(Color(red: 0.85, green: 0.65, blue: 0.13))
+                        .background(AppColors.Today.streakFeedbackButton)
                         .cornerRadius(16)
                 }
                 .padding(.horizontal, 30)

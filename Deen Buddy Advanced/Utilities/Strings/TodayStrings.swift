@@ -91,4 +91,62 @@ struct TodayStrings {
     static let listenLabel = "Listen"
     static let readLabel = "Read"
     static let closeLabel = "Close"
+
+    // MARK: - Daily Quiz Button
+    static let dailyQuizLabel = "DAILY QUIZ"
+    static let dailyQuizMinutes = "5 MIN"
+    static let dailyQuizStart = "Start"
+
+    // MARK: - Activity Detail Screen
+    static let activityProgressToday = "Progress today"
+    static let activityTranslationLabel = "Translation"
+    static let activityChatToLearnMore = "Chat to learn more"
+    static let activityTodaysJourney = "Today's Journey"
+
+    // MARK: - Word of Wisdom
+    static let wisdomUnderstanding = "Understanding"
+    static let wisdomChatPromptPrefix = "I would like to learn more about this wisdom quote by"
+    static let wisdomChatQuoteLabel = "Quote:"
+    static let wisdomChatExplanationLabel = "The explanation given is:"
+    static let wisdomChatRequestDetails = "Please tell me more about:\n• The deeper meaning and context of this wisdom\n• How to apply this in daily life\n• Related teachings from Islam\n• Practical examples of living by this principle"
+    static let wisdomShareTitle = "Word of Wisdom"
+    static let wisdomShareFooter = "Shared from Deen Buddy"
+
+    // MARK: - Streak Feedback Overlay
+    static let streakDayLabel = "day streak"
+    static let streakEncouragement = "Come back tomorrow to keep your streak going\nand get closer to God"
+    static let streakDoneButton = "Done"
+    static let streakDayAbbreviations = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+
+    // MARK: - Locked Day View
+    static let lockedNotQuiteTime = "Not quite time yet."
+    static let lockedCheckBackOn = "Check back on %@ for your Daily Plan session"
+    static let lockedDontMissDay = "Don't miss a day"
+    static let lockedSetReminder = "Set a reminder"
+
+    // MARK: - Journey Header
+    static let journeyTodayTitle = "Today's Journey"
+    static let journeyDateSuffix = "'s Journey"
+
+    // MARK: - Activity Cards
+    static let activityDoneLabel = "DONE"
+    static let activityListenButton = "Listen"
+    static let activityReadButton = "Read"
+
+    // MARK: - Feedback Screen
+    static let feedbackTitle = "Feedback"
+    static let feedbackHeaderTitle = "We'd love to hear from you!"
+    static let feedbackHeaderSubtitle = "Share your suggestions, ideas, or feedback to help us improve the app."
+    static let feedbackPlaceholder = "Type your suggestion here..."
+    static let feedbackSubmitButton = "Submit Feedback"
+    static let feedbackCancelButton = "Cancel"
+    static let feedbackNetworkError = "Network error. Please check your connection."
+    static let feedbackDataError = "Failed to prepare feedback data"
+    static let feedbackServerError = "Server error. Please try again later."
+
+    // MARK: - Reading Goal Tracking
+    static let trackingSaveButton = "Save"
+
+    // MARK: - Component Labels
+    static let weeklyStreakProgressFor = "Progress for %@"
 }

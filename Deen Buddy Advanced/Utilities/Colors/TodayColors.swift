@@ -97,5 +97,102 @@ extension AppColors {
         static let modalTagText = brandGreen // Changed to brand green
         static let completeButton = brandGreen // Changed to brand green
         static let completeButtonText = Color.white
+
+        // MARK: - Background & Overlays
+        static let papyrusBackground = Color(red: 0.98, green: 0.97, blue: 0.95)
+        static let darkOverlay = Color.black.opacity(0.6)
+        static let darkOverlayLight = Color.black.opacity(0.4)
+        static let darkOverlayMedium = Color.black.opacity(0.5)
+
+        // MARK: - Gradients & Overlays (excluding shadows)
+        static let gradientOverlayLight = Color.black.opacity(0.2)
+        static let gradientOverlayMedium = Color.black.opacity(0.3)
+        static let gradientOverlayDark = Color.black.opacity(0.4)
+
+        // MARK: - Fallback Gradients (when images don't load)
+        static let fallbackGradientStart = Color(red: 0.4, green: 0.45, blue: 0.5)
+        static let fallbackGradientMid = Color(red: 0.3, green: 0.4, blue: 0.45)
+        static let fallbackGradientEnd = Color(red: 0.2, green: 0.3, blue: 0.35)
+        static let fallbackGradientPurpleStart = Color(red: 0.4, green: 0.3, blue: 0.6)
+        static let fallbackGradientPurpleEnd = Color(red: 0.3, green: 0.2, blue: 0.5)
+
+        // MARK: - Button Frosted Glass Overlays
+        static let buttonFrostedOverlay = Color.black.opacity(0.1)
+        static let buttonWhiteOverlay = Color.white.opacity(0.2)
+        static let buttonWhiteOverlayLight = Color.white.opacity(0.3)
+        static let buttonWhiteOverlayCircle = Color.white.opacity(0.25)
+
+        // MARK: - Wisdom Card Colors
+        static let wisdomQuoteMark = Color.orange.opacity(0.3)
+        static let wisdomQuoteText = Color.white
+        static let wisdomAuthorLine = Color.orange.opacity(0.6)
+        static let wisdomAuthorText = Color.orange
+        static let wisdomUnderstandingIcon = Color.yellow
+        static let wisdomUnderstandingLabel = Color.yellow
+        static let wisdomDividerStart = Color.white.opacity(0.0)
+        static let wisdomDividerMid = Color.white.opacity(0.3)
+
+        // MARK: - Separator Gradient Colors
+        static let separatorGradientColor = Color(red: 0.85, green: 0.8, blue: 0.7).opacity(0.5)
+        static let separatorIconColor = Color(red: 0.9, green: 0.7, blue: 0.3)
+
+        // MARK: - Streak Feedback Overlay
+        static let streakFeedbackBackground = Color.black
+        static let streakFeedbackCount = Color(red: 0.85, green: 0.65, blue: 0.13)
+        static let streakFeedbackText = Color(red: 0.85, green: 0.65, blue: 0.13)
+        static let streakFeedbackEncouragement = Color.white
+        static let streakFeedbackDayInactive = Color.white.opacity(0.2)
+        static let streakFeedbackCalendarBg = Color.white.opacity(0.1)
+        static let streakFeedbackButton = Color(red: 0.85, green: 0.65, blue: 0.13)
+        static let streakFeedbackButtonText = Color.black
+        static let streakFeedbackDayText = Color.white.opacity(0.6)
+        static let streakFeedbackDayNumber = Color.white.opacity(0.5)
+
+        // MARK: - Activity Detail Screen
+        static let activityDetailProgressPercent = Color.yellow
+        static let activityDetailProgressGradientStart = Color.orange
+        static let activityDetailProgressGradientEnd = Color.yellow
+        static let activityDetailReference = Color.orange
+        static let activityDetailTranslationLabel = Color.orange
+        static let activityDetailShareBg = Color.white.opacity(0.2)
+        static let activityDetailChatBg = Color.white.opacity(0.2)
+        static let activityDetailNextButton = Color.white
+        static let activityDetailNextButtonText = Color.black
+
+        // MARK: - Simple Activity Card
+        static let activityCardCompletionBg = Color.green.opacity(0.2)
+        static let activityCardCompletionIcon = Color.white
+        static let activityCardWhiteIcon = Color.white.opacity(0.3)
+        static let activityCardExpandedOverlay = Color.black.opacity(0.5)
+        static let activityCardCollapsedOverlay = Color.black.opacity(0.5)
+        static let activityCardExpandedGradientLight = Color.white.opacity(0.15)
+        static let activityCardExpandedGradientDark = Color.white.opacity(0.05)
+        static let activityCardCollapsedGradientLight = Color.black.opacity(0.2)
+        static let activityCardCollapsedGradientDark = Color.black.opacity(0.4)
+
+        // MARK: - Journey Header (Legacy)
+        static let journeyAvatarGradientStart = Color(red: 0.8, green: 0.7, blue: 0.3)
+        static let journeyAvatarGradientEnd = Color(red: 0.9, green: 0.8, blue: 0.4)
+        static let journeyHeaderTitle = AppColors.Today.activityCardTitle
+        static let journeyHeaderDate = AppColors.Today.activityCardTitle
+
+        // MARK: - Progress Bar Background
+        static let progressBarBackgroundTan = Color(red: 0.95, green: 0.93, blue: 0.88)
+
+        // MARK: - Weekly Streak Progress
+        static let weeklyStreakBorder = Color(.systemGray3)
+        static let weeklyStreakBorderInactive = Color(.systemGray4)
+        static let weeklyStreakBackground = Color(.systemGray5)
+        static let weeklyStreakBackgroundInactive = Color(.systemGray6)
+
+        // MARK: - Prayer Compact Widget
+        static let prayerCompactBackground = Color(.systemGray6)
+
+        // MARK: - Feedback Screen
+        static let feedbackPlaceholder = Color.gray
+        static let feedbackTextEditor = Color.black
+        static let feedbackBackground = Color.white
+        static let feedbackBorder = Color.gray.opacity(0.3)
+        static let feedbackTint = Color.green
     }
 }

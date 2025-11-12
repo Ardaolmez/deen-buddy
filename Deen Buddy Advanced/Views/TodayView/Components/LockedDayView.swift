@@ -26,18 +26,18 @@ struct LockedDayView: View {
                 .foregroundColor(Color(.systemGray4))
 
             VStack(spacing: 12) {
-                Text("Not quite time yet.")
+                Text(TodayStrings.lockedNotQuiteTime)
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundColor(AppColors.Today.activityCardTitle)
 
-                Text("Check back on \(dateFormatter.string(from: date)) for your Daily Plan session")
+                Text(String(format: TodayStrings.lockedCheckBackOn, dateFormatter.string(from: date)))
                     .font(.system(size: 16))
                     .foregroundColor(AppColors.Today.streakText)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
 
-            Text("Don't miss a day")
+            Text(TodayStrings.lockedDontMissDay)
                 .font(.system(size: 18, weight: .semibold))
                 .foregroundColor(AppColors.Today.activityCardTitle)
                 .padding(.top, 20)
@@ -45,7 +45,7 @@ struct LockedDayView: View {
             Button(action: {
                 // TODO: Implement reminder functionality
             }) {
-                Text("Set a reminder")
+                Text(TodayStrings.lockedSetReminder)
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(AppColors.Today.progressBarFill)
             }
@@ -60,5 +60,5 @@ struct LockedDayView: View {
 
 #Preview {
     LockedDayView(date: Calendar.current.date(byAdding: .day, value: 1, to: Date())!)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.95))
+        .background(AppColors.Today.papyrusBackground)
 }

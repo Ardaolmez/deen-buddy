@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct TodayView: View {
-    @State private var streakDays: [Bool] = [true, true, true, false, false, false, false]
     @State private var showQuiz = false
     @State private var showFeedback = false
     @State private var showGoalDetail = false
@@ -20,9 +19,7 @@ struct TodayView: View {
     @State private var showStreakFeedback = false
     @State private var streakCount = 0
     @State private var weeklyStreak: [Bool] = []
-    @State private var isVerseExpanded = true  // First card expanded by default
-    @State private var isDuroodExpanded = false
-    @State private var isDuaExpanded = false
+    @State private var expandedActivity: DailyActivityType? = .verse  // First card expanded by default
 
     var body: some View {
         NavigationView {
@@ -60,96 +57,14 @@ struct TodayView: View {
                                     .padding(.horizontal, 20)
                             } else {
                                 // Daily Activity Cards - Show for today and past dates with progress
-                                VStack(spacing: 16) {
-                                    // Daily Verse
-                                    if let verse = dailyProgressVM.dailyVerse {
-                                        SimpleDailyActivityCard(
-                                            activity: verse,
-                                            isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(.verse),
-                                            onMarkComplete: {
-                                                // Only allow marking complete if it's today
-                                                if dailyProgressVM.isSelectedDateToday() {
-                                                    dailyProgressVM.markActivityComplete(.verse)
-                                                }
-                                            },
-                                            onShowDetail: {
-                                                selectedActivity = verse
-                                                showActivityDetail = true
-                                            },
-                                            isExpanded: Binding(
-                                                get: { isVerseExpanded },
-                                                set: { newValue in
-                                                    isVerseExpanded = newValue
-                                                    if newValue {
-                                                        // Close other cards when this opens
-                                                        isDuroodExpanded = false
-                                                        isDuaExpanded = false
-                                                    }
-                                                }
-                                            )
-                                        )
-                                    }
-
-                                    // Daily Durood
-                                    if let durood = dailyProgressVM.dailyDurood {
-                                        SimpleDailyActivityCard(
-                                            activity: durood,
-                                            isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(.durood),
-                                            onMarkComplete: {
-                                                // Only allow marking complete if it's today
-                                                if dailyProgressVM.isSelectedDateToday() {
-                                                    dailyProgressVM.markActivityComplete(.durood)
-                                                }
-                                            },
-                                            onShowDetail: {
-                                                selectedActivity = durood
-                                                showActivityDetail = true
-                                            },
-                                            isExpanded: Binding(
-                                                get: { isDuroodExpanded },
-                                                set: { newValue in
-                                                    isDuroodExpanded = newValue
-                                                    if newValue {
-                                                        // Close other cards when this opens
-                                                        isVerseExpanded = false
-                                                        isDuaExpanded = false
-                                                    }
-                                                }
-                                            )
-                                        )
-                                    }
-
-                                    // Daily Dua
-                                    if let dua = dailyProgressVM.dailyDua {
-                                        SimpleDailyActivityCard(
-                                            activity: dua,
-                                            isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(.dua),
-                                            onMarkComplete: {
-                                                // Only allow marking complete if it's today
-                                                if dailyProgressVM.isSelectedDateToday() {
-                                                    dailyProgressVM.markActivityComplete(.dua)
-                                                }
-                                            },
-                                            onShowDetail: {
-                                                selectedActivity = dua
-                                                showActivityDetail = true
-                                            },
-                                            isExpanded: Binding(
-                                                get: { isDuaExpanded },
-                                                set: { newValue in
-                                                    isDuaExpanded = newValue
-                                                    if newValue {
-                                                        // Close other cards when this opens
-                                                        isVerseExpanded = false
-                                                        isDuroodExpanded = false
-                                                    }
-                                                }
-                                            )
-                                        )
-                                    }
-                                }
-                                .padding(.horizontal, 20)
-                                
+                                DailyActivitiesSection(
+                                    dailyProgressVM: dailyProgressVM,
+                                    onActivitySelected: { activity in
+                                        selectedActivity = activity
+                                        showActivityDetail = true
+                                    },
+                                    expandedActivity: $expandedActivity
+                                )
                             }
 
                             // Beautiful separator
@@ -160,79 +75,10 @@ struct TodayView: View {
                             WordOfWisdomCard()
                                 .padding(.horizontal, 20)
 
-                            // Daily Quiz Button - styled to match activity cards
-                            Button(action: {
+                            // Daily Quiz Button
+                            DailyQuizCard {
                                 showQuiz = true
-                            }) {
-                                HStack(spacing: 12) {
-                                    // Icon
-                                    ZStack {
-                                        Circle()
-                                            .fill(Color.white.opacity(0.3))
-                                            .frame(width: 48, height: 48)
-
-                                        Image(systemName: "questionmark.circle.fill")
-                                            .font(.system(size: 20))
-                                            .foregroundColor(.white)
-                                    }
-
-                                    // Title and time
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text("DAILY QUIZ")
-                                            .font(.system(size: 12, weight: .bold))
-                                            .foregroundColor(.white)
-                                            .tracking(0.5)
-
-                                        Text("5 MIN")
-                                            .font(.system(size: 14, weight: .medium))
-                                            .foregroundColor(.white.opacity(0.9))
-                                    }
-
-                                    Spacer()
-
-                                    // Start button
-                                    HStack(spacing: 6) {
-                                        Image(systemName: "play.fill")
-                                            .font(.system(size: 14))
-                                        Text("Start")
-                                            .font(.system(size: 14, weight: .semibold))
-                                    }
-                                    .foregroundColor(.white)
-                                    .padding(.horizontal, 16)
-                                    .padding(.vertical, 8)
-                                    .background(Color.white.opacity(0.3))
-                                    .cornerRadius(12)
-                                }
-                                .padding(16)
-                                .frame(height: 80)
-                                .background(
-                                    ZStack {
-                                        // Brand green gradient background
-                                        LinearGradient(
-                                            colors: [
-                                                AppColors.Today.brandGreen,
-                                                AppColors.Today.brandGreen.opacity(0.8)
-                                            ],
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        )
-
-                                        // Overlay gradient for depth
-                                        LinearGradient(
-                                            colors: [
-                                                Color.black.opacity(0.1),
-                                                Color.black.opacity(0.3)
-                                            ],
-                                            startPoint: .top,
-                                            endPoint: .bottom
-                                        )
-                                    }
-                                )
-                                .cornerRadius(20)
-                                .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 4)
                             }
-                            .buttonStyle(PlainButtonStyle())
-                            .padding(.horizontal, 20)
 
                             // Daily Reading Goal
                             DailyReadGoalCard { viewModel in
@@ -255,23 +101,7 @@ struct TodayView: View {
                     }
 
                     // Sticky Chat Box at the bottom with gradient fade
-                    VStack(spacing: 0) {
-                        // Gradient fade from transparent to background color
-                        LinearGradient(
-                            colors: [
-                                Color(red: 0.98, green: 0.97, blue: 0.95).opacity(0),
-                                Color(red: 0.98, green: 0.97, blue: 0.95).opacity(0),
-                                Color(red: 0.98, green: 0.97, blue: 0.95).opacity(0)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .frame(height: 10)
-
-                        ChatBoxView()
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, 20)
-                    }
+                    StickyChatBox()
                 }
             }
             .navigationTitle(AppStrings.today.navigationTitle)

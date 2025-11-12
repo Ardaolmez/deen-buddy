@@ -41,6 +41,30 @@ struct ChatBoxView: View {
     }
 }
 
+// MARK: - Sticky Chat Box with Gradient Fade
+
+struct StickyChatBox: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            // Gradient fade from transparent to background color
+            LinearGradient(
+                colors: [
+                    AppColors.Today.papyrusBackground.opacity(0),
+                    AppColors.Today.papyrusBackground.opacity(0),
+                    AppColors.Today.papyrusBackground.opacity(0)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 10)
+
+            ChatBoxView()
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
+        }
+    }
+}
+
 #Preview {
     ChatBoxView()
         .padding()

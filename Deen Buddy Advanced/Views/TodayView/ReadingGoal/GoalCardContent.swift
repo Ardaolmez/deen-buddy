@@ -76,7 +76,7 @@ struct GoalCardContent: View {
                         //    RoundedRectangle(cornerRadius: 12)
                           //  .fill(AppColors.Today.quranGoalBrandColor.opacity(1))
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.black.opacity(0.1))
+                                .fill(AppColors.Today.buttonFrostedOverlay)
 
                         }
                     )
@@ -109,7 +109,7 @@ struct GoalCardContent: View {
 
                             //Brand color overlay
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.black.opacity(0.1))
+                                .fill(AppColors.Today.buttonFrostedOverlay)
                         }
                     )
                 }

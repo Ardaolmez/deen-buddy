@@ -15,11 +15,11 @@ struct WeeklyStreakView: View {
 
     private var progressText: String {
         if Calendar.current.isDateInToday(selectedDate) {
-            return "Progress today"
+            return TodayStrings.activityProgressToday
         } else {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM d"
-            return "Progress for \(formatter.string(from: selectedDate))"
+            return String(format: TodayStrings.weeklyStreakProgressFor, formatter.string(from: selectedDate))
         }
     }
 
@@ -41,7 +41,7 @@ struct WeeklyStreakView: View {
                     let dayDate = getDate(for: index)
                     let isSelected = Calendar.current.isDate(dayDate, inSameDayAs: selectedDate)
                     let isClickable = isDayClickable(dayDate, hasProgress: streakDays[index])
-                    let isFuture = dayDate > Date()
+                //    let isFuture = dayDate > Date()
                     let isPast = dayDate < Date() && !Calendar.current.isDateInToday(dayDate)
                     let hasProgress = streakDays[index]
 
@@ -111,7 +111,7 @@ struct WeeklyStreakView: View {
                 GeometryReader { geometry in
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(Color(red: 0.95, green: 0.93, blue: 0.88))
+                            .fill(AppColors.Today.progressBarBackgroundTan)
                             .frame(height: 6)
 
                         if progress > 0 {
@@ -190,5 +190,5 @@ struct WeeklyStreakView: View {
         onDaySelected: { _ in }
     )
     .padding()
-    .background(Color(red: 0.98, green: 0.97, blue: 0.95))
+    .background(AppColors.Today.papyrusBackground)
 }

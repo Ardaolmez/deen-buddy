@@ -46,13 +46,13 @@ struct SimpleDailyActivityCard: View {
                     // Icon - smaller
                     ZStack {
                         Circle()
-                            .fill(isCompleted ? Color.green.opacity(0.2) : Color.white.opacity(0.3))
+                            .fill(isCompleted ? AppColors.Today.activityCardCompletionBg : AppColors.Today.activityCardWhiteIcon)
                             .frame(width: 40, height: 40)
 
                         if isCompleted {
                             Image(systemName: "checkmark")
                                 .font(.system(size: 16, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(AppColors.Today.activityCardCompletionIcon)
                         } else {
                             Image(systemName: iconName)
                                 .font(.system(size: 16))
@@ -79,7 +79,7 @@ struct SimpleDailyActivityCard: View {
                         .font(.system(size: 14, weight: .semibold))
                         .foregroundColor(.white)
                         .padding(8)
-                        .background(Color.white.opacity(0.2))
+                        .background(AppColors.Today.buttonWhiteOverlay)
                         .clipShape(Circle())
                 }
                 .padding(12)
@@ -105,8 +105,8 @@ struct SimpleDailyActivityCard: View {
                     // Fallback gradient
                     LinearGradient(
                         colors: [
-                            Color(red: 0.4, green: 0.3, blue: 0.6),
-                            Color(red: 0.3, green: 0.2, blue: 0.5)
+                            AppColors.Today.fallbackGradientPurpleStart,
+                            AppColors.Today.fallbackGradientPurpleEnd
                         ],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
@@ -128,7 +128,7 @@ struct SimpleDailyActivityCard: View {
         VStack(alignment: .leading, spacing: 24) {
             // Divider
             Rectangle()
-                .fill(Color.white.opacity(0.3))
+                .fill(AppColors.Today.buttonWhiteOverlayLight)
                 .frame(height: 1)
                 .padding(.horizontal, 12)
 
@@ -149,7 +149,7 @@ struct SimpleDailyActivityCard: View {
                     onShowDetail()
                 }) {
                     HStack(spacing: 6) {
-                        Text("Read")
+                        Text(TodayStrings.activityReadButton)
                             .font(.system(size: 14, weight: .semibold))
                     }
                     .foregroundColor(.white)
@@ -163,7 +163,7 @@ struct SimpleDailyActivityCard: View {
 
                             // Dark overlay for contrast
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.black.opacity(0.1))
+                                .fill(AppColors.Today.buttonFrostedOverlay)
                         }
                     )
                 }
@@ -171,7 +171,7 @@ struct SimpleDailyActivityCard: View {
                 // Listen button (disabled) - Frosted glass
                 Button(action: {}) {
                     HStack(spacing: 6) {
-                        Text("Listen")
+                        Text(TodayStrings.activityListenButton)
                             .font(.system(size: 14, weight: .semibold))
                     }
                     .foregroundColor(.white.opacity(0.6))
@@ -185,7 +185,7 @@ struct SimpleDailyActivityCard: View {
 
                             // Dark overlay
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.black.opacity(0.1))
+                                .fill(AppColors.Today.buttonFrostedOverlay)
                         }
                     )
                 }
@@ -202,24 +202,24 @@ struct SimpleDailyActivityCard: View {
         ZStack {
             if isExpanded {
                 // Lighter overlay for expanded state - better readability
-                Color.black.opacity(0.5)
+                AppColors.Today.activityCardExpandedOverlay
 
                 LinearGradient(
                     colors: [
-                        Color.white.opacity(0.15),
-                        Color.white.opacity(0.05)
+                        AppColors.Today.activityCardExpandedGradientLight,
+                        AppColors.Today.activityCardExpandedGradientDark
                     ],
                     startPoint: .top,
                     endPoint: .bottom
                 )
             } else {
                 // Dark overlay for collapsed state - dramatic look
-                Color.black.opacity(0.5)
+                AppColors.Today.activityCardCollapsedOverlay
 
                 LinearGradient(
                     colors: [
-                        Color.black.opacity(0.2),
-                        Color.black.opacity(0.4)
+                        AppColors.Today.activityCardCollapsedGradientLight,
+                        AppColors.Today.activityCardCollapsedGradientDark
                     ],
                     startPoint: .top,
                     endPoint: .bottom
@@ -265,7 +265,7 @@ struct SimpleDailyActivityCard: View {
                 )
             }
             .padding()
-            .background(Color(red: 0.98, green: 0.97, blue: 0.95))
+            .background(AppColors.Today.papyrusBackground)
         }
     }
 

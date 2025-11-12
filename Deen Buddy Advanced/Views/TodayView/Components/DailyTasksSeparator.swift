@@ -16,7 +16,7 @@ struct DailyTasksSeparator: View {
                     LinearGradient(
                         colors: [
                             Color.clear,
-                            Color(red: 0.85, green: 0.8, blue: 0.7).opacity(0.5)
+                            AppColors.Today.separatorGradientColor
                         ],
                         startPoint: .leading,
                         endPoint: .trailing
@@ -28,15 +28,15 @@ struct DailyTasksSeparator: View {
             VStack(spacing: 4) {
                 Image(systemName: "sparkles")
                     .font(.system(size: 12))
-                    .foregroundColor(Color(red: 0.9, green: 0.7, blue: 0.3))
+                    .foregroundColor(AppColors.Today.separatorIconColor)
 
                 Image(systemName: "questionmark.circle")
                     .font(.system(size: 20))
-                    .foregroundColor(Color(red: 0.9, green: 0.7, blue: 0.3))
+                    .foregroundColor(AppColors.Today.separatorIconColor)
 
                 Image(systemName: "sparkles")
                     .font(.system(size: 12))
-                    .foregroundColor(Color(red: 0.9, green: 0.7, blue: 0.3))
+                    .foregroundColor(AppColors.Today.separatorIconColor)
             }
 
             // Right line
@@ -44,7 +44,7 @@ struct DailyTasksSeparator: View {
                 .fill(
                     LinearGradient(
                         colors: [
-                            Color(red: 0.85, green: 0.8, blue: 0.7).opacity(0.5),
+                            AppColors.Today.separatorGradientColor,
                             Color.clear
                         ],
                         startPoint: .leading,
@@ -60,5 +60,5 @@ struct DailyTasksSeparator: View {
 #Preview {
     DailyTasksSeparator()
         .padding()
-        .background(Color(red: 0.98, green: 0.97, blue: 0.95))
+        .background(AppColors.Today.papyrusBackground)
 }

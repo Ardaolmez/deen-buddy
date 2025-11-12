@@ -49,8 +49,8 @@ struct DailyReadGoalCard: View {
                     .stroke(
                         LinearGradient(
                             colors: [
-                                Color.white.opacity(0.3),  // Bright at top
-                                Color.white.opacity(0.0)   // Fade to transparent
+                                AppColors.Today.buttonWhiteOverlayLight,  // Bright at top
+                                Color.clear   // Fade to transparent
                             ],
                             startPoint: .top,
                             endPoint: .bottom

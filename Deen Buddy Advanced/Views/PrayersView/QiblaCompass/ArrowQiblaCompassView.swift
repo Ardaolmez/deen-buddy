@@ -32,7 +32,7 @@ struct ArrowQiblaCompassView: View {
             let kaabaSize = compassSize * 0.11   // Proportional mosque icon size
             let arrowSize = compassSize * 0.38   // Larger arrow for better visibility
             let kaabaOffset = -compassSize * 0.62  // Position Kaaba above the circle
-            let dotOffset = -compassSize * 0.49   // Proportional dot positioning
+         //   let dotOffset = -compassSize * 0.49   // Proportional dot positioning
 
             VStack(spacing: screenHeight * 0.01) {  // Reduced spacing for tighter layout
                 Spacer()

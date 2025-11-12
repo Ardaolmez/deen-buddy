@@ -114,7 +114,7 @@ enum HijriDateFormatter {
     }
 
     private static func hijriLocale(for base: Locale) -> Locale {
-        if let languageCode = base.languageCode {
+        if let languageCode = base.language.languageCode?.identifier {
             return Locale(identifier: "\(languageCode)_SA")
         }
         return Locale(identifier: "en_SA")

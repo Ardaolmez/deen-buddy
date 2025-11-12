@@ -41,9 +41,9 @@ struct WordOfWisdomDetailView: View {
                             // Fallback gradient background
                             LinearGradient(
                                 gradient: Gradient(colors: [
-                                    Color(red: 0.4, green: 0.45, blue: 0.5),
-                                    Color(red: 0.3, green: 0.4, blue: 0.45),
-                                    Color(red: 0.2, green: 0.3, blue: 0.35)
+                                    AppColors.Today.fallbackGradientStart,
+                                    AppColors.Today.fallbackGradientMid,
+                                    AppColors.Today.fallbackGradientEnd
                                 ]),
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -52,15 +52,15 @@ struct WordOfWisdomDetailView: View {
                         }
 
                         // Dark overlay to make text more prominent
-                        Color.black.opacity(0.6)
+                        AppColors.Today.darkOverlay
                             .ignoresSafeArea()
 
                         // Additional gradient for depth
                         LinearGradient(
                             gradient: Gradient(colors: [
-                                Color.black.opacity(0.2),
-                                Color.black.opacity(0.3),
-                                Color.black.opacity(0.4)
+                                AppColors.Today.gradientOverlayLight,
+                                AppColors.Today.gradientOverlayMedium,
+                                AppColors.Today.gradientOverlayDark
                             ]),
                             startPoint: .top,
                             endPoint: .bottom
@@ -79,13 +79,13 @@ struct WordOfWisdomDetailView: View {
                                 // Opening quote mark - decorative
                                 Text("\u{201C}")
                                     .font(.system(size: min(geometry.size.width * 0.15, 48), weight: .bold))
-                                    .foregroundColor(Color.orange.opacity(0.3))
+                                    .foregroundColor(AppColors.Today.wisdomQuoteMark)
                                     .padding(.top, 16)
 
                                 // Quote Text
                                 Text(wisdom.quote)
                                     .font(.system(size: min(geometry.size.width * 0.07, 28), weight: .semibold, design: .rounded))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(AppColors.Today.wisdomQuoteText)
                                     .multilineTextAlignment(.center)
                                     .lineSpacing(12)
                                     .minimumScaleFactor(0.7)
@@ -94,18 +94,18 @@ struct WordOfWisdomDetailView: View {
                                 // Closing quote mark - decorative
                                 Text("\u{201D}")
                                     .font(.system(size: min(geometry.size.width * 0.15, 48), weight: .bold))
-                                    .foregroundColor(Color.orange.opacity(0.3))
+                                    .foregroundColor(AppColors.Today.wisdomQuoteMark)
 
                                 // Author with decorative elements
                                 VStack(spacing: 12) {
                                     Rectangle()
-                                        .fill(Color.orange.opacity(0.6))
+                                        .fill(AppColors.Today.wisdomAuthorLine)
                                         .frame(width: 60, height: 3)
                                         .cornerRadius(1.5)
 
                                     Text("- \(wisdom.author)")
                                         .font(.system(size: min(geometry.size.width * 0.05, 20), weight: .medium, design: .serif))
-                                        .foregroundColor(Color.orange)
+                                        .foregroundColor(AppColors.Today.wisdomAuthorText)
                                         .italic()
                                         .minimumScaleFactor(0.8)
                                         .shadow(color: Color.black.opacity(0.3), radius: 2, x: 0, y: 1)
@@ -118,9 +118,9 @@ struct WordOfWisdomDetailView: View {
                                     Rectangle()
                                         .fill(LinearGradient(
                                             gradient: Gradient(colors: [
-                                                Color.white.opacity(0.0),
-                                                Color.white.opacity(0.3),
-                                                Color.white.opacity(0.0)
+                                                AppColors.Today.wisdomDividerStart,
+                                                AppColors.Today.wisdomDividerMid,
+                                                AppColors.Today.wisdomDividerStart
                                             ]),
                                             startPoint: .leading,
                                             endPoint: .trailing
@@ -132,11 +132,11 @@ struct WordOfWisdomDetailView: View {
                                     HStack {
                                         Image(systemName: "lightbulb.fill")
                                             .font(.system(size: 14))
-                                            .foregroundColor(Color.yellow)
+                                            .foregroundColor(AppColors.Today.wisdomUnderstandingIcon)
 
-                                        Text("Understanding")
+                                        Text(TodayStrings.wisdomUnderstanding)
                                             .font(.system(size: 17, weight: .semibold))
-                                            .foregroundColor(Color.yellow)
+                                            .foregroundColor(AppColors.Today.wisdomUnderstandingLabel)
                                     }
 
                                     // Explanation Text
@@ -169,7 +169,7 @@ struct WordOfWisdomDetailView: View {
                                     .frame(width: 56, height: 56)
                                     .background(
                                         RoundedRectangle(cornerRadius: 16)
-                                            .fill(Color.white.opacity(0.2))
+                                            .fill(AppColors.Today.buttonWhiteOverlay)
                                             .background(
                                                 RoundedRectangle(cornerRadius: 16)
                                                     .fill(.ultraThinMaterial)
@@ -184,7 +184,7 @@ struct WordOfWisdomDetailView: View {
                                 HStack(spacing: 6) {
                                     Image(systemName: "message.fill")
                                         .font(.system(size: 14))
-                                    Text("Chat to learn more")
+                                    Text(TodayStrings.activityChatToLearnMore)
                                         .font(.system(size: 14, weight: .medium))
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.8)
@@ -194,7 +194,7 @@ struct WordOfWisdomDetailView: View {
                                 .frame(height: 56)
                                 .background(
                                     RoundedRectangle(cornerRadius: 16)
-                                        .fill(Color.white.opacity(0.2))
+                                        .fill(AppColors.Today.buttonWhiteOverlay)
                                         .background(
                                             RoundedRectangle(cornerRadius: 16)
                                                 .fill(.ultraThinMaterial)
@@ -211,7 +211,7 @@ struct WordOfWisdomDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("Word of Wisdom")
+                    Text(TodayStrings.wisdomShareTitle)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                 }
@@ -223,7 +223,7 @@ struct WordOfWisdomDetailView: View {
                             .font(.system(size: 18, weight: .semibold))
                             .foregroundColor(.white)
                             .frame(width: 32, height: 32)
-                            .background(Circle().fill(Color.white.opacity(0.2)))
+                            .background(Circle().fill(AppColors.Today.buttonWhiteOverlay))
                     }
                 }
             }
@@ -240,24 +240,20 @@ struct WordOfWisdomDetailView: View {
     // MARK: - Helper Functions
 
     private func generateChatMessage() -> String {
-        var message = "I would like to learn more about this wisdom quote by \(wisdom.author).\n\n"
-        message += "Quote: \"\(wisdom.quote)\"\n\n"
-        message += "The explanation given is: \"\(wisdom.explanation)\"\n\n"
-        message += "Please tell me more about:\n"
-        message += "• The deeper meaning and context of this wisdom\n"
-        message += "• How to apply this in daily life\n"
-        message += "• Related teachings from Islam\n"
-        message += "• Practical examples of living by this principle"
+        var message = "\(TodayStrings.wisdomChatPromptPrefix) \(wisdom.author).\n\n"
+        message += "\(TodayStrings.wisdomChatQuoteLabel) \"\(wisdom.quote)\"\n\n"
+        message += "\(TodayStrings.wisdomChatExplanationLabel) \"\(wisdom.explanation)\"\n\n"
+        message += TodayStrings.wisdomChatRequestDetails
 
         return message
     }
 
     private func generateShareText() -> String {
-        var shareText = "Word of Wisdom\n\n"
+        var shareText = "\(TodayStrings.wisdomShareTitle)\n\n"
         shareText += "\"\(wisdom.quote)\"\n\n"
         shareText += "- \(wisdom.author)\n\n"
         shareText += "\(wisdom.explanation)\n\n"
-        shareText += "Shared from Deen Buddy"
+        shareText += TodayStrings.wisdomShareFooter
         return shareText
     }
 }
