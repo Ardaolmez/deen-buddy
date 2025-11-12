@@ -149,6 +149,7 @@ struct TodayView: View {
                                     }
                                 }
                                 .padding(.horizontal, 20)
+                                
                             }
 
                             // Beautiful separator

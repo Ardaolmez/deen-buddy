@@ -9,34 +9,49 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var appState = AppState()
+    @State private var showLaunchScreen = true
 
     var body: some View {
-        TabView(selection: $appState.selectedTab) {
-            TodayView()
-                .tabItem {
-                    Label(AppStrings.common.todayTab, systemImage: "calendar")
-                }
-                .tag(0)
+        ZStack {
+            // Main TabView
+            TabView(selection: $appState.selectedTab) {
+                TodayView()
+                    .tabItem {
+                        Label(AppStrings.common.todayTab, systemImage: "calendar")
+                    }
+                    .tag(0)
 
-            QuranView()
-                .tabItem {
-                    Label(AppStrings.common.quranTab, systemImage: "book.closed")
-                }
-                .tag(1)
+                QuranView()
+                    .tabItem {
+                        Label(AppStrings.common.quranTab, systemImage: "book.closed")
+                    }
+                    .tag(1)
 
-            PrayersView()
-                .tabItem {
-                    Label(AppStrings.common.prayersTab, systemImage: "moon.stars")
-                }
-                .tag(2)
+                PrayersView()
+                    .tabItem {
+                        Label(AppStrings.common.prayersTab, systemImage: "moon.stars")
+                    }
+                    .tag(2)
 
-            ExploreView()
-                .tabItem {
-                    Label(AppStrings.common.exploreTab, systemImage: "safari")
+                ExploreView()
+                    .tabItem {
+                        Label(AppStrings.common.exploreTab, systemImage: "safari")
+                    }
+                    .tag(3)
+            }
+            .environmentObject(appState)
+
+            // Launch Screen Overlay
+            if showLaunchScreen {
+                QuoteLaunchView {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        showLaunchScreen = false
+                    }
                 }
-                .tag(3)
+                .transition(.opacity)
+                .zIndex(1)
+            }
         }
-        .environmentObject(appState)
     }
 }
 
