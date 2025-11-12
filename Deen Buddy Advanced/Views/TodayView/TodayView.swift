@@ -20,6 +20,9 @@ struct TodayView: View {
     @State private var showStreakFeedback = false
     @State private var streakCount = 0
     @State private var weeklyStreak: [Bool] = []
+    @State private var isVerseExpanded = false
+    @State private var isDuroodExpanded = false
+    @State private var isDuaExpanded = false
 
     var body: some View {
         NavigationView {
@@ -27,9 +30,10 @@ struct TodayView: View {
                 // Background (adapts to light/dark mode)
                 CreamyPapyrusBackground()
 
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(spacing: 20) {
+                VStack(spacing: 0) {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(spacing: 20) {
                             // Journey Header
 //                            JourneyHeaderView(
 //                                journeyTitle: dailyProgressVM.isSelectedDateToday() ? "Today's Journey" : "Journey",
@@ -71,7 +75,8 @@ struct TodayView: View {
                                             onShowDetail: {
                                                 selectedActivity = verse
                                                 showActivityDetail = true
-                                            }
+                                            },
+                                            isExpanded: $isVerseExpanded
                                         )
                                     }
 
@@ -89,7 +94,8 @@ struct TodayView: View {
                                             onShowDetail: {
                                                 selectedActivity = durood
                                                 showActivityDetail = true
-                                            }
+                                            },
+                                            isExpanded: $isDuroodExpanded
                                         )
                                     }
 
@@ -107,7 +113,8 @@ struct TodayView: View {
                                             onShowDetail: {
                                                 selectedActivity = dua
                                                 showActivityDetail = true
-                                            }
+                                            },
+                                            isExpanded: $isDuaExpanded
                                         )
                                     }
                                 }
@@ -202,29 +209,37 @@ struct TodayView: View {
                                 showGoalDetail = true
                             }
                             .padding(.horizontal, 20)
-
-                            // Chat Box
-                            ChatBoxView()
-                                .padding(.horizontal, 20)
-                                .padding(.bottom, 20)
-                                .id("chatBox")
+                            .padding(.bottom, 100) // Add bottom padding for sticky chat
+                            }
+                            .padding(.top, 16)
                         }
-                        .padding(.top, 16)
-                    }
-                    .onAppear {
-                        // Set up the streak completion callback
-                        dailyProgressVM.onDailyStreakCompleted = { streak, last7Days in
-                            streakCount = streak
-                            weeklyStreak = last7Days
-                            showStreakFeedback = true
-                        }
-
-                        // Scroll to bottom with a slight delay to ensure layout is complete
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            withAnimation {
-                                proxy.scrollTo("chatBox", anchor: .bottom)
+                        .onAppear {
+                            // Set up the streak completion callback
+                            dailyProgressVM.onDailyStreakCompleted = { streak, last7Days in
+                                streakCount = streak
+                                weeklyStreak = last7Days
+                                showStreakFeedback = true
                             }
                         }
+                    }
+
+                    // Sticky Chat Box at the bottom with gradient fade
+                    VStack(spacing: 0) {
+                        // Gradient fade from transparent to background color
+                        LinearGradient(
+                            colors: [
+                                Color(red: 0.98, green: 0.97, blue: 0.95).opacity(0),
+                                Color(red: 0.98, green: 0.97, blue: 0.95).opacity(0),
+                                Color(red: 0.98, green: 0.97, blue: 0.95).opacity(0)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: 10)
+
+                        ChatBoxView()
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 20)
                     }
                 }
             }

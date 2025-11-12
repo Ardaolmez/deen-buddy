@@ -15,11 +15,11 @@ struct CreamyPapyrusBackground: View {
             // Light mode: Quran tab page background colors (radial gradient)
             RadialGradient(
                 gradient: Gradient(stops: [
-                    .init(color: AppColors.Quran.pageCenter, location: 0.0),
-                    .init(color: AppColors.Quran.pageRing1, location: 0.25),
-                    .init(color: AppColors.Quran.pageRing2, location: 0.5),
-                    .init(color: AppColors.Quran.pageRing3, location: 0.75),
-                    .init(color: AppColors.Quran.pageRing4, location: 1.0)
+                    .init(color: AppColors.Quran.pageCenterBlue, location: 0.0),
+                    .init(color: AppColors.Quran.pageRing1Blue, location: 0.25),
+                    .init(color: AppColors.Quran.pageRing2Blue, location: 0.5),
+                    .init(color: AppColors.Quran.pageRing3Blue, location: 0.75),
+                    .init(color: AppColors.Quran.pageRing4Blue, location: 1.0)
                 ]),
                 center: .center,
                 startRadius: 0,

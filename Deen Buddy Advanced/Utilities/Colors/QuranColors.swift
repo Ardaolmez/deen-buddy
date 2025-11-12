@@ -15,12 +15,20 @@ extension AppColors {
         static let backgroundGradientStart = Color(red: 0.98, green: 0.94, blue: 0.82)
         static let backgroundGradientEnd = Color(red: 0.96, green: 0.92, blue: 0.78)
 
-        // Page Background (Radial Gradient)
+        // Page Background (Radial Gradient) - Cream/Parchment Theme
         static let pageCenter = Color.white
         static let pageRing1 = Color(red: 0.998, green: 0.99, blue: 0.98)
         static let pageRing2 = Color(red: 0.995, green: 0.985, blue: 0.96)
         static let pageRing3 = Color(red: 0.99, green: 0.98, blue: 0.94)
         static let pageRing4 = Color(red: 0.985, green: 0.97, blue: 0.90)
+
+        // Page Background (Radial Gradient) - Ottoman Blue Theme (Alternative)
+        // Base: #4f97a3 (Ottoman Blue)
+        static let pageCenterBlue = Color.white
+        static let pageRing1Blue = Color(red: 0.96, green: 0.98, blue: 0.99) // #f5fafb - Very pale blue
+        static let pageRing2Blue = Color(red: 0.93, green: 0.97, blue: 0.98) // #edf7f9 - Pale blue
+        static let pageRing3Blue = Color(red: 0.88, green: 0.94, blue: 0.96) // #e0f0f5 - Light blue
+        static let pageRing4Blue = Color(red: 0.83, green: 0.91, blue: 0.93) // #d4e8ed - Soft blue
 
         // Papyrus Colors (for other views)
         static let papyrusSquare = Color(red: 0.99, green: 0.98, blue: 0.94)  // Same as pageRing3
