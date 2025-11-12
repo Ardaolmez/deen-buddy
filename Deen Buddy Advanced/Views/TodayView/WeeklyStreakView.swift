@@ -53,8 +53,8 @@ struct WeeklyStreakView: View {
                         ZStack {
                             Circle()
                                 .strokeBorder(
-                                    isSelected ? AppColors.Today.streakFlame :
-                                    hasProgress ? AppColors.Today.streakFlame.opacity(0.6) :
+                                    isSelected ? AppColors.Today.brandGreen :
+                                    hasProgress ? AppColors.Today.brandGreen.opacity(0.6) :
                                     isPast && !hasProgress ? Color(.systemGray3) :
                                     Color(.systemGray4),
                                     lineWidth: isSelected ? 2.5 : 1.5
@@ -62,9 +62,9 @@ struct WeeklyStreakView: View {
                                 .background(
                                     Circle()
                                         .fill(
-                                            isSelected && hasProgress ? AppColors.Today.streakFlame.opacity(0.15) :
+                                            isSelected && hasProgress ? AppColors.Today.brandGreen.opacity(0.15) :
                                             isSelected ? Color(.systemGray5) :
-                                            hasProgress ? AppColors.Today.streakFlame.opacity(0.1) :
+                                            hasProgress ? AppColors.Today.brandGreen.opacity(0.1) :
                                             isPast && !hasProgress ? Color(.systemGray5) :
                                             Color(.systemGray6)
                                         )
@@ -74,7 +74,7 @@ struct WeeklyStreakView: View {
                             if hasProgress {
                                 // Show flame for completed days
                                 Image(systemName: "flame.fill")
-                                    .foregroundColor(AppColors.Today.streakFlame)
+                                    .foregroundColor(AppColors.Today.brandGreen)
                                     .font(.system(size: 18))
                             } else {
                                 // Show day number for all non-completed days
@@ -104,7 +104,7 @@ struct WeeklyStreakView: View {
 
                     Text("\(progress)%")
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(progress == 100 ? AppColors.Today.activityCardDone : AppColors.Today.progressBarFill)
+                        .foregroundColor(AppColors.Today.brandGreen)
                 }
 
                 // Progress bar
@@ -118,7 +118,10 @@ struct WeeklyStreakView: View {
                             RoundedRectangle(cornerRadius: 8)
                                 .fill(
                                     LinearGradient(
-                                        colors: [Color(red: 1.0, green: 0.7, blue: 0.3), Color(red: 1.0, green: 0.5, blue: 0.2)],
+                                        colors: [
+                                            AppColors.Today.brandGreen.opacity(0.5),
+                                            AppColors.Today.brandGreen
+                                        ],
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )

@@ -35,7 +35,7 @@ extension AppColors {
         static let learningButtonText = Color.white
 
         // Prayer Time Compact Widget
-        static let prayerCompactIcon = Color(red: 1.0, green: 0.6, blue: 0.2) // Warm orange to match streak
+        static let prayerCompactIcon =   Color(red: 0.29, green: 0.55, blue: 0.42)// Warm orange to match streak
 
         // Daily Reading Goal Card
         static let quranGoalTitle = Color.primary
