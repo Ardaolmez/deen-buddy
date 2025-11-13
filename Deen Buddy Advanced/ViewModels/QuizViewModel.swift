@@ -12,6 +12,25 @@ final class QuizViewModel: ObservableObject {
 
     @Published var didFinish: Bool = false   // ⬅️ trigger result screen
 
+    // Per-question answer tracking for non-linear quiz flow
+    @Published var questionStates: [QuestionAnswerState] = []
+
+    enum QuestionAnswerState: Equatable {
+        case unanswered
+        case correct(selectedAnswer: String)
+        case incorrect(selectedAnswer: String, correctAnswer: String)
+
+        var isAnswered: Bool {
+            if case .unanswered = self { return false }
+            return true
+        }
+
+        var isCorrect: Bool {
+            if case .correct = self { return true }
+            return false
+        }
+    }
+
     // Quran data for verse fetching
     private let quranSurahs: [Surah]
 
@@ -48,6 +67,9 @@ final class QuizViewModel: ObservableObject {
         // now assign to self
         self.quizzes = resolvedQuizzes
         self.quizOfDay = resolvedQuizOfDay
+
+        // Initialize question states to unanswered
+        self.questionStates = Array(repeating: .unanswered, count: resolvedQuizOfDay.questions.count)
     }
 
     private static func loadQuizzesFromJSON() -> [QuizModel] {
@@ -179,7 +201,18 @@ final class QuizViewModel: ObservableObject {
         guard !isLocked, quizOfDay.questions.indices.contains(currentIndex) else { return }
         selectedIndex = index
         isLocked = true
-        if index == currentQuestion.correctIndex { score += 1 }
+
+        // Update score and question state
+        let question = quizOfDay.questions[currentIndex]
+        let selectedAnswer = question.answers[index]
+        let correctAnswer = question.answers[question.correctIndex]
+
+        if index == currentQuestion.correctIndex {
+            score += 1
+            questionStates[currentIndex] = .correct(selectedAnswer: selectedAnswer)
+        } else {
+            questionStates[currentIndex] = .incorrect(selectedAnswer: selectedAnswer, correctAnswer: correctAnswer)
+        }
     }
 
     // call when finishing the last question
@@ -195,8 +228,28 @@ final class QuizViewModel: ObservableObject {
                 return
             }
             currentIndex += 1
-            selectedIndex = nil
-            isLocked = false
+
+            // Check if the next question is already answered
+            if questionStates[currentIndex].isAnswered {
+                // Set up to show feedback immediately
+                switch questionStates[currentIndex] {
+                case .correct(let selectedAnswer):
+                    if let answerIndex = quizOfDay.questions[currentIndex].answers.firstIndex(of: selectedAnswer) {
+                        selectedIndex = answerIndex
+                    }
+                case .incorrect(let selectedAnswer, _):
+                    if let answerIndex = quizOfDay.questions[currentIndex].answers.firstIndex(of: selectedAnswer) {
+                        selectedIndex = answerIndex
+                    }
+                case .unanswered:
+                    selectedIndex = nil
+                }
+                isLocked = true
+            } else {
+                // Fresh question
+                selectedIndex = nil
+                isLocked = false
+            }
         }
 
         func restartSameQuiz() {
@@ -217,5 +270,61 @@ final class QuizViewModel: ObservableObject {
             if index == correct { return .correctHighlight }
         }
         return .neutral
+    }
+
+    // MARK: - Non-linear quiz methods for new card UI
+
+    /// Navigate to a specific question (used when clicking circle on Today card)
+    func navigateToQuestion(_ index: Int) {
+        guard questionStates.indices.contains(index) else { return }
+
+        currentIndex = index
+
+        // If already answered, show feedback immediately
+        if questionStates[index].isAnswered {
+            // Set selectedIndex to recreate the answered state
+            switch questionStates[index] {
+            case .correct(let selectedAnswer):
+                if let answerIndex = quizOfDay.questions[index].answers.firstIndex(of: selectedAnswer) {
+                    selectedIndex = answerIndex
+                }
+            case .incorrect(let selectedAnswer, _):
+                if let answerIndex = quizOfDay.questions[index].answers.firstIndex(of: selectedAnswer) {
+                    selectedIndex = answerIndex
+                }
+            case .unanswered:
+                selectedIndex = nil
+            }
+            isLocked = true
+        } else {
+            // Reset for new question
+            selectedIndex = nil
+            isLocked = false
+        }
+    }
+
+    /// Get the next unanswered question index, or nil if all answered
+    func nextUnansweredQuestionIndex() -> Int? {
+        questionStates.firstIndex { !$0.isAnswered }
+    }
+
+    /// Check if all questions are answered
+    var allQuestionsAnswered: Bool {
+        questionStates.allSatisfy { $0.isAnswered }
+    }
+
+    /// Get count of answered questions
+    var answeredQuestionsCount: Int {
+        questionStates.filter { $0.isAnswered }.count
+    }
+
+    /// Reset quiz for retry
+    func resetQuiz() {
+        questionStates = Array(repeating: .unanswered, count: quizOfDay.questions.count)
+        currentIndex = 0
+        selectedIndex = nil
+        isLocked = false
+        score = 0
+        didFinish = false
     }
 }

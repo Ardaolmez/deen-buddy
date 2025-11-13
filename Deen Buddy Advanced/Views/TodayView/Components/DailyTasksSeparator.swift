@@ -16,44 +16,35 @@ struct DailyTasksSeparator: View {
                     LinearGradient(
                         colors: [
                             Color.clear,
-                            AppColors.Today.separatorGradientColor
+                            AppColors.Today.brandGreen
                         ],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
                 )
-                .frame(height: 1)
+                .frame(maxWidth: 80, maxHeight: 3)
 
-            // Center icon
-            VStack(spacing: 4) {
-                Image(systemName: "sparkles")
-                    .font(.system(size: 12))
-                    .foregroundColor(AppColors.Today.separatorIconColor)
-
-                Image(systemName: "questionmark.circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(AppColors.Today.separatorIconColor)
-
-                Image(systemName: "sparkles")
-                    .font(.system(size: 12))
-                    .foregroundColor(AppColors.Today.separatorIconColor)
-            }
+            // Center text
+            Text(TodayStrings.selfLearningTitle)
+                .font(.system(size: 24, weight: .bold, design: .serif))
+                .italic()
+                .foregroundColor(AppColors.Today.brandGreen)
 
             // Right line
             Rectangle()
                 .fill(
                     LinearGradient(
                         colors: [
-                            AppColors.Today.separatorGradientColor,
+                            AppColors.Today.brandGreen,
                             Color.clear
                         ],
                         startPoint: .leading,
                         endPoint: .trailing
                     )
                 )
-                .frame(height: 1)
+                .frame(maxWidth: 80, maxHeight: 3)
         }
-        .padding(.vertical, 24)
+        .padding(.vertical, 8)
     }
 }
 

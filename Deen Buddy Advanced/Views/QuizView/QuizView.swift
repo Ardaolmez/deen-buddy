@@ -3,7 +3,7 @@ import SwiftUI
 
 struct QuizView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject var vm: QuizViewModel = .init()
+    @ObservedObject var vm: QuizViewModel
     @State private var showAnswers: Bool = false
     @State private var showExplanation: Bool = false
     @State private var showVersePopup: Bool = false
@@ -159,6 +159,14 @@ struct QuizView: View {
                 prepareForNewQuestion()
             }
         }
+        .onAppear {
+            // If navigating to already answered question, show feedback immediately
+            if vm.isLocked && vm.selectedIndex != nil {
+                showAnswers = false
+                showExplanation = true
+                isQuestionStreaming = false
+            }
+        }
         .onDisappear {
             answerRevealTask?.cancel()
             answerRevealTask = nil
@@ -170,12 +178,23 @@ private extension QuizView {
     func prepareForNewQuestion(resetExplanation: Bool = true) {
         answerRevealTask?.cancel()
         answerRevealTask = nil
-        if resetExplanation {
-            showExplanation = false
+
+        // Check if navigating to an already answered question
+        if vm.isLocked && vm.selectedIndex != nil {
+            // Show feedback immediately for answered question
+            showExplanation = true
+            showAnswers = false
+            visibleAnswerCount = 0
+            isQuestionStreaming = false
+        } else {
+            // Fresh unanswered question
+            if resetExplanation {
+                showExplanation = false
+            }
+            showAnswers = false
+            visibleAnswerCount = 0
+            isQuestionStreaming = true
         }
-        showAnswers = false
-        visibleAnswerCount = 0
-        isQuestionStreaming = true
     }
 
     func startAnswerReveal() {

@@ -18,6 +18,14 @@ extension AppColors {
         static let dailyQuizButton = brandGreen
         static let dailyQuizText = Color.white
 
+        // Quiz question circles
+        static let quizCircleCorrect = brandGreen
+        static let quizCircleIncorrect = Color(red: 0.85, green: 0.45, blue: 0.42) // Pastel red matching green's vibrancy
+        static let quizCircleUnanswered = papyrusBackground // Same as background
+        static let quizCircleBorder = Color(.systemGray4)
+        static let quizCircleNumber = Color.primary
+        static let quizCircleIcon = Color.white
+
         // Streak colors - warm orange/gold theme
         static let streakFlame = Color(red: 1.0, green: 0.6, blue: 0.2) // Warm orange
         static let streakActive = brandGreen // Changed from generic green to brand green
@@ -133,7 +141,7 @@ extension AppColors {
         static let wisdomDividerMid = Color.white.opacity(0.3)
 
         // MARK: - Separator Gradient Colors
-        static let separatorGradientColor = Color(red: 0.85, green: 0.8, blue: 0.7).opacity(0.5)
+        static let separatorGradientColor = Color(red: 0.95, green: 0.8, blue: 0.6)
         static let separatorIconColor = Color(red: 0.9, green: 0.7, blue: 0.3)
 
         // MARK: - Streak Feedback Overlay

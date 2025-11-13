@@ -14,12 +14,20 @@ struct TodayView: View {
     @State private var goalDetailViewModel: ReadingGoalViewModel?
     @StateObject private var prayersVM = PrayersViewModel()
     @StateObject private var dailyProgressVM = DailyProgressViewModel()
+    @StateObject private var quizVM = QuizViewModel()
     @State private var selectedActivity: DailyActivityContent?
     @State private var showActivityDetail = false
     @State private var showStreakFeedback = false
     @State private var streakCount = 0
     @State private var weeklyStreak: [Bool] = []
     @State private var expandedActivity: DailyActivityType? = .verse  // First card expanded by default
+
+    // Quiz card state
+    @State private var selectedQuestionIndex: Int? = nil
+    @State private var showQuizView = false
+
+    // Navigation title state for scroll-based updates
+    @State private var currentNavigationTitle = TodayStrings.navigationTitle
 
     var body: some View {
         NavigationView {
@@ -38,6 +46,7 @@ struct TodayView: View {
 //                                streakCount: dailyProgressVM.currentStreak,
 //                                selectedDate: dailyProgressVM.selectedDate
 //                            )
+
 
                             // Weekly Streak Section
                             WeeklyStreakView(
@@ -70,15 +79,34 @@ struct TodayView: View {
                             // Beautiful separator
                             DailyTasksSeparator()
                                 .padding(.horizontal, 20)
+                                .background(
+                                    GeometryReader { geometry in
+                                        Color.clear
+                                            .preference(
+                                                key: ViewOffsetKey.self,
+                                                value: geometry.frame(in: .named("scroll")).minY
+                                            )
+                                    }
+                                )
+                                .onPreferenceChange(ViewOffsetKey.self) { offset in
+                                    // Update title when separator crosses threshold
+                                    if offset < 200 {
+                                        currentNavigationTitle = TodayStrings.selfLearningTitle
+                                    } else {
+                                        currentNavigationTitle = TodayStrings.navigationTitle
+                                    }
+                                }
 
                             // Word of Wisdom Card
                             WordOfWisdomCard()
                                 .padding(.horizontal, 20)
 
-                            // Daily Quiz Button
-                            DailyQuizCard {
-                                showQuiz = true
-                            }
+                            // Daily Quiz Card (new non-linear design)
+                            DailyQuizCardNew(
+                                quizViewModel: quizVM,
+                                selectedQuestionIndex: $selectedQuestionIndex,
+                                showQuizView: $showQuizView
+                            )
 
                             // Daily Reading Goal
                             DailyReadGoalCard { viewModel in
@@ -90,6 +118,7 @@ struct TodayView: View {
                             }
                             .padding(.top, 16)
                         }
+                        .coordinateSpace(name: "scroll")
                         .onAppear {
                             // Set up the streak completion callback
                             dailyProgressVM.onDailyStreakCompleted = { streak, last7Days in
@@ -104,7 +133,7 @@ struct TodayView: View {
                     StickyChatBox()
                 }
             }
-            .navigationTitle(AppStrings.today.navigationTitle)
+            .navigationTitle(currentNavigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -120,8 +149,8 @@ struct TodayView: View {
                     }
                 }
             }
-            .fullScreenCover(isPresented: $showQuiz) {
-                QuizView()
+            .fullScreenCover(isPresented: $showQuizView) {
+                QuizView(vm: quizVM)
             }
             .fullScreenCover(isPresented: $showGoalDetail) {
                 if let viewModel = goalDetailViewModel {

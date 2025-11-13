@@ -8,7 +8,8 @@
 import Foundation
 
 struct TodayStrings {
-    static let navigationTitle = "Today's Journey"
+    static let navigationTitle = "Today's Reflection"
+    static let selfLearningTitle = "Today's Learning"
     static let dailyQuiz = "Daily Quiz"
     static let startLesson = "Start"
     static let continueJourney = "Continue your journey with tailored lessons"
@@ -95,7 +96,10 @@ struct TodayStrings {
     // MARK: - Daily Quiz Button
     static let dailyQuizLabel = "DAILY QUIZ"
     static let dailyQuizMinutes = "5 MIN"
-    static let dailyQuizStart = "Start"
+    static let dailyQuizStart = "Start the Quiz"
+    static let dailyQuizContinue = "Continue Quiz"
+    static let dailyQuizReview = "Review"
+    static let dailyQuizSubmit = "Submit"
 
     // MARK: - Activity Detail Screen
     static let activityProgressToday = "Progress today"
