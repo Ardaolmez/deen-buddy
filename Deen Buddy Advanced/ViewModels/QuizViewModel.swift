@@ -278,6 +278,9 @@ final class QuizViewModel: ObservableObject {
     func navigateToQuestion(_ index: Int) {
         guard questionStates.indices.contains(index) else { return }
 
+        // Reset didFinish to allow reviewing without auto-showing results
+        didFinish = false
+
         currentIndex = index
 
         // If already answered, show feedback immediately

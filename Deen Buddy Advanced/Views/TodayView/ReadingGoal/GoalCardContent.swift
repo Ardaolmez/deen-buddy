@@ -55,7 +55,7 @@ struct GoalCardContent: View {
             HStack(spacing: 10) {
                 // Read button - Filled with brand color
                 Button {
-                    showQuranReading = true
+                    showListenTracking = true
                 } label: {
                     HStack(spacing: 6) {
                         Image(systemName: "book.fill")
@@ -98,7 +98,7 @@ struct GoalCardContent: View {
                         Text(AppStrings.today.listen)
                             .font(.system(size: 14, weight: .semibold))
                     }
-                    .foregroundColor(AppColors.Today.quranGoalCardText)
+                    .foregroundColor(AppColors.Today.quranGoalCardText.opacity(0.4))
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 10)
                     .background(
@@ -113,6 +113,7 @@ struct GoalCardContent: View {
                         }
                     )
                 }
+                .disabled(true)
             }
         }
     }

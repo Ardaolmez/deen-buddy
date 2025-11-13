@@ -98,8 +98,8 @@ struct TodayView: View {
                                 }
 
                             // Word of Wisdom Card
-                            WordOfWisdomCard()
-                                .padding(.horizontal, 20)
+//                            WordOfWisdomCard()
+  //                              .padding(.horizontal, 20)
 
                             // Daily Quiz Card (new non-linear design)
                             DailyQuizCardNew(
@@ -107,6 +107,7 @@ struct TodayView: View {
                                 selectedQuestionIndex: $selectedQuestionIndex,
                                 showQuizView: $showQuizView
                             )
+                            .padding(.horizontal, 20)
 
                             // Daily Reading Goal
                             DailyReadGoalCard { viewModel in

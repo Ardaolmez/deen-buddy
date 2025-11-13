@@ -94,10 +94,10 @@ struct TodayStrings {
     static let closeLabel = "Close"
 
     // MARK: - Daily Quiz Button
-    static let dailyQuizLabel = "DAILY QUIZ"
+    static let dailyQuizLabel = "Daily Quiz: 5 questions"
     static let dailyQuizMinutes = "5 MIN"
-    static let dailyQuizStart = "Start the Quiz"
-    static let dailyQuizContinue = "Continue Quiz"
+    static let dailyQuizStart = "Start"
+    static let dailyQuizContinue = "Continue"
     static let dailyQuizReview = "Review"
     static let dailyQuizSubmit = "Submit"
 

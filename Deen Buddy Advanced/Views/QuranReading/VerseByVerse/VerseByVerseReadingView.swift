@@ -16,6 +16,7 @@ struct VerseByVerseReadingView: View {
     @State private var pages: [QuranReadingPage] = []
     @State private var currentPageIndex: Int = 0
     @State private var startingPosition: Int = 0
+    @State private var showVerseNavigation: Bool = false
 
     var currentSurahAndVerse: String {
         guard !pages.isEmpty,
@@ -128,6 +129,14 @@ struct VerseByVerseReadingView: View {
                 endSession()
             }
         }
+        .sheet(isPresented: $showVerseNavigation) {
+            VerseNavigationPopup(
+                surahs: goalViewModel.getSurahs(),
+                onNavigate: { surahId, verseId in
+                    navigateToVerse(surahId: surahId, verseId: verseId)
+                }
+            )
+        }
     }
 
     // MARK: - Top Bar
@@ -161,9 +170,21 @@ struct VerseByVerseReadingView: View {
 
             Spacer()
 
-            // Placeholder for balance
-            Color.clear
-                .frame(width: 40, height: 40)
+            // Pencil icon button for verse navigation
+            Button(action: {
+                showVerseNavigation = true
+            }) {
+                ZStack {
+                    Circle()
+                        .fill(Color(.systemGray6))
+                        .frame(width: 40, height: 40)
+                        .shadow(color: AppColors.VerseByVerse.shadowPrimary, radius: 4, x: 0, y: 2)
+
+                    Image(systemName: "pencil")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(AppColors.VerseByVerse.accentGreen)
+                }
+            }
         }
         .padding(.horizontal, 20)
         .padding(.top, 12)
@@ -257,6 +278,31 @@ struct VerseByVerseReadingView: View {
 
         // Provide haptic feedback for page turns
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        impactFeedback.impactOccurred()
+    }
+
+    // MARK: - Navigation to Specific Verse
+
+    private func navigateToVerse(surahId: Int, verseId: Int) {
+        let surahs = goalViewModel.getSurahs()
+        guard !surahs.isEmpty else { return }
+
+        // Calculate absolute position
+        let absolutePosition = goalViewModel.getAbsolutePosition(surahId: surahId, verseId: verseId)
+
+        // Rebuild pages from new position
+        let result = VerseByVersePageBuilder.buildPages(
+            from: surahs,
+            startingAt: absolutePosition
+        )
+        pages = result.pages
+        currentPageIndex = result.startIndex
+
+        // Update goal position
+        goalViewModel.updateCurrentPosition(to: absolutePosition)
+
+        // Haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
         impactFeedback.impactOccurred()
     }
 

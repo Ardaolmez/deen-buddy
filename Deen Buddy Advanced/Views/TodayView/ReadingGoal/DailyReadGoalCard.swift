@@ -58,9 +58,7 @@ struct DailyReadGoalCard: View {
                         lineWidth: 1
                     )
             )
-            .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)   //
-            .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 6)   //
-            .shadow(color: Color.black.opacity(0.15), radius: 24, x: 0, y: 12) // Far
+            .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 3)
             .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .fullScreenCover(isPresented: $showListenTracking) {
