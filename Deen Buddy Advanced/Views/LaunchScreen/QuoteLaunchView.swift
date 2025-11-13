@@ -51,7 +51,7 @@ struct QuoteLaunchView: View {
 
                 // App Title
                 Text("Iman Buddy")
-                    .font(.system(size: 42, weight: .regular, design: .serif))
+                    .font(.system(size: 34, weight: .medium, design: .serif))
                     .foregroundColor(.white)
                     .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 2)
 
@@ -62,12 +62,13 @@ struct QuoteLaunchView: View {
                     VStack(spacing: 24) {
                         // Quote text with quotation marks
                         Text("\"\(quote.quote)\"")
-                            .font(.system(size: 26, weight: .regular, design: .serif))
+                            .font(.system(size: 30, weight: .regular, design: .serif))
                             .foregroundColor(.white)
                             .multilineTextAlignment(.center)
                             .lineSpacing(6)
                             .shadow(color: .black.opacity(0.5), radius: 3, x: 0, y: 2)
-                            .padding(.horizontal, 50)
+                            .frame(maxWidth: UIScreen.main.bounds.width - 90) // Card max width
+                            .italic()
 
                         // Author reference (formatted like the screenshot)
                         Text(quote.author.uppercased())

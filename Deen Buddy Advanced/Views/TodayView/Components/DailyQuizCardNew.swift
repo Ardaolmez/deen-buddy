@@ -31,9 +31,9 @@ struct DailyQuizCardNew: View {
                     .foregroundColor(.black.opacity(0.6))
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.bottom, 16)
+            .padding(.bottom, 4)
             // Question circles
-            HStack(spacing: 18) {
+            HStack(spacing: 22) {
                 ForEach(0..<min(5, quizViewModel.questionStates.count), id: \.self) { index in
                     SimpleQuestionCircle(
                         number: index + 1,
@@ -61,8 +61,8 @@ struct DailyQuizCardNew: View {
             .buttonStyle(PlainButtonStyle())
             .disabled(quizViewModel.totalQuestions == 0)
         }
-        .padding(.horizontal, 32)
-        .padding(.vertical, 24)
+        .padding(.horizontal, 16)
+        .padding(.vertical,16)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(AppColors.Quran.papyrusSquare)
