@@ -213,6 +213,9 @@ struct TodayView: View {
         if let dua = dailyProgressVM.dailyDua {
             activities.append(dua)
         }
+        if let wisdom = dailyProgressVM.dailyWisdom {
+            activities.append(wisdom)
+        }
         return activities
     }
 }

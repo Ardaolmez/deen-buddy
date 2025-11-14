@@ -21,7 +21,7 @@ struct StreamingTextView: View {
     @State private var streamingTask: Task<Void, Never>? = nil
 
     // Animation speed (seconds per character)
-    private let characterDelay: Double = 0.05
+    private let characterDelay: Double = 0.03
 
     var body: some View {
         Text(displayedText.isEmpty ? " " : displayedText)
@@ -103,7 +103,7 @@ struct StreamingAttributedTextView: View {
     @State private var streamingComplete: Bool = false
 
     // Animation speed (seconds per character)
-    private let characterDelay: Double = 0.03
+    private let characterDelay: Double = 0.04
 
     var body: some View {
         if streamingComplete || !isStreaming {

@@ -13,6 +13,7 @@ class DailyProgressViewModel: ObservableObject {
     @Published var dailyVerse: DailyActivityContent?
     @Published var dailyDurood: DailyActivityContent?
     @Published var dailyDua: DailyActivityContent?
+    @Published var dailyWisdom: DailyActivityContent?
     @Published var selectedDate: Date = Date()
 
     private let userDefaultsKey = "dailyProgressTracker"
@@ -39,6 +40,7 @@ class DailyProgressViewModel: ObservableObject {
         dailyVerse = getDailyVerse()
         dailyDurood = getDailyDurood()
         dailyDua = getDailyDua()
+        dailyWisdom = getDailyWisdom()
     }
 
     // MARK: - JSON Loading Helper
@@ -129,6 +131,39 @@ class DailyProgressViewModel: ObservableObject {
         let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
         let index = dayOfYear % duas.count
         return duas[index]
+    }
+
+    private func getDailyWisdom() -> DailyActivityContent {
+        // Load wisdom from JSON
+        guard let wisdoms: [WordOfWisdom] = loadJSON(filename: "word_of_wisdom"),
+              !wisdoms.isEmpty else {
+            // Fallback if JSON fails to load
+            return DailyActivityContent(
+                type: .wisdom,
+                title: "The best revenge is to improve yourself.",
+                arabicText: nil,  // No Arabic text for wisdom
+                transliteration: nil,  // No transliteration for wisdom
+                translation: "Instead of seeking to harm those who hurt you, focus your energy on bettering yourself - your character, your actions, your faith.",
+                reference: "Ali ibn Abi Talib",
+                tags: ["WISDOM", "SELF_IMPROVEMENT"]
+            )
+        }
+
+        // Select wisdom based on day of year
+        let dayOfYear = Calendar.current.ordinality(of: .day, in: .year, for: Date()) ?? 1
+        let index = dayOfYear % wisdoms.count
+        let wisdom = wisdoms[index]
+
+        // Convert WordOfWisdom to DailyActivityContent
+        return DailyActivityContent(
+            type: .wisdom,
+            title: wisdom.quote,  // Quote becomes title
+            arabicText: nil,  // No Arabic text
+            transliteration: nil,  // No transliteration
+            translation: wisdom.explanation,  // Explanation becomes translation
+            reference: wisdom.author,  // Author becomes reference
+            tags: ["WISDOM"]
+        )
     }
 
     // MARK: - Mark Complete

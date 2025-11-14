@@ -12,12 +12,14 @@ enum DailyActivityType: String, Codable, CaseIterable {
     case verse = "daily_verse"
     case durood = "daily_durood"
     case dua = "daily_dua"
+    case wisdom = "daily_wisdom"
 
     var displayName: String {
         switch self {
         case .verse: return "Daily Verse"
         case .durood: return "Daily Durood"
         case .dua: return "Daily Dua"
+        case .wisdom: return "Daily Wisdom"
         }
     }
 
@@ -26,6 +28,7 @@ enum DailyActivityType: String, Codable, CaseIterable {
         case .verse: return 2
         case .durood: return 2
         case .dua: return 2
+        case .wisdom: return 2
         }
     }
 
@@ -34,6 +37,7 @@ enum DailyActivityType: String, Codable, CaseIterable {
         case .verse: return "book.fill"
         case .durood: return "hands.sparkles.fill"
         case .dua: return "heart.fill"
+        case .wisdom: return "quote.bubble.fill"
         }
     }
 }
@@ -43,7 +47,7 @@ struct DailyActivityContent: Codable {
     let id: String
     let type: DailyActivityType
     let title: String
-    let arabicText: String
+    let arabicText: String?  // Optional for wisdom type
     let transliteration: String?
     let translation: String
     let reference: String?
@@ -52,7 +56,7 @@ struct DailyActivityContent: Codable {
     init(id: String = UUID().uuidString,
          type: DailyActivityType,
          title: String,
-         arabicText: String,
+         arabicText: String? = nil,  // Now optional
          transliteration: String? = nil,
          translation: String,
          reference: String? = nil,

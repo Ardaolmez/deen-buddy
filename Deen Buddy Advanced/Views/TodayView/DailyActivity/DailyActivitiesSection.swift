@@ -28,6 +28,11 @@ struct DailyActivitiesSection: View {
             if let dua = dailyProgressVM.dailyDua {
                 activityCard(for: dua, type: .dua)
             }
+
+            // Daily Wisdom
+            if let wisdom = dailyProgressVM.dailyWisdom {
+                wisdomCard(for: wisdom)
+            }
         }
         .padding(.horizontal, 20)
     }
@@ -53,6 +58,30 @@ struct DailyActivitiesSection: View {
                 set: { isExpanded in
                     // Set to this type if expanded, nil if collapsed
                     expandedActivity = isExpanded ? type : nil
+                }
+            )
+        )
+    }
+
+    @ViewBuilder
+    private func wisdomCard(for wisdom: DailyActivityContent) -> some View {
+        WisdomActivityCard(
+            activity: wisdom,
+            isCompleted: dailyProgressVM.isActivityCompletedForSelectedDate(.wisdom),
+            onMarkComplete: {
+                // Only allow marking complete if it's today
+                if dailyProgressVM.isSelectedDateToday() {
+                    dailyProgressVM.markActivityComplete(.wisdom)
+                }
+            },
+            onShowDetail: {
+                onActivitySelected(wisdom)
+            },
+            isExpanded: Binding(
+                get: { expandedActivity == .wisdom },
+                set: { isExpanded in
+                    // Set to wisdom if expanded, nil if collapsed
+                    expandedActivity = isExpanded ? .wisdom : nil
                 }
             )
         )

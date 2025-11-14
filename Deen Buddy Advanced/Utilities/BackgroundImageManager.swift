@@ -116,6 +116,7 @@ extension BackgroundImageManager {
         case verse
         case durood
         case dua
+        case wisdom
         case readingGoal
         case dailyVerse
 
@@ -124,6 +125,7 @@ extension BackgroundImageManager {
             case .verse: return "verse"
             case .durood: return "durood"
             case .dua: return "dua"
+            case .wisdom: return "wisdom"
             case .readingGoal: return "readingGoal"
             case .dailyVerse: return "dailyVerse"
             }

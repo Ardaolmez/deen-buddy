@@ -21,6 +21,7 @@ struct ExpandableDailyActivityCard: View {
         case .verse: return "book.fill"
         case .durood: return "hands.sparkles.fill"
         case .dua: return "heart.fill"
+        case .wisdom: return "quote.bubble.fill"
         }
     }
 
@@ -33,6 +34,8 @@ struct ExpandableDailyActivityCard: View {
             return BackgroundImageManager.shared.getRandomImage(for: .durood)
         case .dua:
             return BackgroundImageManager.shared.getRandomImage(for: .dua)
+        case .wisdom:
+            return BackgroundImageManager.shared.getRandomImage(for: .wisdom)
         }
     }
 

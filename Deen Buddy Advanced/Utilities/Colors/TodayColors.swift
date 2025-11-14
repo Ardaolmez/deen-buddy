@@ -134,7 +134,7 @@ extension AppColors {
         static let wisdomQuoteMark = Color.orange.opacity(0.3)
         static let wisdomQuoteText = Color.white
         static let wisdomAuthorLine = Color.orange.opacity(0.6)
-        static let wisdomAuthorText = Color.orange
+        static let wisdomAuthorText = Color.white.opacity(0.9)
         static let wisdomUnderstandingIcon = Color.yellow
         static let wisdomUnderstandingLabel = Color.yellow
         static let wisdomDividerStart = Color.white.opacity(0.0)

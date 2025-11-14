@@ -1,40 +1,21 @@
 //
-//  SimpleDailyActivityCard.swift
+//  WisdomActivityCard.swift
 //  Deen Buddy Advanced
 //
-//  Simple card for daily activities (Verse, Durood, Dua) with Read button
+//  Unique card design for daily wisdom activity
 //
 
 import SwiftUI
 
-struct SimpleDailyActivityCard: View {
+struct WisdomActivityCard: View {
     let activity: DailyActivityContent
     let isCompleted: Bool
     let onMarkComplete: () -> Void
     let onShowDetail: () -> Void
     @Binding var isExpanded: Bool
 
-    private var iconName: String {
-        switch activity.type {
-        case .verse: return "book.fill"
-        case .durood: return "hands.sparkles.fill"
-        case .dua: return "heart.fill"
-        case .wisdom: return "quote.bubble.fill"
-        }
-    }
-
     private var backgroundImageName: String {
-        // Get random image for each activity type (stable per day)
-        switch activity.type {
-        case .verse:
-            return BackgroundImageManager.shared.getRandomImage(for: .verse)
-        case .durood:
-            return BackgroundImageManager.shared.getRandomImage(for: .durood)
-        case .dua:
-            return BackgroundImageManager.shared.getRandomImage(for: .dua)
-        case .wisdom:
-            return BackgroundImageManager.shared.getRandomImage(for: .wisdom)
-        }
+        return BackgroundImageManager.shared.getRandomImage(for: .wisdom)
     }
 
     var body: some View {
@@ -57,7 +38,7 @@ struct SimpleDailyActivityCard: View {
                                 .font(.system(size: 16, weight: .bold))
                                 .foregroundColor(AppColors.Today.activityCardCompletionIcon)
                         } else {
-                            Image(systemName: iconName)
+                            Image(systemName: "quote.bubble.fill")
                                 .font(.system(size: 16))
                                 .foregroundColor(.white)
                         }
@@ -65,7 +46,7 @@ struct SimpleDailyActivityCard: View {
 
                     // Title and time - more compact
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(activity.type.displayName.uppercased())
+                        Text("DAILY WISDOM")
                             .font(.system(size: 13, weight: .bold))
                             .foregroundColor(.white)
                             .tracking(0.5)
@@ -136,12 +117,21 @@ struct SimpleDailyActivityCard: View {
                 .padding(.horizontal, 12)
 
             VStack(alignment: .center, spacing: 16) {
-                // Translation preview
-                Text(activity.translation)
+                // Quote text
+                Text("\"\(activity.title)\"")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.white)
-                    .lineLimit(3)
+                    .lineLimit(4)
                     .multilineTextAlignment(.center)
+                    .italic()
+
+                // Author
+                if let author = activity.reference {
+                    Text("- \(author)")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.white.opacity(0.9))
+                        .multilineTextAlignment(.center)
+                }
             }
             .padding(.horizontal, 24)
 
@@ -234,37 +224,23 @@ struct SimpleDailyActivityCard: View {
 
 #Preview {
     struct PreviewWrapper: View {
-        @State private var expanded1 = false
-        @State private var expanded2 = false
+        @State private var expanded = false
 
         var body: some View {
             VStack(spacing: 16) {
-                SimpleDailyActivityCard(
+                WisdomActivityCard(
                     activity: DailyActivityContent(
-                        type: .verse,
-                        title: "Patience and Prayer",
-                        arabicText: "Test",
-                        translation: "Test translation",
-                        tags: []
+                        type: .wisdom,
+                        title: "The best revenge is to improve yourself.",
+                        arabicText: nil,
+                        translation: "Focus your energy on bettering yourself.",
+                        reference: "Ali ibn Abi Talib",
+                        tags: ["WISDOM"]
                     ),
                     isCompleted: false,
                     onMarkComplete: {},
                     onShowDetail: {},
-                    isExpanded: $expanded1
-                )
-
-                SimpleDailyActivityCard(
-                    activity: DailyActivityContent(
-                        type: .durood,
-                        title: "Durood Ibrahim",
-                        arabicText: "Test",
-                        translation: "Test translation",
-                        tags: []
-                    ),
-                    isCompleted: true,
-                    onMarkComplete: {},
-                    onShowDetail: {},
-                    isExpanded: $expanded2
+                    isExpanded: $expanded
                 )
             }
             .padding()

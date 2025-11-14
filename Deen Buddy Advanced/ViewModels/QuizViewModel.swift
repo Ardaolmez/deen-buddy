@@ -15,7 +15,7 @@ final class QuizViewModel: ObservableObject {
     // Per-question answer tracking for non-linear quiz flow
     @Published var questionStates: [QuestionAnswerState] = []
 
-    enum QuestionAnswerState: Equatable {
+    enum QuestionAnswerState: Equatable, Codable {
         case unanswered
         case correct(selectedAnswer: String)
         case incorrect(selectedAnswer: String, correctAnswer: String)
@@ -30,6 +30,16 @@ final class QuizViewModel: ObservableObject {
             return false
         }
     }
+
+    // MARK: - Persistence
+    private struct QuizState: Codable {
+        let date: String  // yyyyMMdd format
+        let questionStates: [QuestionAnswerState]
+        let score: Int
+        let didFinish: Bool
+    }
+
+    private let quizStateKey = "dailyQuizState"
 
     // Quran data for verse fetching
     private let quranSurahs: [Surah]
@@ -70,6 +80,9 @@ final class QuizViewModel: ObservableObject {
 
         // Initialize question states to unanswered
         self.questionStates = Array(repeating: .unanswered, count: resolvedQuizOfDay.questions.count)
+
+        // Load saved state if available for today
+        loadStateIfAvailable()
     }
 
     private static func loadQuizzesFromJSON() -> [QuizModel] {
@@ -213,11 +226,15 @@ final class QuizViewModel: ObservableObject {
         } else {
             questionStates[currentIndex] = .incorrect(selectedAnswer: selectedAnswer, correctAnswer: correctAnswer)
         }
+
+        // Save state after answering
+        saveState()
     }
 
     // call when finishing the last question
         func finish() {
             didFinish = true
+            saveState()
         }
 
         // your existing next()
@@ -258,6 +275,7 @@ final class QuizViewModel: ObservableObject {
             isLocked = false
             score = 0
             didFinish = false
+            saveState()
         }
 
     enum AnswerState { case neutral, correctHighlight, wrongHighlight }
@@ -329,5 +347,41 @@ final class QuizViewModel: ObservableObject {
         isLocked = false
         score = 0
         didFinish = false
+        saveState()
+    }
+
+    // MARK: - Persistence Methods
+
+    private func getCurrentDateString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        return formatter.string(from: Date())
+    }
+
+    private func saveState() {
+        let state = QuizState(
+            date: getCurrentDateString(),
+            questionStates: questionStates,
+            score: score,
+            didFinish: didFinish
+        )
+
+        if let encoded = try? JSONEncoder().encode(state) {
+            UserDefaults.standard.set(encoded, forKey: quizStateKey)
+        }
+    }
+
+    private func loadStateIfAvailable() {
+        guard let data = UserDefaults.standard.data(forKey: quizStateKey),
+              let state = try? JSONDecoder().decode(QuizState.self, from: data) else {
+            return
+        }
+
+        // Only load if it's for today's quiz
+        if state.date == getCurrentDateString() {
+            self.questionStates = state.questionStates
+            self.score = state.score
+            self.didFinish = state.didFinish
+        }
     }
 }

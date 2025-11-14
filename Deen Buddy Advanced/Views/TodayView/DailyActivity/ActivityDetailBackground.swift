@@ -19,6 +19,8 @@ struct ActivityDetailBackground: View {
             return BackgroundImageManager.shared.getRandomImage(for: .durood)
         case .dua:
             return BackgroundImageManager.shared.getRandomImage(for: .dua)
+        case .wisdom:
+            return BackgroundImageManager.shared.getRandomImage(for: .wisdom)
         }
     }
 
