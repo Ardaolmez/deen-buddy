@@ -7,21 +7,18 @@
 
 import SwiftUI
 
-// QuizResultView.swift
-import SwiftUI
-
 struct QuizResultView: View {
     let score: Int
     let total: Int
     let gradeText: String
-    let onShare: () -> Void
+    let questions: [QuizQuestion]
+    let questionStates: [QuizViewModel.QuestionAnswerState]
     let onDone: () -> Void
-    let onRetry: () -> Void
 
     private var percent: Double { total > 0 ? Double(score)/Double(total) : 0 }
 
     var body: some View {
-        VStack(spacing: 24) {
+        VStack(spacing: 16) {
             // Header
             HStack {
                 Button {
@@ -55,68 +52,121 @@ struct QuizResultView: View {
                 )
                 .padding(.horizontal)
 
-            // Card
+            // Compact Card
             ZStack {
-                RoundedRectangle(cornerRadius: 24, style: .continuous)
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(AppColors.Quiz.resultCardBackground)
-                VStack(spacing: 18) {
-                    // Circular ring
+                VStack(spacing: 12) {
+                    // Circular ring - smaller
                     ProgressRing(progress: percent)
-                        .frame(width: 160, height: 160)
-                        .padding(.top, 16)
+                        .frame(width: 120, height: 120)
+                        .padding(.top, 12)
 
                     Text("\(score)/\(total)")
-                        .font(.system(size: 24, weight: .bold, design: .serif))
-
-                    Text(AppStrings.quiz.yourIman)
-                        .font(.system(.title3, design: .serif).weight(.semibold))
-                        .padding(.top, 8)
+                        .font(.system(size: 22, weight: .bold, design: .serif))
 
                     Text(gradeText)
-                        .font(.system(.title2, design: .serif))
+                        .font(.system(.title3, design: .serif))
                         .foregroundColor(.primary)
-
-                    HStack(spacing: 12) {
-                        Button {
-                            onRetry()
-                        } label: {
-                            Label(AppStrings.quiz.retry, systemImage: "arrow.clockwise")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(AppColors.Quiz.retryButtonBackground)
-                                .foregroundColor(AppColors.Quiz.retryButtonText)
-                                .cornerRadius(12)
-                        }
-
-                        Button {
-                            onShare()
-                        } label: {
-                            Label(AppStrings.quiz.share, systemImage: "square.and.arrow.up")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(AppColors.Quiz.shareButtonBackground)
-                                .foregroundColor(AppColors.Quiz.shareButtonText)
-                                .cornerRadius(12)
-                        }
-                    }
-                    .padding(.horizontal)
-
-                    Spacer(minLength: 8)
+                        .padding(.bottom, 12)
                 }
-                .padding()
+                .padding(.vertical, 12)
             }
             .padding(.horizontal)
 
-            // Footer note
-            Text(AppStrings.quiz.tailoredQuizzes)
-                .font(.callout)
-                .foregroundColor(.secondary)
-                .multilineTextAlignment(.center)
+            // Question Feedback List
+            ScrollView {
+                VStack(spacing: 12) {
+                    ForEach(Array(questions.enumerated()), id: \.offset) { index, question in
+                        QuestionFeedbackRow(
+                            questionNumber: index + 1,
+                            question: question,
+                            state: questionStates[index]
+                        )
+                    }
+                }
                 .padding(.horizontal)
-
-            Spacer()
+                .padding(.bottom, 20)
+            }
         }
         .background(Color(.systemBackground).ignoresSafeArea())
+    }
+}
+
+// MARK: - Question Feedback Row
+struct QuestionFeedbackRow: View {
+    let questionNumber: Int
+    let question: QuizQuestion
+    let state: QuizViewModel.QuestionAnswerState
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // Question header
+            HStack(spacing: 8) {
+                // Number circle
+                ZStack {
+                    Circle()
+                        .fill(state.isCorrect ? AppColors.Quiz.correctAnswerBackground : AppColors.Quiz.wrongAnswerBackground)
+                        .frame(width: 28, height: 28)
+
+                    Text("\(questionNumber)")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(AppColors.Quiz.buttonText)
+                }
+
+                // Question text
+                Text(question.question)
+                    .font(.system(size: 15, weight: .medium))
+                    .foregroundColor(.primary)
+                    .lineLimit(2)
+
+                Spacer()
+
+                // Status icon
+                Image(systemName: state.isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                    .font(.system(size: 20))
+                    .foregroundColor(state.isCorrect ? AppColors.Quiz.correctAnswerBackground : AppColors.Quiz.wrongAnswerBackground)
+            }
+
+            // Answer details
+            VStack(alignment: .leading, spacing: 6) {
+                if case .incorrect(let selectedAnswer, let correctAnswer) = state {
+                    // Your answer (incorrect)
+                    HStack(spacing: 6) {
+                        Text(AppStrings.quiz.yourAnswer + ":")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.secondary)
+                        Text(selectedAnswer)
+                            .font(.system(size: 13))
+                            .foregroundColor(AppColors.Quiz.wrongAnswerBackground)
+                    }
+
+                    // Correct answer
+                    HStack(spacing: 6) {
+                        Text(AppStrings.quiz.correctAnswer + ":")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.secondary)
+                        Text(correctAnswer)
+                            .font(.system(size: 13))
+                            .foregroundColor(AppColors.Quiz.correctAnswerBackground)
+                    }
+                } else if case .correct(let selectedAnswer) = state {
+                    // Your answer (correct)
+                    HStack(spacing: 6) {
+                        Text(AppStrings.quiz.yourAnswer + ":")
+                            .font(.system(size: 13, weight: .medium))
+                            .foregroundColor(.secondary)
+                        Text(selectedAnswer)
+                            .font(.system(size: 13))
+                            .foregroundColor(AppColors.Quiz.correctAnswerBackground)
+                    }
+                }
+            }
+            .padding(.leading, 36)
+        }
+        .padding(12)
+        .background(AppColors.Quiz.resultCardBackground)
+        .cornerRadius(12)
     }
 }
 

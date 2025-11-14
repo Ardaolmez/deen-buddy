@@ -37,6 +37,10 @@ extension AppColors {
         static let answerCorrectBorder = brandGreen // Changed to brand green
         static let answerWrongBorder = Color.red
 
+        // Feedback Colors
+        static let correctAnswerBackground = brandGreen
+        static let wrongAnswerBackground = Color.red
+
         // Explanation Card Colors
         static let explanationCardBackground = Color(.systemGray6)
         static let explanationCorrectHeader = brandGreen // Changed to brand green

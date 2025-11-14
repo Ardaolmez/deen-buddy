@@ -140,9 +140,9 @@ struct QuizView: View {
                 score: vm.score,
                 total: vm.totalQuestions,
                 gradeText: vm.gradeText,
-                onShare: { QuizShareSheet.present(text: String(format: AppStrings.quiz.shareText, vm.summaryLine)) },
-                onDone: { dismiss() },
-                onRetry: { vm.restartSameQuiz() }
+                questions: vm.quizOfDay.questions,
+                questionStates: vm.questionStates,
+                onDone: { dismiss() }
             )
         }
         .sheet(isPresented: $showVersePopup) {

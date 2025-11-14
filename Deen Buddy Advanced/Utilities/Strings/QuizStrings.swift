@@ -33,6 +33,8 @@ struct QuizStrings {
     static let correctAnswerIs = "The correct answer is:"
     static let explanation = "Explanation:"
     static let reference = "Reference:"
+    static let yourAnswer = "Your answer"
+    static let correctAnswer = "Correct answer"
 
     // Verse Display
     static let quranVerse = "Quranic Reference:"
