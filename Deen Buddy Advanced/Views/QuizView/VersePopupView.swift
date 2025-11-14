@@ -20,7 +20,7 @@ struct VersePopupView: View {
                 if let surah = surah {
                     ScrollViewReader { proxy in
                         ScrollView {
-                            VStack(alignment: .leading, spacing: 16) {
+                            LazyVStack(alignment: .leading, spacing: 16) {
                                 // Surah Header
                                 VStack(spacing: 8) {
                                     Text(surah.name)
@@ -71,12 +71,8 @@ struct VersePopupView: View {
                             }
                         }
                         .onAppear {
-                            // Scroll to target verse with animation
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                withAnimation {
-                                    proxy.scrollTo(verseNumber, anchor: .top)
-                                }
-                            }
+                            // Scroll immediately to target verse without animation
+                            proxy.scrollTo(verseNumber, anchor: .center)
                         }
                     }
                 } else {
