@@ -237,36 +237,46 @@ final class QuizViewModel: ObservableObject {
             saveState()
         }
 
-        // your existing next()
+        // Navigate to next question (unanswered if possible, or next feedback)
         func next() {
             guard isLocked else { return }
-            if isLastQuestion {
-                finish()
-                return
-            }
-            currentIndex += 1
 
-            // Check if the next question is already answered
-            if questionStates[currentIndex].isAnswered {
-                // Set up to show feedback immediately
-                switch questionStates[currentIndex] {
-                case .correct(let selectedAnswer):
-                    if let answerIndex = quizOfDay.questions[currentIndex].answers.firstIndex(of: selectedAnswer) {
-                        selectedIndex = answerIndex
-                    }
-                case .incorrect(let selectedAnswer, _):
-                    if let answerIndex = quizOfDay.questions[currentIndex].answers.firstIndex(of: selectedAnswer) {
-                        selectedIndex = answerIndex
-                    }
-                case .unanswered:
-                    selectedIndex = nil
-                }
-                isLocked = true
-            } else {
-                // Fresh question
+            // First, try to find the next unanswered question
+            if let nextUnansweredIndex = findNextUnansweredQuestion(startingFrom: currentIndex + 1) {
+                // Navigate to next unanswered question
+                currentIndex = nextUnansweredIndex
                 selectedIndex = nil
                 isLocked = false
+            } else {
+                // All questions answered - cycle to next question for review
+                let nextIndex = (currentIndex + 1) % questionStates.count
+                navigateToQuestion(nextIndex)
             }
+        }
+
+        // Show results (called from "See Results" button on Q5)
+        func showResults() {
+            finish()
+        }
+
+        /// Find the next unanswered question starting from a given index
+        private func findNextUnansweredQuestion(startingFrom startIndex: Int) -> Int? {
+            // First, search from startIndex to end
+            for index in startIndex..<questionStates.count {
+                if !questionStates[index].isAnswered {
+                    return index
+                }
+            }
+
+            // If nothing found, wrap around and search from beginning to current position
+            for index in 0..<min(startIndex, questionStates.count) {
+                if !questionStates[index].isAnswered {
+                    return index
+                }
+            }
+
+            // All questions answered
+            return nil
         }
 
         func restartSameQuiz() {

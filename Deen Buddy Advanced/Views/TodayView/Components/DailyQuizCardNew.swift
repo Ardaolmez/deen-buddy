@@ -11,6 +11,7 @@ struct DailyQuizCardNew: View {
     @ObservedObject var quizViewModel: QuizViewModel
     @Binding var selectedQuestionIndex: Int?
     @Binding var showQuizView: Bool
+    @Binding var showQuizResults: Bool
 
     var body: some View {
         VStack(spacing: 16) {
@@ -82,9 +83,8 @@ struct DailyQuizCardNew: View {
 
     private func handleButtonTap() {
         if quizViewModel.allQuestionsAnswered {
-            // Navigate to first question to review feedback
-            quizViewModel.navigateToQuestion(0)
-            showQuizView = true
+            // Show results page directly without QuizView flash
+            showQuizResults = true
         } else {
             // Open next unanswered question in QuizView
             if let nextIndex = quizViewModel.nextUnansweredQuestionIndex() {
@@ -238,7 +238,8 @@ struct QuestionCircleView: View {
         DailyQuizCardNew(
             quizViewModel: QuizViewModel(),
             selectedQuestionIndex: .constant(nil),
-            showQuizView: .constant(false)
+            showQuizView: .constant(false),
+            showQuizResults: .constant(false)
         )
     }
     .background(AppColors.Today.papyrusBackground)

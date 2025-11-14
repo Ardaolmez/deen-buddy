@@ -113,25 +113,61 @@ struct QuizView: View {
 
             // Next / Finish (only show after explanation appears)
             if showExplanation {
-                Button {
-                    let isLastQuestion = vm.isLastQuestion
-                    if !isLastQuestion {
+                if vm.isLastQuestion {
+                    // Question 5 - show two buttons or one depending on completion
+                    if vm.allQuestionsAnswered {
+                        // All answered - show "See Results" button
+                        Button {
+                            vm.showResults()
+                        } label: {
+                            Text(AppStrings.quiz.seeResults)
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(AppColors.Quiz.nextButtonActive)
+                                .foregroundColor(AppColors.Quiz.buttonText)
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                    } else {
+                        // Not all answered - show "Next Question" button
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.25)) {
+                                prepareForNewQuestion()
+                            }
+                            vm.next()
+                        } label: {
+                            Text(AppStrings.quiz.nextQuestion)
+                                .fontWeight(.semibold)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(AppColors.Quiz.nextButtonActive)
+                                .foregroundColor(AppColors.Quiz.buttonText)
+                                .cornerRadius(12)
+                        }
+                        .padding(.horizontal)
+                        .padding(.bottom)
+                    }
+                } else {
+                    // Questions 1-4 - always show "Next Question" button
+                    Button {
                         withAnimation(.easeInOut(duration: 0.25)) {
                             prepareForNewQuestion()
                         }
+                        vm.next()
+                    } label: {
+                        Text(AppStrings.quiz.nextQuestion)
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(AppColors.Quiz.nextButtonActive)
+                            .foregroundColor(AppColors.Quiz.buttonText)
+                            .cornerRadius(12)
                     }
-                    vm.next()
-                } label: {
-                    Text(vm.isLastQuestion ? AppStrings.quiz.seeResults : AppStrings.quiz.nextQuestion)
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(AppColors.Quiz.nextButtonActive)
-                        .foregroundColor(AppColors.Quiz.buttonText)
-                        .cornerRadius(12)
+                    .padding(.horizontal)
+                    .padding(.bottom)
                 }
-                .padding(.horizontal)
-                .padding(.bottom)
             }
         }
         .background(Color(.systemBackground).ignoresSafeArea())

@@ -25,6 +25,7 @@ struct TodayView: View {
     // Quiz card state
     @State private var selectedQuestionIndex: Int? = nil
     @State private var showQuizView = false
+    @State private var showQuizResults = false
 
     // Navigation title state for scroll-based updates
     @State private var currentNavigationTitle = TodayStrings.navigationTitle
@@ -105,7 +106,8 @@ struct TodayView: View {
                             DailyQuizCardNew(
                                 quizViewModel: quizVM,
                                 selectedQuestionIndex: $selectedQuestionIndex,
-                                showQuizView: $showQuizView
+                                showQuizView: $showQuizView,
+                                showQuizResults: $showQuizResults
                             )
                             .padding(.horizontal, 20)
 
@@ -152,6 +154,16 @@ struct TodayView: View {
             }
             .fullScreenCover(isPresented: $showQuizView) {
                 QuizView(vm: quizVM)
+            }
+            .fullScreenCover(isPresented: $showQuizResults) {
+                QuizResultView(
+                    score: quizVM.score,
+                    total: quizVM.totalQuestions,
+                    gradeText: quizVM.gradeText,
+                    questions: quizVM.quizOfDay.questions,
+                    questionStates: quizVM.questionStates,
+                    onDone: { showQuizResults = false }
+                )
             }
             .fullScreenCover(isPresented: $showGoalDetail) {
                 if let viewModel = goalDetailViewModel {
