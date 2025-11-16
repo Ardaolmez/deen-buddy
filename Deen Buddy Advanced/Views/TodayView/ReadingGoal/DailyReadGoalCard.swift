@@ -10,7 +10,7 @@ import SwiftUI
 struct DailyReadGoalCard: View {
     var onGoalDetailRequested: (ReadingGoalViewModel) -> Void = { _ in }
 
-    @StateObject private var viewModel = ReadingGoalViewModel()
+    @ObservedObject private var viewModel = ReadingGoalViewModel.shared
     @ObservedObject private var sessionManager = ReadingSessionManager.shared
     @State private var showListenTracking: Bool = false
     @State private var showGoalSelection: Bool = false
@@ -58,7 +58,10 @@ struct DailyReadGoalCard: View {
                         lineWidth: 1
                     )
             )
-            .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 3)
+            // Enhanced 3D multi-layer shadow
+            .shadow(color: Color.black.opacity(0.15), radius: 12, x: 0, y: 6)
+            .shadow(color: Color.black.opacity(0.10), radius: 6, x: 0, y: 3)
+            .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: 1)
             .contentShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .fullScreenCover(isPresented: $showListenTracking) {

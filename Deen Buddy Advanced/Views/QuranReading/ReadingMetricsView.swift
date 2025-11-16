@@ -108,8 +108,8 @@ struct ReadingMetricsView: View {
 
 #Preview {
     ReadingMetricsView(
-        sessionManager: ReadingSessionManager(),
-        goalViewModel: ReadingGoalViewModel()
+        sessionManager: ReadingSessionManager.shared,
+        goalViewModel: ReadingGoalViewModel.shared
     )
     .background(AppColors.Reading.background)
 }

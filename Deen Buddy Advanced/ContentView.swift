@@ -21,7 +21,7 @@ struct ContentView: View {
                     }
                     .tag(0)
 
-                QuranView()
+                QuranMainView()
                     .tabItem {
                         Label(AppStrings.common.quranTab, systemImage: "book.closed")
                     }

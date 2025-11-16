@@ -243,14 +243,14 @@ struct VerseByVerseReadingView: View {
         let surahs = goalViewModel.getSurahs()
         guard !surahs.isEmpty else { return }
 
-        // Get starting position
-        if let lastPosition = goalViewModel.getLastReadPosition() {
+        // Get starting position - prioritize current position (from pencil navigation) over saved position
+        if let currentPos = goalViewModel.currentPositionInfo {
+            startingPosition = currentPos.absoluteVersePosition
+        } else if let lastPosition = goalViewModel.getLastReadPosition() {
             startingPosition = goalViewModel.getAbsolutePosition(
                 surahId: lastPosition.surahId,
                 verseId: lastPosition.verseId
             )
-        } else if let currentPos = goalViewModel.currentPositionInfo {
-            startingPosition = currentPos.absoluteVersePosition
         } else {
             startingPosition = 0
         }
@@ -354,7 +354,7 @@ struct VerseByVerseReadingView: View {
 
 struct VerseByVerseReadingPreviewWrapper: View {
     @State private var isPresented = true
-    @StateObject private var viewModel = ReadingGoalViewModel()
+    @ObservedObject private var viewModel = ReadingGoalViewModel.shared
 
     var body: some View {
         VerseByVerseReadingView(

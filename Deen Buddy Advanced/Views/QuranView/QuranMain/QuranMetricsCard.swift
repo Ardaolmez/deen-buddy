@@ -1,13 +1,13 @@
 //
-//  VerseMetricsCard.swift
+//  QuranMetricsCard.swift
 //  Deen Buddy Advanced
 //
-//  Fancy metrics display card for verse-by-verse reading
+//  Metrics display card for Quran main page with 3D shadow styling
 //
 
 import SwiftUI
 
-struct VerseMetricsCard: View {
+struct QuranMetricsCard: View {
     @ObservedObject var goalViewModel: ReadingGoalViewModel
     @ObservedObject var sessionManager: ReadingSessionManager
 
@@ -18,44 +18,42 @@ struct VerseMetricsCard: View {
                 icon: "clock.fill",
                 label: "Time",
                 value: formatTime(sessionManager.elapsedSeconds),
-                color: AppColors.VerseByVerse.accentGreen
+                color: AppColors.Prayers.prayerGreen
             )
 
             Divider()
                 .frame(height: 30)
-                .background(AppColors.VerseByVerse.metricsDivider)
+                .background(Color(.systemGray4))
 
             // Daily goal progress (5 minutes)
             metricItem(
                 icon: "target",
                 label: "Goal",
                 value: formatGoal(),
-                color: AppColors.VerseByVerse.progressGoal
+                color: AppColors.Prayers.prayerGreen
             )
 
             Divider()
                 .frame(height: 30)
-                .background(AppColors.VerseByVerse.metricsDivider)
+                .background(Color(.systemGray4))
 
             // Current streak
             metricItem(
                 icon: "flame.fill",
                 label: "Streak",
                 value: "\(goalViewModel.readingGoal?.currentStreak ?? 0)",
-                color: AppColors.VerseByVerse.progressStreak
+                color: AppColors.Prayers.prayerGreen
             )
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.white)
-                .shadow(color: AppColors.VerseByVerse.shadowPrimary, radius: 8, x: 0, y: 2)
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
         )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(AppColors.VerseByVerse.accentGreen.opacity(0.3), lineWidth: 1.5)
-        )
+        .shadow(color: Color.black.opacity(0.15), radius: 4, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(0.2), radius: 12, x: 0, y: 6)
+        .shadow(color: Color.black.opacity(0.15), radius: 24, x: 0, y: 12)
     }
 
     // MARK: - Metric Item
@@ -70,12 +68,12 @@ struct VerseMetricsCard: View {
             // Value
             Text(value)
                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundColor(AppColors.VerseByVerse.textPrimary)
+                .foregroundColor(.primary)
 
             // Label
             Text(label)
                 .font(.system(size: 10, weight: .medium))
-                .foregroundColor(AppColors.VerseByVerse.metricsLabel)
+                .foregroundColor(.secondary)
                 .textCase(.uppercase)
                 .tracking(0.5)
         }
@@ -99,17 +97,11 @@ struct VerseMetricsCard: View {
     }
 }
 
-// MARK: - Preview
-
 #Preview {
-    ZStack {
-        AppColors.VerseByVerse.backgroundGradient
-            .ignoresSafeArea()
-
-        VerseMetricsCard(
-            goalViewModel: ReadingGoalViewModel.shared,
-            sessionManager: ReadingSessionManager.shared
-        )
-        .padding()
-    }
+    QuranMetricsCard(
+        goalViewModel: ReadingGoalViewModel.shared,
+        sessionManager: ReadingSessionManager.shared
+    )
+    .padding()
+    .background(Color(.systemBackground))
 }

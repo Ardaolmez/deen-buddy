@@ -11,6 +11,10 @@ struct VerseByVerseContentView: View {
     let page: QuranReadingPage
     let isCurrentPage: Bool
 
+    @ObservedObject private var favoritesManager = FavoritesManager.shared
+    @ObservedObject private var bookmarksManager = BookmarksManager.shared
+    @State private var showBookmarkPopup = false
+
     var verseContext: VerseWithContext? {
         page.verses.first
     }
@@ -34,8 +38,8 @@ struct VerseByVerseContentView: View {
                         // Arabic text - centered and prominent with card background
                         arabicTextView(verse: verse)
 
-                        // Verse number badge
-                        verseNumberBadge(number: verse.verseNumber)
+                        // Verse number badge with favorite and bookmark buttons
+                        verseActionsRow(verse: verse)
 
                         // English translation - centered
                         translationTextView(verse: verse)
@@ -47,6 +51,14 @@ struct VerseByVerseContentView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color(.systemBackground))
+        .sheet(isPresented: $showBookmarkPopup) {
+            if let verse = verseContext {
+                AddToBookmarkPopup(
+                    surahId: getSurahIdFromContext(verse),
+                    verseId: verse.verseNumber
+                )
+            }
+        }
     }
 
     // MARK: - Surah Header
@@ -131,7 +143,67 @@ struct VerseByVerseContentView: View {
             )
     }
 
-    // MARK: - Verse Number Badge
+    // MARK: - Verse Actions Row (Number + Favorite + Bookmark)
+
+    private func verseActionsRow(verse: VerseWithContext) -> some View {
+        let surahId = getSurahIdFromContext(verse)
+        let verseId = verse.verseNumber
+        let isFavorited = favoritesManager.isFavorite(surahId: surahId, verseId: verseId)
+        let isBookmarked = bookmarksManager.isVerseBookmarked(surahId: surahId, verseId: verseId)
+
+        return HStack(spacing: 16) {
+            // Favorite button
+            Button(action: {
+                favoritesManager.toggleFavorite(surahId: surahId, verseId: verseId)
+                // Haptic feedback
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
+            }) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(isFavorited ? AppColors.Prayers.prayerGreen.opacity(0.1) : Color(.systemGray6))
+                        .frame(width: 50, height: 50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(isFavorited ? AppColors.Prayers.prayerGreen : Color(.systemGray4), lineWidth: 2)
+                        )
+                        .shadow(color: AppColors.VerseByVerse.shadowPrimary, radius: 4, x: 0, y: 2)
+
+                    Image(systemName: isFavorited ? "heart.fill" : "heart")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(isFavorited ? AppColors.Prayers.prayerGreen : AppColors.VerseByVerse.textSecondary)
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
+
+            // Verse number badge
+            verseNumberBadge(number: verse.verseNumber)
+
+            // Bookmark button
+            Button(action: {
+                showBookmarkPopup = true
+                // Haptic feedback
+                let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+                impactFeedback.impactOccurred()
+            }) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(isBookmarked ? AppColors.Prayers.prayerGreen.opacity(0.1) : Color(.systemGray6))
+                        .frame(width: 50, height: 50)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(isBookmarked ? AppColors.Prayers.prayerGreen : Color(.systemGray4), lineWidth: 2)
+                        )
+                        .shadow(color: AppColors.VerseByVerse.shadowPrimary, radius: 4, x: 0, y: 2)
+
+                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(isBookmarked ? AppColors.Prayers.prayerGreen : AppColors.VerseByVerse.textSecondary)
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
+    }
 
     private func verseNumberBadge(number: Int) -> some View {
         ZStack {

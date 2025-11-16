@@ -10,6 +10,8 @@ import SwiftUI
 import Combine
 
 class ReadingGoalViewModel: ObservableObject {
+    static let shared = ReadingGoalViewModel()
+
     @Published var readingGoal: ReadingGoal?
     @Published var currentPositionInfo: CurrentPositionInfo?
 
@@ -18,7 +20,7 @@ class ReadingGoalViewModel: ObservableObject {
     private let lastPositionKey = "lastReadPosition"
     private var surahs: [Surah] = []
 
-    init() {
+    private init() {
         loadSurahs()
         loadGoal()
         updateCurrentPosition()

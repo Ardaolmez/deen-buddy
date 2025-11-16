@@ -98,4 +98,16 @@ struct ReadingStrings {
     static let retryLoading = "Retry"
     static let noGoalSet = "No reading goal set"
     static let setGoalPrompt = "Set a reading goal to get started"
+
+    // MARK: - Verse Navigation
+    static let selectSurah = "Select Surah"
+    static let selectVerse = "Select Verse"
+    static let searchSurah = "Search Surah..."
+    static let searchVerse = "Search Verse..."
+    static let back = "Back"
+    static let cancel = "Cancel"
+    static let verses = "verses"
+    static let verseCount = "%d verses"
+    static let noResults = "No results found"
+    static let searchPlaceholder = "Search by name or number..."
 }

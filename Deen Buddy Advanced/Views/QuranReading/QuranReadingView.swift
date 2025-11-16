@@ -232,7 +232,7 @@ struct QuranReadingView: View {
 
 struct QuranReadingPreviewWrapper: View {
     @State private var isPresented = true
-    @StateObject private var viewModel = ReadingGoalViewModel()
+    @ObservedObject private var viewModel = ReadingGoalViewModel.shared
 
     var body: some View {
         QuranReadingView(
