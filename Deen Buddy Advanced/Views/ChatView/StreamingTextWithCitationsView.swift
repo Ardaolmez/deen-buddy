@@ -167,6 +167,7 @@ struct StreamingTextWithCitationsView: View {
     private func buildSegments(words: [String], visibleCitations: [CitationPosition]) -> [Segment] {
         var segments: [Segment] = []
         var lastWordIndex = 0
+        var isFirstSegment = true
 
         for citationPos in visibleCitations {
             // Add words before citation
@@ -174,21 +175,24 @@ struct StreamingTextWithCitationsView: View {
                 for index in lastWordIndex..<citationPos.wordIndex {
                     let word = words[index]
                     if !word.isEmpty {
-                        // Add space before word (except first word)
-                        let wordWithSpace = index > 0 ? " \(word)" : word
-                        segments.append(Segment(text: wordWithSpace, citation: nil))
-                    } else {
-                        // Empty string means there was a space, preserve it
-                        segments.append(Segment(text: " ", citation: nil))
+                        // Add space before word (except very first segment)
+                        if !isFirstSegment {
+                            segments.append(Segment(text: " ", citation: nil))
+                        }
+                        segments.append(Segment(text: word, citation: nil))
+                        isFirstSegment = false
                     }
                 }
             }
 
-            // Add space before citation card
-            segments.append(Segment(text: " ", citation: nil))
+            // Add space before citation card (unless it's the first segment)
+            if !isFirstSegment {
+                segments.append(Segment(text: " ", citation: nil))
+            }
 
             // Add citation card
             segments.append(Segment(text: nil, citation: citationPos.citation))
+            isFirstSegment = false
             lastWordIndex = citationPos.wordIndex
         }
 
@@ -197,10 +201,12 @@ struct StreamingTextWithCitationsView: View {
             for index in lastWordIndex..<words.count {
                 let word = words[index]
                 if !word.isEmpty {
-                    let wordWithSpace = (index > 0 || lastWordIndex > 0) ? " \(word)" : word
-                    segments.append(Segment(text: wordWithSpace, citation: nil))
-                } else {
-                    segments.append(Segment(text: " ", citation: nil))
+                    // Add space before word (except very first segment)
+                    if !isFirstSegment {
+                        segments.append(Segment(text: " ", citation: nil))
+                    }
+                    segments.append(Segment(text: word, citation: nil))
+                    isFirstSegment = false
                 }
             }
         }
