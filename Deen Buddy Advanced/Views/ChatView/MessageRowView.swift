@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MessageRowView: View {
     let message: ChatMessage
+    @ObservedObject var viewModel: ChatViewModel
     var shouldAnimateWelcome: Bool = true  // Whether welcome message should animate
     var onWelcomeAnimationComplete: (() -> Void)? = nil  // Callback when welcome animation finishes
     var isKeyboardOpen: Bool = false  // Track if keyboard is open
@@ -11,6 +12,11 @@ struct MessageRowView: View {
 
     @Environment(\.colorScheme) var colorScheme
     @State private var selectedCitation: Citation?
+
+    // Check if animation has completed using global tracking
+    private var hasCompletedAnimation: Bool {
+        viewModel.hasCompletedAnimation(for: message.id)
+    }
 
     var body: some View {
         HStack(alignment: .bottom) {
@@ -31,40 +37,54 @@ struct MessageRowView: View {
                         .font(.system(size: 18, weight: .regular, design: .serif))
                         .foregroundStyle(AppColors.Chat.userText(for: colorScheme))
                         .multilineTextAlignment(.leading)
-                } else if message.isWelcomeMessage && shouldAnimateWelcome {
-                    // Welcome message - use streaming animation (only first time)
+                } else if message.shouldUseStreamingView && !hasCompletedAnimation {
+                    // Bot messages with streaming animation (only once per message)
                     if !message.citations.isEmpty {
                         StreamingTextWithCitationsView(
+                            messageId: message.id,
                             fullText: message.text,
                             citations: message.citations,
                             isStreaming: true,
-                            onStreamingComplete: onWelcomeAnimationComplete,
+                            viewModel: viewModel,
+                            onStreamingComplete: {
+                                viewModel.markAnimationComplete(for: message.id)
+                                if message.isWelcomeMessage {
+                                    onWelcomeAnimationComplete?()
+                                }
+                            },
                             onCitationTap: { citation in
                                 if isKeyboardOpen {
-                                    dismissKeyboard?()  // Close keyboard like clicking anywhere else
+                                    dismissKeyboard?()
                                     return
                                 }
                                 selectedCitation = citation
                             },
-                            initialDelay: 0.5
+                            initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
                         )
                     } else {
                         StreamingTextView(
+                            messageId: message.id,
                             fullText: message.text,
                             font: .system(size: 18, weight: .regular, design: .serif),
                             color: .primary,
                             isStreaming: true,
-                            onStreamingComplete: onWelcomeAnimationComplete,
-                            initialDelay: 0.5
+                            viewModel: viewModel,
+                            onStreamingComplete: {
+                                viewModel.markAnimationComplete(for: message.id)
+                                if message.isWelcomeMessage {
+                                    onWelcomeAnimationComplete?()
+                                }
+                            },
+                            initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
                         )
                     }
                 } else {
-                    // Regular bot messages or welcome message after animation - appear instantly
+                    // Bot messages after streaming completes or on scroll/re-render - appear instantly
                     StaticMessageView(
                         message: message,
                         onCitationTap: { citation in
                             if isKeyboardOpen {
-                                dismissKeyboard?()  // Close keyboard like clicking anywhere else
+                                dismissKeyboard?()
                                 return
                             }
                             selectedCitation = citation

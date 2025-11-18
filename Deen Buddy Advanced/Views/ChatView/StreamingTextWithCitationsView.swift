@@ -2,38 +2,40 @@
 //  StreamingTextWithCitationsView.swift
 //  Deen Buddy Advanced
 //
-//  Streams text character by character and inserts citation cards at the right positions
+//  Streams text word by word and inserts citation cards at the right positions
 //
 
 import SwiftUI
 
 struct StreamingTextWithCitationsView: View {
+    let messageId: UUID
     let fullText: String
     let citations: [Citation]
     let isStreaming: Bool
+    @ObservedObject var viewModel: ChatViewModel
     var onTextUpdate: ((String) -> Void)? = nil
     var onStreamingComplete: (() -> Void)? = nil
     var onCitationTap: ((Citation) -> Void)? = nil
     var initialDelay: Double = 0.0
 
     @Environment(\.colorScheme) var colorScheme
-    @State private var displayedCharacterCount: Int = 0
     @State private var streamingTask: Task<Void, Never>? = nil
 
     // Parsed structure: positions where citations should appear
     private struct CitationPosition {
-        let characterIndex: Int  // Position in cleaned text (without markers)
+        let wordIndex: Int  // Position in words array (without markers)
         let citation: Citation
     }
 
-    private var parsedData: (cleanText: String, citationPositions: [CitationPosition]) {
-        var cleanText = ""
+    private var parsedData: (words: [String], citationPositions: [CitationPosition]) {
+        var words: [String] = []
         var citationPositions: [CitationPosition] = []
 
         // Pattern to match citation markers: ^[Quran 2:45]
         let pattern = #"\^\[([^\]]+)\]"#
         guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
-            return (fullText, [])
+            // No citations, just split into words
+            return (fullText.split(separator: " ", omittingEmptySubsequences: false).map(String.init), [])
         }
 
         let nsString = fullText as NSString
@@ -48,23 +50,24 @@ struct StreamingTextWithCitationsView: View {
         }
 
         var lastEnd = 0
-        var currentCleanPosition = 0
 
         for match in matches {
             // Add text before citation
             if match.range.location > lastEnd {
                 let beforeRange = NSRange(location: lastEnd, length: match.range.location - lastEnd)
                 let beforeText = nsString.substring(with: beforeRange)
-                cleanText += beforeText
-                currentCleanPosition += beforeText.count
+
+                // Split into words and add to array
+                let beforeWords = beforeText.split(separator: " ", omittingEmptySubsequences: false).map(String.init)
+                words.append(contentsOf: beforeWords)
             }
 
-            // Extract citation ref and add to positions
+            // Extract citation ref and add to positions (citation appears after current words)
             if let refRange = Range(match.range(at: 1), in: fullText) {
                 let ref = String(fullText[refRange])
                 if let citation = citationMap[ref] {
                     citationPositions.append(CitationPosition(
-                        characterIndex: currentCleanPosition,
+                        wordIndex: words.count,
                         citation: citation
                     ))
                 }
@@ -76,25 +79,28 @@ struct StreamingTextWithCitationsView: View {
         // Add remaining text
         if lastEnd < nsString.length {
             let remainingRange = NSRange(location: lastEnd, length: nsString.length - lastEnd)
-            cleanText += nsString.substring(with: remainingRange)
+            let remainingText = nsString.substring(with: remainingRange)
+            let remainingWords = remainingText.split(separator: " ", omittingEmptySubsequences: false).map(String.init)
+            words.append(contentsOf: remainingWords)
         }
 
-        return (cleanText, citationPositions)
+        return (words, citationPositions)
     }
 
-    // Animation speed
-    private let characterDelay: Double = 0.05
+    // Animation speed (seconds per word)
+    private let wordDelay: Double = 0.08
 
     var body: some View {
         let parsed = parsedData
+        let displayedWordCount = viewModel.getStreamingProgress(for: messageId)
 
         // Build the view with streamed text + citation cards
-        buildContentView(cleanText: parsed.cleanText, citationPositions: parsed.citationPositions)
+        buildContentView(words: parsed.words, citationPositions: parsed.citationPositions, displayedWordCount: displayedWordCount)
             .onAppear {
                 if isStreaming {
-                    startStreaming(cleanText: parsed.cleanText)
+                    startStreaming(words: parsed.words)
                 } else {
-                    displayedCharacterCount = parsed.cleanText.count
+                    viewModel.updateStreamingProgress(for: messageId, wordCount: parsed.words.count)
                 }
             }
             .onChange(of: isStreaming) { streaming in
@@ -108,17 +114,17 @@ struct StreamingTextWithCitationsView: View {
             }
     }
 
-    private func buildContentView(cleanText: String, citationPositions: [CitationPosition]) -> some View {
-        // Create view with text chunks and citation cards
-        let displayedText = String(cleanText.prefix(displayedCharacterCount))
+    private func buildContentView(words: [String], citationPositions: [CitationPosition], displayedWordCount: Int) -> some View {
+        // Get currently displayed words
+        let displayedWords = Array(words.prefix(displayedWordCount))
 
         // Determine which citations should be visible
-        let visibleCitations = citationPositions.filter { $0.characterIndex <= displayedCharacterCount }
+        let visibleCitations = citationPositions.filter { $0.wordIndex <= displayedWordCount }
 
-        // Build segments (text chunks and citations)
-        let segments = buildSegments(displayedText: displayedText, visibleCitations: visibleCitations)
+        // Build segments (words and citations)
+        let segments = buildSegments(words: displayedWords, visibleCitations: visibleCitations)
 
-        // Render using FlowLayout (minimal spacing since words include their own spaces)
+        // Render using FlowLayout
         return FlowLayout(spacing: 0) {
             ForEach(Array(segments.enumerated()), id: \.offset) { index, segment in
                 if let text = segment.text, !text.isEmpty {
@@ -158,25 +164,20 @@ struct StreamingTextWithCitationsView: View {
         let citation: Citation?
     }
 
-    private func buildSegments(displayedText: String, visibleCitations: [CitationPosition]) -> [Segment] {
+    private func buildSegments(words: [String], visibleCitations: [CitationPosition]) -> [Segment] {
         var segments: [Segment] = []
-        var lastIndex = 0
+        var lastWordIndex = 0
 
         for citationPos in visibleCitations {
-            // Add text before citation, split by words for better wrapping
-            if citationPos.characterIndex > lastIndex {
-                let startIdx = displayedText.index(displayedText.startIndex, offsetBy: lastIndex)
-                let endIdx = displayedText.index(displayedText.startIndex, offsetBy: citationPos.characterIndex)
-                let textSegment = String(displayedText[startIdx..<endIdx])
-
-                // Split text into words to allow proper wrapping
-                let words = textSegment.components(separatedBy: " ")
-                for (index, word) in words.enumerated() {
+            // Add words before citation
+            if citationPos.wordIndex > lastWordIndex {
+                for index in lastWordIndex..<citationPos.wordIndex {
+                    let word = words[index]
                     if !word.isEmpty {
                         // Add space before word (except first word)
                         let wordWithSpace = index > 0 ? " \(word)" : word
                         segments.append(Segment(text: wordWithSpace, citation: nil))
-                    } else if index < words.count - 1 {
+                    } else {
                         // Empty string means there was a space, preserve it
                         segments.append(Segment(text: " ", citation: nil))
                     }
@@ -188,21 +189,17 @@ struct StreamingTextWithCitationsView: View {
 
             // Add citation card
             segments.append(Segment(text: nil, citation: citationPos.citation))
-            lastIndex = citationPos.characterIndex
+            lastWordIndex = citationPos.wordIndex
         }
 
-        // Add remaining text
-        if lastIndex < displayedText.count {
-            let startIdx = displayedText.index(displayedText.startIndex, offsetBy: lastIndex)
-            let remainingText = String(displayedText[startIdx...])
-
-            // Split remaining text into words
-            let words = remainingText.components(separatedBy: " ")
-            for (index, word) in words.enumerated() {
+        // Add remaining words
+        if lastWordIndex < words.count {
+            for index in lastWordIndex..<words.count {
+                let word = words[index]
                 if !word.isEmpty {
-                    let wordWithSpace = index > 0 ? " \(word)" : word
+                    let wordWithSpace = (index > 0 || lastWordIndex > 0) ? " \(word)" : word
                     segments.append(Segment(text: wordWithSpace, citation: nil))
-                } else if index < words.count - 1 {
+                } else {
                     segments.append(Segment(text: " ", citation: nil))
                 }
             }
@@ -211,24 +208,29 @@ struct StreamingTextWithCitationsView: View {
         return segments
     }
 
-    private func startStreaming(cleanText: String) {
-        guard !cleanText.isEmpty else { return }
+    private func startStreaming(words: [String]) {
+        guard !words.isEmpty else { return }
 
         streamingTask?.cancel()
+
+        // Get starting position from view model (resume where we left off)
+        let startIndex = viewModel.getStreamingProgress(for: messageId)
+
         streamingTask = Task {
-            // Initial delay
-            if initialDelay > 0 {
+            // Initial delay (only on first start)
+            if initialDelay > 0 && startIndex == 0 {
                 try? await Task.sleep(nanoseconds: UInt64(initialDelay * 1_000_000_000))
             }
 
-            for index in 0..<cleanText.count {
+            for index in startIndex..<words.count {
                 if Task.isCancelled { break }
 
-                try? await Task.sleep(nanoseconds: UInt64(characterDelay * 1_000_000_000))
+                try? await Task.sleep(nanoseconds: UInt64(wordDelay * 1_000_000_000))
 
                 await MainActor.run {
-                    displayedCharacterCount = index + 1
-                    onTextUpdate?(String(cleanText.prefix(index + 1)))
+                    viewModel.updateStreamingProgress(for: messageId, wordCount: index + 1)
+                    // Notify parent (optional, for scroll tracking)
+                    onTextUpdate?("\(index + 1) words")
                 }
             }
 
