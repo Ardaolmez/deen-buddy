@@ -6,9 +6,8 @@ struct ChatView: View {
     let initialMessage: String?
     @StateObject private var vm: ChatViewModel
 
-    private let bubbleMaxWidth: CGFloat = 280
-    @State private var scrollTrigger: Int = 0  // Trigger for scroll updates
     @FocusState private var isTextFieldFocused: Bool
+    @State private var isUserAtBottom: Bool = true  // Track if user scrolled away from bottom
 
     init(initialMessage: String? = nil) {
         self.initialMessage = initialMessage
@@ -30,54 +29,65 @@ struct ChatView: View {
                             ForEach(vm.messages.filter { !$0.isHidden }) { msg in
                                 MessageRowView(
                                     message: msg,
-                                    isStreaming: msg.id == vm.latestBotMessageId && msg.role == .bot,
-                                    onStreamingUpdate: { _ in
-                                        // Trigger scroll on each character update
-                                        scrollTrigger += 1
-                                    },
-                                    onStreamingComplete: {
-                                        // Streaming finished, hide stop button
-                                        vm.isStreaming = false
-
-                                        // Show keyboard when welcome message finishes
-                                        if msg.isWelcomeMessage {
-                                            isTextFieldFocused = true
-                                        }
+                                    shouldAnimateWelcome: !vm.welcomeMessageHasAnimated,
+                                    onWelcomeAnimationComplete: {
+                                        vm.welcomeMessageHasAnimated = true
                                     }
                                 )
                                     .id(msg.id)
                                     .padding(.horizontal, 16)
                             }
                             if vm.isSending {
-                                MessageRowView(message: .init(role: .bot, text: AppStrings.chat.loadingIndicator))
-                                    .redacted(reason: .placeholder)
-                                    .padding(.horizontal, 16)
+                                HStack(alignment: .bottom) {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(AppStrings.chat.botName)
+                                            .font(.system(size: 17, weight: .semibold))
+                                            .foregroundStyle(AppColors.Chat.headerTitle(for: colorScheme))
+                                            .padding(.bottom, 2)
+
+                                        VStack(alignment: .leading, spacing: 8) {
+                                            ForEach(0..<3, id: \.self) { index in
+                                                RoundedRectangle(cornerRadius: 4)
+                                                    .fill(Color.gray.opacity(0.3))
+                                                    .frame(width: index == 2 ? 180 : 280, height: 18)
+                                            }
+                                        }
+                                    }
+
+                                    Spacer(minLength: 24)
+                                }
+                                .padding(.horizontal, 16)
+                                .id("loading")
                             }
-                            Spacer(minLength: 8)
                         }
                         .padding(.top, 12)
+                        .padding(.bottom, 8)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture {
                         isTextFieldFocused = false
                     }
-                    .onChange(of: vm.messages.count) { newCount in
-                        withAnimation(.easeOut(duration: 0.2)) {
-                            if let last = vm.messages.last { proxy.scrollTo(last.id, anchor: .bottom) }
+                    .simultaneousGesture(
+                        DragGesture().onChanged { _ in
+                            isUserAtBottom = false  // User is manually scrolling
+                        }
+                    )
+                    .onAppear {
+                        // Open keyboard on first load
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            isTextFieldFocused = true
                         }
                     }
-                    .onChange(of: vm.messages.last?.text) { newText in
-                        if let last = vm.messages.last {
+                    .onChange(of: vm.messages.count) { _ in
+                        // New message arrived - user is back at bottom
+                        isUserAtBottom = true
+                    }
+                    .onChange(of: vm.isSending) { isSending in
+                        // Scroll to loading animation when it appears
+                        if isSending {
+                            isUserAtBottom = true  // New activity, reset to bottom
                             withAnimation(.easeOut(duration: 0.2)) {
-                                proxy.scrollTo(last.id, anchor: .bottom)
-                            }
-                        }
-                    }
-                    .onChange(of: scrollTrigger) { _ in
-                        // Scroll continuously as text streams in
-                        if let last = vm.messages.last {
-                            withAnimation(.easeOut(duration: 0.15)) {
-                                proxy.scrollTo(last.id, anchor: .bottom)
+                                proxy.scrollTo("loading", anchor: .bottom)
                             }
                         }
                     }
@@ -98,31 +108,18 @@ struct ChatView: View {
 
                     let canSend = !vm.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
 
-                    // Show stop button when streaming, otherwise show send button
-                    if vm.isStreaming {
-                        Button(action: vm.stopStreaming) {
-                            Image(systemName: "stop.fill")
-                                .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(AppColors.Chat.stopButtonIcon(for: colorScheme))
-                                .padding(12)
-                                .background(AppColors.Chat.stopButtonBackground(for: colorScheme))
-                                .clipShape(Circle())
-                                .shadow(color: AppColors.Chat.shadowStrong, radius: 8, x: 0, y: 3)
-                                .shadow(color: AppColors.Chat.shadowLight, radius: 2, x: 0, y: 1)
-                        }
-                    } else {
-                        Button(action: vm.send) {
-                            Image(systemName: "paperplane.fill")
-                                .font(.system(size: 18, weight: .semibold))
-                                .foregroundColor(AppColors.Chat.sendButtonIcon(for: colorScheme))
-                                .padding(12)
-                                .background(canSend ? AppColors.Chat.sendButtonActive(for: colorScheme) : AppColors.Chat.sendButtonInactive)
-                                .clipShape(Circle())
-                                .shadow(color: AppColors.Chat.shadowStrong, radius: 8, x: 0, y: 3)
-                                .shadow(color: AppColors.Chat.shadowLight, radius: 2, x: 0, y: 1)
-                        }
-                        .disabled(!canSend)
+                    // Send button
+                    Button(action: vm.send) {
+                        Image(systemName: "paperplane.fill")
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(AppColors.Chat.sendButtonIcon(for: colorScheme))
+                            .padding(12)
+                            .background(canSend ? AppColors.Chat.sendButtonActive(for: colorScheme) : AppColors.Chat.sendButtonInactive)
+                            .clipShape(Circle())
+                            .shadow(color: AppColors.Chat.shadowStrong, radius: 8, x: 0, y: 3)
+                            .shadow(color: AppColors.Chat.shadowLight, radius: 2, x: 0, y: 1)
                     }
+                    .disabled(!canSend)
                 }
                 .padding()
                 .background(Color.clear)

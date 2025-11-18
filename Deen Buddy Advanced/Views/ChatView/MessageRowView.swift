@@ -2,9 +2,8 @@ import SwiftUI
 
 struct MessageRowView: View {
     let message: ChatMessage
-    var isStreaming: Bool = false  // Enable streaming animation for new bot messages
-    var onStreamingUpdate: ((String) -> Void)? = nil  // Callback for streaming text updates
-    var onStreamingComplete: (() -> Void)? = nil  // Callback when streaming finishes
+    var shouldAnimateWelcome: Bool = true  // Whether welcome message should animate
+    var onWelcomeAnimationComplete: (() -> Void)? = nil  // Callback when welcome animation finishes
 
     private var isUser: Bool { message.role == .user }
 
@@ -23,36 +22,44 @@ struct MessageRowView: View {
                         .padding(.bottom, 2)
                 }
 
-                // Parse and render message with clickable citations
-                if !isUser && !message.citations.isEmpty {
-                    // Message with citations - use streaming view with citation cards
-                    StreamingTextWithCitationsView(
-                        fullText: message.text,
-                        citations: message.citations,
-                        isStreaming: isStreaming,
-                        onTextUpdate: onStreamingUpdate,
-                        onStreamingComplete: onStreamingComplete,
-                        onCitationTap: { citation in
-                            selectedCitation = citation
-                        },
-                        initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
-                    )
-                } else if !isUser && message.shouldUseStreamingView {
-                    // Stream bot messages character by character (no citations)
-                    StreamingTextView(
-                        fullText: message.text,
-                        font: .system(size: 18, weight: .regular, design: .serif),
-                        color: .primary,
-                        isStreaming: isStreaming,
-                        onTextUpdate: onStreamingUpdate,
-                        onStreamingComplete: onStreamingComplete,
-                        initialDelay: message.isWelcomeMessage ? 0.5 : 0.0
-                    )
-                } else {
+                // Render message content
+                if isUser {
+                    // User messages - simple text
                     Text(message.text)
                         .font(.system(size: 18, weight: .regular, design: .serif))
-                        .foregroundStyle(isUser ? AppColors.Chat.userText(for: colorScheme) : .primary)
+                        .foregroundStyle(AppColors.Chat.userText(for: colorScheme))
                         .multilineTextAlignment(.leading)
+                } else if message.isWelcomeMessage && shouldAnimateWelcome {
+                    // Welcome message - use streaming animation (only first time)
+                    if !message.citations.isEmpty {
+                        StreamingTextWithCitationsView(
+                            fullText: message.text,
+                            citations: message.citations,
+                            isStreaming: true,
+                            onStreamingComplete: onWelcomeAnimationComplete,
+                            onCitationTap: { citation in
+                                selectedCitation = citation
+                            },
+                            initialDelay: 0.5
+                        )
+                    } else {
+                        StreamingTextView(
+                            fullText: message.text,
+                            font: .system(size: 18, weight: .regular, design: .serif),
+                            color: .primary,
+                            isStreaming: true,
+                            onStreamingComplete: onWelcomeAnimationComplete,
+                            initialDelay: 0.5
+                        )
+                    }
+                } else {
+                    // Regular bot messages or welcome message after animation - appear instantly
+                    StaticMessageView(
+                        message: message,
+                        onCitationTap: { citation in
+                            selectedCitation = citation
+                        }
+                    )
                 }
             }
             .padding(.vertical, isUser ? 10 : 0)
@@ -71,126 +78,5 @@ struct MessageRowView: View {
         .sheet(item: $selectedCitation) { citation in
             VersePopupView(surahName: citation.surah, verseNumber: citation.ayah)
         }
-    }
-
-    @ViewBuilder
-    private func renderMessageWithCitations() -> some View {
-        let textSegments = parseText()
-
-        if isStreaming {
-            // Stream text with citations
-            StreamingAttributedTextView(segments: textSegments, isStreaming: true, onTextUpdate: onStreamingUpdate)
-                .environment(\.openURL, OpenURLAction { url in
-                    // Handle citation taps
-                    if url.scheme == "citation",
-                       let numberString = url.host,
-                       let number = Int(numberString),
-                       number > 0 && number <= message.citations.count {
-                        selectedCitation = message.citations[number - 1]
-                    }
-                    return .handled
-                })
-        } else {
-            // Show full text immediately
-            Text(textSegments.map { segment -> AttributedString in
-                switch segment {
-                case .text(let string):
-                    var attributed = AttributedString(string)
-                    attributed.font = .system(size: 18, weight: .regular, design: .serif)
-                    attributed.foregroundColor = .primary
-                    return attributed
-                case .citation(let number, let citation):
-                    // Extract surah name and ayah from citation
-                    // Format: (Surah ayah) e.g., (Al-Baqarah 2:45)
-                    let citationText = " (\(citation.surah) \(citation.ayah))"
-                    var attributed = AttributedString(citationText)
-                    attributed.font = .system(size: 14, weight: .medium)
-                    attributed.foregroundColor = AppColors.Chat.headerTitle(for: colorScheme)
-                    // Store citation index in link attribute
-                    attributed.link = URL(string: "citation://\(number)")
-                    return attributed
-                }
-            }.reduce(AttributedString(), +))
-            .font(.system(size: 18, weight: .regular, design: .serif))
-            .foregroundStyle(.primary)
-            .multilineTextAlignment(.leading)
-            .environment(\.openURL, OpenURLAction { url in
-                // Handle citation taps
-                if url.scheme == "citation",
-                   let numberString = url.host,
-                   let number = Int(numberString),
-                   number > 0 && number <= message.citations.count {
-                    selectedCitation = message.citations[number - 1]
-                }
-                return .handled
-            })
-        }
-    }
-
-    enum TextSegment {
-        case text(String)
-        case citation(Int, Citation)
-    }
-
-    /// Helper function to parse text
-    private func parseText() -> [TextSegment] {
-        return parseTextWithCitations(message.text, citations: message.citations)
-    }
-
-    /// Parse message text and replace citation markers with numbered citations
-    /// Example: "Hello^[Quran 2:45] world" -> ["Hello", citation(1), " world"]
-    private func parseTextWithCitations(_ text: String, citations: [Citation]) -> [TextSegment] {
-        var segments: [TextSegment] = []
-
-        // Build a map of citation ref -> citation for quick lookup
-        let citationMap = Dictionary(uniqueKeysWithValues: citations.enumerated().map { (index, citation) in
-            (citation.ref, (index + 1, citation))
-        })
-
-        // Pattern to match citation markers: ^[Quran 2:45]
-        let pattern = #"\^\[([^\]]+)\]"#
-
-        guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else {
-            return [.text(text)]
-        }
-
-        let nsString = text as NSString
-        let matches = regex.matches(in: text, options: [], range: NSRange(location: 0, length: nsString.length))
-
-        var lastEnd = 0
-
-        for match in matches {
-            // Add text before the citation marker
-            if match.range.location > lastEnd {
-                let beforeRange = NSRange(location: lastEnd, length: match.range.location - lastEnd)
-                let beforeText = nsString.substring(with: beforeRange)
-                if !beforeText.isEmpty {
-                    segments.append(.text(beforeText))
-                }
-            }
-
-            // Extract citation ref (e.g., "Quran 2:45")
-            if let refRange = Range(match.range(at: 1), in: text) {
-                let ref = String(text[refRange])
-
-                // Look up the citation
-                if let (number, citation) = citationMap[ref] {
-                    segments.append(.citation(number, citation))
-                }
-            }
-
-            lastEnd = match.range.location + match.range.length
-        }
-
-        // Add remaining text after last citation
-        if lastEnd < nsString.length {
-            let remainingRange = NSRange(location: lastEnd, length: nsString.length - lastEnd)
-            let remainingText = nsString.substring(with: remainingRange)
-            if !remainingText.isEmpty {
-                segments.append(.text(remainingText))
-            }
-        }
-
-        return segments.isEmpty ? [.text(text)] : segments
     }
 }
