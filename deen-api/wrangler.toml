@@ -1,6 +1,7 @@
-name = "deen-api"
+name = "deen-buddy-backend"
 main = "worker.js"
 compatibility_date = "2024-01-01"
+account_id = "c6f9e27cc89135391e406496d4b87202"  # Vibalyze account
 
 # Environment variables (set these with: wrangler secret put VARIABLE_NAME)
 # ANTHROPIC_AUTH_TOKEN - Your API token

@@ -32,6 +32,10 @@ struct ChatView: View {
                                     shouldAnimateWelcome: !vm.welcomeMessageHasAnimated,
                                     onWelcomeAnimationComplete: {
                                         vm.welcomeMessageHasAnimated = true
+                                    },
+                                    isKeyboardOpen: isTextFieldFocused,
+                                    dismissKeyboard: {
+                                        isTextFieldFocused = false
                                     }
                                 )
                                     .id(msg.id)

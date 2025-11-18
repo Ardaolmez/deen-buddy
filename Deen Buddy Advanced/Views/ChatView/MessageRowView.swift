@@ -4,6 +4,8 @@ struct MessageRowView: View {
     let message: ChatMessage
     var shouldAnimateWelcome: Bool = true  // Whether welcome message should animate
     var onWelcomeAnimationComplete: (() -> Void)? = nil  // Callback when welcome animation finishes
+    var isKeyboardOpen: Bool = false  // Track if keyboard is open
+    var dismissKeyboard: (() -> Void)? = nil  // Closure to dismiss keyboard
 
     private var isUser: Bool { message.role == .user }
 
@@ -38,6 +40,10 @@ struct MessageRowView: View {
                             isStreaming: true,
                             onStreamingComplete: onWelcomeAnimationComplete,
                             onCitationTap: { citation in
+                                if isKeyboardOpen {
+                                    dismissKeyboard?()  // Close keyboard like clicking anywhere else
+                                    return
+                                }
                                 selectedCitation = citation
                             },
                             initialDelay: 0.5
@@ -57,6 +63,10 @@ struct MessageRowView: View {
                     StaticMessageView(
                         message: message,
                         onCitationTap: { citation in
+                            if isKeyboardOpen {
+                                dismissKeyboard?()  // Close keyboard like clicking anywhere else
+                                return
+                            }
                             selectedCitation = citation
                         }
                     )
