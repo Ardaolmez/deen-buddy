@@ -13,8 +13,14 @@ struct FavoritesListView: View {
     @ObservedObject private var quranViewModel = QuranViewModel()
 
     @State private var searchText = ""
-    @State private var selectedVerse: (surahName: String, verseNumber: Int)?
-    @State private var showVersePopup = false
+    @State private var selectedVerse: VerseSelection?
+
+    // Identifiable wrapper for verse selection
+    struct VerseSelection: Identifiable {
+        let id = UUID()
+        let surahName: String
+        let verseNumber: Int
+    }
 
     var body: some View {
         NavigationStack {
@@ -37,13 +43,11 @@ struct FavoritesListView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showVersePopup) {
-                if let selected = selectedVerse {
-                    VersePopupView(
-                        surahName: selected.surahName,
-                        verseNumber: selected.verseNumber
-                    )
-                }
+            .sheet(item: $selectedVerse) { selected in
+                VersePopupView(
+                    surahName: selected.surahName,
+                    verseNumber: selected.verseNumber
+                )
             }
         }
     }
@@ -85,8 +89,10 @@ struct FavoritesListView: View {
                                 favoritesManager.removeFavorite(withId: favorite.id)
                             },
                             onTap: {
-                                selectedVerse = (surahName: surah.transliteration, verseNumber: favorite.verseId)
-                                showVersePopup = true
+                                selectedVerse = VerseSelection(
+                                    surahName: surah.transliteration,
+                                    verseNumber: favorite.verseId
+                                )
                             }
                         )
 

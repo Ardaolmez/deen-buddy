@@ -19,8 +19,14 @@ struct BookmarksListView: View {
     @State private var showCreateFolder = false
     @State private var showDeleteConfirmation = false
     @State private var showRenameFolder = false
-    @State private var selectedVerse: (surahName: String, verseNumber: Int)?
-    @State private var showVersePopup = false
+    @State private var selectedVerse: VerseSelection?
+
+    // Identifiable wrapper for verse selection
+    struct VerseSelection: Identifiable {
+        let id = UUID()
+        let surahName: String
+        let verseNumber: Int
+    }
 
     enum BookmarkStep {
         case folderSelection
@@ -82,13 +88,11 @@ struct BookmarksListView: View {
                     })
                 }
             }
-            .sheet(isPresented: $showVersePopup) {
-                if let selected = selectedVerse {
-                    VersePopupView(
-                        surahName: selected.surahName,
-                        verseNumber: selected.verseNumber
-                    )
-                }
+            .sheet(item: $selectedVerse) { selected in
+                VersePopupView(
+                    surahName: selected.surahName,
+                    verseNumber: selected.verseNumber
+                )
             }
             .alert(AppStrings.quran.deleteFolderConfirmation, isPresented: $showDeleteConfirmation) {
                 Button(AppStrings.quran.cancel, role: .cancel) {}
@@ -255,8 +259,10 @@ struct BookmarksListView: View {
                                         bookmarksManager.removeVerseFromFolder(folderId: folder.id, verseId: verse.id)
                                     },
                                     onTap: {
-                                        selectedVerse = (surahName: surah.transliteration, verseNumber: verse.verseId)
-                                        showVersePopup = true
+                                        selectedVerse = VerseSelection(
+                                            surahName: surah.transliteration,
+                                            verseNumber: verse.verseId
+                                        )
                                     }
                                 )
 
