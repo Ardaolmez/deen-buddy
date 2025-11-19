@@ -88,7 +88,7 @@ struct StreamingTextWithCitationsView: View {
     }
 
     // Animation speed (seconds per word)
-    private let wordDelay: Double = 0.08
+    private let wordDelay: Double = 0.15
 
     var body: some View {
         let parsed = parsedData

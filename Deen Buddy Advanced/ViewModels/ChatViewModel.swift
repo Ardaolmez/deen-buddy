@@ -60,13 +60,13 @@ final class ChatViewModel: ObservableObject {
         service.reply(to: trimmed, history: conversationHistory)
             .sink { [weak self] response in
                 guard let self else { return }
-                // All bot messages use streaming animation
-                var botMessage = ChatMessage(
+                // Regular bot messages use StaticMessageView (no typing animation)
+                let botMessage = ChatMessage(
                     role: .bot,
                     text: response.answer,
                     citations: response.citations
                 )
-                botMessage.shouldUseStreamingView = true
+                // Don't set shouldUseStreamingView - will use StaticMessageView
                 self.messages.append(botMessage)
                 self.isSending = false
             }
@@ -89,13 +89,13 @@ final class ChatViewModel: ObservableObject {
         service.reply(to: trimmed, history: conversationHistory)
             .sink { [weak self] response in
                 guard let self else { return }
-                // All bot messages use streaming animation
-                var botMessage = ChatMessage(
+                // Regular bot messages use StaticMessageView (no typing animation)
+                let botMessage = ChatMessage(
                     role: .bot,
                     text: response.answer,
                     citations: response.citations
                 )
-                botMessage.shouldUseStreamingView = true
+                // Don't set shouldUseStreamingView - will use StaticMessageView
                 self.messages.append(botMessage)
                 self.isSending = false
             }
