@@ -106,25 +106,23 @@ struct ChatView: View {
                         }
                         .onChange(of: isTextFieldFocused) { focused in
                             if focused {
-                                // Keyboard opening - scroll to bottom
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                // Keyboard opening - scroll to bottom with matching spring animation
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                                     if let lastMessage = vm.messages.filter({ !$0.isHidden }).last {
-                                        withAnimation(.easeOut(duration: 0.3)) {
+                                        withAnimation(.interpolatingSpring(mass: 3, stiffness: 1000, damping: 500, initialVelocity: 0)) {
                                             proxy.scrollTo(lastMessage.id, anchor: .bottom)
                                         }
                                     } else if vm.isSending {
-                                        withAnimation(.easeOut(duration: 0.3)) {
+                                        withAnimation(.interpolatingSpring(mass: 3, stiffness: 1000, damping: 500, initialVelocity: 0)) {
                                             proxy.scrollTo("loading", anchor: .bottom)
                                         }
                                     }
                                 }
                             } else {
-                                // Keyboard closing - scroll to show user's last question at top
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    if let lastUserMessage = vm.messages.filter({ $0.role == .user && !$0.isHidden }).last {
-                                        withAnimation(.easeOut(duration: 0.3)) {
-                                            proxy.scrollTo(lastUserMessage.id, anchor: .top)
-                                        }
+                                // Keyboard closing - scroll immediately with matching spring animation
+                                if let lastUserMessage = vm.messages.filter({ $0.role == .user && !$0.isHidden }).last {
+                                    withAnimation(.interpolatingSpring(mass: 3, stiffness: 1000, damping: 500, initialVelocity: 0)) {
+                                        proxy.scrollTo(lastUserMessage.id, anchor: .top)
                                     }
                                 }
                             }
