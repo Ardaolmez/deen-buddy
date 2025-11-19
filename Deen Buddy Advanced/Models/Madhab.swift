@@ -8,19 +8,24 @@
 import Foundation
 
 enum Madhab: String, CaseIterable, Codable {
-    case shafi = "Shafi'i"
-    case hanafi = "Hanafi"
+    case shafi = "shafi"
+    case hanafi = "hanafi"
 
     var displayName: String {
-        return self.rawValue
+        switch self {
+        case .shafi:
+            return AppStrings.prayers.madhabShafi
+        case .hanafi:
+            return AppStrings.prayers.madhabHanafi
+        }
     }
 
     var description: String {
         switch self {
         case .shafi:
-            return "Standard (Shafi'i, Maliki, Hanbali)"
+            return AppStrings.prayers.madhabShafiDesc
         case .hanafi:
-            return "Later Asr time (Hanafi)"
+            return AppStrings.prayers.madhabHanafiDesc
         }
     }
 }

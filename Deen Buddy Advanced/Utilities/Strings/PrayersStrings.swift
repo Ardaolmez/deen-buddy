@@ -93,3 +93,11 @@ struct ArrowQiblaStrings {
     static let gettingLocation = AppStrings.prayers.gettingLocation
     static let lowAccuracyWarning = AppStrings.prayers.lowAccuracyWarning
 }
+
+// MARK: - Madhab Strings
+extension PrayersStrings {
+    static let madhabShafi = "Shafi'i"
+    static let madhabHanafi = "Hanafi"
+    static let madhabShafiDesc = "Standard (Shafi'i, Maliki, Hanbali)"
+    static let madhabHanafiDesc = "Later Asr time (Hanafi)"
+}

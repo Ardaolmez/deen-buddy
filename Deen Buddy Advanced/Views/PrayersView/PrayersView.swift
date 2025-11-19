@@ -16,12 +16,6 @@ struct PrayersView: View {
                         Spacer()
                             .frame(height: 20)
 
-                        // MARK: Madhab Selector
-                        MadhabSelector(selectedMadhab: $vm.selectedMadhab)
-
-                        Spacer()
-                            .frame(height: 16)
-
                         // MARK: Prayer Icons Row
                         PrayerIconsRow(
                             entries: vm.entries,
@@ -56,6 +50,27 @@ struct PrayersView: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Text(AppStrings.prayers.myPrayers)
                         .font(.system(.title2, weight: .bold))
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        ForEach(Madhab.allCases, id: \.self) { madhab in
+                            Button(action: {
+                                vm.selectedMadhab = madhab
+                            }) {
+                                HStack {
+                                    Text(madhab.displayName)
+                                    if vm.selectedMadhab == madhab {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                        }
+                    } label: {
+                        Text(vm.selectedMadhab.displayName)
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(Color.primary.opacity(0.6))
+                    }
                 }
             }
         }
