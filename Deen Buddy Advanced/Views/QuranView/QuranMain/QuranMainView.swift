@@ -16,11 +16,16 @@ struct QuranMainView: View {
     @State private var selectedMode: NavigationMode = .surah
     @State private var showFavorites = false
     @State private var showBookmarks = false
+    @State private var showSettings = false
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
+            ZStack {
+                // Creamy Papyrus Background
+                CreamyPapyrusBackground()
+
+                ScrollView {
+                    VStack(spacing: 20) {
                     // Metrics Card with 3D shadow
                     QuranMetricsCard(
                         goalViewModel: goalViewModel,
@@ -41,8 +46,25 @@ struct QuranMainView: View {
                     )
                 }
                 .padding(20)
+                }
             }
-            .background(Color(.systemBackground).ignoresSafeArea())
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Text(AppStrings.quran.navigationTitle)
+                        .font(.system(.title2, weight: .bold))
+                }
+
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showSettings = true
+                    }) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(AppColors.Today.settingsIcon)
+                    }
+                }
+            }
             .fullScreenCover(isPresented: $showFavorites) {
                 FavoritesListView()
             }
