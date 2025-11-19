@@ -16,6 +16,12 @@ struct PrayersView: View {
                         Spacer()
                             .frame(height: 20)
 
+                        // MARK: Madhab Selector
+                        MadhabSelector(selectedMadhab: $vm.selectedMadhab)
+
+                        Spacer()
+                            .frame(height: 16)
+
                         // MARK: Prayer Icons Row
                         PrayerIconsRow(
                             entries: vm.entries,

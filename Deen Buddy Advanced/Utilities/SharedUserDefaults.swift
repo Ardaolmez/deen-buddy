@@ -15,6 +15,7 @@ extension UserDefaults {
     // Keys
     private static let prayerDataKey = "prayerWidgetData"
     private static let lastCountryCodeKey = "lastCountryCode"
+    private static let madhabKey = "selectedMadhab"
 
     // MARK: - Prayer Data
 
@@ -41,5 +42,20 @@ extension UserDefaults {
 
     func loadCountryCode() -> String? {
         return string(forKey: Self.lastCountryCodeKey)
+    }
+
+    // MARK: - Madhab Preference
+
+    func saveMadhab(_ madhab: Madhab) {
+        set(madhab.rawValue, forKey: Self.madhabKey)
+        synchronize()
+    }
+
+    func loadMadhab() -> Madhab {
+        guard let rawValue = string(forKey: Self.madhabKey),
+              let madhab = Madhab(rawValue: rawValue) else {
+            return .hanafi // Default to Hanafi
+        }
+        return madhab
     }
 }

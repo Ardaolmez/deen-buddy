@@ -22,7 +22,7 @@ final class PrayersViewModel: ObservableObject {
     // MARK: - Weekly streak (days this week with all five prayed)
     @Published private(set) var weekStreakCount: Int = 0
     @Published private(set) var isPerfectWeek: Bool = false
-    
+
     @Published private(set) var cityLine: String = AppStrings.prayers.locating
     @Published private(set) var header: DayTimes?
     @Published private(set) var entries: [PrayerEntry] = []
@@ -34,6 +34,15 @@ final class PrayersViewModel: ObservableObject {
 
     // completed state (per-day)
     @Published private(set) var completedToday: Set<PrayerName> = []
+
+    // Madhab selection
+    @Published var selectedMadhab: Madhab = .hanafi {
+        didSet {
+            if oldValue != selectedMadhab {
+                madhabChanged(from: oldValue, to: selectedMadhab)
+            }
+        }
+    }
 
     private let location = LocationService()
     private var bag = Set<AnyCancellable>()
@@ -47,11 +56,15 @@ final class PrayersViewModel: ObservableObject {
     init(recordsStore: PrayerRecordsStore = CoreDataPrayerRecordsStore()) {
         self.recordsStore = recordsStore
 
-        // Initialize location context from cached data for smart calculation
+        // Load saved madhab preference
+        self.selectedMadhab = UserDefaults.shared.loadMadhab()
+
+        // Initialize location context and madhab from cached data for smart calculation
         if let cachedCountryCode = UserDefaults.shared.loadCountryCode(),
            let cachedCoord = cache.getCachedCoordinate() {
             PrayerTimesService.updateLocationContext(countryCode: cachedCountryCode, latitude: cachedCoord.latitude)
         }
+        PrayerTimesService.updateMadhab(self.selectedMadhab)
 
         // 1) Try cached snapshot for instant UI (no "Locating..." shown)
         if let snap = cache.loadToday() {
@@ -597,6 +610,24 @@ final class PrayersViewModel: ObservableObject {
     /// Cancel all prayer notifications
     func cancelAllNotifications() {
         notificationManager.cancelAllPrayerNotifications()
+    }
+
+    // MARK: - Madhab Change
+
+    private func madhabChanged(from oldMadhab: Madhab, to newMadhab: Madhab) {
+        // Save preference
+        UserDefaults.shared.saveMadhab(newMadhab)
+
+        // Update service
+        PrayerTimesService.updateMadhab(newMadhab)
+
+        // Recalculate prayer times with new madhab
+        if let coord = coord {
+            reload(for: coord)
+        }
+
+        // Reschedule notifications with new times
+        scheduleMultiDayNotifications()
     }
 
 }

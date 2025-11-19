@@ -26,6 +26,7 @@ struct PrayerTimesService {
     // Cache for location-based calculation context
     private static var currentCountryCode: String?
     private static var currentLatitude: Double?
+    private static var currentMadhab: Madhab = .hanafi
 
     // Smart calculation method selection based on location
     private static func recommendedMethod(for countryCode: String?, latitude: Double?) -> CalculationMethod {
@@ -83,11 +84,17 @@ struct PrayerTimesService {
         currentLatitude = latitude
     }
 
-    // Generate calculation parameters based on current location
+    // Update madhab preference
+    static func updateMadhab(_ madhab: Madhab) {
+        currentMadhab = madhab
+    }
+
+    // Generate calculation parameters based on current location and madhab
     private static var params: CalculationParameters {
         let method = recommendedMethod(for: currentCountryCode, latitude: currentLatitude)
         var p = method.params
-        p.madhab = .hanafi
+        // Convert our Madhab enum to Adhan's Madhab enum
+        p.madhab = currentMadhab == .hanafi ? .hanafi : .shafi
         p.highLatitudeRule = .twilightAngle
         return p
     }
