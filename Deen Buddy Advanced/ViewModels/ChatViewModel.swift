@@ -15,6 +15,8 @@ final class ChatViewModel: ObservableObject {
     @Published var input: String = ""
     @Published var isSending = false
     @Published var welcomeMessageHasAnimated = false  // Track if welcome message animation completed
+    @Published var completedAnimations: Set<UUID> = []  // Track which messages have completed animation
+    @Published var streamingProgress: [UUID: Int] = [:]  // Track word count for ongoing animations
 
     private var bag = Set<AnyCancellable>()
     private let service: ChatService
@@ -24,7 +26,7 @@ final class ChatViewModel: ObservableObject {
     init(service: ChatService = CloudflareChatService(), initialMessage: String? = nil) {
         self.service = service
         var welcomeMessage = ChatMessage(role: .bot, text: AppStrings.chat.welcomeMessage, isWelcomeMessage: true)
-        // Only welcome message gets streaming animation
+        // All bot messages get streaming animation
         welcomeMessage.shouldUseStreamingView = true
 
         // If there's an initial message, hide the welcome message
@@ -58,12 +60,13 @@ final class ChatViewModel: ObservableObject {
         service.reply(to: trimmed, history: conversationHistory)
             .sink { [weak self] response in
                 guard let self else { return }
-                // Regular bot messages appear instantly (no streaming)
-                let botMessage = ChatMessage(
+                // All bot messages use streaming animation
+                var botMessage = ChatMessage(
                     role: .bot,
                     text: response.answer,
                     citations: response.citations
                 )
+                botMessage.shouldUseStreamingView = true
                 self.messages.append(botMessage)
                 self.isSending = false
             }
@@ -86,15 +89,37 @@ final class ChatViewModel: ObservableObject {
         service.reply(to: trimmed, history: conversationHistory)
             .sink { [weak self] response in
                 guard let self else { return }
-                // Regular bot messages appear instantly (no streaming)
-                let botMessage = ChatMessage(
+                // All bot messages use streaming animation
+                var botMessage = ChatMessage(
                     role: .bot,
                     text: response.answer,
                     citations: response.citations
                 )
+                botMessage.shouldUseStreamingView = true
                 self.messages.append(botMessage)
                 self.isSending = false
             }
             .store(in: &bag)
+    }
+
+    // Mark a message animation as completed
+    func markAnimationComplete(for messageId: UUID) {
+        completedAnimations.insert(messageId)
+        streamingProgress.removeValue(forKey: messageId)  // Clean up progress tracking
+    }
+
+    // Check if a message has completed animation
+    func hasCompletedAnimation(for messageId: UUID) -> Bool {
+        return completedAnimations.contains(messageId)
+    }
+
+    // Update streaming progress for a message
+    func updateStreamingProgress(for messageId: UUID, wordCount: Int) {
+        streamingProgress[messageId] = wordCount
+    }
+
+    // Get streaming progress for a message
+    func getStreamingProgress(for messageId: UUID) -> Int {
+        return streamingProgress[messageId] ?? 0
     }
 }

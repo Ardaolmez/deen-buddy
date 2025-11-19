@@ -29,6 +29,7 @@ struct ChatView: View {
                             ForEach(vm.messages.filter { !$0.isHidden }) { msg in
                                 MessageRowView(
                                     message: msg,
+                                    viewModel: vm,
                                     shouldAnimateWelcome: !vm.welcomeMessageHasAnimated,
                                     onWelcomeAnimationComplete: {
                                         vm.welcomeMessageHasAnimated = true

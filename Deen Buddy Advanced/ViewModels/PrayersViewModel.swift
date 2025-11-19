@@ -307,6 +307,12 @@ final class PrayersViewModel: ObservableObject {
                                              entries: self.entries,
                                              coord: c)
                     }
+
+                    // Reschedule notifications now that we have a proper location
+                    // This handles the case where notifications were scheduled before location was ready
+                    if didChange && !newCityLine.isEmpty && newCityLine != "Locating..." {
+                        self.scheduleMultiDayNotifications()
+                    }
                 }
             }
         }
@@ -537,35 +543,54 @@ final class PrayersViewModel: ObservableObject {
 
     // MARK: - Prayer Notifications
 
-    /// Schedule notifications for prayer times
+    /// Schedule notifications for prayer times (30 days ahead)
     private func scheduleNotificationsIfNeeded(header: DayTimes) {
+        // Don't schedule if location is not ready yet
+        guard !cityLine.isEmpty && cityLine != "Locating..." else {
+            print("⏳ Delaying notification scheduling until location is ready")
+            return
+        }
+
         notificationManager.checkPermissionStatus { [weak self] status in
             guard let self = self else { return }
 
             if status == .authorized {
-                // Permission already granted, schedule notifications
-                self.notificationManager.schedulePrayerNotifications(for: header, cityLine: self.cityLine)
+                // Permission already granted, schedule notifications for 30 days
+                self.scheduleMultiDayNotifications()
             } else if status == .notDetermined {
                 // Permission not yet requested, request it
-                self.requestNotificationPermission(header: header)
+                self.requestNotificationPermission()
             }
             // If denied, we don't schedule (user can enable in Settings)
         }
     }
 
-    /// Request notification permission and schedule if granted
-    private func requestNotificationPermission(header: DayTimes) {
-        notificationManager.requestPermission { [weak self] granted in
-            guard let self = self, granted else { return }
-            self.notificationManager.schedulePrayerNotifications(for: header, cityLine: self.cityLine)
+    /// Generate prayer times for the next 30 days and schedule notifications
+    private func scheduleMultiDayNotifications() {
+        guard let coord = self.coord else { return }
+
+        var prayerTimesList: [(date: Date, times: DayTimes)] = []
+        let calendar = Calendar.current
+        let today = Date()
+
+        // Generate prayer times for 30 days
+        for dayOffset in 0..<30 {
+            guard let date = calendar.date(byAdding: .day, value: dayOffset, to: today),
+                  let dayTimes = PrayerTimesService.dayTimes(for: coord, on: date) else {
+                continue
+            }
+            prayerTimesList.append((date: date, times: dayTimes))
         }
+
+        // Schedule all notifications
+        notificationManager.schedulePrayerNotifications(for: prayerTimesList, cityLine: cityLine)
     }
 
-    /// Manually request notification permission (can be called from UI)
+    /// Request notification permission and schedule if granted (can be called from UI or internally)
     func requestNotificationPermission() {
         notificationManager.requestPermission { [weak self] granted in
-            guard let self = self, granted, let header = self.header else { return }
-            self.notificationManager.schedulePrayerNotifications(for: header, cityLine: self.cityLine)
+            guard let self = self, granted else { return }
+            self.scheduleMultiDayNotifications()
         }
     }
 

@@ -49,11 +49,11 @@ final class PrayerNotificationManager: NSObject {
 
     // MARK: - Schedule Prayer Notifications
 
-    /// Schedule notifications for all prayer times
+    /// Schedule notifications for all prayer times for multiple days
     /// - Parameters:
-    ///   - dayTimes: The prayer times for the day
+    ///   - prayerTimesList: Array of prayer times for multiple days
     ///   - cityLine: The location string (e.g., "New York, US")
-    func schedulePrayerNotifications(for dayTimes: DayTimes, cityLine: String) {
+    func schedulePrayerNotifications(for prayerTimesList: [(date: Date, times: DayTimes)], cityLine: String) {
         // First, check if we have permission
         checkPermissionStatus { [weak self] status in
             guard status == .authorized else {
@@ -61,26 +61,44 @@ final class PrayerNotificationManager: NSObject {
                 return
             }
 
+            // Only validate cityLine when scheduling, not when it's still loading
+            guard !cityLine.isEmpty && cityLine != "Locating..." else {
+                print("⚠️ Cannot schedule notifications: location not ready (cityLine: '\(cityLine)')")
+                return
+            }
+
             // Cancel existing notifications before scheduling new ones
             self?.cancelAllPrayerNotifications()
 
-            // Schedule for each prayer
-            self?.scheduleNotification(for: .fajr, time: dayTimes.fajr, cityLine: cityLine)
-            self?.scheduleNotification(for: .dhuhr, time: dayTimes.dhuhr, cityLine: cityLine)
-            self?.scheduleNotification(for: .asr, time: dayTimes.asr, cityLine: cityLine)
-            self?.scheduleNotification(for: .maghrib, time: dayTimes.maghrib, cityLine: cityLine)
-            self?.scheduleNotification(for: .isha, time: dayTimes.isha, cityLine: cityLine)
+            var totalScheduled = 0
+            // Schedule for each day
+            for dayPrayers in prayerTimesList {
+                self?.scheduleNotification(for: .fajr, time: dayPrayers.times.fajr, cityLine: cityLine, date: dayPrayers.date)
+                self?.scheduleNotification(for: .dhuhr, time: dayPrayers.times.dhuhr, cityLine: cityLine, date: dayPrayers.date)
+                self?.scheduleNotification(for: .asr, time: dayPrayers.times.asr, cityLine: cityLine, date: dayPrayers.date)
+                self?.scheduleNotification(for: .maghrib, time: dayPrayers.times.maghrib, cityLine: cityLine, date: dayPrayers.date)
+                self?.scheduleNotification(for: .isha, time: dayPrayers.times.isha, cityLine: cityLine, date: dayPrayers.date)
+                totalScheduled += 5
+            }
 
-            print("✅ Scheduled notifications for all 5 prayers in \(cityLine)")
+            print("✅ Scheduled \(totalScheduled) notifications for \(prayerTimesList.count) days in \(cityLine)")
         }
     }
 
+    /// Schedule notifications for a single day (backward compatibility)
+    /// - Parameters:
+    ///   - dayTimes: The prayer times for the day
+    ///   - cityLine: The location string (e.g., "New York, US")
+    func schedulePrayerNotifications(for dayTimes: DayTimes, cityLine: String) {
+        let today = Date()
+        schedulePrayerNotifications(for: [(date: today, times: dayTimes)], cityLine: cityLine)
+    }
+
     /// Schedule a notification for a specific prayer
-    private func scheduleNotification(for prayer: PrayerName, time: Date, cityLine: String) {
+    private func scheduleNotification(for prayer: PrayerName, time: Date, cityLine: String, date: Date) {
         // Don't schedule notifications for times that have already passed
         guard time > Date() else {
-            print("⏭️ Skipping \(prayer.title) notification - time has passed")
-            return
+            return  // Silently skip - this is normal for past prayers
         }
 
         // Create notification content
@@ -99,8 +117,8 @@ final class PrayerNotificationManager: NSObject {
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: time)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
 
-        // Create request with unique identifier
-        let identifier = "prayer_\(prayer.rawValue)_\(dateIdentifier(for: time))"
+        // Create request with unique identifier using the date parameter
+        let identifier = "prayer_\(prayer.rawValue)_\(dateIdentifier(for: date))"
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
 
         // Schedule the notification
@@ -109,9 +127,9 @@ final class PrayerNotificationManager: NSObject {
                 print("❌ Error scheduling \(prayer.title) notification: \(error.localizedDescription)")
             } else {
                 let formatter = DateFormatter()
-                formatter.dateStyle = .none
+                formatter.dateStyle = .short
                 formatter.timeStyle = .short
-                print("✅ Scheduled \(prayer.title) notification for \(formatter.string(from: time))")
+                print("✅ Scheduled \(prayer.title) for \(formatter.string(from: time))")
             }
         }
     }

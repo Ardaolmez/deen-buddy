@@ -137,6 +137,7 @@ struct StaticTextWithCitationsView: View {
     private func buildSegments(cleanText: String, citationPositions: [CitationPosition]) -> [Segment] {
         var segments: [Segment] = []
         var lastIndex = 0
+        var isFirstSegment = true
 
         for citationPos in citationPositions {
             if citationPos.characterIndex > lastIndex {
@@ -145,18 +146,24 @@ struct StaticTextWithCitationsView: View {
                 let textSegment = String(cleanText[startIdx..<endIdx])
 
                 let words = textSegment.components(separatedBy: " ")
-                for (index, word) in words.enumerated() {
+                for word in words {
                     if !word.isEmpty {
-                        let wordWithSpace = index > 0 ? " \(word)" : word
-                        segments.append(Segment(text: wordWithSpace, citation: nil))
-                    } else if index < words.count - 1 {
-                        segments.append(Segment(text: " ", citation: nil))
+                        // Add space before word (except very first segment)
+                        if !isFirstSegment {
+                            segments.append(Segment(text: " ", citation: nil))
+                        }
+                        segments.append(Segment(text: word, citation: nil))
+                        isFirstSegment = false
                     }
                 }
             }
 
-            segments.append(Segment(text: " ", citation: nil))
+            // Add space before citation card (unless it's the first segment)
+            if !isFirstSegment {
+                segments.append(Segment(text: " ", citation: nil))
+            }
             segments.append(Segment(text: nil, citation: citationPos.citation))
+            isFirstSegment = false
             lastIndex = citationPos.characterIndex
         }
 
@@ -165,12 +172,14 @@ struct StaticTextWithCitationsView: View {
             let remainingText = String(cleanText[startIdx...])
 
             let words = remainingText.components(separatedBy: " ")
-            for (index, word) in words.enumerated() {
+            for word in words {
                 if !word.isEmpty {
-                    let wordWithSpace = index > 0 ? " \(word)" : word
-                    segments.append(Segment(text: wordWithSpace, citation: nil))
-                } else if index < words.count - 1 {
-                    segments.append(Segment(text: " ", citation: nil))
+                    // Add space before word (except very first segment)
+                    if !isFirstSegment {
+                        segments.append(Segment(text: " ", citation: nil))
+                    }
+                    segments.append(Segment(text: word, citation: nil))
+                    isFirstSegment = false
                 }
             }
         }

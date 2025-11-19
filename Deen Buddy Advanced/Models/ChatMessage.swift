@@ -36,4 +36,5 @@ struct ChatMessage: Identifiable, Equatable, Hashable {
     var shouldUseStreamingView: Bool = false  // Whether this message should use StreamingTextView
     var displayedText: String = ""  // Partial text to display when stopped
     var isHidden: Bool = false  // Flag to hide message from UI (for auto-sent context messages)
+    var hasCompletedStreaming: Bool = false  // Track if streaming animation has completed
 }

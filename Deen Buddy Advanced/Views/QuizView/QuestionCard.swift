@@ -47,6 +47,7 @@ struct QuestionCard: View {
         VStack(alignment: .leading, spacing: 16) {
             // Question text
             StreamingTextView(
+                messageId: nil,
                 fullText: question,
                 font: .system(.title2, design: .serif).weight(.semibold),
                 color: AppColors.Quiz.explanationText,
