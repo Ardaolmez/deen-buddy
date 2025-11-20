@@ -171,6 +171,19 @@ struct QuizView: View {
             }
         }
         .background(Color(.systemBackground).ignoresSafeArea())
+        .overlay {
+            if showVersePopup,
+               let surahName = vm.currentQuestion.surah,
+               let verseNum = vm.currentQuestion.verse {
+                CenteredVerseModal(
+                    surahName: surahName,
+                    verseNumber: verseNum,
+                    onDismiss: {
+                        showVersePopup = false
+                    }
+                )
+            }
+        }
         .fullScreenCover(isPresented: $vm.didFinish) {
             QuizResultView(
                 score: vm.score,
@@ -180,12 +193,6 @@ struct QuizView: View {
                 questionStates: vm.questionStates,
                 onDone: { dismiss() }
             )
-        }
-        .sheet(isPresented: $showVersePopup) {
-            if let surahName = vm.currentQuestion.surah,
-               let verseNum = vm.currentQuestion.verse {
-                VersePopupView(surahName: surahName, verseNumber: verseNum)
-            }
         }
         .onChange(of: vm.currentIndex) { _ in
             prepareForNewQuestion()

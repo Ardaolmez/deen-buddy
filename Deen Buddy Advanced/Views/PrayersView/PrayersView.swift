@@ -43,15 +43,11 @@ struct PrayersView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(AppStrings.prayers.myPrayers)
             .navigationDestination(isPresented: $openRecords) {
                 PrayerRecordsView()
             }
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text(AppStrings.prayers.myPrayers)
-                        .font(.system(.title2, weight: .bold))
-                }
-
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         ForEach(Madhab.allCases, id: \.self) { madhab in

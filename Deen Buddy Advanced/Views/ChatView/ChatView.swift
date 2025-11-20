@@ -8,6 +8,7 @@ struct ChatView: View {
 
     @FocusState private var isTextFieldFocused: Bool
     @State private var isUserAtBottom: Bool = true  // Track if user scrolled away from bottom
+    @State private var selectedCitation: Citation?  // Track selected citation for modal
 
     init(initialMessage: String? = nil) {
         self.initialMessage = initialMessage
@@ -37,7 +38,8 @@ struct ChatView: View {
                                         isKeyboardOpen: isTextFieldFocused,
                                         dismissKeyboard: {
                                             isTextFieldFocused = false
-                                        }
+                                        },
+                                        selectedCitation: $selectedCitation
                                     )
                                         .id(msg.id)
                                         .padding(.horizontal, 16)
@@ -177,6 +179,17 @@ struct ChatView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .overlay {
+            if let citation = selectedCitation {
+                CenteredVerseModal(
+                    surahName: citation.surah,
+                    verseNumber: citation.ayah,
+                    onDismiss: {
+                        selectedCitation = nil
+                    }
+                )
+            }
         }
     }
 }

@@ -7,11 +7,11 @@ struct MessageRowView: View {
     var onWelcomeAnimationComplete: (() -> Void)? = nil  // Callback when welcome animation finishes
     var isKeyboardOpen: Bool = false  // Track if keyboard is open
     var dismissKeyboard: (() -> Void)? = nil  // Closure to dismiss keyboard
+    @Binding var selectedCitation: Citation?  // Binding to parent's citation state
 
     private var isUser: Bool { message.role == .user }
 
     @Environment(\.colorScheme) var colorScheme
-    @State private var selectedCitation: Citation?
 
     // Check if animation has completed using global tracking
     private var hasCompletedAnimation: Bool {
@@ -105,8 +105,5 @@ struct MessageRowView: View {
         }
         .padding(.horizontal, isUser ? 16 : 0)
         .transition(.move(edge: isUser ? .trailing : .leading).combined(with: .opacity))
-        .sheet(item: $selectedCitation) { citation in
-            VersePopupView(surahName: citation.surah, verseNumber: citation.ayah)
-        }
     }
 }

@@ -4,6 +4,11 @@
 //
 //  Pop-up view to display Quran verses in context
 //
+//  ⚠️ DEPRECATED: This file has been replaced by CenteredVerseModal.swift
+//  The new modal provides a centered presentation with Arabic + English
+//  in a more elegant design. This file is kept for reference only.
+//  Please use CenteredVerseModal instead.
+//
 
 import SwiftUI
 

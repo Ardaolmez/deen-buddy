@@ -88,11 +88,16 @@ struct BookmarksListView: View {
                     })
                 }
             }
-            .sheet(item: $selectedVerse) { selected in
-                VersePopupView(
-                    surahName: selected.surahName,
-                    verseNumber: selected.verseNumber
-                )
+            .overlay {
+                if let selected = selectedVerse {
+                    CenteredVerseModal(
+                        surahName: selected.surahName,
+                        verseNumber: selected.verseNumber,
+                        onDismiss: {
+                            selectedVerse = nil
+                        }
+                    )
+                }
             }
             .alert(AppStrings.quran.deleteFolderConfirmation, isPresented: $showDeleteConfirmation) {
                 Button(AppStrings.quran.cancel, role: .cancel) {}

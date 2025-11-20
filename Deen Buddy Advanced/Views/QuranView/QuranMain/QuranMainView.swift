@@ -49,12 +49,8 @@ struct QuranMainView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle(AppStrings.quran.navigationTitle)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Text(AppStrings.quran.navigationTitle)
-                        .font(.system(.title2, weight: .bold))
-                }
-
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         showSettings = true
