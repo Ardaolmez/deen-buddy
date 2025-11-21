@@ -14,7 +14,7 @@ struct QuoteLaunchView: View {
         explanation: "Focus on bettering yourself."
     )
     @State private var showShareSheet = false
-    @State private var backgroundImageName: String = "bg_image_1"
+    @State private var backgroundImageName: String = BackgroundImageManager.shared.getTrulyRandomImage()
     let onContinue: () -> Void
 
     var body: some View {
@@ -165,9 +165,8 @@ struct QuoteLaunchView: View {
     }
 
     private func loadRandomBackground() {
-        // Randomly select one of the 8 background images
-        let randomIndex = Int.random(in: 1...8)
-        backgroundImageName = "bg_image_\(randomIndex)"
+        // Randomly select from available background images
+        backgroundImageName = BackgroundImageManager.shared.getTrulyRandomImage()
         print("✅ Selected random background: \(backgroundImageName)")
     }
 
