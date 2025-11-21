@@ -54,6 +54,11 @@ final class BackgroundImageManager {
         "tile_decorative"
     ]
 
+    // Combined images for daily cards (mosques + tile patterns)
+    private var allDailyCardImages: [String] {
+        allBackgroundImages + allTilePatterns
+    }
+
     // Cache for daily selected images
     private var dailyImageCache: [String: String] = [:]
     private let lastDateKey = "lastBackgroundImageDate"
@@ -65,8 +70,9 @@ final class BackgroundImageManager {
 
     /// Get a random background image for a specific card type
     /// Images are stable for the same card type on the same day
+    /// Uses mixed pool of mosque backgrounds + tile patterns
     /// - Parameter cardType: Identifier for the card type (e.g., "verse", "durood", "readingGoal")
-    /// - Returns: Image name from the background images array
+    /// - Returns: Image name from the combined images array
     func getRandomImage(for cardType: String) -> String {
         // Check cache first
         if let cached = dailyImageCache[cardType] {
@@ -76,8 +82,8 @@ final class BackgroundImageManager {
         // Generate a stable random image for this card type today
         let today = getCurrentDateString()
         let seed = seedValue(from: today + cardType)
-        let index = abs(seed) % allBackgroundImages.count
-        let selectedImage = allBackgroundImages[index]
+        let index = abs(seed) % allDailyCardImages.count
+        let selectedImage = allDailyCardImages[index]
 
         // Cache it
         dailyImageCache[cardType] = selectedImage
@@ -86,8 +92,15 @@ final class BackgroundImageManager {
     }
 
     /// Get a truly random image (changes on each call)
+    /// Uses mixed pool of mosque backgrounds + tile patterns
     /// - Returns: Random image name
     func getTrulyRandomImage() -> String {
+        allDailyCardImages.randomElement() ?? "bg_tile"
+    }
+
+    /// Get a truly random background image only (no tile patterns)
+    /// - Returns: Random mosque/art background image name
+    func getTrulyRandomBackgroundImage() -> String {
         allBackgroundImages.randomElement() ?? "bg_tile"
     }
 
