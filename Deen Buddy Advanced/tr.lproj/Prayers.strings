@@ -64,7 +64,7 @@
 
 /* Qibla Compass */
 "qiblaDirection" = "Kıble Yönü";
-"alignedToQibla" = "Kıbleye Dön";
+"alignedToQibla" = "Kıbleye dönüldü";
 "turnDirectionFormat" = "%@ %d° dön";
 "left" = "Sola";
 "right" = "Sağa";

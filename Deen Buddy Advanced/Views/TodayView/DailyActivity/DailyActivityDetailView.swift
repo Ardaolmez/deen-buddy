@@ -81,7 +81,7 @@ struct DailyActivityDetailView: View {
             .toolbar {
                
                 ToolbarItem(placement: .principal) {
-                    Text("Today's Journey")
+                    Text(TodayStrings.activityTodaysJourney)
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundColor(.white)
                 }
