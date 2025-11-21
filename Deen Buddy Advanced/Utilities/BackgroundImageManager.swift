@@ -12,29 +12,46 @@ import SwiftUI
 final class BackgroundImageManager {
     static let shared = BackgroundImageManager()
 
-    // All available background images from BgImages directory
+    // All available background images from Asset Catalog
     private let allBackgroundImages = [
-        "Al Aqsa Mosque_ Majestic Art.jpg",
-        "Alaqsa Mosque_ Majestic Islamic Art.jpg",
-        "Awe-Inspiring Al-Aqsa Mosque_ Arabic Art Masterpiece.jpg",
-        "Blue Mosque_ Captivating Arabic Art.jpg",
-        "Golden Arabic Mornin_ Beauty.jpg",
-        "Intricate Arabic Masterpiece.jpg",
-        "Majestic Beauty_ Reimagined Mosques.jpg",
-        "Moroccan Tapestry _ Vibrant Art.jpg",
-        "Pin Islamic mosque Forest mosque location Mosque….jpg",
-        "Quba mosque painting.jpg",
-        "Suleymaniye Mosque_ Majestic Arabic Art.jpg",
-        "Watercolor, Oil Painting & AI-Generated Islamic Art _ Unique Home Decor.jpg",
-        "tile.jpg",
-        "bg-download.jpg",
-        "bg-download-1.jpg",
-        "download (2).jpg",
-        "download (3).jpg",
-        "download (4).jpg",
-        "download (11).jpg",
-        "f70463413e5dbcd16f08057199702ed3.jpg",
-        "fad28ce105d83d22e670b25e03a5aff1.jpg"
+        "bg_alaqsa_1",
+        "bg_alaqsa_2",
+        "bg_alaqsa_3",
+        "bg_blue_mosque",
+        "bg_golden_arabic",
+        "bg_intricate_arabic",
+        "bg_majestic_mosques",
+        "bg_moroccan",
+        "bg_forest_mosque",
+        "bg_quba_mosque",
+        "bg_suleymaniye",
+        "bg_watercolor_art",
+        "bg_tile",
+        "bg_download_1",
+        "bg_download_2",
+        "bg_misc_1",
+        "bg_misc_2",
+        "bg_misc_3",
+        "bg_misc_4",
+        "bg_misc_5",
+        "bg_misc_6"
+    ]
+
+    // All available tile pattern images from Asset Catalog
+    private let allTilePatterns = [
+        "tile_carpet",
+        "tile_pattern_1",
+        "tile_pattern_2",
+        "tile_pattern_3",
+        "tile_pattern_4",
+        "tile_pattern_5",
+        "tile_pattern_6",
+        "tile_pattern_7",
+        "tile_pattern_8",
+        "tile_tezhib",
+        "tile_minakari",
+        "tile_nasir_mosque",
+        "tile_decorative"
     ]
 
     // Cache for daily selected images
@@ -71,12 +88,38 @@ final class BackgroundImageManager {
     /// Get a truly random image (changes on each call)
     /// - Returns: Random image name
     func getTrulyRandomImage() -> String {
-        allBackgroundImages.randomElement() ?? "tile.jpg"
+        allBackgroundImages.randomElement() ?? "bg_tile"
     }
 
     /// Get all available background images
     var availableImages: [String] {
         allBackgroundImages
+    }
+
+    /// Get all available tile patterns
+    var availableTilePatterns: [String] {
+        allTilePatterns
+    }
+
+    /// Get a random tile pattern (changes on each call)
+    func getRandomTilePattern() -> String {
+        allTilePatterns.randomElement() ?? "tile_pattern_1"
+    }
+
+    /// Get a stable tile pattern for a specific card type
+    func getTilePattern(for cardType: String) -> String {
+        let cacheKey = "tile_\(cardType)"
+        if let cached = dailyImageCache[cacheKey] {
+            return cached
+        }
+
+        let today = getCurrentDateString()
+        let seed = seedValue(from: today + cacheKey)
+        let index = abs(seed) % allTilePatterns.count
+        let selectedPattern = allTilePatterns[index]
+
+        dailyImageCache[cacheKey] = selectedPattern
+        return selectedPattern
     }
 
     // MARK: - Private Helpers
@@ -135,5 +178,28 @@ extension BackgroundImageManager {
     /// Get random image using CardType enum
     func getRandomImage(for cardType: CardType) -> String {
         getRandomImage(for: cardType.identifier)
+    }
+}
+
+// MARK: - Preloading
+
+extension BackgroundImageManager {
+    /// Preload essential launch images into memory
+    func preloadLaunchImages() {
+        // Preload first few background images for quick access
+        let launchImages = Array(allBackgroundImages.prefix(5))
+        for imageName in launchImages {
+            _ = UIImage(named: imageName)
+        }
+    }
+
+    /// Preload daily card images based on today's selections
+    func preloadDailyCardImages() {
+        // Preload images that will be used for today's cards
+        let cardTypes: [CardType] = [.verse, .durood, .dua, .wisdom, .readingGoal, .dailyVerse]
+        for cardType in cardTypes {
+            let imageName = getRandomImage(for: cardType)
+            _ = UIImage(named: imageName)
+        }
     }
 }
