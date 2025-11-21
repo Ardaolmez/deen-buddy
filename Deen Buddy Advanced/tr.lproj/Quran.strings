@@ -1,0 +1,75 @@
+/* Quran Tab Strings - Turkish */
+
+/* Basic Navigation */
+"navigationTitle" = "Kuran";
+"loading" = "Kuran yükleniyor...";
+"selectSurah" = "Sure Seç";
+"selectLanguage" = "Dil Seç";
+"verses" = "ayetler";
+"surahCount" = "%d/114";
+"errorMessage" = "Kuran yüklenirken hata oluştu";
+"retry" = "Tekrar Dene";
+"done" = "Tamam";
+
+/* Surah Selector */
+"searchSurahPlaceholder" = "Sure Ara...";
+"versesCount" = "%d ayet";
+"surahType" = "%@ • %d ayet";
+
+/* Error Messages */
+"couldNotLoadQuranData" = "Kuran verileri yüklenemedi";
+
+/* Sample Text for Settings */
+"sampleBismillah" = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
+"sampleBismillahTranslation" = "Rahman ve Rahim olan Allah'ın adıyla";
+
+/* Metrics Card */
+"metricTime" = "Süre";
+"metricGoal" = "Hedef";
+"metricStreak" = "Seri";
+"metricGoalFormat" = "%d/5dk";
+
+/* Main Page */
+"startReading" = "Okumaya Başla";
+"continueReading" = "Okumaya Devam Et";
+"beginYourJourney" = "Kuran yolculuğuna başla";
+"lastRead" = "Son okunan";
+"surahBysurah" = "Sure Sure";
+"juzByJuz" = "Cüz Cüz";
+"surahs" = "Sureler";
+"juz" = "Cüz";
+"juzCount" = "Cüz %d";
+"totalJuz" = "30 Cüz";
+"browseAllSurahs" = "114 Sureye Göz At";
+"browseAllJuz" = "30 Cüze Göz At";
+"tapToSelect" = "Ayet seçmek için dokun";
+"verses30Juz" = "30 Cüz";
+
+/* Favorites & Bookmarks */
+"favorites" = "Favoriler";
+"bookmarks" = "Yer İşaretleri";
+"noFavoritesYet" = "Henüz favori yok";
+"tapHeartToAddFavorites" = "Okurken kalp simgesine dokunarak ayetleri favorilerinize ekleyin";
+"noBookmarksYet" = "Henüz yer işareti klasörü yok";
+"createFolderToOrganize" = "Yer işaretli ayetlerinizi düzenlemek için klasör oluşturun";
+"addNewFolder" = "Yeni Klasör Ekle";
+"folderName" = "Klasör Adı";
+"create" = "Oluştur";
+"cancel" = "İptal";
+"enterFolderName" = "Klasör adı girin";
+"rename" = "Yeniden Adlandır";
+"delete" = "Sil";
+"selectFolder" = "Klasör Seç";
+"addToBookmark" = "Yer İşaretine Ekle";
+"verse" = "Ayet";
+"noVersesInFolder" = "Bu klasörde ayet yok";
+"addVersesWhileReading" = "Okurken yer işareti simgesine dokunarak ayet ekleyin";
+"folders" = "Klasörler";
+"verseInFolder" = "%d ayet";
+"versesInFolder" = "%d ayet";
+"deleteFolderConfirmation" = "Bu klasörü silmek istediğinizden emin misiniz?";
+"deleteConfirm" = "Sil";
+"back" = "Geri";
+"searchFolders" = "Klasör ara...";
+"searchVerses" = "Ayet ara...";
+"searchFavorites" = "Favorilerde ara...";

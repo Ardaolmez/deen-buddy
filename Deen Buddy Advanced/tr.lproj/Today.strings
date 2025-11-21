@@ -1,0 +1,149 @@
+/* Today Tab Strings - Turkish */
+
+"navigationTitle" = "Günün Yolculuğu";
+"selfLearningTitle" = "Günün Öğrenimi";
+"dailyQuiz" = "Günlük Test";
+"startLesson" = "Başla";
+"continueJourney" = "Özel derslerle yolculuğunuza devam edin";
+
+/* Daily Verse Card */
+"dailyVerseTitle" = "Günün Ayeti";
+
+/* Daily Quran Goal Card */
+"dailyQuranGoal" = "Günlük Kuran:";
+"verses" = "ayetler";
+"minutes" = "dakika";
+"pages" = "sayfalar";
+"versesAhead" = "%d ayet ilerde";
+"versesBehind" = "%d ayet geride";
+"minutesAhead" = "%d dakika ilerde";
+"minutesBehind" = "%d dakika geride";
+"onTrack" = "Hedefte";
+"versesToGo" = "%d ayet kaldı";
+"minutesToGo" = "%d dakika kaldı";
+"read" = "Oku";
+"listen" = "Dinle";
+"tapForDetails" = "Detaylar için dokun";
+"tapToCollapse" = "Kapatmak için dokun";
+
+/* Reading Goal Details (Expanded) */
+"todaysProgress" = "Günlük İlerleme";
+"goal" = "Hedef";
+"completed" = "Tamamlanan";
+"remaining" = "Kalan";
+"timeline" = "Zaman Çizelgesi";
+"expected" = "Beklenen";
+"actual" = "Gerçekleşen";
+"status" = "Durum";
+"streak" = "Seri";
+"current" = "Şu anki";
+"best" = "En İyi";
+"days" = "günler";
+"day" = "gün";
+
+/* Reading Goal Selection */
+"selectYourGoal" = "Hedefinizi Seçin";
+"completionGoals" = "Günlük Hedefler";
+"microLearningGoals" = "Mikro Öğrenme Hedefler";
+"startGoal" = "Hedefe Başla";
+"cancel" = "İptal";
+
+/* Reading Goal Assets */
+"mosquePaintingImage" = "Quba mosque painting.jpg";
+"versePrefix" = "Ayet ";
+
+/* Daily Verse Assets */
+"tileBackgroundImage" = "tile.jpg";
+
+/* Daily Verse Errors */
+"couldNotLoadQuranData" = "Kuran verileri yüklenemedi";
+"couldNotSelectDailyVerse" = "Günlük ayet seçilemedi";
+
+/* Daily Verse Card */
+"tapToReadFull" = "Tamamını okumak için dokun";
+
+/* Feedback Messages */
+"feedbackThankYou" = "Geri bildiriminiz için teşekkürler!";
+"feedbackError" = "Geri bildirim gönderilemedi. Lütfen tekrar deneyin.";
+
+/* Daily Progress */
+"progressToday" = "Günlük ilerleme";
+"dailyStreakTitle" = "Günlük Seri";
+"currentStreak" = "Şu anki";
+"bestStreakLabel" = "En İyi";
+"dayStreak" = "%d gün";
+"daysStreak" = "%d gün";
+
+/* Daily Activities */
+"dailyVerseActivity" = "Günün Ayeti";
+"dailyDuroodActivity" = "Günün Salavatı";
+"dailyDuaActivity" = "Günün Duası";
+"dailyWisdomActivity" = "Günün Hikmeti";
+"estimatedTime" = "%d DAK";
+"learnSomethingNew" = "Her gün yeni bir şey öğren!";
+"activityDone" = "TAMAMLANDI";
+"markComplete" = "Tamamlandı Olarak İşaretle";
+"listenLabel" = "Dinle";
+"readLabel" = "Oku";
+"closeLabel" = "Kapat";
+
+/* Daily Quiz Button */
+"dailyQuizLabel" = "Günlük Test: 5 soru";
+"dailyQuizMinutes" = "5 DAK";
+"dailyQuizStart" = "Başla";
+"dailyQuizContinue" = "Devam Et";
+"dailyQuizReview" = "Cevapları Incele";
+"dailyQuizSubmit" = "Gönder";
+
+/* Activity Detail Screen */
+"activityProgressToday" = "Günlük ilerleme";
+"activityTranslationLabel" = "Çeviri";
+"activityExplanationLabel" = "Açıklama";
+"activityChatToLearnMore" = "Iman Buddy'le sohbet et";
+"activityTodaysJourney" = "Günün Yolculuğu";
+
+/* Word of Wisdom */
+"wisdomUnderstanding" = "Anlayış";
+"wisdomChatPromptPrefix" = "Bu hikmet sözü hakkında daha fazla bilgi edinmek istiyorum";
+"wisdomChatQuoteLabel" = "Alıntı:";
+"wisdomChatExplanationLabel" = "Verilen açıklama:";
+"wisdomChatRequestDetails" = "Lütfen bana şunlar hakkında daha fazla bilgi verin:\n• Bu hikmetin derin anlamı ve bağlamı\n• Günlük hayatta nasıl uygulanır\n• İslam'dan ilgili öğretiler\n• Bu ilkeye göre yaşamanın pratik örnekleri";
+"wisdomShareTitle" = "Hikmet Sözü";
+"wisdomShareFooter" = "Iman Buddy'den paylaşıldı";
+
+/* Streak Feedback Overlay */
+"streakDayLabel" = "günlük seri";
+"streakEncouragement" = "Serinizi sürdürmek için yarın geri gelin\nve Allah'a daha da yaklaşın";
+"streakDoneButton" = "Tamam";
+
+/* Locked Day View */
+"lockedNotQuiteTime" = "Henüz tam zamanı değil.";
+"lockedCheckBackOn" = "Günlük Plan oturumunuz için %@ tarihinde tekrar kontrol edin";
+"lockedDontMissDay" = "Bir gün kaçırmayın";
+"lockedSetReminder" = "Hatırlatıcı ayarla";
+
+/* Journey Header */
+"journeyTodayTitle" = "Bugünün Yolculuğu";
+"journeyDateSuffix" = "'nın Yolculuğu";
+
+/* Activity Cards */
+"activityDoneLabel" = "TAMAMLANDI";
+"activityListenButton" = "Dinle";
+"activityReadButton" = "Oku";
+
+/* Feedback Screen */
+"feedbackTitle" = "Geri Bildirim";
+"feedbackHeaderTitle" = "Sizden haber almak isteriz!";
+"feedbackHeaderSubtitle" = "Uygulamayı geliştirmemize yardımcı olmak için önerilerinizi, fikirlerinizi veya geri bildirimlerinizi paylaşın.";
+"feedbackPlaceholder" = "Önerinizi buraya yazın...";
+"feedbackSubmitButton" = "Geri Bildirim Gönder";
+"feedbackCancelButton" = "İptal";
+"feedbackNetworkError" = "Ağ hatası. Lütfen bağlantınızı kontrol edin.";
+"feedbackDataError" = "Geri bildirim verilerini hazırlama başarısız";
+"feedbackServerError" = "Sunucu hatası. Lütfen daha sonra tekrar deneyin.";
+
+/* Reading Goal Tracking */
+"trackingSaveButton" = "Kaydet";
+
+/* Component Labels */
+"weeklyStreakProgressFor" = "%@ için ilerleme";

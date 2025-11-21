@@ -1,0 +1,75 @@
+/* Quran Tab Strings - English */
+
+/* Basic Navigation */
+"navigationTitle" = "Quran";
+"loading" = "Loading Quran...";
+"selectSurah" = "Select Surah";
+"selectLanguage" = "Select Language";
+"verses" = "verses";
+"surahCount" = "%d/114";
+"errorMessage" = "Error loading Quran";
+"retry" = "Retry";
+"done" = "Done";
+
+/* Surah Selector */
+"searchSurahPlaceholder" = "Search Surah...";
+"versesCount" = "%d verses";
+"surahType" = "%@ • %d verses";
+
+/* Error Messages */
+"couldNotLoadQuranData" = "Could not load Quran data";
+
+/* Sample Text for Settings */
+"sampleBismillah" = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
+"sampleBismillahTranslation" = "In the name of Allah, the Most Gracious, the Most Merciful";
+
+/* Metrics Card */
+"metricTime" = "Time";
+"metricGoal" = "Goal";
+"metricStreak" = "Streak";
+"metricGoalFormat" = "%d/5m";
+
+/* Main Page */
+"startReading" = "Start Reading";
+"continueReading" = "Continue Reading";
+"beginYourJourney" = "Begin your Quran journey";
+"lastRead" = "Last read";
+"surahBysurah" = "Surah by Surah";
+"juzByJuz" = "Juz by Juz";
+"surahs" = "Surahs";
+"juz" = "Juz";
+"juzCount" = "Juz %d";
+"totalJuz" = "30 Juz";
+"browseAllSurahs" = "Browse all 114 Surahs";
+"browseAllJuz" = "Browse all 30 Juz";
+"tapToSelect" = "Tap to select verse";
+"verses30Juz" = "30 Juz";
+
+/* Favorites & Bookmarks */
+"favorites" = "Favorites";
+"bookmarks" = "Bookmarks";
+"noFavoritesYet" = "No favorites yet";
+"tapHeartToAddFavorites" = "Tap the heart icon while reading to add verses to your favorites";
+"noBookmarksYet" = "No bookmark folders yet";
+"createFolderToOrganize" = "Create folders to organize your bookmarked verses";
+"addNewFolder" = "Add New Folder";
+"folderName" = "Folder Name";
+"create" = "Create";
+"cancel" = "Cancel";
+"enterFolderName" = "Enter folder name";
+"rename" = "Rename";
+"delete" = "Delete";
+"selectFolder" = "Select Folder";
+"addToBookmark" = "Add to Bookmark";
+"verse" = "Verse";
+"noVersesInFolder" = "No verses in this folder";
+"addVersesWhileReading" = "Add verses while reading by tapping the bookmark icon";
+"folders" = "Folders";
+"verseInFolder" = "%d verse";
+"versesInFolder" = "%d verses";
+"deleteFolderConfirmation" = "Are you sure you want to delete this folder?";
+"deleteConfirm" = "Delete";
+"back" = "Back";
+"searchFolders" = "Search folders...";
+"searchVerses" = "Search verses...";
+"searchFavorites" = "Search favorites...";

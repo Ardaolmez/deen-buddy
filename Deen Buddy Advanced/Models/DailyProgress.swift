@@ -16,10 +16,10 @@ enum DailyActivityType: String, Codable, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .verse: return "Daily Verse"
-        case .durood: return "Daily Durood"
-        case .dua: return "Daily Dua"
-        case .wisdom: return "Daily Wisdom"
+        case .verse: return AppStrings.today.dailyVerseActivity
+        case .durood: return AppStrings.today.dailyDuroodActivity
+        case .dua: return AppStrings.today.dailyDuaActivity
+        case .wisdom: return AppStrings.today.dailyWisdomActivity
         }
     }
 

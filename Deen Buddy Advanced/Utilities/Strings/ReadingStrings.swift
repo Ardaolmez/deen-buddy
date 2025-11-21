@@ -7,107 +7,116 @@
 
 import Foundation
 
+private let table = "Reading"
+private var lang: AppLanguageManager { AppLanguageManager.shared }
+
 struct ReadingStrings {
     // MARK: - Header & Navigation
-    static let goal = "Goal: 5 min"
-    static let timeFormat = "%d:%02d"  // minutes:seconds
-    static let close = "Close"
-    static let currentPosition = "Current: %@"
+    static var goal: String { lang.getString("goal", table: table) }
+    static var timeFormat: String { lang.getString("timeFormat", table: table) }
+    static var close: String { lang.getString("close", table: table) }
+    static var currentPosition: String { lang.getString("currentPosition", table: table) }
 
     // MARK: - Verse Display
-    static let verse = "Verse %d"
-    static let surahHeader = "%@ - %@" // Name - Translation
-    static let versesRemaining = "%d verses remaining"
-    static let minutesRemaining = "%d minutes remaining"
+    static var verse: String { lang.getString("verse", table: table) }
+    static var surahHeader: String { lang.getString("surahHeader", table: table) }
+    static var versesRemaining: String { lang.getString("versesRemaining", table: table) }
+    static var minutesRemaining: String { lang.getString("minutesRemaining", table: table) }
 
     // MARK: - Progress & Completion
-    static let progress = "Progress"
-    static let completed = "Completed!"
-    static let keepGoing = "Keep going!"
-    static let overallProgress = "Overall Progress"
-    static let dailyGoal = "Daily Goal"
-    static let goalCompleted = "Goal Completed! 🎉"
+    static var progress: String { lang.getString("progress", table: table) }
+    static var completed: String { lang.getString("completed", table: table) }
+    static var keepGoing: String { lang.getString("keepGoing", table: table) }
+    static var overallProgress: String { lang.getString("overallProgress", table: table) }
+    static var dailyGoal: String { lang.getString("dailyGoal", table: table) }
+    static var goalCompleted: String { lang.getString("goalCompleted", table: table) }
 
     // MARK: - Session Management
-    static let readingSession = "Reading Session"
-    static let sessionEnded = "Session ended"
-    static let sessionActive = "Session Active"
-    static let totalTimeToday = "Total time today: %d min"
-    static let sessionInsights = "Session Insights"
+    static var readingSession: String { lang.getString("readingSession", table: table) }
+    static var sessionEnded: String { lang.getString("sessionEnded", table: table) }
+    static var sessionActive: String { lang.getString("sessionActive", table: table) }
+    static var totalTimeToday: String { lang.getString("totalTimeToday", table: table) }
+    static var sessionInsights: String { lang.getString("sessionInsights", table: table) }
 
     // MARK: - Metrics & Analytics
-    static let readingSpeed = "Reading Speed"
-    static let versesPerMinute = "%.1f v/min"
-    static let estimatedCompletion = "Est. Completion"
-    static let readingEfficiency = "Efficiency"
-    static let focusScore = "Focus Score"
-    static let consistencyScore = "Consistency"
+    static var readingSpeed: String { lang.getString("readingSpeed", table: table) }
+    static var versesPerMinute: String { lang.getString("versesPerMinute", table: table) }
+    static var estimatedCompletion: String { lang.getString("estimatedCompletion", table: table) }
+    static var readingEfficiency: String { lang.getString("readingEfficiency", table: table) }
+    static var focusScore: String { lang.getString("focusScore", table: table) }
+    static var consistencyScore: String { lang.getString("consistencyScore", table: table) }
 
     // MARK: - Progress Ring Labels
-    static let goalProgress = "Goal Progress"
-    static let versesReadToday = "Verses Read Today"
-    static let readingTimeToday = "Reading Time Today"
-    static let streakCounter = "%d day streak"
-    static let bestStreak = "Best: %d"
+    static var goalProgress: String { lang.getString("goalProgress", table: table) }
+    static var versesReadToday: String { lang.getString("versesReadToday", table: table) }
+    static var readingTimeToday: String { lang.getString("readingTimeToday", table: table) }
+    static var streakCounter: String { lang.getString("streakCounter", table: table) }
+    static var bestStreak: String { lang.getString("bestStreak", table: table) }
 
     // MARK: - Achievement & Motivation
-    static let currentStreak = "Current Streak"
-    static let achievement = "Achievement!"
-    static let weekWarrior = "Week Warrior 🔥"
-    static let monthlyMaster = "Monthly Master ⭐"
-    static let centuryScholar = "Century Scholar 💎"
-    static let streakProtection = "Streak Protection"
-    static let almostThere = "Almost there!"
-    static let keepItUp = "Keep it up!"
+    static var currentStreak: String { lang.getString("currentStreak", table: table) }
+    static var achievement: String { lang.getString("achievement", table: table) }
+    static var weekWarrior: String { lang.getString("weekWarrior", table: table) }
+    static var monthlyMaster: String { lang.getString("monthlyMaster", table: table) }
+    static var centuryScholar: String { lang.getString("centuryScholar", table: table) }
+    static var streakProtection: String { lang.getString("streakProtection", table: table) }
+    static var almostThere: String { lang.getString("almostThere", table: table) }
+    static var keepItUp: String { lang.getString("keepItUp", table: table) }
 
     // MARK: - Goal Types
-    static let oneWeekGoal = "1 Week Goal"
-    static let twoWeekGoal = "2 Week Goal"
-    static let oneMonthGoal = "1 Month Goal"
-    static let threeMonthGoal = "3 Month Goal"
-    static let microLearningGoal = "5 Minutes Daily"
-    static let versesGoal = "VERSES\nGOAL"
-    static let timeGoal = "5 MIN\nDAILY"
+    static var oneWeekGoal: String { lang.getString("oneWeekGoal", table: table) }
+    static var twoWeekGoal: String { lang.getString("twoWeekGoal", table: table) }
+    static var oneMonthGoal: String { lang.getString("oneMonthGoal", table: table) }
+    static var threeMonthGoal: String { lang.getString("threeMonthGoal", table: table) }
+    static var microLearningGoal: String { lang.getString("microLearningGoal", table: table) }
+    static var versesGoal: String { lang.getString("versesGoal", table: table) }
+    static var timeGoal: String { lang.getString("timeGoal", table: table) }
 
     // MARK: - Status Indicators
-    static let onTrack = "On Track"
-    static let ahead = "Ahead"
-    static let behind = "Behind"
-    static let excellent = "Excellent"
-    static let good = "Good"
-    static let needsImprovement = "Needs Improvement"
+    static var onTrack: String { lang.getString("onTrack", table: table) }
+    static var ahead: String { lang.getString("ahead", table: table) }
+    static var behind: String { lang.getString("behind", table: table) }
+    static var excellent: String { lang.getString("excellent", table: table) }
+    static var good: String { lang.getString("good", table: table) }
+    static var needsImprovement: String { lang.getString("needsImprovement", table: table) }
 
     // MARK: - Reading Experience
-    static let pageOf = "Page %d of %d"
-    static let surahProgress = "Surah Progress"
-    static let verseHighlight = "Current Verse"
-    static let readingFocus = "Reading Focus"
-    static let nightMode = "Night Mode"
-    static let fontSizeAdjust = "Font Size"
+    static var pageOf: String { lang.getString("pageOf", table: table) }
+    static var surahProgress: String { lang.getString("surahProgress", table: table) }
+    static var verseHighlight: String { lang.getString("verseHighlight", table: table) }
+    static var readingFocus: String { lang.getString("readingFocus", table: table) }
+    static var nightMode: String { lang.getString("nightMode", table: table) }
+    static var fontSizeAdjust: String { lang.getString("fontSizeAdjust", table: table) }
 
     // MARK: - Adaptive Messages
-    static let morningMotivation = "Start your day with Quran ☀️"
-    static let afternoonEncouragement = "Perfect time for reflection 🌅"
-    static let eveningReminder = "End your day peacefully 🌙"
-    static let streakReminder = "Don't break your %d-day streak!"
-    static let comebackMessage = "Welcome back! Let's continue your journey"
+    static var morningMotivation: String { lang.getString("morningMotivation", table: table) }
+    static var afternoonEncouragement: String { lang.getString("afternoonEncouragement", table: table) }
+    static var eveningReminder: String { lang.getString("eveningReminder", table: table) }
+    static var streakReminder: String { lang.getString("streakReminder", table: table) }
+    static var comebackMessage: String { lang.getString("comebackMessage", table: table) }
 
     // MARK: - Error & Loading States
-    static let loadingQuran = "Loading Quran..."
-    static let errorLoadingData = "Error loading data"
-    static let retryLoading = "Retry"
-    static let noGoalSet = "No reading goal set"
-    static let setGoalPrompt = "Set a reading goal to get started"
+    static var loadingQuran: String { lang.getString("loadingQuran", table: table) }
+    static var errorLoadingData: String { lang.getString("errorLoadingData", table: table) }
+    static var retryLoading: String { lang.getString("retryLoading", table: table) }
+    static var noGoalSet: String { lang.getString("noGoalSet", table: table) }
+    static var setGoalPrompt: String { lang.getString("setGoalPrompt", table: table) }
 
     // MARK: - Verse Navigation
-    static let selectSurah = "Select Surah"
-    static let selectVerse = "Select Verse"
-    static let searchSurah = "Search Surah..."
-    static let searchVerse = "Search Verse..."
-    static let back = "Back"
-    static let cancel = "Cancel"
-    static let verses = "verses"
-    static let verseCount = "%d verses"
-    static let noResults = "No results found"
-    static let searchPlaceholder = "Search by name or number..."
+    static var selectSurah: String { lang.getString("selectSurah", table: table) }
+    static var selectVerse: String { lang.getString("selectVerse", table: table) }
+    static var selectJuz: String { lang.getString("selectJuz", table: table) }
+    static var searchSurah: String { lang.getString("searchSurah", table: table) }
+    static var searchVerse: String { lang.getString("searchVerse", table: table) }
+    static var searchJuz: String { lang.getString("searchJuz", table: table) }
+    static var back: String { lang.getString("back", table: table) }
+    static var cancel: String { lang.getString("cancel", table: table) }
+    static var verses: String { lang.getString("verses", table: table) }
+    static var verseCount: String { lang.getString("verseCount", table: table) }
+    static var noResults: String { lang.getString("noResults", table: table) }
+    static var searchPlaceholder: String { lang.getString("searchPlaceholder", table: table) }
+    static var juzFormat: String { lang.getString("juzFormat", table: table) }
+    static var surahsRange: String { lang.getString("surahsRange", table: table) }
+    static var surah: String { lang.getString("surah", table: table) }
+    static var juz: String { lang.getString("juz", table: table) }
 }

@@ -46,12 +46,12 @@ struct WisdomActivityCard: View {
 
                     // Title and time - more compact
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("DAILY WISDOM")
+                        Text(AppStrings.today.dailyWisdomActivity.uppercased())
                             .font(.system(size: 13, weight: .bold))
                             .foregroundColor(.white)
                             .tracking(0.5)
 
-                        Text("\(activity.type.estimatedMinutes) MIN")
+                        Text(String(format: AppStrings.today.estimatedTime, activity.type.estimatedMinutes))
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.white.opacity(0.8))
                     }

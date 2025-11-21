@@ -16,7 +16,7 @@ struct QuranMetricsCard: View {
             // Reading time
             metricItem(
                 icon: "clock.fill",
-                label: "Time",
+                label: AppStrings.quran.metricTime,
                 value: formatTime(sessionManager.elapsedSeconds),
                 color: AppColors.Prayers.prayerGreen
             )
@@ -28,7 +28,7 @@ struct QuranMetricsCard: View {
             // Daily goal progress (5 minutes)
             metricItem(
                 icon: "target",
-                label: "Goal",
+                label: AppStrings.quran.metricGoal,
                 value: formatGoal(),
                 color: AppColors.Prayers.prayerGreen
             )
@@ -40,7 +40,7 @@ struct QuranMetricsCard: View {
             // Current streak
             metricItem(
                 icon: "flame.fill",
-                label: "Streak",
+                label: AppStrings.quran.metricStreak,
                 value: "\(goalViewModel.readingGoal?.currentStreak ?? 0)",
                 color: AppColors.Prayers.prayerGreen
             )
@@ -93,7 +93,7 @@ struct QuranMetricsCard: View {
     private func formatGoal() -> String {
         // Show live total minutes (same as what Today View uses)
         let liveMinutes = sessionManager.elapsedSeconds / 60
-        return "\(liveMinutes)/5m"
+        return String(format: AppStrings.quran.metricGoalFormat, liveMinutes)
     }
 }
 

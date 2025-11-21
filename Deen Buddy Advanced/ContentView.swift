@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject private var appState = AppState()
+    @ObservedObject private var appLanguageManager = AppLanguageManager.shared
     @State private var showLaunchScreen = true
 
     var body: some View {
@@ -39,6 +40,7 @@ struct ContentView: View {
                     }
                     .tag(3)
             }
+            .id(appLanguageManager.currentLanguage)
             .environmentObject(appState)
 
             // Launch Screen Overlay

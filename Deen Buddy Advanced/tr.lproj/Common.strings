@@ -1,0 +1,39 @@
+/* Common Strings - Turkish */
+
+/* Tab Labels */
+"todayTab" = "Bugün";
+"quranTab" = "Kuran";
+"prayersTab" = "Namaz";
+"exploreTab" = "Keşfet";
+
+/* Actions */
+"close" = "Kapat";
+"done" = "Bitti";
+"cancel" = "İptal";
+"retry" = "Tekrar Dene";
+"share" = "Paylaş";
+"yes" = "Evet";
+"no" = "Hayır";
+"ok" = "Tamam";
+"save" = "Kaydet";
+"delete" = "Sil";
+"edit" = "Düzenle";
+"continueAction" = "Devam Et";
+
+/* States */
+"loading" = "Yükleniyor...";
+"error" = "Hata";
+"success" = "Başarılı";
+
+/* Daily Streak */
+"dailyStreak" = "Günlük Seri";
+
+/* Personalized Learning */
+"personalizedLearning" = "Kişiselleştirilmiş Öğrenme";
+"prophetsStories" = "Peygamber Hikayeleri";
+"lessonProgress" = "Ders %d / %d";
+"start" = "Başla";
+
+/* Text Labels */
+"arabic" = "Arapça";
+"translation" = "Çeviri";

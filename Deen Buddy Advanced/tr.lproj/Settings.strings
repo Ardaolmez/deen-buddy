@@ -1,0 +1,19 @@
+/* Settings Strings - Turkish */
+
+"navigationTitle" = "Ayarlar";
+"language" = "Dil";
+"notifications" = "Bildirimler";
+"about" = "Hakkında";
+"moreLanguagesComingSoon" = "Daha fazla dil yakında...";
+
+/* Quran Translation Section */
+"quranTranslation" = "Kuran Çevirisi";
+"selected" = "Seçili: %@";
+
+/* About Section */
+"appVersion" = "Uygulama Sürümü";
+"version" = "1.0.0";
+
+/* App Language Section */
+"appLanguage" = "Uygulama Dili";
+"selectLanguage" = "Dil Seçin";

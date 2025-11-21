@@ -1,0 +1,17 @@
+/* Explore Tab Strings - Turkish */
+
+"navigationTitle" = "Keşfet";
+"comingSoon" = "Yakında";
+"prophetStoriesComingSoon" = "Yakında: Peygamber ﷺ'in Hikayeleri";
+"view" = "Görüntüle";
+"hijriDateTitle" = "Hicri Tarih";
+"hijriLocationUnavailable" = "Konum kullanılamıyor";
+"hijriLoading" = "Bugünün tarihi alınıyor...";
+"hijriCalendarTitle" = "Hicri Takvim";
+"hijriCalendarSubtitle" = "Hicri takvimi keşfetmek için bir tarih seçin";
+"hijriCalendarHint" = "Herhangi bir gün için Hicri ve Miladi zaman çizelgelerini karşılaştırın.";
+"hijriCalendarHijriHeader" = "Hicri";
+"hijriCalendarGregorianHeader" = "Miladi";
+"hijriCalendarSpecialDatesTitle" = "Özel bir güne gidin";
+"hijriCalendarSpecialDatesPlaceholder" = "Özel bir tarih seçin";
+"hijriCalendarSpecialDatesReset" = "Seçimi sıfırla";

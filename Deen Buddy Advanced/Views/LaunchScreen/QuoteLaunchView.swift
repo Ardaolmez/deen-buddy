@@ -91,7 +91,7 @@ struct QuoteLaunchView: View {
                     showShareSheet = true
                 }) {
                     HStack(spacing: 8) {
-                        Text("Share")
+                        Text(AppStrings.launch.share)
                             .font(.system(size: 18, weight: .semibold))
                         Image(systemName: "square.and.arrow.up")
                             .font(.system(size: 16, weight: .semibold))
@@ -112,7 +112,7 @@ struct QuoteLaunchView: View {
                 .padding(.bottom, 30)
 
                 // Tap anywhere to continue
-                Text("Or, tap anywhere to continue")
+                Text(AppStrings.launch.tapToContinue)
                     .font(.system(size: 15, weight: .regular))
                     .foregroundColor(.white.opacity(0.9))
                     .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 1)
@@ -177,7 +177,7 @@ struct QuoteLaunchView: View {
 
         - \(quote.author)
 
-        Shared from Iman Buddy
+        \(AppStrings.launch.sharedFrom)
         """
     }
 }

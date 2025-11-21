@@ -108,7 +108,7 @@ struct FavoritesListView: View {
             }
         }
         .scrollDismissesKeyboard(.interactively)
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search favorites...")
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: AppStrings.quran.searchFavorites)
     }
 
     // MARK: - Filtered Results

@@ -1,0 +1,19 @@
+/* Settings Strings - English */
+
+"navigationTitle" = "Settings";
+"language" = "Language";
+"notifications" = "Notifications";
+"about" = "About";
+"moreLanguagesComingSoon" = "More languages coming soon...";
+
+/* Quran Translation Section */
+"quranTranslation" = "Quran Translation";
+"selected" = "Selected: %@";
+
+/* About Section */
+"appVersion" = "App Version";
+"version" = "1.0.0";
+
+/* App Language Section */
+"appLanguage" = "App Language";
+"selectLanguage" = "Select Language";

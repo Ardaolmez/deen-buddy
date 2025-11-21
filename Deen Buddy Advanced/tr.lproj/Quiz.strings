@@ -1,0 +1,38 @@
+/* Quiz Tab Strings - Turkish */
+
+"navigationTitle" = "Günlük Test";
+"nextQuestion" = "Sonraki Soru";
+"seeResults" = "Sonuçları Gör";
+
+/* Quiz Result */
+"yourIman" = "Puanınız:";
+"retry" = "Tekrar Dene";
+"share" = "Paylaş";
+"tailoredQuizzes" = "Iman Buddy her gün bilgi seviyesine göre özel testler hazırlıyor. İslam hakkinda daha çok şey öğrenmek için devam edin.";
+
+/* Grade Messages */
+"gradeExcellent" = "Mükemmel 🌟";
+"gradeGreat" = "Harika 👍";
+"gradeGood" = "İyi 🙂";
+"gradeKeepGoing" = "Devam Et 💪";
+
+/* Share */
+"shareText" = "Iman Buddy'de %@ puan aldım!";
+
+/* Answer Feedback */
+"correct" = "Doğru!";
+"incorrect" = "Yanlış";
+"correctAnswerIs" = "Doğru cevap:";
+"explanation" = "Açıklama:";
+"reference" = "Referans:";
+"yourAnswer" = "Cevabınız";
+"correctAnswer" = "Doğru cevap";
+
+/* Verse Display */
+"quranVerse" = "Kuran Referansı:";
+
+/* Verse Popup */
+"versePopupDone" = "Tamam";
+"versePopupLoading" = "Yükleniyor...";
+"versePopupError" = "Sure bulunamadı";
+"verseLabel" = "Ayet";

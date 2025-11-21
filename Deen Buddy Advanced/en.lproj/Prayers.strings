@@ -1,0 +1,81 @@
+/* Prayers Tab Strings - English */
+
+/* Basic Navigation */
+"navigationTitle" = "Prayers";
+"myPrayers" = "My Prayers";
+"todaysPrayers" = "Today's Prayers";
+"didYouPray" = "Did you pray %@?";
+"greatJob" = "Great job!";
+"markedCompleted" = "Marked as completed for today.";
+"markCompleted" = "Mark it completed to track your consistency.";
+"current" = "current";
+"now" = "Now";
+"next" = "Next";
+"nextPrayer" = "Upcoming";
+"nextPrayerAt" = "Next: %@ at %@";
+"nextPrayerTomorrow" = "Next: %@ tomorrow";
+"beforeFajr" = "Before Fajr";
+"sunrise" = "Sunrise";
+"sunset" = "Sunset";
+"zawal" = "Zawal";
+"undo" = "Undo";
+"yes" = "Yes";
+"history" = "Stats";
+"prayerStreakTitle" = "Weekly Streak";
+"streakPerfect" = "Perfect so far — keep it up!";
+"streakSoFarFormat" = "Streaks this month: %@";
+"availableLater" = "Available when time comes";
+"allComplete" = "All Complete";
+"perfect" = "Perfect!";
+
+/* Compact Prayer Status */
+"nextDhuhrCompact" = "Next: %@ — %@";
+"nowPrayerCompact" = "Now: %@ — %@";
+
+/* Prayer Names */
+"fajr" = "Fajr";
+"dhuhr" = "Dhuhr";
+"asr" = "Asr";
+"maghrib" = "Maghrib";
+"isha" = "Isha";
+
+/* Prayer Names (Short) */
+"fajrShort" = "Fajr";
+"dhuhrShort" = "Dhuhr";
+"asrShort" = "Asr";
+"maghribShort" = "Magh";
+"ishaShort" = "Isha";
+
+/* Time Formats */
+"timePlaceholder" = "--:--";
+"timeCountdownPlaceholder" = "--:--:--";
+
+/* Format Strings */
+"nowPrayerFormat" = "%@: %@ — %@";
+"nextDhuhrFormat" = "%@: %@ — %@";
+
+/* Location & Status */
+"locating" = "Locating…";
+"yourArea" = "Your Area";
+"countdownPlaceholder" = "—";
+
+/* UserDefaults Keys */
+"completedKeyPrefix" = "prayers.completed";
+
+/* Qibla Compass */
+"qiblaDirection" = "Qibla Direction";
+"alignedToQibla" = "Face to Qibla";
+"turnDirectionFormat" = "Turn %@ %d°";
+"left" = "Left";
+"right" = "Right";
+"device" = "Device";
+"currentHeading" = "Current Heading";
+"difference" = "Difference";
+"gettingLocation" = "Getting location...";
+"lowAccuracyWarning" = "Low compass accuracy - calibrate your device";
+
+/* Madhab Selection */
+"madhabShafi" = "Shafi'i";
+"madhabHanafi" = "Hanafi";
+"madhabShafiDesc" = "Standard (Shafi'i, Maliki, Hanbali)";
+"madhabHanafiDesc" = "Later Asr time (Hanafi)";

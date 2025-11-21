@@ -50,7 +50,7 @@ struct ActivityDetailContent: View {
                     }
 
                     // Explanation Label
-                    Text("Explanation")
+                    Text(TodayStrings.activityExplanationLabel)
                         .font(.system(size: 17, weight: .semibold))
                         .foregroundColor(AppColors.Today.activityDetailTranslationLabel)
                         .multilineTextAlignment(.center)

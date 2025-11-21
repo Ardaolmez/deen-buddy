@@ -139,7 +139,7 @@ struct AddToBookmarkPopup: View {
             }
         }
         .scrollDismissesKeyboard(.interactively)
-        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search folders...")
+        .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: AppStrings.quran.searchFolders)
     }
 
     // MARK: - Filtered Results

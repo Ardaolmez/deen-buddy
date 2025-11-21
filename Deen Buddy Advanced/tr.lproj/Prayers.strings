@@ -1,0 +1,81 @@
+/* Prayers Tab Strings - Turkish */
+
+/* Basic Navigation */
+"navigationTitle" = "Namaz Saatleri";
+"myPrayers" = "Namaz Saatlerim";
+"todaysPrayers" = "Bugünün Namazları";
+"didYouPray" = "%@ namazını kıldınız mı?";
+"greatJob" = "Harika!";
+"markedCompleted" = "Bugün için tamamlandı olarak işaretlendi.";
+"markCompleted" = "Tutarlılığınızı takip etmek için tamamlandı olarak işaretleyin.";
+"current" = "Şimdi";
+"now" = "Şimdi";
+"next" = "Sonraki";
+"nextPrayer" = "Yaklaşan";
+"nextPrayerAt" = "Sonraki: %@ saat %@";
+"nextPrayerTomorrow" = "Sonraki: Yarın %@";
+"beforeFajr" = "İmsak Öncesi";
+"sunrise" = "Güneşin Doğuşu";
+"sunset" = "Güneşin Batışı";
+"zawal" = "İstiva";
+"undo" = "Geri Al";
+"yes" = "Evet";
+"history" = "İstatistikler";
+"prayerStreakTitle" = "Haftalık Seri";
+"streakPerfect" = "Şu ana kadar mükemmel — devam et!";
+"streakSoFarFormat" = "Bu ayki seriler: %@";
+"availableLater" = "Vakti geldiğinde kullanılabilir";
+"allComplete" = "Hepsi Tamamlandı";
+"perfect" = "Mükemmel!";
+
+/* Compact Prayer Status */
+"nextDhuhrCompact" = "Sonraki: %@ — %@";
+"nowPrayerCompact" = "Şimdi: %@ — %@";
+
+/* Prayer Names */
+"fajr" = "Sabah";
+"dhuhr" = "Öğle";
+"asr" = "İkindi";
+"maghrib" = "Akşam";
+"isha" = "Yatsı";
+
+/* Prayer Names (Short) */
+"fajrShort" = "Sabah";
+"dhuhrShort" = "Öğle";
+"asrShort" = "İkindi";
+"maghribShort" = "Akşam";
+"ishaShort" = "Yatsı";
+
+/* Time Formats */
+"timePlaceholder" = "--:--";
+"timeCountdownPlaceholder" = "--:--:--";
+
+/* Format Strings */
+"nowPrayerFormat" = "%@: %@ — %@";
+"nextDhuhrFormat" = "%@: %@ — %@";
+
+/* Location & Status */
+"locating" = "Konum bulunuyor…";
+"yourArea" = "Bölgeniz";
+"countdownPlaceholder" = "—";
+
+/* UserDefaults Keys */
+"completedKeyPrefix" = "prayers.completed";
+
+/* Qibla Compass */
+"qiblaDirection" = "Kıble Yönü";
+"alignedToQibla" = "Kıbleye Dön";
+"turnDirectionFormat" = "%@ %d° dön";
+"left" = "Sola";
+"right" = "Sağa";
+"device" = "Cihaz";
+"currentHeading" = "Mevcut Yön";
+"difference" = "Fark";
+"gettingLocation" = "Konum alınıyor...";
+"lowAccuracyWarning" = "Düşük pusula hassasiyeti - cihazınızı kalibre edin";
+
+/* Madhab Selection */
+"madhabShafi" = "Şafii";
+"madhabHanafi" = "Hanefi";
+"madhabShafiDesc" = "Standart (Şafii, Maliki, Hanbeli)";
+"madhabHanafiDesc" = "Geç İkindi vakti (Hanefi)";

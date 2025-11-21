@@ -1,0 +1,149 @@
+/* Today Tab Strings - English */
+
+"navigationTitle" = "Today's Reflection";
+"selfLearningTitle" = "Today's Learning";
+"dailyQuiz" = "Daily Quiz";
+"startLesson" = "Start";
+"continueJourney" = "Continue your journey with tailored lessons";
+
+/* Daily Verse Card */
+"dailyVerseTitle" = "Daily Verse";
+
+/* Daily Quran Goal Card */
+"dailyQuranGoal" = "Daily Quran:";
+"verses" = "verses";
+"minutes" = "minutes";
+"pages" = "pages";
+"versesAhead" = "%d verses ahead";
+"versesBehind" = "%d verses behind";
+"minutesAhead" = "%d minutes ahead";
+"minutesBehind" = "%d minutes behind";
+"onTrack" = "On track";
+"versesToGo" = "%d verses to go";
+"minutesToGo" = "%d minutes to go";
+"read" = "Read";
+"listen" = "Listen";
+"tapForDetails" = "Tap for details";
+"tapToCollapse" = "Tap to collapse";
+
+/* Reading Goal Details (Expanded) */
+"todaysProgress" = "Today's Progress";
+"goal" = "Goal";
+"completed" = "Completed";
+"remaining" = "Remaining";
+"timeline" = "Timeline";
+"expected" = "Expected";
+"actual" = "Actual";
+"status" = "Status";
+"streak" = "Streak";
+"current" = "Current";
+"best" = "Best";
+"days" = "days";
+"day" = "day";
+
+/* Reading Goal Selection */
+"selectYourGoal" = "Select Your Goal";
+"completionGoals" = "Completion Goals";
+"microLearningGoals" = "Micro-Learning Goals";
+"startGoal" = "Start Goal";
+"cancel" = "Cancel";
+
+/* Reading Goal Assets */
+"mosquePaintingImage" = "Quba mosque painting.jpg";
+"versePrefix" = "Verse ";
+
+/* Daily Verse Assets */
+"tileBackgroundImage" = "tile.jpg";
+
+/* Daily Verse Errors */
+"couldNotLoadQuranData" = "Could not load Quran data";
+"couldNotSelectDailyVerse" = "Could not select daily verse";
+
+/* Daily Verse Card */
+"tapToReadFull" = "Tap to read full";
+
+/* Feedback Messages */
+"feedbackThankYou" = "Thank you for your feedback!";
+"feedbackError" = "Failed to submit feedback. Please try again.";
+
+/* Daily Progress */
+"progressToday" = "Progress today";
+"dailyStreakTitle" = "Daily Streak";
+"currentStreak" = "Current";
+"bestStreakLabel" = "Best";
+"dayStreak" = "%d day";
+"daysStreak" = "%d days";
+
+/* Daily Activities */
+"dailyVerseActivity" = "Daily Verse";
+"dailyDuroodActivity" = "Daily Durood";
+"dailyDuaActivity" = "Daily Dua";
+"dailyWisdomActivity" = "Daily Wisdom";
+"estimatedTime" = "%d MIN";
+"learnSomethingNew" = "Learn something new every day";
+"activityDone" = "DONE";
+"markComplete" = "Mark Complete";
+"listenLabel" = "Listen";
+"readLabel" = "Read";
+"closeLabel" = "Close";
+
+/* Daily Quiz Button */
+"dailyQuizLabel" = "Daily Quiz: 5 questions";
+"dailyQuizMinutes" = "5 MIN";
+"dailyQuizStart" = "Start";
+"dailyQuizContinue" = "Continue";
+"dailyQuizReview" = "Review";
+"dailyQuizSubmit" = "Submit";
+
+/* Activity Detail Screen */
+"activityProgressToday" = "Progress today";
+"activityTranslationLabel" = "Translation";
+"activityExplanationLabel" = "Explanation";
+"activityChatToLearnMore" = "Chat to learn more";
+"activityTodaysJourney" = "Today's Journey";
+
+/* Word of Wisdom */
+"wisdomUnderstanding" = "Understanding";
+"wisdomChatPromptPrefix" = "I would like to learn more about this wisdom quote by";
+"wisdomChatQuoteLabel" = "Quote:";
+"wisdomChatExplanationLabel" = "The explanation given is:";
+"wisdomChatRequestDetails" = "Please tell me more about:\n• The deeper meaning and context of this wisdom\n• How to apply this in daily life\n• Related teachings from Islam\n• Practical examples of living by this principle";
+"wisdomShareTitle" = "Word of Wisdom";
+"wisdomShareFooter" = "Shared from Iman Buddy";
+
+/* Streak Feedback Overlay */
+"streakDayLabel" = "day streak";
+"streakEncouragement" = "Come back tomorrow to keep your streak going\nand get closer to God";
+"streakDoneButton" = "Done";
+
+/* Locked Day View */
+"lockedNotQuiteTime" = "Not quite time yet.";
+"lockedCheckBackOn" = "Check back on %@ for your Daily Plan session";
+"lockedDontMissDay" = "Don't miss a day";
+"lockedSetReminder" = "Set a reminder";
+
+/* Journey Header */
+"journeyTodayTitle" = "Today's Journey";
+"journeyDateSuffix" = "'s Journey";
+
+/* Activity Cards */
+"activityDoneLabel" = "DONE";
+"activityListenButton" = "Listen";
+"activityReadButton" = "Read";
+
+/* Feedback Screen */
+"feedbackTitle" = "Feedback";
+"feedbackHeaderTitle" = "We'd love to hear from you!";
+"feedbackHeaderSubtitle" = "Share your suggestions, ideas, or feedback to help us improve the app.";
+"feedbackPlaceholder" = "Type your suggestion here...";
+"feedbackSubmitButton" = "Submit Feedback";
+"feedbackCancelButton" = "Cancel";
+"feedbackNetworkError" = "Network error. Please check your connection.";
+"feedbackDataError" = "Failed to prepare feedback data";
+"feedbackServerError" = "Server error. Please try again later.";
+
+/* Reading Goal Tracking */
+"trackingSaveButton" = "Save";
+
+/* Component Labels */
+"weeklyStreakProgressFor" = "Progress for %@";

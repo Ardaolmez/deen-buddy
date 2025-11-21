@@ -1,0 +1,19 @@
+/* Chat Feature Strings - English */
+
+"navigationTitle" = "Ask a Question";
+"chatBoxPrompt" = "Ask a Question";
+"todayChatBoxPrompt" = "What do you have in your mind?";
+"inputPlaceholder" = "Type your question...";
+"inputPlaceholderShort" = "Ask me anything…";
+"close" = "Close";
+"botName" = "Iman Buddy:";
+"welcomeMessage" = "Salaam! How can I assist you today?";
+
+/* Loading */
+"loadingIndicator" = "…";
+
+/* Stop Button */
+"stopButton" = "Stop";
+
+/* Citation Card */
+"citationIconName" = "book.closed.fill";

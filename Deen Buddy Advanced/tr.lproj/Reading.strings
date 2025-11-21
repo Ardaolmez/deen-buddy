@@ -1,0 +1,110 @@
+/* Reading Feature Strings - Turkish */
+
+/* Header & Navigation */
+"goal" = "Hedef: 5 dk";
+"timeFormat" = "%d:%02d";
+"close" = "Kapat";
+"currentPosition" = "Şu anki: %@";
+
+/* Verse Display */
+"verse" = "Ayet %d";
+"surahHeader" = "%@ - %@";
+"versesRemaining" = "%d ayet kaldı";
+"minutesRemaining" = "%d dakika kaldı";
+
+/* Progress & Completion */
+"progress" = "İlerleme";
+"completed" = "Tamamlandı!";
+"keepGoing" = "Devam et!";
+"overallProgress" = "Genel İlerleme";
+"dailyGoal" = "Günlük Hedef";
+"goalCompleted" = "Hedef Tamamlandı! 🎉";
+
+/* Session Management */
+"readingSession" = "Okuma Oturumu";
+"sessionEnded" = "Oturum sona erdi";
+"sessionActive" = "Oturum Aktif";
+"totalTimeToday" = "Bugünkü toplam süre: %d dk";
+"sessionInsights" = "Oturum İçgörüleri";
+
+/* Metrics & Analytics */
+"readingSpeed" = "Okuma Hızı";
+"versesPerMinute" = "%.1f ayet/dk";
+"estimatedCompletion" = "Tahmini Tamamlanma";
+"readingEfficiency" = "Verimlilik";
+"focusScore" = "Odaklanma";
+"consistencyScore" = "Devamlılık";
+
+/* Progress Ring Labels */
+"goalProgress" = "Hedef İlerlemesi";
+"versesReadToday" = "Bugün Okunan Ayetler";
+"readingTimeToday" = "Bugünkü Okuma Süresi";
+"streakCounter" = "%d günlük seri";
+"bestStreak" = "En İyi: %d";
+
+/* Achievement & Motivation */
+"currentStreak" = "Şu Anki Seri";
+"achievement" = "Başarı!";
+"weekWarrior" = "Hafta Savaşçısı 🔥";
+"monthlyMaster" = "Aylık Usta ⭐";
+"centuryScholar" = "Yüzyıl Bilgini 💎";
+"streakProtection" = "Seri Koruması";
+"almostThere" = "Neredeyse bitti!";
+"keepItUp" = "Devam et!";
+
+/* Goal Types */
+"oneWeekGoal" = "1 Haftalık Hedef";
+"twoWeekGoal" = "2 Haftalık Hedef";
+"oneMonthGoal" = "1 Aylık Hedef";
+"threeMonthGoal" = "3 Aylık Hedef";
+"microLearningGoal" = "Günde 5 Dakika";
+"versesGoal" = "AYET\nHEDEFİ";
+"timeGoal" = "GÜNLÜK\n5 DAK";
+
+/* Status Indicators */
+"onTrack" = "Hedefte";
+"ahead" = "İlerde";
+"behind" = "Geride";
+"excellent" = "Mükemmel";
+"good" = "İyi";
+"needsImprovement" = "Geliştirilmeli";
+
+/* Reading Experience */
+"pageOf" = "Sayfa %d / %d";
+"surahProgress" = "Sure İlerlemesi";
+"verseHighlight" = "Şu Anki Ayet";
+"readingFocus" = "Okuma Odağı";
+"nightMode" = "Gece Modu";
+"fontSizeAdjust" = "Yazı Boyutu";
+
+/* Adaptive Messages */
+"morningMotivation" = "Gününüze Kuran ile başlayın ☀️";
+"afternoonEncouragement" = "Düşünmek için mükemmel zaman 🌅";
+"eveningReminder" = "Gününüzü huzurla sonlandırın 🌙";
+"streakReminder" = "%d günlük serinizi bozmayın!";
+"comebackMessage" = "Tekrar hoş geldiniz! Hadi yolculuğunuza devam edelim";
+
+/* Error & Loading States */
+"loadingQuran" = "Kuran yükleniyor...";
+"errorLoadingData" = "Veriler yüklenirken hata oluştu";
+"retryLoading" = "Tekrar Dene";
+"noGoalSet" = "Okuma hedefi ayarlanmadı";
+"setGoalPrompt" = "Başlamak için bir okuma hedefi belirleyin";
+
+/* Verse Navigation */
+"selectSurah" = "Sure Seç";
+"selectVerse" = "Ayet Seç";
+"selectJuz" = "Cüz Seç";
+"searchSurah" = "Sure Ara...";
+"searchVerse" = "Ayet Ara...";
+"searchJuz" = "Cüz Ara...";
+"back" = "Geri";
+"cancel" = "İptal";
+"verses" = "ayetler";
+"verseCount" = "%d ayet";
+"noResults" = "Sonuç bulunamadı";
+"searchPlaceholder" = "İsim veya numara ile ara...";
+"juzFormat" = "Cüz %d";
+"surahsRange" = "Sureler %d - %d";
+"surah" = "Sure";
+"juz" = "Cüz";

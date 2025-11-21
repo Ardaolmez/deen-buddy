@@ -11,6 +11,7 @@ struct QuranMainView: View {
     @StateObject private var quranViewModel = QuranViewModel()
     @StateObject private var goalViewModel = ReadingGoalViewModel.shared
     @StateObject private var sessionManager = ReadingSessionManager.shared
+    @ObservedObject private var appLanguageManager = AppLanguageManager.shared
     @EnvironmentObject var appState: AppState
 
     @State private var selectedMode: NavigationMode = .surah
@@ -49,14 +50,19 @@ struct QuranMainView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(AppStrings.quran.navigationTitle)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarLeading) {
+                    Text(AppStrings.quran.navigationTitle)
+                        .font(.system(size: 20, weight: .semibold))
+                        .foregroundColor(.primary)
+                }
+
+                ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
                         showSettings = true
                     }) {
                         Image(systemName: "gearshape.fill")
-                            .font(.system(size: 16, weight: .medium))
+                            .font(.system(size: 14, weight: .medium))
                             .foregroundColor(AppColors.Today.settingsIcon)
                     }
                 }
@@ -66,6 +72,9 @@ struct QuranMainView: View {
             }
             .fullScreenCover(isPresented: $showBookmarks) {
                 BookmarksListView()
+            }
+            .sheet(isPresented: $showSettings) {
+                AppLanguagePickerView()
             }
         }
     }

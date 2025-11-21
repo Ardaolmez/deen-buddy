@@ -1,0 +1,39 @@
+/* Common Strings - English */
+
+/* Tab Labels */
+"todayTab" = "Today";
+"quranTab" = "Quran";
+"prayersTab" = "Prayers";
+"exploreTab" = "Explore";
+
+/* Actions */
+"close" = "Close";
+"done" = "Done";
+"cancel" = "Cancel";
+"retry" = "Retry";
+"share" = "Share";
+"yes" = "Yes";
+"no" = "No";
+"ok" = "OK";
+"save" = "Save";
+"delete" = "Delete";
+"edit" = "Edit";
+"continueAction" = "Continue";
+
+/* States */
+"loading" = "Loading...";
+"error" = "Error";
+"success" = "Success";
+
+/* Daily Streak */
+"dailyStreak" = "Daily Streak";
+
+/* Personalized Learning */
+"personalizedLearning" = "Personalized Learning";
+"prophetsStories" = "Prophets Stories";
+"lessonProgress" = "Lesson %d of %d";
+"start" = "Start";
+
+/* Text Labels */
+"arabic" = "Arabic";
+"translation" = "Translation";

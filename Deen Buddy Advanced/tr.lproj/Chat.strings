@@ -1,0 +1,19 @@
+/* Chat Feature Strings - Turkish */
+
+"navigationTitle" = "Sohbet";
+"chatBoxPrompt" = "Sohbet";
+"todayChatBoxPrompt" = "Iman Buddy'le sohbet et";
+"inputPlaceholder" = "Sorunuzu yazın...";
+"inputPlaceholderShort" = "Bana bir şey sor…";
+"close" = "Kapat";
+"botName" = "Iman Buddy:";
+"welcomeMessage" = "Selamün aleyküm! Bugün ne hakkında konuşmak istersiniz?";
+
+/* Loading */
+"loadingIndicator" = "…";
+
+/* Stop Button */
+"stopButton" = "Dur";
+
+/* Citation Card */
+"citationIconName" = "book.closed.fill";

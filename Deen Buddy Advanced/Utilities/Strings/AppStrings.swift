@@ -23,6 +23,7 @@ struct AppStrings {
 
     // Features
     static let reading = ReadingStrings.self
+    static let launch = LaunchStrings.self
 
     // Shared
     static let common = CommonStrings.self

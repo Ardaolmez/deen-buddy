@@ -1,0 +1,38 @@
+/* Quiz Tab Strings - English */
+
+"navigationTitle" = "Daily Quiz";
+"nextQuestion" = "Next Question";
+"seeResults" = "See Results";
+
+/* Quiz Result */
+"yourIman" = "Your Iman:";
+"retry" = "Retry";
+"share" = "Share";
+"tailoredQuizzes" = "Iman Buddy will tailor custom quizzes for you each day based on your knowledge level. Keep going to steadily strengthen your Iman.";
+
+/* Grade Messages */
+"gradeExcellent" = "Excellent 🌟";
+"gradeGreat" = "Great 👍";
+"gradeGood" = "Good 🙂";
+"gradeKeepGoing" = "Keep Going 💪";
+
+/* Share */
+"shareText" = "I scored %@ on Iman Buddy!";
+
+/* Answer Feedback */
+"correct" = "Correct!";
+"incorrect" = "Incorrect";
+"correctAnswerIs" = "The correct answer is:";
+"explanation" = "Explanation:";
+"reference" = "Reference:";
+"yourAnswer" = "Your answer";
+"correctAnswer" = "Correct answer";
+
+/* Verse Display */
+"quranVerse" = "Quranic Reference:";
+
+/* Verse Popup */
+"versePopupDone" = "Done";
+"versePopupLoading" = "Loading...";
+"versePopupError" = "Surah not found";
+"verseLabel" = "Verse";

@@ -68,7 +68,7 @@ struct ExpandableDailyActivityCard: View {
                         .tracking(0.5)
 
                     if !isExpanded {
-                        Text("\(activity.type.estimatedMinutes) MIN")
+                        Text(String(format: AppStrings.today.estimatedTime, activity.type.estimatedMinutes))
                             .font(.system(size: 13, weight: .medium))
                             .foregroundColor(.white.opacity(0.8))
                     }

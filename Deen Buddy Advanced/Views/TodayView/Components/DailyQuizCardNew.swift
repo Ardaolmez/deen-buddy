@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DailyQuizCardNew: View {
     @ObservedObject var quizViewModel: QuizViewModel
+    @ObservedObject private var appLanguageManager = AppLanguageManager.shared
     @Binding var selectedQuestionIndex: Int?
     @Binding var showQuizView: Bool
     @Binding var showQuizResults: Bool
@@ -27,7 +28,7 @@ struct DailyQuizCardNew: View {
                 }
                 
 
-                Text("Learn something new every day")
+                Text(AppStrings.today.learnSomethingNew)
                     .font(.system(size: 13, weight: .medium))
                     .foregroundColor(.black.opacity(0.6))
                     .frame(maxWidth: .infinity, alignment: .leading)

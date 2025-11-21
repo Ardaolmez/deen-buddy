@@ -21,8 +21,15 @@ struct VerseNavigationPopup: View {
     @State private var verseSearchText = ""
 
     enum NavigationMode: String, CaseIterable {
-        case surah = "Surah"
-        case juz = "Juz"
+        case surah = "surah"
+        case juz = "juz"
+
+        var displayName: String {
+            switch self {
+            case .surah: return AppStrings.reading.surah
+            case .juz: return AppStrings.reading.juz
+            }
+        }
     }
 
     enum NavigationStep {
@@ -177,9 +184,9 @@ struct VerseNavigationPopup: View {
     private var navigationTitle: String {
         switch step {
         case .juzSelection:
-            return "Select Juz"
+            return AppStrings.reading.selectJuz
         case .surahSelection:
-            return navigationMode == .juz ? "Select Surah" : AppStrings.reading.selectSurah
+            return AppStrings.reading.selectSurah
         case .verseSelection:
             return AppStrings.reading.selectVerse
         }
@@ -224,7 +231,7 @@ struct VerseNavigationPopup: View {
     private var navigationModeToggle: some View {
         Picker("Navigation Mode", selection: $navigationMode) {
             ForEach(NavigationMode.allCases, id: \.self) { mode in
-                Text(mode.rawValue).tag(mode)
+                Text(mode.displayName).tag(mode)
             }
         }
         .pickerStyle(SegmentedPickerStyle())
@@ -280,7 +287,7 @@ struct VerseNavigationPopup: View {
                             }
 
                             // Juz label
-                            Text("Juz \(juz.id)")
+                            Text(String(format: AppStrings.reading.juzFormat, juz.id))
                                 .font(.system(size: 13, weight: .medium))
                                 .foregroundColor(.primary)
 
@@ -309,7 +316,7 @@ struct VerseNavigationPopup: View {
             }
         }
         .scrollDismissesKeyboard(.interactively)
-        .searchable(text: $juzSearchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search Juz...")
+        .searchable(text: $juzSearchText, placement: .navigationBarDrawer(displayMode: .always), prompt: AppStrings.reading.searchJuz)
     }
 
     // MARK: - Step 1 (Surah Mode) / Step 2 (Juz Mode): Surah Selection
@@ -319,11 +326,11 @@ struct VerseNavigationPopup: View {
             // Show selected Juz header when in Juz mode
             if navigationMode == .juz, let juz = selectedJuz {
                 VStack(spacing: 8) {
-                    Text("Juz \(juz.id)")
+                    Text(String(format: AppStrings.reading.juzFormat, juz.id))
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.primary)
 
-                    Text("Surahs \(juz.startSurah) - \(juz.endSurah)")
+                    Text(String(format: AppStrings.reading.surahsRange, juz.startSurah, juz.endSurah))
                         .font(.system(size: 14, weight: .medium))
                         .foregroundColor(.secondary)
                 }
@@ -414,7 +421,7 @@ struct VerseNavigationPopup: View {
                     VStack(spacing: 8) {
                         // Show Juz info when in Juz mode
                         if navigationMode == .juz, let juz = selectedJuz {
-                            Text("Juz \(juz.id)")
+                            Text(String(format: AppStrings.reading.juzFormat, juz.id))
                                 .font(.system(size: 12, weight: .semibold))
                                 .foregroundColor(AppColors.VerseByVerse.accentGreen)
                                 .padding(.horizontal, 12)

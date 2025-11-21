@@ -56,7 +56,7 @@ struct ActivityDetailProgressHeader: View {
                 Text(activity.type.displayName.uppercased())
                     .font(.system(size: 13, weight: .bold))
                     .tracking(1)
-                Text("• \(activity.type.estimatedMinutes) MIN")
+                Text("• " + String(format: AppStrings.today.estimatedTime, activity.type.estimatedMinutes))
                     .font(.system(size: 13, weight: .medium))
             }
             .foregroundColor(.white)

@@ -201,7 +201,7 @@ struct BookmarksListView: View {
                     }
                 }
                 .scrollDismissesKeyboard(.interactively)
-                .searchable(text: $folderSearchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search folders...")
+                .searchable(text: $folderSearchText, placement: .navigationBarDrawer(displayMode: .always), prompt: AppStrings.quran.searchFolders)
             }
         }
     }
@@ -278,7 +278,7 @@ struct BookmarksListView: View {
                     }
                 }
                 .scrollDismissesKeyboard(.interactively)
-                .searchable(text: $verseSearchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search verses...")
+                .searchable(text: $verseSearchText, placement: .navigationBarDrawer(displayMode: .always), prompt: AppStrings.quran.searchVerses)
             }
         }
     }

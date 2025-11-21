@@ -26,22 +26,22 @@ enum PrayerName: String, CaseIterable, Identifiable, Codable, Hashable {
     // Long title for rows/cards
     var title: String {
         switch self {
-        case .fajr:    return "Fajr"
-        case .dhuhr:   return "Dhuhr"
-        case .asr:     return "Asr"
-        case .maghrib: return "Maghrib"
-        case .isha:    return "Isha"
+        case .fajr:    return AppStrings.prayers.fajr
+        case .dhuhr:   return AppStrings.prayers.dhuhr
+        case .asr:     return AppStrings.prayers.asr
+        case .maghrib: return AppStrings.prayers.maghrib
+        case .isha:    return AppStrings.prayers.isha
         }
     }
 
     // Short label (useful for compact UIs if needed)
     var short: String {
         switch self {
-        case .fajr:    return "Fajr"
-        case .dhuhr:   return "Dhuhr"
-        case .asr:     return "Asr"
-        case .maghrib: return "Magh"
-        case .isha:    return "Isha"
+        case .fajr:    return AppStrings.prayers.fajrShort
+        case .dhuhr:   return AppStrings.prayers.dhuhrShort
+        case .asr:     return AppStrings.prayers.asrShort
+        case .maghrib: return AppStrings.prayers.maghribShort
+        case .isha:    return AppStrings.prayers.ishaShort
         }
     }
 

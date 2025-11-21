@@ -1,0 +1,110 @@
+/* Reading Feature Strings - English */
+
+/* Header & Navigation */
+"goal" = "Goal: 5 min";
+"timeFormat" = "%d:%02d";
+"close" = "Close";
+"currentPosition" = "Current: %@";
+
+/* Verse Display */
+"verse" = "Verse %d";
+"surahHeader" = "%@ - %@";
+"versesRemaining" = "%d verses remaining";
+"minutesRemaining" = "%d minutes remaining";
+
+/* Progress & Completion */
+"progress" = "Progress";
+"completed" = "Completed!";
+"keepGoing" = "Keep going!";
+"overallProgress" = "Overall Progress";
+"dailyGoal" = "Daily Goal";
+"goalCompleted" = "Goal Completed! 🎉";
+
+/* Session Management */
+"readingSession" = "Reading Session";
+"sessionEnded" = "Session ended";
+"sessionActive" = "Session Active";
+"totalTimeToday" = "Total time today: %d min";
+"sessionInsights" = "Session Insights";
+
+/* Metrics & Analytics */
+"readingSpeed" = "Reading Speed";
+"versesPerMinute" = "%.1f v/min";
+"estimatedCompletion" = "Est. Completion";
+"readingEfficiency" = "Efficiency";
+"focusScore" = "Focus Score";
+"consistencyScore" = "Consistency";
+
+/* Progress Ring Labels */
+"goalProgress" = "Goal Progress";
+"versesReadToday" = "Verses Read Today";
+"readingTimeToday" = "Reading Time Today";
+"streakCounter" = "%d day streak";
+"bestStreak" = "Best: %d";
+
+/* Achievement & Motivation */
+"currentStreak" = "Current Streak";
+"achievement" = "Achievement!";
+"weekWarrior" = "Week Warrior 🔥";
+"monthlyMaster" = "Monthly Master ⭐";
+"centuryScholar" = "Century Scholar 💎";
+"streakProtection" = "Streak Protection";
+"almostThere" = "Almost there!";
+"keepItUp" = "Keep it up!";
+
+/* Goal Types */
+"oneWeekGoal" = "1 Week Goal";
+"twoWeekGoal" = "2 Week Goal";
+"oneMonthGoal" = "1 Month Goal";
+"threeMonthGoal" = "3 Month Goal";
+"microLearningGoal" = "5 Minutes Daily";
+"versesGoal" = "VERSES\nGOAL";
+"timeGoal" = "5 MIN\nDAILY";
+
+/* Status Indicators */
+"onTrack" = "On Track";
+"ahead" = "Ahead";
+"behind" = "Behind";
+"excellent" = "Excellent";
+"good" = "Good";
+"needsImprovement" = "Needs Improvement";
+
+/* Reading Experience */
+"pageOf" = "Page %d of %d";
+"surahProgress" = "Surah Progress";
+"verseHighlight" = "Current Verse";
+"readingFocus" = "Reading Focus";
+"nightMode" = "Night Mode";
+"fontSizeAdjust" = "Font Size";
+
+/* Adaptive Messages */
+"morningMotivation" = "Start your day with Quran ☀️";
+"afternoonEncouragement" = "Perfect time for reflection 🌅";
+"eveningReminder" = "End your day peacefully 🌙";
+"streakReminder" = "Don't break your %d-day streak!";
+"comebackMessage" = "Welcome back! Let's continue your journey";
+
+/* Error & Loading States */
+"loadingQuran" = "Loading Quran...";
+"errorLoadingData" = "Error loading data";
+"retryLoading" = "Retry";
+"noGoalSet" = "No reading goal set";
+"setGoalPrompt" = "Set a reading goal to get started";
+
+/* Verse Navigation */
+"selectSurah" = "Select Surah";
+"selectVerse" = "Select Verse";
+"selectJuz" = "Select Juz";
+"searchSurah" = "Search Surah...";
+"searchVerse" = "Search Verse...";
+"searchJuz" = "Search Juz...";
+"back" = "Back";
+"cancel" = "Cancel";
+"verses" = "verses";
+"verseCount" = "%d verses";
+"noResults" = "No results found";
+"searchPlaceholder" = "Search by name or number...";
+"juzFormat" = "Juz %d";
+"surahsRange" = "Surahs %d - %d";
+"surah" = "Surah";
+"juz" = "Juz";

@@ -9,10 +9,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var languageManager = LanguageManager.shared
+    @ObservedObject var appLanguageManager = AppLanguageManager.shared
 
     var body: some View {
         NavigationView {
             Form {
+                appLanguageSection
                 languageSection
                 aboutSection
             }
@@ -21,7 +23,21 @@ struct SettingsView: View {
         .navigationViewStyle(.stack)
     }
 
-    // MARK: - Language Section
+    // MARK: - App Language Section
+    private var appLanguageSection: some View {
+        Section(header: Text(AppStrings.settings.appLanguage)) {
+            NavigationLink(destination: LanguageSettingsView()) {
+                HStack {
+                    Text(AppStrings.settings.language)
+                    Spacer()
+                    Text("\(appLanguageManager.currentLanguage.flag) \(appLanguageManager.currentLanguage.displayName)")
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+
+    // MARK: - Quran Translation Section
     private var languageSection: some View {
         Section(header: Text(AppStrings.settings.quranTranslation)) {
             languagePicker

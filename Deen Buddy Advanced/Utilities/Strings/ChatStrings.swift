@@ -7,22 +7,25 @@
 
 import Foundation
 
+private let table = "Chat"
+private var lang: AppLanguageManager { AppLanguageManager.shared }
+
 struct ChatStrings {
-    static let navigationTitle = "Ask a Question"
-    static let chatBoxPrompt = "Ask a Question"
-    static let todayChatBoxPrompt = "What do you have in your mind?"
-    static let inputPlaceholder = "Type your question..."
-    static let inputPlaceholderShort = "Ask me anything…"
-    static let close = "Close"
-    static let botName = "Iman Buddy:"
-    static let welcomeMessage = "Salaam! How can I assist you today?"
+    static var navigationTitle: String { lang.getString("navigationTitle", table: table) }
+    static var chatBoxPrompt: String { lang.getString("chatBoxPrompt", table: table) }
+    static var todayChatBoxPrompt: String { lang.getString("todayChatBoxPrompt", table: table) }
+    static var inputPlaceholder: String { lang.getString("inputPlaceholder", table: table) }
+    static var inputPlaceholderShort: String { lang.getString("inputPlaceholderShort", table: table) }
+    static var close: String { lang.getString("close", table: table) }
+    static var botName: String { lang.getString("botName", table: table) }
+    static var welcomeMessage: String { lang.getString("welcomeMessage", table: table) }
 
     // Loading
-    static let loadingIndicator = "…"
+    static var loadingIndicator: String { lang.getString("loadingIndicator", table: table) }
 
     // Stop button
-    static let stopButton = "Stop"
+    static var stopButton: String { lang.getString("stopButton", table: table) }
 
-    // Citation card
+    // Citation card (not localized - SF Symbol name)
     static let citationIconName = "book.closed.fill"
 }

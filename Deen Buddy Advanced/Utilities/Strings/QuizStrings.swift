@@ -7,41 +7,44 @@
 
 import Foundation
 
+private let table = "Quiz"
+private var lang: AppLanguageManager { AppLanguageManager.shared }
+
 struct QuizStrings {
-    static let navigationTitle = "Daily Quiz"
-    static let nextQuestion = "Next Question"
-    static let seeResults = "See Results"
+    static var navigationTitle: String { lang.getString("navigationTitle", table: table) }
+    static var nextQuestion: String { lang.getString("nextQuestion", table: table) }
+    static var seeResults: String { lang.getString("seeResults", table: table) }
 
     // Quiz Result
-    static let yourIman = "Your Iman:"
-    static let retry = "Retry"
-    static let share = "Share"
-    static let tailoredQuizzes = "Iman Buddy will tailor custom quizzes for you each day based on your knowledge level. Keep going to steadily strengthen your Iman."
+    static var yourIman: String { lang.getString("yourIman", table: table) }
+    static var retry: String { lang.getString("retry", table: table) }
+    static var share: String { lang.getString("share", table: table) }
+    static var tailoredQuizzes: String { lang.getString("tailoredQuizzes", table: table) }
 
     // Grade Messages
-    static let gradeExcellent = "Excellent 🌟"
-    static let gradeGreat = "Great 👍"
-    static let gradeGood = "Good 🙂"
-    static let gradeKeepGoing = "Keep Going 💪"
+    static var gradeExcellent: String { lang.getString("gradeExcellent", table: table) }
+    static var gradeGreat: String { lang.getString("gradeGreat", table: table) }
+    static var gradeGood: String { lang.getString("gradeGood", table: table) }
+    static var gradeKeepGoing: String { lang.getString("gradeKeepGoing", table: table) }
 
     // Share
-    static let shareText = "I scored %@ on Iman Buddy!"
+    static var shareText: String { lang.getString("shareText", table: table) }
 
     // Answer Feedback
-    static let correct = "Correct!"
-    static let incorrect = "Incorrect"
-    static let correctAnswerIs = "The correct answer is:"
-    static let explanation = "Explanation:"
-    static let reference = "Reference:"
-    static let yourAnswer = "Your answer"
-    static let correctAnswer = "Correct answer"
+    static var correct: String { lang.getString("correct", table: table) }
+    static var incorrect: String { lang.getString("incorrect", table: table) }
+    static var correctAnswerIs: String { lang.getString("correctAnswerIs", table: table) }
+    static var explanation: String { lang.getString("explanation", table: table) }
+    static var reference: String { lang.getString("reference", table: table) }
+    static var yourAnswer: String { lang.getString("yourAnswer", table: table) }
+    static var correctAnswer: String { lang.getString("correctAnswer", table: table) }
 
     // Verse Display
-    static let quranVerse = "Quranic Reference:"
+    static var quranVerse: String { lang.getString("quranVerse", table: table) }
 
     // Verse Popup
-    static let versePopupDone = "Done"
-    static let versePopupLoading = "Loading..."
-    static let versePopupError = "Surah not found"
-    static let verseLabel = "Verse"
+    static var versePopupDone: String { lang.getString("versePopupDone", table: table) }
+    static var versePopupLoading: String { lang.getString("versePopupLoading", table: table) }
+    static var versePopupError: String { lang.getString("versePopupError", table: table) }
+    static var verseLabel: String { lang.getString("verseLabel", table: table) }
 }

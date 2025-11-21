@@ -9,22 +9,22 @@
 import Foundation
 import Combine
 
-// App UI languages (currently only English, ready for more)
+// App UI languages
 enum AppLanguage: String, CaseIterable, Codable {
     case english = "en"
+    case turkish = "tr"
     // Future languages ready to uncomment:
     // case arabic = "ar"
     // case urdu = "ur"
-    // case turkish = "tr"
     // case french = "fr"
     // case spanish = "es"
 
     var displayName: String {
         switch self {
         case .english: return "English"
+        case .turkish: return "Türkçe"
         // case .arabic: return "العربية"
         // case .urdu: return "اردو"
-        // case .turkish: return "Türkçe"
         // case .french: return "Français"
         // case .spanish: return "Español"
         }
@@ -33,9 +33,9 @@ enum AppLanguage: String, CaseIterable, Codable {
     var flag: String {
         switch self {
         case .english: return "🇬🇧"
+        case .turkish: return "🇹🇷"
         // case .arabic: return "🇸🇦"
         // case .urdu: return "🇵🇰"
-        // case .turkish: return "🇹🇷"
         // case .french: return "🇫🇷"
         // case .spanish: return "🇪🇸"
         }
@@ -44,7 +44,7 @@ enum AppLanguage: String, CaseIterable, Codable {
     var isRTL: Bool {
         // Right-to-left languages
         switch self {
-        case .english: return false
+        case .english, .turkish: return false
         // case .arabic, .urdu: return true
         // default: return false
         }
@@ -75,12 +75,14 @@ class AppLanguageManager: ObservableObject {
         }
     }
 
-    // This function will be used later for actual translations
-    // For now, it just returns the key
-    func getString(for key: String) -> String {
-        // Future: look up translation based on currentLanguage
-        // For now, just return the English string
-        return key
+    // Load localized string from .strings file based on current language
+    func getString(_ key: String, table: String) -> String {
+        guard let path = Bundle.main.path(forResource: currentLanguage.rawValue, ofType: "lproj"),
+              let bundle = Bundle(path: path) else {
+            // Fallback to main bundle if language bundle not found
+            return NSLocalizedString(key, tableName: table, bundle: .main, comment: "")
+        }
+        return NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
     }
 }
 

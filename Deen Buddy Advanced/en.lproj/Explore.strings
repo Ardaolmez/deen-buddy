@@ -1,0 +1,17 @@
+/* Explore Tab Strings - English */
+
+"navigationTitle" = "Explore";
+"comingSoon" = "Coming Soon";
+"prophetStoriesComingSoon" = "Coming Soon: Stories of the Prophet ﷺ";
+"view" = "View";
+"hijriDateTitle" = "Hijri Date";
+"hijriLocationUnavailable" = "Location unavailable";
+"hijriLoading" = "Fetching today's date...";
+"hijriCalendarTitle" = "Hijri Calendar";
+"hijriCalendarSubtitle" = "Select a date to explore the Hijri calendar";
+"hijriCalendarHint" = "Compare Hijri and Gregorian timelines for any day.";
+"hijriCalendarHijriHeader" = "Hijri";
+"hijriCalendarGregorianHeader" = "Gregorian";
+"hijriCalendarSpecialDatesTitle" = "Jump to a important day";
+"hijriCalendarSpecialDatesPlaceholder" = "Choose a special date";
+"hijriCalendarSpecialDatesReset" = "Reset selection";
