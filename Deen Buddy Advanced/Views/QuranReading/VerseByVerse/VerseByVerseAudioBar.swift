@@ -3,7 +3,7 @@
 //  Deen Buddy Advanced
 //
 //  Audio bar for verse-by-verse reading view
-//  Matches the clean reading view aesthetic
+//  With language/mode selector
 //
 
 import SwiftUI
@@ -13,37 +13,43 @@ struct VerseByVerseAudioBar: View {
     let onSettingsTap: () -> Void
     let onClose: () -> Void
 
+    // Check if Turkish - only Arabic available
+    private var isTurkish: Bool {
+        AppLanguageManager.shared.currentLanguage == .turkish
+    }
+
     var body: some View {
         VStack(spacing: 12) {
-            // Top row: Phase indicator and close button
+            // Top row: Language selector and close button
             HStack {
-                // Current phase pill
-                HStack(spacing: 6) {
-                    Circle()
-                        .fill(phaseColor)
-                        .frame(width: 8, height: 8)
+                // Language/Mode selector - tap to open settings sheet
+                // Disabled when Turkish (only Arabic available)
+                Button(action: onSettingsTap) {
+                    HStack(spacing: 6) {
+                        Circle()
+                            .fill(phaseColor)
+                            .frame(width: 8, height: 8)
 
-                    Text(audioPlayer.phaseLabel)
-                        .font(.system(size: 12, weight: .semibold))
-                        .foregroundColor(AppColors.VerseByVerse.textPrimary)
+                        Text(isTurkish ? CommonStrings.arabic : audioPlayer.savedPreference.displayName)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(isTurkish ? AppColors.VerseByVerse.textSecondary : AppColors.VerseByVerse.textPrimary)
+
+                        if !isTurkish {
+                            Image(systemName: "chevron.down")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor(AppColors.VerseByVerse.textSecondary)
+                        }
+                    }
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(
+                        Capsule()
+                            .fill(Color(.systemGray6))
+                    )
                 }
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(
-                    Capsule()
-                        .fill(Color(.systemGray6))
-                )
+                .disabled(isTurkish)
 
                 Spacer()
-
-                // Settings button
-                Button(action: onSettingsTap) {
-                    Image(systemName: "gearshape.fill")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(AppColors.VerseByVerse.textSecondary)
-                        .frame(width: 32, height: 32)
-                        .background(Circle().fill(Color(.systemGray6)))
-                }
 
                 // Close button
                 Button(action: onClose) {

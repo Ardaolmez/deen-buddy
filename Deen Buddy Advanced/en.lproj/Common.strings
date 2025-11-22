@@ -37,3 +37,9 @@
 /* Text Labels */
 "arabic" = "Arabic";
 "translation" = "Translation";
+"arabicPlusTranslation" = "Arabic + Translation";
+
+/* Audio Preference Descriptions */
+"listenToArabicRecitation" = "Listen to Arabic recitation";
+"listenToTranslation" = "Listen to English translation";
+"arabicFirstThenTranslation" = "Arabic first, then translation";

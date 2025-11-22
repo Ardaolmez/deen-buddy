@@ -5,6 +5,7 @@
 //  Audio player for daily verse with support for Arabic, Translation, or Both
 //  - Arabic: Quran.com API (uses selected reciter)
 //  - English: AlQuran.cloud API (Ibrahim Walk - Sahih International)
+//  - Turkish: iOS Text-to-Speech (AVSpeechSynthesizer)
 //
 
 import Foundation
@@ -12,7 +13,7 @@ import AVFoundation
 import Combine
 
 @MainActor
-class DailyVerseAudioPlayer: ObservableObject {
+class DailyVerseAudioPlayer: NSObject, ObservableObject {
     // MARK: - Published Properties
     @Published var playbackState: PlaybackState = .idle
     @Published var progress: Double = 0.0
@@ -30,6 +31,10 @@ class DailyVerseAudioPlayer: ObservableObject {
     private var player: AVPlayer?
     private var timeObserver: Any?
     private var cancellables = Set<AnyCancellable>()
+
+    // Text-to-Speech for Turkish
+    private var speechSynthesizer: AVSpeechSynthesizer?
+    private var translationText: String?
 
     // Verse info
     private var surahNumber: Int = 1
@@ -63,10 +68,17 @@ class DailyVerseAudioPlayer: ObservableObject {
     }
 
     // MARK: - Initialization
-    init() {
+    override init() {
+        super.init()
         setupAudioSession()
         preference = savedPreference
         observePlaybackEnd()
+        setupSpeechSynthesizer()
+    }
+
+    private func setupSpeechSynthesizer() {
+        speechSynthesizer = AVSpeechSynthesizer()
+        speechSynthesizer?.delegate = self
     }
 
     deinit {
@@ -89,10 +101,11 @@ class DailyVerseAudioPlayer: ObservableObject {
     }
 
     // MARK: - Load Verse
-    func loadVerse(surah: Int, verse: Int, preference: DailyVerseAudioPreference) async {
+    func loadVerse(surah: Int, verse: Int, preference: DailyVerseAudioPreference, translationText: String? = nil) async {
         self.surahNumber = surah
         self.verseNumber = verse
         self.preference = preference
+        self.translationText = translationText
         self.currentPhase = preference == .translationOnly ? .translation : .arabic
 
         playbackState = .loading
@@ -100,8 +113,11 @@ class DailyVerseAudioPlayer: ObservableObject {
         currentTime = 0
         duration = 0
 
-        // Fetch Arabic audio URL from Quran.com API (if needed)
-        if preference != .translationOnly {
+        // If Turkish language, always fetch Arabic (translation disabled)
+        let isTurkish = AppLanguageManager.shared.currentLanguage == .turkish
+
+        // Fetch Arabic audio URL from Quran.com API (if needed or if Turkish)
+        if preference != .translationOnly || isTurkish {
             await fetchArabicAudioURL()
         }
 
@@ -126,8 +142,20 @@ class DailyVerseAudioPlayer: ObservableObject {
     // MARK: - Playback Controls
     func play() {
         if playbackState.isPaused {
+            // Resume TTS if it was paused
+            if speechSynthesizer?.isPaused == true {
+                speechSynthesizer?.continueSpeaking()
+                playbackState = .playing
+                return
+            }
             player?.play()
             playbackState = .playing
+            return
+        }
+
+        // If Turkish language, force Arabic only (Turkish TTS disabled for now)
+        if AppLanguageManager.shared.currentLanguage == .turkish {
+            playArabic()
             return
         }
 
@@ -145,12 +173,14 @@ class DailyVerseAudioPlayer: ObservableObject {
 
     func pause() {
         player?.pause()
+        speechSynthesizer?.pauseSpeaking(at: .immediate)
         playbackState = .paused
     }
 
     func stop() {
         player?.pause()
         player = nil
+        speechSynthesizer?.stopSpeaking(at: .immediate)
         removeTimeObserver()
         playbackState = .idle
         progress = 0
@@ -178,14 +208,80 @@ class DailyVerseAudioPlayer: ObservableObject {
     }
 
     private func playTranslation() {
-        let urlString = EnglishAudioConfig.audioURL(surah: surahNumber, verse: verseNumber)
-        guard let url = URL(string: urlString) else {
-            playbackState = .error("Translation audio not available")
+        currentPhase = .translation
+
+        // Use Turkish TTS if app language is Turkish, otherwise English audio
+        if AppLanguageManager.shared.currentLanguage == .turkish {
+            playTurkishTTS()
+        } else {
+            let urlString = EnglishAudioConfig.audioURL(surah: surahNumber, verse: verseNumber)
+            guard let url = URL(string: urlString) else {
+                playbackState = .error("Translation audio not available")
+                return
+            }
+            playURL(url)
+        }
+    }
+
+    private func playTurkishTTS() {
+        guard let text = translationText, !text.isEmpty else {
+            playbackState = .error("Turkish translation not available")
             return
         }
 
-        currentPhase = .translation
-        playURL(url)
+        // Stop any existing speech
+        speechSynthesizer?.stopSpeaking(at: .immediate)
+
+        let utterance = AVSpeechUtterance(string: text)
+
+        // Try to get the best available Turkish male voice (Cem)
+        // Priority: Premium > Enhanced > Compact > Default
+        // Users can download enhanced voices in: Settings > Accessibility > Spoken Content > Voices > Turkish
+        let voice = getTurkishMaleVoice()
+        utterance.voice = voice
+
+        // Fine-tune the voice
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate * 0.85  // Slower for Quran recitation
+        utterance.pitchMultiplier = 0.95  // Slightly lower pitch for male voice
+        utterance.volume = 1.0
+        utterance.preUtteranceDelay = 0.1
+        utterance.postUtteranceDelay = 0.1
+
+        playbackState = .playing
+        speechSynthesizer?.speak(utterance)
+    }
+
+    private func getTurkishMaleVoice() -> AVSpeechSynthesisVoice? {
+        // Get all available Turkish voices
+        let turkishVoices = AVSpeechSynthesisVoice.speechVoices().filter {
+            $0.language.hasPrefix("tr")
+        }
+
+        // Debug: Print all available Turkish voices
+        print("=== Available Turkish Voices ===")
+        for voice in turkishVoices {
+            print("Name: \(voice.name), ID: \(voice.identifier), Quality: \(voice.quality.rawValue)")
+        }
+        print("================================")
+
+        // Sort by quality (higher is better) and prefer male voice (Cem)
+        let sortedVoices = turkishVoices.sorted { $0.quality.rawValue > $1.quality.rawValue }
+
+        // First try to find Cem (male) with best quality
+        if let maleVoice = sortedVoices.first(where: { $0.name.lowercased().contains("cem") }) {
+            print("Selected male Turkish voice: \(maleVoice.name) - \(maleVoice.identifier)")
+            return maleVoice
+        }
+
+        // If no Cem, look for any male-sounding voice or highest quality
+        if let bestVoice = sortedVoices.first {
+            print("Selected Turkish voice: \(bestVoice.name) - \(bestVoice.identifier)")
+            return bestVoice
+        }
+
+        // Last resort: default Turkish
+        print("Using default Turkish voice")
+        return AVSpeechSynthesisVoice(language: "tr-TR")
     }
 
     private func playURL(_ url: URL) {
@@ -273,8 +369,37 @@ class DailyVerseAudioPlayer: ObservableObject {
 
     var phaseLabel: String {
         switch currentPhase {
-        case .arabic: return "Arabic"
-        case .translation: return "Translation"
+        case .arabic: return CommonStrings.arabic
+        case .translation: return CommonStrings.translation
+        }
+    }
+}
+
+// MARK: - AVSpeechSynthesizerDelegate
+extension DailyVerseAudioPlayer: AVSpeechSynthesizerDelegate {
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+        Task { @MainActor in
+            self.handleTTSFinished()
+        }
+    }
+
+    nonisolated func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+        Task { @MainActor in
+            // TTS was cancelled, do nothing special
+        }
+    }
+
+    @MainActor
+    private func handleTTSFinished() {
+        // If Arabic+Translation mode and Arabic just finished, this won't be called
+        // because Arabic uses AVPlayer, not TTS
+        // This is only called when Turkish TTS finishes
+        if preference == .arabicThenTranslation && currentPhase == .translation {
+            // Translation finished after Arabic
+            stop()
+        } else if preference == .translationOnly {
+            // Translation only mode finished
+            stop()
         }
     }
 }

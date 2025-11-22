@@ -57,4 +57,10 @@ struct CommonStrings {
     // Text Labels
     static var arabic: String { lang.getString("arabic", table: table) }
     static var translation: String { lang.getString("translation", table: table) }
+    static var arabicPlusTranslation: String { lang.getString("arabicPlusTranslation", table: table) }
+
+    // Audio Preference Descriptions
+    static var listenToArabicRecitation: String { lang.getString("listenToArabicRecitation", table: table) }
+    static var listenToTranslation: String { lang.getString("listenToTranslation", table: table) }
+    static var arabicFirstThenTranslation: String { lang.getString("arabicFirstThenTranslation", table: table) }
 }

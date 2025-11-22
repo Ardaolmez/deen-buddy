@@ -37,3 +37,9 @@
 /* Text Labels */
 "arabic" = "Arapça";
 "translation" = "Çeviri";
+"arabicPlusTranslation" = "Arapça + Çeviri";
+
+/* Audio Preference Descriptions */
+"listenToArabicRecitation" = "Arapça dinle";
+"listenToTranslation" = "Çeviriyi dinle";
+"arabicFirstThenTranslation" = "Önce Arapça, sonra çeviri";

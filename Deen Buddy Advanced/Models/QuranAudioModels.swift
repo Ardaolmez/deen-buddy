@@ -15,19 +15,13 @@ import Foundation
 enum AudioLanguage: String, CaseIterable, Codable {
     case arabic = "ar"
     case english = "en"
-    // Future: case turkish = "tr"
+    case turkish = "tr"
 
     var displayName: String {
         switch self {
         case .arabic: return "Arabic"
         case .english: return "English"
-        }
-    }
-
-    var icon: String {
-        switch self {
-        case .arabic: return "🇸🇦"
-        case .english: return "🇬🇧"
+        case .turkish: return "Turkish"
         }
     }
 }
@@ -252,17 +246,17 @@ enum DailyVerseAudioPreference: String, CaseIterable, Codable {
 
     var displayName: String {
         switch self {
-        case .arabicOnly: return "Arabic"
-        case .translationOnly: return "Translation"
-        case .arabicThenTranslation: return "Arabic + Translation"
+        case .arabicOnly: return CommonStrings.arabic
+        case .translationOnly: return CommonStrings.translation
+        case .arabicThenTranslation: return CommonStrings.arabicPlusTranslation
         }
     }
 
     var description: String {
         switch self {
-        case .arabicOnly: return "Listen to Arabic recitation"
-        case .translationOnly: return "Listen to English translation"
-        case .arabicThenTranslation: return "Arabic first, then translation"
+        case .arabicOnly: return CommonStrings.listenToArabicRecitation
+        case .translationOnly: return CommonStrings.listenToTranslation
+        case .arabicThenTranslation: return CommonStrings.arabicFirstThenTranslation
         }
     }
 

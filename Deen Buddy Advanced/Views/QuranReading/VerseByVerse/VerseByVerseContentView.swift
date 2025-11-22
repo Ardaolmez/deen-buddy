@@ -83,12 +83,8 @@ struct VerseByVerseContentView: View {
         }
         .sheet(isPresented: $showPreferenceSheet) {
             AudioPreferenceSheet(
-                currentPreference: audioPlayer?.hasSetPreference == true ? audioPlayer?.savedPreference : nil,
+                currentPreference: audioPlayer?.savedPreference,
                 onSelect: { preference in
-                    // Create player if needed
-                    if audioPlayer == nil {
-                        audioPlayer = DailyVerseAudioPlayer()
-                    }
                     audioPlayer?.savedPreference = preference
                     if let verse = verseContext {
                         loadAndPlayAudio(verse: verse, preference: preference)
@@ -102,6 +98,18 @@ struct VerseByVerseContentView: View {
                 audioPlayer?.stop()
                 showAudioBar = false
             }
+        }
+        .onChange(of: isCurrentPage) { isCurrent in
+            // Stop audio when this page is no longer current
+            if !isCurrent && showAudioBar {
+                audioPlayer?.stop()
+                showAudioBar = false
+            }
+        }
+        .onDisappear {
+            // Stop audio when view disappears
+            audioPlayer?.stop()
+            showAudioBar = false
         }
     }
 
@@ -265,18 +273,23 @@ struct VerseByVerseContentView: View {
                     .shadow(color: AppColors.VerseByVerse.shadowPrimary, radius: 8, x: 0, y: 4)
                     .shadow(color: showAudioBar ? AppColors.Prayers.prayerGreen.opacity(0.3) : AppColors.VerseByVerse.glowGold, radius: 12, x: 0, y: 0)
 
-                // Verse number or audio icon
-                if showAudioBar && audioPlayer?.playbackState.isPlaying == true {
-                    Image(systemName: "pause.fill")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(AppColors.Prayers.prayerGreen)
-                } else if showAudioBar {
+                // When audio bar CLOSED: show play icon (hint to tap)
+                // When audio bar OPEN: show verse number (or pause if playing)
+                if showAudioBar {
+                    // Audio bar is open - show verse number or pause icon
+                    if audioPlayer?.playbackState.isPlaying == true {
+                        Image(systemName: "pause.fill")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(AppColors.Prayers.prayerGreen)
+                    } else {
+                        Text("\(number)")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundColor(AppColors.Prayers.prayerGreen)
+                    }
+                } else {
+                    // Audio bar is closed - show play icon as hint
                     Image(systemName: "play.fill")
                         .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(AppColors.Prayers.prayerGreen)
-                } else {
-                    Text("\(number)")
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
                         .foregroundColor(AppColors.VerseByVerse.verseNumberText)
                 }
             }
@@ -305,12 +318,9 @@ struct VerseByVerseContentView: View {
                 audioPlayer = DailyVerseAudioPlayer()
             }
 
-            // Open audio bar
-            if audioPlayer?.hasSetPreference != true {
-                showPreferenceSheet = true
-            } else if let preference = audioPlayer?.savedPreference {
-                loadAndPlayAudio(verse: verse, preference: preference)
-            }
+            // Start playing with saved preference (defaults to Arabic)
+            let preference = audioPlayer?.savedPreference ?? .arabicOnly
+            loadAndPlayAudio(verse: verse, preference: preference)
         }
 
         // Haptic feedback
@@ -331,8 +341,11 @@ struct VerseByVerseContentView: View {
             showAudioBar = true
         }
 
+        // Pass translation text for Turkish TTS
+        let translationText = verse.verse.translation
+
         Task {
-            await audioPlayer?.loadVerse(surah: surahId, verse: verseId, preference: preference)
+            await audioPlayer?.loadVerse(surah: surahId, verse: verseId, preference: preference, translationText: translationText)
             audioPlayer?.play()
         }
     }
