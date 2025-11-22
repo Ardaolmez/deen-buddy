@@ -72,7 +72,8 @@ struct DailyActivityDetailView: View {
                             onNext: {
                                 navigateToNext()
                             },
-                            safeAreaBottom: geometry.safeAreaInsets.bottom
+                            safeAreaBottom: geometry.safeAreaInsets.bottom,
+                            isLastActivity: isOnLastActivity()
                         )
                     }
                 }
@@ -142,6 +143,14 @@ struct DailyActivityDetailView: View {
         }
     }
 
+    private func isOnLastActivity() -> Bool {
+        guard !allActivities.isEmpty else { return false }
+        guard let currentIndex = allActivities.firstIndex(where: { $0.type == currentActivity.type }) else {
+            return false
+        }
+        return currentIndex == allActivities.count - 1
+    }
+
     private func navigateToNext() {
         guard !allActivities.isEmpty else { return }
 
@@ -150,8 +159,14 @@ struct DailyActivityDetailView: View {
             return
         }
 
-        // Get next index (cycle back to 0 if at the end)
-        let nextIndex = (currentIndex + 1) % allActivities.count
+        // If on last activity, dismiss the view instead of cycling
+        if currentIndex == allActivities.count - 1 {
+            presentationMode.wrappedValue.dismiss()
+            return
+        }
+
+        // Get next activity
+        let nextIndex = currentIndex + 1
         let nextActivity = allActivities[nextIndex]
 
         withAnimation(.easeInOut(duration: 0.3)) {

@@ -12,6 +12,7 @@ struct ActivityDetailActionBar: View {
     let onChat: () -> Void
     let onNext: () -> Void
     let safeAreaBottom: CGFloat
+    var isLastActivity: Bool = false
 
     var body: some View {
         HStack(spacing: 12) {
@@ -54,9 +55,9 @@ struct ActivityDetailActionBar: View {
                 )
             }
 
-            // Next button - always visible
+            // Next/Done button - shows checkmark on last activity
             Button(action: onNext) {
-                Image(systemName: "arrow.right")
+                Image(systemName: isLastActivity ? "checkmark" : "arrow.right")
                     .font(.system(size: 20, weight: .semibold))
                     .foregroundColor(AppColors.Today.activityDetailNextButtonText)
                     .frame(width: 56, height: 56)
