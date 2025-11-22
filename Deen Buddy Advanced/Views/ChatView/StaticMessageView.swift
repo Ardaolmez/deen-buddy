@@ -95,35 +95,39 @@ struct StaticTextWithCitationsView: View {
 
     var body: some View {
         let parsed = parsedData
-        let segments = buildSegments(cleanText: parsed.cleanText, citationPositions: parsed.citationPositions)
+        let paragraphs = buildParagraphs(cleanText: parsed.cleanText, citationPositions: parsed.citationPositions)
 
-        FlowLayout(spacing: 0) {
-            ForEach(Array(segments.enumerated()), id: \.offset) { index, segment in
-                if let text = segment.text, !text.isEmpty {
-                    Text(text)
-                        .font(.system(size: 18, weight: .regular, design: .serif))
-                        .foregroundStyle(.primary)
-                } else if let citation = segment.citation {
-                    Button(action: {
-                        onCitationTap?(citation)
-                    }) {
-                        HStack(spacing: 6) {
-                            Image(systemName: AppStrings.chat.citationIconName)
-                                .font(.system(size: 10, weight: .semibold))
-                                .foregroundColor(AppColors.Chat.citationCardIcon(for: colorScheme))
+        VStack(alignment: .leading, spacing: 12) {
+            ForEach(Array(paragraphs.enumerated()), id: \.offset) { paragraphIndex, segments in
+                FlowLayout(spacing: 0) {
+                    ForEach(Array(segments.enumerated()), id: \.offset) { index, segment in
+                        if let text = segment.text, !text.isEmpty {
+                            Text(text)
+                                .font(.system(size: 18, weight: .regular, design: .serif))
+                                .foregroundStyle(.primary)
+                        } else if let citation = segment.citation {
+                            Button(action: {
+                                onCitationTap?(citation)
+                            }) {
+                                HStack(spacing: 6) {
+                                    Image(systemName: AppStrings.chat.citationIconName)
+                                        .font(.system(size: 10, weight: .semibold))
+                                        .foregroundColor(AppColors.Chat.citationCardIcon(for: colorScheme))
 
-                            Text("\(citation.surah) \(citation.ayah)")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundColor(AppColors.Chat.citationCardText(for: colorScheme))
+                                    Text("\(citation.surah) \(citation.ayah)")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(AppColors.Chat.citationCardText(for: colorScheme))
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                        .fill(AppColors.Chat.citationCardBackground(for: colorScheme))
+                                )
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(
-                            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                .fill(AppColors.Chat.citationCardBackground(for: colorScheme))
-                        )
                     }
-                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }
@@ -134,21 +138,79 @@ struct StaticTextWithCitationsView: View {
         let citation: Citation?
     }
 
-    private func buildSegments(cleanText: String, citationPositions: [CitationPosition]) -> [Segment] {
+    /// Builds paragraphs - each paragraph is an array of segments
+    private func buildParagraphs(cleanText: String, citationPositions: [CitationPosition]) -> [[Segment]] {
+        // Split text into paragraphs by newlines
+        let paragraphTexts = cleanText.components(separatedBy: "\n").filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+
+        var paragraphs: [[Segment]] = []
+        var currentCharIndex = 0
+
+        for paragraphText in paragraphTexts {
+            // Find where this paragraph starts in the original clean text
+            if let range = cleanText.range(of: paragraphText, range: cleanText.index(cleanText.startIndex, offsetBy: currentCharIndex)..<cleanText.endIndex) {
+                let paragraphStart = cleanText.distance(from: cleanText.startIndex, to: range.lowerBound)
+                let paragraphEnd = paragraphStart + paragraphText.count
+
+                // Get citations that fall within this paragraph
+                let paragraphCitations = citationPositions.filter {
+                    $0.characterIndex >= paragraphStart && $0.characterIndex <= paragraphEnd
+                }
+
+                // Build segments for this paragraph
+                let segments = buildSegmentsForParagraph(
+                    paragraphText: paragraphText,
+                    paragraphStart: paragraphStart,
+                    citations: paragraphCitations
+                )
+
+                if !segments.isEmpty {
+                    paragraphs.append(segments)
+                }
+
+                currentCharIndex = paragraphEnd
+            }
+        }
+
+        // If no paragraphs found (no newlines), treat entire text as one paragraph
+        if paragraphs.isEmpty && !cleanText.isEmpty {
+            let segments = buildSegmentsForParagraph(
+                paragraphText: cleanText,
+                paragraphStart: 0,
+                citations: citationPositions
+            )
+            if !segments.isEmpty {
+                paragraphs.append(segments)
+            }
+        }
+
+        return paragraphs
+    }
+
+    private func buildSegmentsForParagraph(paragraphText: String, paragraphStart: Int, citations: [CitationPosition]) -> [Segment] {
         var segments: [Segment] = []
-        var lastIndex = 0
         var isFirstSegment = true
+        var lastLocalIndex = 0
 
-        for citationPos in citationPositions {
-            if citationPos.characterIndex > lastIndex {
-                let startIdx = cleanText.index(cleanText.startIndex, offsetBy: lastIndex)
-                let endIdx = cleanText.index(cleanText.startIndex, offsetBy: citationPos.characterIndex)
-                let textSegment = String(cleanText[startIdx..<endIdx])
+        // Sort citations by position
+        let sortedCitations = citations.sorted { $0.characterIndex < $1.characterIndex }
 
-                let words = textSegment.components(separatedBy: " ")
+        for citationPos in sortedCitations {
+            // Convert global index to local paragraph index
+            let localCitationIndex = citationPos.characterIndex - paragraphStart
+
+            // Only process if citation is within this paragraph's bounds
+            guard localCitationIndex >= 0 && localCitationIndex <= paragraphText.count else { continue }
+
+            if localCitationIndex > lastLocalIndex {
+                let startIdx = paragraphText.index(paragraphText.startIndex, offsetBy: lastLocalIndex)
+                let endIdx = paragraphText.index(paragraphText.startIndex, offsetBy: min(localCitationIndex, paragraphText.count))
+                let textSegment = String(paragraphText[startIdx..<endIdx])
+
+                // Split by whitespace (space, tab, etc.) but not newlines since we already split by those
+                let words = textSegment.components(separatedBy: .whitespaces)
                 for word in words {
                     if !word.isEmpty {
-                        // Add space before word (except very first segment)
                         if !isFirstSegment {
                             segments.append(Segment(text: " ", citation: nil))
                         }
@@ -158,23 +220,23 @@ struct StaticTextWithCitationsView: View {
                 }
             }
 
-            // Add space before citation card (unless it's the first segment)
+            // Add citation
             if !isFirstSegment {
                 segments.append(Segment(text: " ", citation: nil))
             }
             segments.append(Segment(text: nil, citation: citationPos.citation))
             isFirstSegment = false
-            lastIndex = citationPos.characterIndex
+            lastLocalIndex = localCitationIndex
         }
 
-        if lastIndex < cleanText.count {
-            let startIdx = cleanText.index(cleanText.startIndex, offsetBy: lastIndex)
-            let remainingText = String(cleanText[startIdx...])
+        // Add remaining text after last citation
+        if lastLocalIndex < paragraphText.count {
+            let startIdx = paragraphText.index(paragraphText.startIndex, offsetBy: lastLocalIndex)
+            let remainingText = String(paragraphText[startIdx...])
 
-            let words = remainingText.components(separatedBy: " ")
+            let words = remainingText.components(separatedBy: .whitespaces)
             for word in words {
                 if !word.isEmpty {
-                    // Add space before word (except very first segment)
                     if !isFirstSegment {
                         segments.append(Segment(text: " ", citation: nil))
                     }
