@@ -285,11 +285,21 @@ class DailyVerseAudioPlayer: NSObject, ObservableObject {
     }
 
     private func playURL(_ url: URL) {
+        // Fully clean up previous player to prevent audio mixing
         removeTimeObserver()
         player?.pause()
+        player?.replaceCurrentItem(with: nil)
+        player = nil
 
-        let playerItem = AVPlayerItem(url: url)
+        // Create fresh player with AVURLAsset for better streaming control
+        let asset = AVURLAsset(url: url, options: [
+            AVURLAssetPreferPreciseDurationAndTimingKey: true
+        ])
+        let playerItem = AVPlayerItem(asset: asset)
+
+        // Create new player
         player = AVPlayer(playerItem: playerItem)
+        player?.automaticallyWaitsToMinimizeStalling = false
 
         addTimeObserver()
 
@@ -331,9 +341,16 @@ class DailyVerseAudioPlayer: NSObject, ObservableObject {
     // MARK: - Playback End Observer
     private func observePlaybackEnd() {
         NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime)
-            .sink { [weak self] _ in
+            .sink { [weak self] notification in
                 Task { @MainActor in
-                    self?.handlePlaybackEnded()
+                    // IMPORTANT: Only handle if this notification is for OUR current player item
+                    guard let self = self,
+                          let finishedItem = notification.object as? AVPlayerItem,
+                          let currentItem = self.player?.currentItem,
+                          finishedItem === currentItem else {
+                        return
+                    }
+                    self.handlePlaybackEnded()
                 }
             }
             .store(in: &cancellables)
