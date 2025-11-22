@@ -15,6 +15,11 @@ struct VerseByVerseContentView: View {
     @ObservedObject private var bookmarksManager = BookmarksManager.shared
     @State private var showBookmarkPopup = false
 
+    // Audio state - lazy loaded to avoid slow initialization on every page
+    @State private var audioPlayer: DailyVerseAudioPlayer?
+    @State private var showAudioBar = false
+    @State private var showPreferenceSheet = false
+
     var verseContext: VerseWithContext? {
         page.verses.first
     }
@@ -41,6 +46,23 @@ struct VerseByVerseContentView: View {
                         // Verse number badge with favorite and bookmark buttons
                         verseActionsRow(verse: verse)
 
+                        // Audio bar (shown when listening)
+                        if showAudioBar, let player = audioPlayer {
+                            VerseByVerseAudioBar(
+                                audioPlayer: player,
+                                onSettingsTap: {
+                                    showPreferenceSheet = true
+                                },
+                                onClose: {
+                                    player.stop()
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        showAudioBar = false
+                                    }
+                                }
+                            )
+                            .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                        }
+
                         // English translation - centered
                         translationTextView(verse: verse)
                     }
@@ -57,6 +79,28 @@ struct VerseByVerseContentView: View {
                     surahId: getSurahIdFromContext(verse),
                     verseId: verse.verseNumber
                 )
+            }
+        }
+        .sheet(isPresented: $showPreferenceSheet) {
+            AudioPreferenceSheet(
+                currentPreference: audioPlayer?.hasSetPreference == true ? audioPlayer?.savedPreference : nil,
+                onSelect: { preference in
+                    // Create player if needed
+                    if audioPlayer == nil {
+                        audioPlayer = DailyVerseAudioPlayer()
+                    }
+                    audioPlayer?.savedPreference = preference
+                    if let verse = verseContext {
+                        loadAndPlayAudio(verse: verse, preference: preference)
+                    }
+                }
+            )
+        }
+        .onChange(of: page.id) { _ in
+            // Stop audio when page changes
+            if showAudioBar {
+                audioPlayer?.stop()
+                showAudioBar = false
             }
         }
     }
@@ -176,8 +220,8 @@ struct VerseByVerseContentView: View {
             }
             .buttonStyle(PlainButtonStyle())
 
-            // Verse number badge
-            verseNumberBadge(number: verse.verseNumber)
+            // Verse number badge (tap for audio)
+            verseNumberBadge(number: verse.verseNumber, verse: verse)
 
             // Bookmark button
             Button(action: {
@@ -205,23 +249,91 @@ struct VerseByVerseContentView: View {
         }
     }
 
-    private func verseNumberBadge(number: Int) -> some View {
-        ZStack {
-            // Background with border
-            RoundedRectangle(cornerRadius: 12)
-                .fill(AppColors.VerseByVerse.verseNumberBackground)
-                .frame(width: 60, height: 60)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(AppColors.VerseByVerse.verseNumberBorder, lineWidth: 2)
-                )
-                .shadow(color: AppColors.VerseByVerse.shadowPrimary, radius: 8, x: 0, y: 4)
-                .shadow(color: AppColors.VerseByVerse.glowGold, radius: 12, x: 0, y: 0)
+    private func verseNumberBadge(number: Int, verse: VerseWithContext) -> some View {
+        Button(action: {
+            handleAudioTap(verse: verse)
+        }) {
+            ZStack {
+                // Background with border - changes when audio is playing
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(showAudioBar ? AppColors.Prayers.prayerGreen.opacity(0.15) : AppColors.VerseByVerse.verseNumberBackground)
+                    .frame(width: 60, height: 60)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(showAudioBar ? AppColors.Prayers.prayerGreen : AppColors.VerseByVerse.verseNumberBorder, lineWidth: 2)
+                    )
+                    .shadow(color: AppColors.VerseByVerse.shadowPrimary, radius: 8, x: 0, y: 4)
+                    .shadow(color: showAudioBar ? AppColors.Prayers.prayerGreen.opacity(0.3) : AppColors.VerseByVerse.glowGold, radius: 12, x: 0, y: 0)
 
-            // Verse number
-            Text("\(number)")
-                .font(.system(size: 24, weight: .bold, design: .rounded))
-                .foregroundColor(AppColors.VerseByVerse.verseNumberText)
+                // Verse number or audio icon
+                if showAudioBar && audioPlayer?.playbackState.isPlaying == true {
+                    Image(systemName: "pause.fill")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(AppColors.Prayers.prayerGreen)
+                } else if showAudioBar {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(AppColors.Prayers.prayerGreen)
+                } else {
+                    Text("\(number)")
+                        .font(.system(size: 24, weight: .bold, design: .rounded))
+                        .foregroundColor(AppColors.VerseByVerse.verseNumberText)
+                }
+            }
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    // MARK: - Audio Helpers
+
+    private func handleAudioTap(verse: VerseWithContext) {
+        if showAudioBar, let player = audioPlayer {
+            // Toggle play/pause if audio bar is already shown
+            if player.playbackState.isPlaying {
+                player.pause()
+            } else if player.playbackState.isPaused {
+                player.play()
+            } else {
+                // Stopped - close the bar
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    showAudioBar = false
+                }
+            }
+        } else {
+            // Create player lazily if needed
+            if audioPlayer == nil {
+                audioPlayer = DailyVerseAudioPlayer()
+            }
+
+            // Open audio bar
+            if audioPlayer?.hasSetPreference != true {
+                showPreferenceSheet = true
+            } else if let preference = audioPlayer?.savedPreference {
+                loadAndPlayAudio(verse: verse, preference: preference)
+            }
+        }
+
+        // Haptic feedback
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+    }
+
+    private func loadAndPlayAudio(verse: VerseWithContext, preference: DailyVerseAudioPreference) {
+        let surahId = getSurahIdFromContext(verse)
+        let verseId = verse.verseNumber
+
+        // Create player if needed
+        if audioPlayer == nil {
+            audioPlayer = DailyVerseAudioPlayer()
+        }
+
+        withAnimation(.easeInOut(duration: 0.3)) {
+            showAudioBar = true
+        }
+
+        Task {
+            await audioPlayer?.loadVerse(surah: surahId, verse: verseId, preference: preference)
+            audioPlayer?.play()
         }
     }
 

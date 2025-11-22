@@ -241,3 +241,71 @@ enum PlaybackState: Equatable {
         return false
     }
 }
+
+// MARK: - Daily Verse Audio Preference
+
+/// User's preferred audio mode for daily verse playback
+enum DailyVerseAudioPreference: String, CaseIterable, Codable {
+    case arabicOnly = "arabic_only"
+    case translationOnly = "translation_only"
+    case arabicThenTranslation = "arabic_then_translation"
+
+    var displayName: String {
+        switch self {
+        case .arabicOnly: return "Arabic"
+        case .translationOnly: return "Translation"
+        case .arabicThenTranslation: return "Arabic + Translation"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .arabicOnly: return "Listen to Arabic recitation"
+        case .translationOnly: return "Listen to English translation"
+        case .arabicThenTranslation: return "Arabic first, then translation"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .arabicOnly: return "speaker.wave.2.fill"
+        case .translationOnly: return "globe"
+        case .arabicThenTranslation: return "arrow.right.circle.fill"
+        }
+    }
+}
+
+// MARK: - Verse Reference Parser
+
+/// Utility to parse verse references like "Surah Al-Baqarah 2:45" or "Al-Baqarah 2:45"
+struct VerseReferenceParser {
+    /// Parse a reference string and extract surah and verse numbers
+    /// - Parameter reference: Reference string like "Surah Al-Baqarah 2:45"
+    /// - Returns: Tuple of (surahNumber, verseNumber) if parseable, nil otherwise
+    static func parse(_ reference: String?) -> (surah: Int, verse: Int)? {
+        guard let reference = reference else { return nil }
+
+        // Try to find pattern like "2:45" or "114:6"
+        let pattern = #"(\d+):(\d+)"#
+        guard let regex = try? NSRegularExpression(pattern: pattern),
+              let match = regex.firstMatch(in: reference, range: NSRange(reference.startIndex..., in: reference)) else {
+            return nil
+        }
+
+        // Extract surah and verse numbers
+        guard let surahRange = Range(match.range(at: 1), in: reference),
+              let verseRange = Range(match.range(at: 2), in: reference),
+              let surah = Int(reference[surahRange]),
+              let verse = Int(reference[verseRange]) else {
+            return nil
+        }
+
+        // Validate ranges
+        guard surah >= 1, surah <= 114,
+              verse >= 1, verse <= QuranVerseHelper.verseCount(for: surah) else {
+            return nil
+        }
+
+        return (surah, verse)
+    }
+}
