@@ -46,15 +46,21 @@ final class CloudflareChatService: ChatService {
         // Add current user message
         messages.append(["role": "user", "content": userText])
 
+        // Get current app language
+        let language = AppLanguageManager.shared.currentLanguage.rawValue
+
         // Debug logging
-        print("🌐 [CloudflareChat] History count: \(history.count), Total messages: \(messages.count)")
+        print("🌐 [CloudflareChat] History count: \(history.count), Total messages: \(messages.count), Language: \(language)")
         print("🌐 [CloudflareChat] Messages being sent:")
         for (i, msg) in messages.enumerated() {
             print("  [\(i)] \(msg["role"] ?? "?"): \(msg["content"]?.prefix(50) ?? "?")")
         }
 
-        // Request body
-        let body: [String: Any] = ["messages": messages]
+        // Request body with language
+        let body: [String: Any] = [
+            "messages": messages,
+            "language": language
+        ]
         guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
             return Just(ChatServiceResponse(
                 answer: "Error: Could not encode request",

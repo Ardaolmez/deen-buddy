@@ -56,6 +56,41 @@ RESPONSE STRUCTURE (Follow this order, if it is applicable):
 
 If no verse is cited, return empty citations array: "citations": []`;
 
+// Language configurations - easily scalable
+const languageConfig = {
+  en: {
+    name: 'English',
+    instruction: '' // Default, no extra instruction needed
+  },
+  tr: {
+    name: 'Turkish',
+    instruction: '\n\n🌍 LANGUAGE: Respond in Turkish (Türkçe). Use Turkish Islamic phrases like "Allah razı olsun", "İnşallah", "Maşallah", "Elhamdülillah". Keep the verse citation format ^[Quran X:Y] in English but translate the verse quote to Turkish.'
+  },
+  ar: {
+    name: 'Arabic',
+    instruction: '\n\n🌍 LANGUAGE: Respond in Arabic (العربية). Use Arabic Islamic phrases naturally. Keep the verse citation format ^[Quran X:Y] in English but quote the verse in Arabic.'
+  },
+  ur: {
+    name: 'Urdu',
+    instruction: '\n\n🌍 LANGUAGE: Respond in Urdu (اردو). Use Urdu Islamic phrases naturally. Keep the verse citation format ^[Quran X:Y] in English but translate the verse quote to Urdu.'
+  },
+  id: {
+    name: 'Indonesian',
+    instruction: '\n\n🌍 LANGUAGE: Respond in Indonesian (Bahasa Indonesia). Use Indonesian Islamic phrases naturally. Keep the verse citation format ^[Quran X:Y] in English but translate the verse quote to Indonesian.'
+  },
+  ms: {
+    name: 'Malay',
+    instruction: '\n\n🌍 LANGUAGE: Respond in Malay (Bahasa Melayu). Use Malay Islamic phrases naturally. Keep the verse citation format ^[Quran X:Y] in English but translate the verse quote to Malay.'
+  }
+  // Add more languages here as needed
+};
+
+// Build final prompt with language
+function buildPrompt(language = 'en') {
+  const lang = languageConfig[language] || languageConfig.en;
+  return systemPrompt + lang.instruction;
+}
+
 // Estimate tokens (rough approximation: ~4 chars per token)
 function estimateTokens(text) {
   return Math.ceil(text.length / 4);
@@ -82,7 +117,7 @@ function trimMessagesToFitBudget(messages, maxTokens = 8000) {
 }
 
 // Core function to call Z.AI API (OpenAI-compatible)
-async function askMyDeen(messages, env) {
+async function askMyDeen(messages, env, language = 'en') {
   try {
     // Z.AI API configuration
     const apiUrl = 'https://api.z.ai/api/coding/paas/v4/chat/completions';
@@ -91,6 +126,9 @@ async function askMyDeen(messages, env) {
     if (!apiKey) {
       throw new Error('ANTHROPIC_AUTH_TOKEN is not configured');
     }
+
+    // Build prompt with language
+    const finalPrompt = buildPrompt(language);
 
     // Trim messages to fit budget
     const trimmedMessages = trimMessagesToFitBudget(messages);
@@ -106,7 +144,7 @@ async function askMyDeen(messages, env) {
         messages: [
           {
             role: 'system',
-            content: systemPrompt
+            content: finalPrompt
           },
           ...trimmedMessages
         ],
@@ -257,6 +295,9 @@ export default {
           }
         }
 
+        // Get language from request (default to English)
+        const language = body.language || 'en';
+
         // Log incoming question
         const ip = request.headers.get('CF-Connecting-IP');
         const userAgent = request.headers.get('User-Agent');
@@ -267,13 +308,14 @@ export default {
           timestamp: new Date().toISOString(),
           question: lastUserMessage,
           conversationLength: messages.length,
+          language,
           ip,
           country
         }));
 
         // Process the conversation
         const startTime = Date.now();
-        const result = await askMyDeen(messages, env);
+        const result = await askMyDeen(messages, env, language);
         const processingTime = Date.now() - startTime;
 
         // Log successful response
@@ -282,6 +324,7 @@ export default {
           messageCount: messages.length,
           answerPreview: result.answer?.substring(0, 100),
           citationCount: result.citations?.length || 0,
+          language,
           ip,
           country,
           userAgent,
