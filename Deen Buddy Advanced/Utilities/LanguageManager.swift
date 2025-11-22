@@ -11,11 +11,13 @@ import Combine
 // Supported languages for Quran translations
 enum QuranLanguage: String, CaseIterable, Codable {
     case english = "en"
+    case turkish = "tr"
     case arabic = "ar"
 
     var displayName: String {
         switch self {
         case .english: return "English"
+        case .turkish: return "Türkçe"
         case .arabic: return "العربية (Arabic)"
         }
     }
@@ -26,6 +28,14 @@ enum QuranLanguage: String, CaseIterable, Codable {
             return "quran" // Arabic only file has no language suffix
         }
         return "quran_\(rawValue)"
+    }
+
+    /// Get the corresponding QuranLanguage for an AppLanguage
+    static func fromAppLanguage(_ appLanguage: AppLanguage) -> QuranLanguage {
+        switch appLanguage {
+        case .english: return .english
+        case .turkish: return .turkish
+        }
     }
 }
 
@@ -42,12 +52,31 @@ class LanguageManager: ObservableObject {
     private let userDefaultsKey = "selectedQuranLanguage"
 
     private init() {
-        // Load saved language or default to English
+        // Load saved language or default based on app language
         if let savedLanguage = UserDefaults.standard.string(forKey: userDefaultsKey),
            let language = QuranLanguage(rawValue: savedLanguage) {
             self.selectedLanguage = language
         } else {
-            self.selectedLanguage = .english
+            // No saved preference - sync with app language
+            let appLanguage = AppLanguageManager.shared.currentLanguage
+            self.selectedLanguage = QuranLanguage.fromAppLanguage(appLanguage)
+        }
+
+        // Listen for app language changes to auto-update Quran language
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appLanguageDidChange),
+            name: .appLanguageChanged,
+            object: nil
+        )
+    }
+
+    @objc private func appLanguageDidChange() {
+        // Auto-sync Quran language with app language
+        let appLanguage = AppLanguageManager.shared.currentLanguage
+        let newQuranLanguage = QuranLanguage.fromAppLanguage(appLanguage)
+        if selectedLanguage != newQuranLanguage {
+            selectedLanguage = newQuranLanguage
         }
     }
 

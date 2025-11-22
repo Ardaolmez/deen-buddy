@@ -24,43 +24,18 @@ struct VerseByVerseReadingView: View {
               let firstVerse = pages[currentPageIndex].verses.first else {
             return "Quran"
         }
-        let surahEnglishName = getSurahEnglishName(for: getSurahIdFromContext(firstVerse))
-        return "\(surahEnglishName) (\(firstVerse.surahTransliteration)) - Verse \(firstVerse.verseNumber)"
+        let surahTranslation = getSurahTranslation(for: getSurahIdFromContext(firstVerse))
+        let verseText = String(format: ReadingStrings.verse, firstVerse.verseNumber)
+        return "\(surahTranslation) (\(firstVerse.surahTransliteration)) - \(verseText)"
     }
 
-    private func getSurahEnglishName(for surahId: Int) -> String {
-        let surahNames = [
-            1: "The Opening", 2: "The Cow", 3: "The Family of Imran", 4: "The Women",
-            5: "The Table", 6: "The Cattle", 7: "The Heights", 8: "The Spoils of War",
-            9: "The Repentance", 10: "Jonah", 11: "Hud", 12: "Joseph",
-            13: "The Thunder", 14: "Abraham", 15: "The Rocky Tract", 16: "The Bees",
-            17: "The Night Journey", 18: "The Cave", 19: "Mary", 20: "Ta-Ha",
-            21: "The Prophets", 22: "The Pilgrimage", 23: "The Believers", 24: "The Light",
-            25: "The Criterion", 26: "The Poets", 27: "The Ants", 28: "The Stories",
-            29: "The Spider", 30: "The Romans", 31: "Luqman", 32: "The Prostration",
-            33: "The Combined Forces", 34: "Sheba", 35: "The Originator", 36: "Ya-Sin",
-            37: "Those Ranged in Ranks", 38: "Sad", 39: "The Groups", 40: "The Forgiver",
-            41: "Distinguished", 42: "The Consultation", 43: "The Gold", 44: "The Smoke",
-            45: "The Kneeling", 46: "The Valley", 47: "Muhammad", 48: "The Victory",
-            49: "The Dwellings", 50: "Qaf", 51: "The Scatterers", 52: "The Mount",
-            53: "The Star", 54: "The Moon", 55: "The Most Gracious", 56: "The Event",
-            57: "The Iron", 58: "The Reasoning", 59: "The Gathering", 60: "The Tested",
-            61: "The Ranks", 62: "Friday", 63: "The Hypocrites", 64: "The Loss & Gain",
-            65: "The Divorce", 66: "The Prohibition", 67: "The Kingdom", 68: "The Pen",
-            69: "The Inevitable", 70: "The Levels", 71: "Noah", 72: "The Jinn",
-            73: "The Wrapped", 74: "The Covered", 75: "The Resurrection", 76: "The Human",
-            77: "Those Sent", 78: "The Great News", 79: "Those Who Pull", 80: "He Frowned",
-            81: "The Overthrowing", 82: "The Cleaving", 83: "The Defrauders", 84: "The Splitting",
-            85: "The Stars", 86: "The Nightcomer", 87: "The Most High", 88: "The Overwhelming",
-            89: "The Dawn", 90: "The City", 91: "The Sun", 92: "The Night",
-            93: "The Forenoon", 94: "The Opening-Up", 95: "The Fig", 96: "The Clot",
-            97: "The Night of Decree", 98: "The Clear Evidence", 99: "The Earthquake", 100: "The Runners",
-            101: "The Striking Hour", 102: "The Piling Up", 103: "The Time", 104: "The Slanderer",
-            105: "The Elephant", 106: "Quraish", 107: "The Small Kindnesses", 108: "The River in Paradise",
-            109: "The Disbelievers", 110: "The Help", 111: "The Palm Fiber", 112: "The Sincerity",
-            113: "The Daybreak", 114: "The People"
-        ]
-        return surahNames[surahId] ?? "Unknown"
+    private func getSurahTranslation(for surahId: Int) -> String {
+        // Get the surah translation from the loaded data (respects current language)
+        let surahs = goalViewModel.getSurahs()
+        if let surah = surahs.first(where: { $0.id == surahId }) {
+            return surah.translation ?? surah.transliteration
+        }
+        return "Surah \(surahId)"
     }
 
     private func getSurahIdFromContext(_ verseContext: VerseWithContext) -> Int {

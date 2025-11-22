@@ -34,12 +34,24 @@ class QuranService {
     }
 
     // Load chapter metadata (lightweight)
-    func loadChapterMetadata(language: QuranLanguage = .english) -> [ChapterMetadata] {
-        let fileName = "chapters_\(language.rawValue)"
+    // Uses current app language by default
+    func loadChapterMetadata(language: QuranLanguage = LanguageManager.shared.selectedLanguage) -> [ChapterMetadata] {
+        // Arabic doesn't have a separate chapters file, fall back to English
+        let langCode = language == .arabic ? "en" : language.rawValue
+        let fileName = "chapters_\(langCode)"
 
         guard let url = Bundle.main.url(forResource: fileName, withExtension: "json") else {
-            print("❌ QuranService: Could not find \(fileName).json")
-            return []
+            print("❌ QuranService: Could not find \(fileName).json, falling back to English")
+            // Fallback to English if language file not found
+            guard let fallbackUrl = Bundle.main.url(forResource: "chapters_en", withExtension: "json") else {
+                return []
+            }
+            do {
+                let data = try Data(contentsOf: fallbackUrl)
+                return try JSONDecoder().decode([ChapterMetadata].self, from: data)
+            } catch {
+                return []
+            }
         }
 
         do {

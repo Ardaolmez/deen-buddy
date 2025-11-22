@@ -24,6 +24,22 @@ class ReadingGoalViewModel: ObservableObject {
         loadSurahs()
         loadGoal()
         updateCurrentPosition()
+
+        // Listen for language changes to reload Quran data
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(languageDidChange),
+            name: .appLanguageChanged,
+            object: nil
+        )
+    }
+
+    @objc private func languageDidChange() {
+        // Reload Quran data with new language
+        loadSurahs()
+        updateCurrentPosition()
+        // Notify observers that data changed
+        objectWillChange.send()
     }
 
     // MARK: - Data Loading

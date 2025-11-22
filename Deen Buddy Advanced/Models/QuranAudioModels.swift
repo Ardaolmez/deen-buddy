@@ -2,10 +2,146 @@
 //  QuranAudioModels.swift
 //  Deen Buddy Advanced
 //
-//  Data models for Quran audio recitation from Quran.com API
+//  Data models for Quran audio recitation
+//  - Arabic audio: Quran.com API (multiple reciters)
+//  - English audio: AlQuran.cloud API (Ibrahim Walk - Sahih International)
 //
 
 import Foundation
+
+// MARK: - Audio Language & Mode
+
+/// Language options for audio playback
+enum AudioLanguage: String, CaseIterable, Codable {
+    case arabic = "ar"
+    case english = "en"
+    // Future: case turkish = "tr"
+
+    var displayName: String {
+        switch self {
+        case .arabic: return "Arabic"
+        case .english: return "English"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .arabic: return "🇸🇦"
+        case .english: return "🇬🇧"
+        }
+    }
+}
+
+/// Audio playback modes
+enum AudioPlaybackMode: String, CaseIterable, Codable {
+    case arabicOnly = "arabic"
+    case translationOnly = "translation"
+    case arabicThenTranslation = "sequential"
+
+    var displayName: String {
+        switch self {
+        case .arabicOnly: return "Arabic Only"
+        case .translationOnly: return "Translation Only"
+        case .arabicThenTranslation: return "Arabic → Translation"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .arabicOnly: return "🇸🇦"
+        case .translationOnly: return "🌐"
+        case .arabicThenTranslation: return "➡️"
+        }
+    }
+}
+
+// MARK: - English Audio (AlQuran.cloud)
+
+/// English translation audio configuration
+/// Uses Ibrahim Walk reciting Sahih International translation
+struct EnglishAudioConfig {
+    /// Base URL for AlQuran.cloud audio CDN
+    static let baseURL = "https://cdn.alquran.cloud/media/audio/ayah"
+
+    /// Edition identifier for Ibrahim Walk (Sahih International)
+    static let edition = "en.walk"
+
+    /// Get audio URL for a specific verse
+    /// - Parameter absoluteVerseNumber: The verse number from 1-6236
+    /// - Returns: Full URL to the audio file
+    static func audioURL(for absoluteVerseNumber: Int) -> String {
+        return "\(baseURL)/\(edition)/\(absoluteVerseNumber)"
+    }
+
+    /// Get audio URL using surah and verse numbers
+    /// - Parameters:
+    ///   - surah: Surah number (1-114)
+    ///   - verse: Verse number within the surah
+    /// - Returns: Full URL to the audio file
+    static func audioURL(surah: Int, verse: Int) -> String {
+        let absolute = QuranVerseHelper.absoluteVerseNumber(surah: surah, verse: verse)
+        return audioURL(for: absolute)
+    }
+}
+
+/// Helper for verse number calculations
+struct QuranVerseHelper {
+    /// Total verses per surah (1-114)
+    static let versesPerSurah = [
+        7, 286, 200, 176, 120, 165, 206, 75, 129, 109,    // 1-10
+        123, 111, 43, 52, 99, 128, 111, 110, 98, 135,     // 11-20
+        112, 78, 118, 64, 77, 227, 93, 88, 69, 60,        // 21-30
+        34, 30, 73, 54, 45, 83, 182, 88, 75, 85,          // 31-40
+        54, 53, 89, 59, 37, 35, 38, 29, 18, 45,           // 41-50
+        60, 49, 62, 55, 78, 96, 29, 22, 24, 13,           // 51-60
+        14, 11, 11, 18, 12, 12, 30, 52, 52, 44,           // 61-70
+        28, 28, 20, 56, 40, 31, 50, 40, 46, 42,           // 71-80
+        29, 19, 36, 25, 22, 17, 19, 26, 30, 20,           // 81-90
+        15, 21, 11, 8, 8, 19, 5, 8, 8, 11,                // 91-100
+        11, 8, 3, 9, 5, 4, 7, 3, 6, 3,                    // 101-110
+        5, 4, 5, 6                                         // 111-114
+    ]
+
+    /// Total verses in the Quran
+    static let totalVerses = 6236
+
+    /// Convert surah:verse to absolute verse number (1-6236)
+    /// - Parameters:
+    ///   - surah: Surah number (1-114)
+    ///   - verse: Verse number within the surah
+    /// - Returns: Absolute verse number
+    static func absoluteVerseNumber(surah: Int, verse: Int) -> Int {
+        guard surah >= 1 && surah <= 114 else { return 1 }
+
+        var absolute = 0
+        for i in 0..<(surah - 1) {
+            absolute += versesPerSurah[i]
+        }
+        return absolute + verse
+    }
+
+    /// Convert absolute verse number to surah:verse
+    /// - Parameter absolute: Absolute verse number (1-6236)
+    /// - Returns: Tuple of (surah, verse)
+    static func surahAndVerse(from absolute: Int) -> (surah: Int, verse: Int) {
+        var remaining = absolute
+        for (index, count) in versesPerSurah.enumerated() {
+            if remaining <= count {
+                return (surah: index + 1, verse: remaining)
+            }
+            remaining -= count
+        }
+        return (surah: 114, verse: 6) // Last verse of Quran
+    }
+
+    /// Get total verses in a surah
+    /// - Parameter surah: Surah number (1-114)
+    /// - Returns: Number of verses in the surah
+    static func verseCount(for surah: Int) -> Int {
+        guard surah >= 1 && surah <= 114 else { return 0 }
+        return versesPerSurah[surah - 1]
+    }
+}
 
 // MARK: - Reciter Models
 

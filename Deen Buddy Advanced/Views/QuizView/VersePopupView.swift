@@ -103,7 +103,8 @@ struct VersePopupView: View {
     }
 
     private func loadSurah() {
-        let surahs = QuranService.shared.loadQuran(language: .english)
+        // Use current language setting instead of hardcoded English
+        let surahs = QuranService.shared.loadQuran()
         surah = surahs.first { $0.transliteration == surahName }
 
         if surah == nil {
