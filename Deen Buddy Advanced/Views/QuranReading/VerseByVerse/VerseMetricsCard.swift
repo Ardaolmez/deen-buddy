@@ -16,7 +16,7 @@ struct VerseMetricsCard: View {
             // Reading time
             metricItem(
                 icon: "clock.fill",
-                label: "Time",
+                label: QuranStrings.metricTime,
                 value: formatTime(sessionManager.elapsedSeconds),
                 color: AppColors.VerseByVerse.accentGreen
             )
@@ -28,7 +28,7 @@ struct VerseMetricsCard: View {
             // Daily goal progress (5 minutes)
             metricItem(
                 icon: "target",
-                label: "Goal",
+                label: QuranStrings.metricGoal,
                 value: formatGoal(),
                 color: AppColors.VerseByVerse.progressGoal
             )
@@ -40,7 +40,7 @@ struct VerseMetricsCard: View {
             // Current streak
             metricItem(
                 icon: "flame.fill",
-                label: "Streak",
+                label: QuranStrings.metricStreak,
                 value: "\(goalViewModel.readingGoal?.currentStreak ?? 0)",
                 color: AppColors.VerseByVerse.progressStreak
             )
